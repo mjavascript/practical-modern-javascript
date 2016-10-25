@@ -357,7 +357,7 @@ Imagine you had a program with some comic book characters, Bruno Diaz being one 
 ----
 var character = {
   name: 'Bruno',
-  pseudonim: 'Batman',
+  pseudonym: 'Batman',
   metadata: {
     age: 34,
     gender: 'male'
@@ -366,44 +366,44 @@ var character = {
 };
 ----
 
-If you wanted a +pseudonim+ variable referencing +character.batman+, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing +pseudonim+ in several places in your codebase and you'd prefer to avoid typing out +character.pseudonim+ each time.
+If you wanted a +pseudonym+ variable referencing +character.batman+, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing +pseudonym+ in several places in your codebase and you'd prefer to avoid typing out +character.pseudonym+ each time.
 
 [source,javascript]
 ----
-var pseudonim = character.pseudonim;
+var pseudonym = character.pseudonym;
 ----
 
-With destructuring in assignment, the syntax becomes a bit more clear. As you can see in the next example, you don't have to write +pseudonim+ twice, while still clearly conveying intent. The following statement is equivalent to the previous one written in ES5 code.
+With destructuring in assignment, the syntax becomes a bit more clear. As you can see in the next example, you don't have to write +pseudonym+ twice, while still clearly conveying intent. The following statement is equivalent to the previous one written in ES5 code.
 
 [source,javascript]
 ----
-var { pseudonim } = character;
+var { pseudonym } = character;
 ----
 
 Just like you could declare multiple comma-separated variables with a single +var+ statement, you can also declare multiple variables within the brackets of a destructuring expression.
 
 [source,javascript]
 ----
-var { pseudonim, name } = character;
+var { pseudonym, name } = character;
 ----
 
 In a similar fashion, you could mix and match destructuring with regular variable declarations in the same +var+ statement. While this might look a bit confusing at first, it'll be up to any JavaScript coding style guides you follow to determine whether it's appropriate to declare several variables in a single statement. In any case, it goes to show the flexibility offered by destructuring syntax.
 
 [source,javascript]
 ----
-var { pseudonim, name } = character, two = 2;
+var { pseudonym, name } = character, two = 2;
 ----
 
-If you want to extract a property named +pseudonim+ but would like to declare it as a variable named +alias+, you can use the following destructuring syntax known as aliasing. Note that you can use +alias+ or any other valid variable name.
+If you want to extract a property named +pseudonym+ but would like to declare it as a variable named +alias+, you can use the following destructuring syntax known as aliasing. Note that you can use +alias+ or any other valid variable name.
 
 [source,javascript]
 ----
-var { pseudonim: alias } = character;
+var { pseudonym: alias } = character;
 console.log(alias);
 // <- 'Batman'
 ----
 
-While aliases don't look any simpler than the ES5 flavor, +alias = character.pseudonim+, they start making sense when you consider the fact that destructuring supports deep structures as in the following example.
+While aliases don't look any simpler than the ES5 flavor, +alias = character.pseudonym+, they start making sense when you consider the fact that destructuring supports deep structures as in the following example.
 
 [source,javascript]
 ----
