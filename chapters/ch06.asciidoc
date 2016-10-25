@@ -1,0 +1,569 @@
+[[leveraging-es-collections]]
+== Leveraging ECMAScript Collections
+
+JavaScript data structures are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map +npm+ package names to their metadata, as shown next.
+
+[source,javascript]
+----
+const registry = {};
+function add (name, meta) {
+  registry[name] = meta;
+}
+function get (name) {
+  return registry[name];
+}
+add('contra', { description: 'Asynchronous flow control' });
+add('dragula', { description: 'Drag and drop' });
+add('woofmark', { description: 'Markdown and WYSIWYG editor' });
+----
+
+There's several problems with this approach, outlined below.
+
+- Security issues where user-provided keys like +__proto__+, +toString+, or anything in +Object.prototype+ break expectations and make interaction with this kind of hash-map data structures more cumbersome
+- Iteration over list items is verbose with +Object.keys(registry).forEach+
+- Keys are limited to strings, making it hard to create hash-maps where you'd like to index values by DOM elements or other non-string references
+
+The first problem could be fixed using a prefix, and being careful to always get or set values in the hash-map through functions that add those prefixes, to avoid mistakes.
+
+[source,javascript]
+----
+const registry = {};
+function add (name, meta) {
+  registry['pkg:' + name] = meta;
+}
+function get (name) {
+  return registry['pkg:' + name];
+}
+----
+
+An alternative could also be using +Object.create(null)+ instead of an empty object literal. In this case, the created object won't inherit from +Object.prototype+, meaning it won't be harmed by +__proto__+ and friends.
+
+[source,javascript]
+----
+const registry = Object.create(null);
+function add (name, meta) {
+  registry[name] = meta;
+}
+function get (name) {
+  return registry[name];
+}
+----
+
+For iteration we could create a +list+ function that returns key/value tuples.
+
+[source,javascript]
+----
+const registry = Object.create(null);
+function list () {
+  return Object.keys(registry).map(key => [key, registry[key]]);
+}
+----
+
+Or we could implement the iterator protocol on our hash-map. Here we are trading complexity in favor of convenience: the iterator code is more complicated to read than the former case where we had a +list+ function with familiar +Object.keys+ and +Array#map+ methods. In the following example, however, accessing the list is even easier and more convenient than through +list+: following the iterator protocol means there's no need for a custom +list+ function.
+
+[source,javascript]
+----
+const registry = Object.create(null);
+registry[Symbol.iterator] = () => {
+  const keys = Object.keys(registry);
+  return {
+    next () {
+      const done = keys.length === 0;
+      const key = keys.shift();
+      const value = [key, registry[key]];
+      return { done, value };
+    }
+  };
+}
+console.log([...registry]);
+----
+
+When it comes to using non-string keys, though, we hit a hard limit in ES5 code. Luckily for us, though, ES6 collections provide us with an even better solution. ES6 collections don't have key-naming issues, and they facilitate collection behaviors, like the iterator we've implemented on our custom hash-map, out the box. At the same time, ES6 collections allow arbitrary keys, and aren't limited to string keys like regular JavaScript objects.
+
+Let's plunge into their practical usage and inner workings.
+
+=== 6.1 Using ES6 Maps
+
+ES6 introduces built-in collections, such as +Map+, meant to alleviate implementation of patterns such as those we outlined earlier when building our own hash-map from scratch. +Map+ is a key/value data structure in ES6 that more naturally and efficiently lends itself to creating maps in JavaScript without the need for object literals.
+
+==== 6.1.1 First Look into ES6 Maps
+
+Here's how what we had earlier would have looked like when using ES6 maps. As you can see, the implementation details we've had to come up for our custom ES5 hash-map are already built into +Map+, vastly simplifying our use case.
+
+[source,javascript]
+----
+const map = new Map();
+map.set('contra', { description: 'Asynchronous flow control' });
+map.set('dragula', { description: 'Drag and drop' });
+map.set('woofmark', { description: 'Markdown and WYSIWYG editor' });
+console.log([...map]);
+----
+
+Once you have a map, you can query whether it contains an entry by a +key+ provided via the +map.has+ method.
+
+[source,javascript]
+----
+map.has('contra');
+// <- true
+map.has('jquery');
+// <- false
+----
+
+Earlier, we pointed out that maps don't cast keys the way traditional objects do. This is typically an advantage, but you need to keep in mind that they won't be treated the same when querying the map, either.
+
+[source,javascript]
+----
+const map = new Map([[1, 'a']]);
+map.has(1);
+// <- true
+map.has('1');
+// <- false
+----
+
+The +map.get+ method takes a map entry +key+ and returns the +value+ if an entry by the provided key is found.
+
+[source,javascript]
+----
+map.get('contra');
+// <- { description: 'Asynchronous flow control' }
+----
+
+Deleting values from the map is possible through the +map.delete+ method, providing the +key+ for the entry you want to remove.
+
+[source,javascript]
+----
+map.delete('contra');
+map.get('contra');
+// <- undefined
+----
+
+You can clear the entries for a +Map+ entirely, without losing the reference to the map itself. This can be handy in cases where you want to reset state for an object.
+
+[source,javascript]
+----
+const map = new Map([[1, 2], [3, 4], [5, 6]]);
+map.has(1);
+// <- true
+map.clear();
+map.has(1);
+// <- false
+[...map];
+// <- []
+----
+
+Maps come with a read-only +.size+ property that behaves similarly to +Array#length+ -- at any point in time it gives you the current amount of entries in the map.
+
+[source,javascript]
+----
+const map = new Map([[1, 2], [3, 4], [5, 6]]);
+map.size;
+// <- 3
+map.delete(3);
+map.size;
+// <- 2
+map.clear()
+map.size;
+// <- 0
+----
+
+You're able to use arbitrary objects when choosing map keys: you're not limited to using primitive values like symbols, numbers, or strings. Instead, you can use functions, objects, dates -- and even DOM elements, too. Keys won't be casted to strings as we observe with plain JavaScript objects, but instead their references are preserved.
+
+[source,javascript]
+----
+const map = new Map();
+map.set(new Date(), function today () {});
+map.set(() => 'key', { key: 'door' });
+map.set(Symbol('items'), [1, 2]);
+----
+
+As an example, if we chose to use a symbol as the key for a map entry, we'd have to use a reference to that same symbol to get the item back, as demonstrated in the following snippet of code.
+
+[source,javascript]
+----
+const map = new Map();
+const key = Symbol('items');
+map.set(key, [1, 2]);
+map.get(Symbol('items')); // not the same reference as "key"
+// <- undefined
+map.get(key);
+// <- [1, 2]
+----
+
+Assuming an array of key/value pair +items+ you want to include on a map, we could use a +for..of+ loop to iterate over those +items+ and add each pair to the map using +map.set+, as shown in the following code snippet. Note how we're using destructuring during the +for..of+ loop in order to effortlessly pull the +key+ and +value+ out of each two-dimensional item in +items+.
+
+[source,javascript]
+----
+const items = [
+  [new Date(), function today () {}],
+  [() => 'key', { key: 'door' }],
+  [Symbol('items'), [1, 2]]
+];
+const map = new Map();
+for (let [key, value] of items) {
+  map.set(key, value);
+}
+----
+
+Maps are iterable objects as well, because they implement a +Symbol.iterator+ method. Thus, a copy of the map can be created using a +for..of+ loop using similar code to what we've just used to create a map out of the +items+ array.
+
+[source,javascript]
+----
+const copy = new Map();
+for (let [key, value] of map) {
+  copy.set(key, value);
+}
+----
+
+In order to keep things simple, you can initialize maps directly using any object that follows the iterable protocol and produces a collection of +[key, value]+ items. The following code snippet uses an array to seed a newly created +Map+. In this case, iteration occurs entirely in the +Map+ constructor.
+
+[source,javascript]
+----
+const items = [
+  [new Date(), function today () {}],
+  [() => 'key', { key: 'door' }],
+  [Symbol('items'), [1, 2]]
+];
+const map = new Map(items);
+----
+
+Creating a copy of a map is even easier: you feed the map you want to copy into a new map's constructor, and get a copy back. There isn't a special +new Map(Map)+ overload. Instead, we take advantage that map implements the iterable protocol and also consumes iterables when constructing a new map. The following code snippet demonstrates how simple that is.
+
+[source,javascript]
+----
+const copy = new Map(map);
+----
+
+Just like maps are easily fed into other maps because they're iterable objects, they're also easy to consume. The following piece of code demonstrates how we can use the spread operator to this effect.
+
+[source,javascript]
+----
+const map = new Map();
+map.set(1, 'one');
+map.set(2, 'two');
+map.set(3, 'three');
+console.log([...map]);
+// <- [[1, 'one'], [2, 'two'], [3, 'three']]
+----
+
+In the following piece of code we've combined several new features in ES6: +Map+, the +for..of+ loop, +let+ variables, and template literals.
+
+[source,javascript]
+----
+const map = new Map();
+map.set(1, 'one');
+map.set(2, 'two');
+map.set(3, 'three');
+for (let [key, value] of map) {
+  console.log(`${key}: ${value}`);
+  // <- '1: one'
+  // <- '2: two'
+  // <- '3: three'
+}
+----
+
+Even though map items are accessed through programmatic API, their keys are unique, just like with hash-maps. Setting a key over and over again will only overwrite its value. The following code snippet demonstrates how writing the +'a'+ item over and over again results in a map containing only a single item.
+
+[source,javascript]
+----
+const map = new Map();
+map.set('a', 1);
+map.set('a', 2);
+map.set('a', 3);
+console.log([...map]);
+// <- [['a', 3]]
+----
+
+In ES6 maps, +NaN+ becomes a "corner-case" that gets treated as a value that's equal to itself, even though the +NaN === NaN+ expression evaluates to +false+. A number of ECMAScript features introduced in ES6 and later use a different comparison algorithm than that of ES5 and earlier where +NaN+ is equal to +NaN+, although +NaN !== NaN+; and ++0+ is different from +-0+, even though ++0 === -0+. The following piece of code shows how even though +NaN+ is typically evaluated to be different than itself, +Map+ considers +NaN+ to be a constant value that's always the same.
+
+[source,javascript]
+----
+console.log(NaN === NaN);
+// <- false
+const map = new Map();
+map.set(NaN, 'a');
+map.set(NaN, 'b');
+console.log([...map]);
+// <- [[NaN, 'b']]
+----
+
+When you iterate over a +Map+, you are actually looping over its +.entries()+. That means that you don't need to explicitly iterate over +.entries()+. It'll be done on your behalf anyways: +map[Symbol.iterator]+ points to +map.entries+. The +.entries()+ method returns an iterator for the key/value pairs in the map.
+
+[source,javascript]
+----
+map[Symbol.iterator] === map.entries;
+// <- true
+----
+
+There are has two other +Map+ iterators you can leverage: +.keys()+ and +.values()+. The first enumerates keys in a map while the second enumerates values, as opposed to +.entries()+ which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
+
+[source,javascript]
+----
+const map = new Map([[1, 2], [3, 4], [5, 6]]);
+[...map.keys()];
+// <- [1, 3, 5]
+[...map.values()];
+// <- [2, 4, 6]
+[...map.entries()];
+// <- [[1, 2], [3, 4], [5, 6]]
+----
+
+Map entries are always iterated in insertion order. This contrasts with +Object.keys+, which is specified to follow an arbitrary order. Although, in practice, insertion order is typically preserved by JavaScript engines regardless of the specification.
+
+Maps have a +.forEach+ method that's identical in behavior to that in ES5 +Array+ objects. Once again, keys do not get casted into strings in the case of +Map+, as demonstrated below.
+
+[source,javascript]
+----
+const map = new Map([[NaN, 1], [Symbol(), 2], ['key', 'value']]);
+map.forEach((value, key) => console.log(key, value));
+// <- NaN 1
+// <- Symbol() 2
+// <- 'key' 'value'
+----
+
+Earlier, we brought up the ability of providing arbitrary object references as the key to a +Map+ entry. Let's go into a concrete use case for that API.
+
+==== 6.1.2 Hash-Maps and the DOM
+
+In ES5, whenever we wanted to associate a DOM element with an API object connecting that element with some library, we had to implement a verbose and slow pattern such as the one in the following code listing. That code returns an API object with a few methods associated to a given DOM element, allowing us to put DOM elements on a map from which we can later retrieve the API object for a DOM element.
+
+[source,javascript]
+----
+const map = [];
+function customThing (el) {
+  const mapped = findByElement(el);
+  if (mapped) {
+    return mapped;
+  }
+  const api = {
+    // custom thing api methods
+  };
+  const entry = storeInMap(el, api);
+  api.destroy = destroy.bind(null, entry);
+  return api;
+}
+function storeInMap (el, api) {
+  const entry = { el: el, api: api };
+  map.push(entry);
+  return entry;
+}
+function findByElement (el) {
+  for (const i = 0; i < map.length; i++) {
+    if (map[i].el === el) {
+      return map[i].api;
+    }
+  }
+}
+function destroy (entry) {
+  const i = map.indexOf(entry);
+  map.splice(i, 1);
+}
+----
+
+One of the most valuable aspects of +Map+ is the ability to index by DOM elements. That, combined with the fact that +Map+ also has collection manipulation abilities greatly simplifies things.
+
+[source,javascript]
+----
+const map = new Map();
+function customThing (el) {
+  const mapped = findByElement(el);
+  if (mapped) {
+    return mapped;
+  }
+  const api = {
+    // custom thing api methods
+    destroy: destroy.bind(null, el)
+  };
+  storeInMap(el, api);
+  return api;
+}
+function storeInMap (el, api) {
+  map.set(el, api);
+}
+function findByElement (el) {
+  return map.get(el);
+}
+function destroy (el) {
+  map.delete(el);
+}
+----
+
+The fact that mapping functions have become one liners thanks to native +Map+ methods means we could inline those functions instead, as readability is no longer an issue. The following piece of code is a vastly simplified alternative to the ES5 piece of code we started with. Here we're not concerned with implementation details anymore, but have instead boiled the DOM-to-API mapping to its bare essentials.
+
+[source,javascript]
+----
+const map = new Map();
+function customThing (el) {
+  const mapped = map.get(el);
+  if (mapped) {
+    return mapped;
+  }
+  const api = {
+    // custom thing api methods
+    destroy: () => map.delete(el)
+  };
+  map.set(el, api);
+  return api;
+}
+----
+
+Maps aren't the only kind of built-in collection in ES6, there's also +WeakMap+, +Set+, and +WeakSet+. Let's proceed by digging into +WeakMap+.
+
+=== 6.2 Understanding and Using WeakMap
+
+For the most part, you can think of +WeakMap+ as a subset of +Map+. The +WeakMap+ collection imposes a number of limitations that we didn't find in +Map+. The biggest limitation is that +WeakMap+ is not iterable like +Map+: there is no iterable protocol in +WeakMap+, no +WeakMap#entries+, no +WeakMap#keys+, no +WeakMap#values+, no +WeakMap#forEach+ and no +WeakMap#clear+ methods.
+
+Another distinction found in +WeakMap+ is that every +key+ must be an object. This is in contrast with +Map+ where, while object references were allowed as keys, they weren't enforced. Remember that +Symbol+ is a value type, and as such, they're not allowed either.
+
+[source,javascript]
+----
+const map = new WeakMap();
+map.set(Date.now, 'now');
+map.set(1, 1);
+// <- TypeError
+map.set(Symbol(), 2);
+// <- TypeError
+----
+
+In exchange for having a more limited feature set, +WeakMap+ key references are weakly held, meaning that the objects referenced by +WeakMap+ keys are subject to garbage collection if there are no other references to them. This kind of behavior is useful when you have metadata about a +person+, for example, but you want the +person+ to be garbage collected when and if the only reference back to +person+ is their metadata. You can now keep that metadata in a +WeakMap+ using +person+ as the key.
+
+With +WeakMap+, you are still able to provide an iterable for initialization.
+
+[source,javascript]
+----
+const map = new WeakMap([
+  [new Date(), 'foo'],
+  [() => 'bar', 'baz']
+]);
+----
+
+While +WeakMap+ has a smaller API surface in order to effectively allow for weak references, it still carries +.has+, +.get+, and +.delete+ methods like +Map+ does. The brief snippet of code shown next demonstrates these methods.
+
+[source,javascript]
+----
+const date = new Date();
+const map = new WeakMap([[date, 'foo'], [() => 'bar', 'baz']]);
+map.has(date);
+// <- true
+map.get(date);
+// <- 'foo'
+map.delete(date)
+map.has(date);
+// <- false
+----
+
+==== 6.2.1 Is +WeakMap+ Strictly Worse Than +Map+?
+
+The distinction that makes +WeakMap+ worth the trouble is in its name. Given that +WeakMap+ holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as +WeakMap+ keys. This is in contrast with +Map+ which holds strong object references, preventing +Map+ keys from being garbage collected.
+
+Correspondingly, use cases for +WeakMap+ revolve around the need to specify metadata or extend an object while still being able to garbage collect that object if there are no other references to it. A perfect example might be the underlying implementation for +process.on('unhandledRejection')+ in Node.js, which uses a +WeakMap+ to keep track of rejected promises that weren't dealt with. By using +WeakMap+, the implementation prevents memory leaks because the +WeakMap+ won't be grabbing onto those promises strongly. In this case, we have a simple map that weakly holds onto promises, but is flexible enough to handle entries being removed from the map when they're no longer referenced anywhere else.
+
+Keeping data about DOM elements that should be released from memory when they're no longer of interest is another important use case, and in this regard using +WeakMap+ is an even better solution to the DOM-related API caching solution we implemented earlier using +Map+.
+
+In so many words, then: no, +WeakMap+ is not strictly worse than +Map+ -- they just cater to different use cases.
+
+=== 6.3 Sets in ES6
+
+A set is a grouping of values. Sets are also a new collection type in ES6. Sets are similar to +Map+.
+
+- +Set+ is also iterable
+- +Set+ constructor also accepts an iterable
+- +Set+ also has a +.size+ property
+- Keys can be arbitrary values or object references
+- Keys must be unique
+- +NaN+ equals +NaN+ when it comes to +Set+ too
+- All of +.keys+, +.values+, +.entries+, +.forEach+, +.has+, +.delete+, and +.clear+
+
+At the same time, sets are different from +Map+ in a few key ways. Sets don't hold key value pairs, there's only one dimension. You can think of sets as being similar to arrays where every element is distinct from each other.
+
+There isn't a +.get+ method in +Set+. A +set.get(key)+ method would be redundant: if you already have the +key+ then there isn't anything else to get, as that's the only dimension. If we wanted to check for whether the +key+ is in the set, there's +set.has(key)+ to fulfill that role.
+
+Similarly, a +set.set(key)+ method wouldn't be aptly named, as you aren't setting a +value+ to a +key+, but merely adding a value to the set instead. Thus, the method to add values to a set is +set.add+, as demonstrated in the next snippet.
+
+[source,javascript]
+----
+const set = new Set();
+set.add({ an: 'example' });
+----
+
+Sets are iterable, but unlike maps you only iterate over keys, not key value pairs. The following example demonstrates how sets can be spread over an array using the spread operator and creating a single dimensional list.
+
+[source,javascript]
+----
+const set = new Set(['a', 'b', 'c']);
+console.log([...set]);
+// <- ['a', 'b', 'c']
+----
+
+In the following example you can note how a set won't contain duplicate entries: every element in a +Set+ must be unique.
+
+[source,javascript]
+----
+const set = new Set(['a', 'b', 'b', 'c', 'c']);
+console.log([...set]);
+// <- ['a', 'b', 'c'];
+----
+
+The following piece of code creates a +Set+ with all of the +<div>+ elements on a page and then prints how many were found. Then, we query the DOM again and call +set.add+ again for every DOM element. Given that they're all already in the +set+, the +.size+ property won't change, meaning the +set+ remains the same.
+
+[source,javascript]
+----
+function divs () {
+  return [...document.querySelectorAll('div')];
+}
+const set = new Set(divs());
+console.log(set.size);
+// <- 56
+divs().forEach(div => set.add(div));
+console.log(set.size);
+// <- 56
+----
+
+=== 6.4 ES6 WeakSets
+
+In a similar fashion to +Map+ and +WeakMap+, +WeakSet+ is the weak version of +Set+ that can't be iterated over. You can't iterate over a +WeakSet+. The values in a +WeakSet+ must be unique object references. If nothing else is referencing a +value+ found in a +WeakSet+, it'll be subject to garbage collection.
+
+Much like in +WeakMap+, you can only +.add+, +.delete+, and check if +WeakSet#has+ a given +value+. Just like in +Set+, there's no +.get+ because sets are one-dimensional.
+
+We aren't allowed to add primitive values such as strings or symbols to a +WeakSet+.
+
+[source,javascript]
+----
+const set = new WeakSet();
+set.add('a');
+// <- TypeError
+set.add(Symbol());
+// <- TypeError
+----
+
+Passing iterators to the constructor is allowed, even though a +WeakSet+ instance is not iterable itself. That iterable will be iterated when the set is constructed, adding each entry in the iterable sequence to the set. The following snippet of code serves as an example.
+
+[source,javascript]
+----
+const set = new WeakSet([
+  new Date(),
+  {},
+  () => {},
+  [1]
+]);
+----
+
+As a use case for +WeakSet+, you may consider the following piece of code where we have a +Car+ class that ensures its methods are only called upon car objects that are instances of the +Car+ class by using a +WeakSet+.
+
+[source,javascript]
+----
+const cars = new WeakSet();
+class Car {
+  constructor() {
+    cars.add(this);
+  }
+  fuelUp () {
+    if (!cars.has(this)) {
+      throw new TypeError('Car#fuelUp called on incompatible object!');
+    }
+  }
+}
+----
+
+When it comes to deciding whether to use +Map+, +WeakMap+, +Set+, or +WeakSet+, there's a series of questions you should ask yourself. For instance, if you are using the collection to extend objects using metadata, then you should know to look at the weak collections. If your only concern is whether something is present, then you probably need a +Set+. If you are looking to create a cache, you should probably use a +Map+.
+
+Collections in ES6 provide built-in solutions for common use cases that were previously cumbersome to implement by users, such as the case of +Map+, or hard to execute correctly, as in the case of +WeakMap+ where we allow references to be released if they're no longer interesting, avoiding memory leaks.

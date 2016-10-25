@@ -1,0 +1,22 @@
+[[javascript-modules]]
+== JavaScript Modules
+
+Over the years, we've seen multiple different ways in which to split code into more manageable units. For the longest time we've had the module pattern where you simply wrapped pieces of code in self-invoking function expressions. You had to be careful to sort your scripts so that each script came after all of its dependencies.
+
+A while later, the RequireJS library was born. It provided a way of defining the dependencies of each module programmatically, so that a dependency graph is created and you wouldn't need to worry about sorting your scripts anymore. The way RequireJS worked demanded that you provided an array of strings used to identify your dependencies and also wrap modules in a function call, which would then receive those dependencies as parameters. Many other libraries provide similar functionality but offer an slightly different API.
+
+Other complexity management mechanisms existed, such as the dependency injection mechanism in AngularJS, where you define named components using functions where you can, in turn, specify other named component dependencies. AngularJS carries the load of dependency injection on your behalf, so you only have to name components and specify dependencies.
+
+CommonJS surfaced as an alternative to RequireJS, and it was swiftly popularized by Node.js soon afterwards. In this chapter we'll take a look at CommonJS, which is still heavily in use today. We'll then cover the module system introduced to native JavaScript in ES6, and lastly we'll explore interoperability between CommonJS and native JavaScript modules -- also known as "ES modules".
+
+=== 9.1 CommonJS
+
+The CommonJS module format ...
+
+9.1 CommonJS
+9.2 Modules in ES6
+9.3 Exports and Imports
+9.4 Module Loading
+9.5 Interoperability
+9.6 Best Practices
+9.7 Summary

@@ -1,0 +1,526 @@
+[[overview-of-ecmascript6]]
+== Overview of ECMAScript 6
+
+The web platform is evolving at an astonishingly fast pace. The latest version of the language specification, ECMAScript-262 version 6, or ES6 for short, was published in June 2015. While ES6 took a long six years to get here, new releases of the specification are expected to be published every year from now on. To accomodate the yearly release schedule, versions will now be referred to by their publication year. Thus ES6 becomes ES2015, ES7 will be ES2016, and so on. Being one of the longest awaited iterations on JavaScript, ES6 contains an impressive amount of new features, syntax changes, and improvements to existing aspects of the language.
+
+=== 2.1 First Look at ES6
+
+In chapters 4 through 7 we're going to dive deep into ES6, but for now an overview of the most interesting features will help you get a sense of what to expect from ES6.
+
+==== 2.1.1 Arrow Functions
+
+One of the best known features in ES6 is the arrow function. They are an alternative syntax for declaring functions. In their simplest form, as seen in the following bit of code, the function implicitly returns the result of evaluating the expression on the right-hand side.
+
+[source,javascript]
+----
+var double = x => x * 2;
+double(3);
+// <- 6
+----
+
+In other words, that code is equivalent to the following.
+
+[source,javascript]
+----
+var double = function (x) { return x * 2; }
+double(3);
+// <- 6
+----
+
+Keep in mind that there's several different ways to declare arrow functions, as we'll learn in chapter 4. Another exciting feature is template literals.
+
+==== 2.1.2 Template Literals
+
+Up until ES5 you could wrap strings in single or double quotes. ES6 introduces the backtick as a third way of declaring strings. These strings are different than regular strings in a number of ways. For instance, template literals can include interpolations containing JavaScript expressions such as variables, function calls, or anything else you could think of. The following example interpolates a name out of an object within a template literal.
+
+[source,javascript]
+----
+var user = { name: 'Nicolas' };
+var text = +Hello, ${user.name}!+;
+// <- 'Hello, Nicolas!'
+----
+
+Template literals can be multiline without having to resort to arrays, escapes, or string concatenation like we did with quoted strings. The next piece of code shows a multiline template literal.
+
+[source,javascript]
+----
+var multiline = +
+this is
+a multiline
+template literal
++;
+----
+
+Let's discuss destructuring, one of the most popular features in ES6, next.
+
+==== 2.1.3 Destructuring in Assignment
+
+Sometimes we need to store references to deeply nested object properties, as seen in the next example.
+
+[source,javascript]
+----
+var monthly = billing.monthly;
+var yearly = billing.yearly;
+----
+
+In ES6 the destructuring syntax helps eliminate duplication by providing a more concise way of expressing our intent. You could read the next piece of code as "declare +monthly+ and +yearly+ variables from +billing+". The snippet is equivalent to the one we saw earlier, without destructuring.
+
+[source,javascript]
+----
+var {monthly,yearly} = billing;
+----
+
+You could also destructure assignment for arrays. Here's a situation I've encountered countless times, pulling +x+ and +y+ coordinates from an array.
+
+[source,javascript]
+----
+var x = coords[0];
+var y = coords[1];
+----
+
+With destructuring our intent becomes much more clear, and we don't need to hardcode the indices either.
+
+[source,javascript]
+----
+var [x,y] = coords;
+----
+
+You can also use destructuring in function parameters, to swap variables for without an auxiliary, and in many other use cases. Destructuring also has a few more features such as aliases and default values. They are explored in chapter 4. There's also the rest and spread operators, let's visit those now.
+
+==== 2.1.4 Rest and Spread
+
+Rest parameters are declared by adding three dots before the last parameter to a function. When a function only has a single parameter +...args+, +args+ will be an +Array+ containing all of the arguments passed to the function. Parameters to the left of the rest parameters won't be included in the +rest+ array.
+
+[source,javascript]
+----
+function list (first, ...rest) {
+  console.log(first);
+  console.log(rest);
+}
+list(1, 2, 3);
+// <- 1
+// <- [2, 3]
+----
+
+Typically you would invoke a function by passing arguments into it.
+
+[source,javascript]
+----
+console.log(1, 2, 3)
+// <- '1 2 3'
+----
+
+Sometimes however you have those arguments in a list and just don't want to access every index just for a method call – or you just can't because the array is formed dynamically – so you use +.apply+. This feels kind of awkward because +.apply+ also takes a context for +this+, which feels out of place when it's not relevant and you have to reiterate the host object (or use +null+).
+
+[source,javascript]
+----
+console.log.apply(console, [1, 2, 3])
+// <- '1 2 3'
+----
+
+The spread operator can be used as a butter knife alternative over using +.apply+. There is no need for a context either. You just append three dots +...+ to the array, just like with the rest parameter.
+
+[source,javascript]
+----
+console.log(...[1, 2, 3])
+// <- '1 2 3'
+----
+
+You can mix and match the spread operator with other arguments. All of the following expressions are equivalent.
+
+[source,javascript]
+----
+list(1, 2, 3, 4, 5, 6);
+list(...[1, 2, 3, 4, 5, 6]);
+list(1, ...[2, 3], ...[4, 5], 6);
+----
+
+Let's also take a moment to look at +let+ and +const+ declarations.
+
+==== 2.1.5 Let and Const
+
+These two statements are new to the language in ES6. JavaScript has been traditionally lexically scoped, where variable declarations are hoisted to the top of a function scope and can be confusing to newcomers to the language. Furthermore, because of hoisting, you're unable to declare variables with the same name in different code branches. Meanwhile, +let+ has block-scoped semantics, allowing code like the following.
+
+[source,javascript]
+----
+if (valid(model)) {
+  let doc = new Document(model);
+  doc.save();
+}
+console.log(doc)
+// <- ReferenceError: doc is not defined
+----
+
+Note how the +doc+ variable is now scoped to the +if+ code branch, but is unavailable outside of that block. If +doc+ had been declared using +var+, it would've been hoisted to the containing +function+ (or, in the absence of a +function+, the global scope). In that case, the log statement wouldn't be a syntax error. The +let+ statement helps us avoid situations in which variables can be accessed even though they shouldn't be accessible, as in the example we just saw.
+
+Constants are another flavor of variable declaration coming in ES6, using the +const+ keyword. They have the same semantics as +let+ declarations, except that they must be assigned in their declaration as in the next code snippet.
+
+[source,javascript]
+----
+const person = { name: 'Nicolas' };
+----
+
+Attempts to assign a value to +person+ after initialization will fail silently (or loudly, with an +Error+, in strict mode). That doesn't mean the person object is immutable, the following piece of code would still be perfectly valid when using +const+.
+
+[source,javascript]
+----
+const person = { name: 'Nicolas' };
+person.dob = new Date(1988, 5, 9)
+----
+
+These types of constant references help you avoid human errors where, for instance, a reference to +person+ is passed off to a function but then assigned a different value, creating an inconsistency that may be undesirable.
+
+There's a ton more features besides the ones we've covered thus far: promises, iterators, generators, symbols, classes, proxies, reflection, collections, modules, and also changes to Number, Math, Object, and Array.
+
+Having this many new features is not without drawbacks, though. No browser to date has implemented all of ES6 in a fully compliant way. Most modern browsers have partial implementations, so you can already use a good part of the features in them, but not all of it. Feature testing wouldn't be effective here, as you would be sprinkling your code with several +if+ statements more than need be. If we want to write ES6 code that works across browsers consistently, we can rely on something called transpilers.
+
+=== 2.2 Tooling Around ES6
+
+Transpilers are tools that take the ES6 source code we write and produce ES5 code that browsers can interpret more consistently. This is the most reliable way of running ES6 code in production today: although transpilers haven't implemented all of ES6 either, they produce ES5 code that all modern browsers can execute. It doesn't seem like transpilers are a fad, or that they'll quickly fade into nothingness, but rather that they'll stick around for a long time. As new versions of the language are released every year, we can expect transpilers to support ES2016, ES2017 and beyond. Similarly, we can also expect transpilers to eventually produce ES6 code as browser support gets better, then ES2016 code, and so on.
+
+We've established that transpilers let us stay ahead of the curve, allowing us to use the latest language features before browsers get a chance to implement them. Let's tal about a specific transpiler, Babel, and how you can use it.
+
+==== 2.2.1 Introduction to Babel
+
+Babel is a JavaScript-to-JavaScript transpiler. It can compile ES6 JavaScript code into ES5. It produces fairly human-readable code, enough that you can make sense of what it's doing. Babel is a Node.js package, and you can install it through npm, the package manager for Node. If you don't have Node yet, you can download it from their website (https://nodejs.org). Once you've installed Node, you'll also get the +npm+ command-line tool. You can now install Babel entering the following command into your favorite terminal.
+
+[source,shell]
+----
+npm install babel --global
+----
+
+Upon installation, you'll be getting two more command-line tools: +babel+ and +babel-node+. The first one, +babel+, can be used to compile ES6 files into ES5. The second one, +babel-node+, dynamically interprets Node.js modules using the Babel compiler as they are loaded.
+
+Suppose you had a file named +example.js+ containing the following bits of ES6 code.
+
+[source,javascript]
+----
+var double = value => value * 2;
+console.log(double(3));
+----
+
+You can easily compile the code by executing the following command in your command-line. It would print output similar to what's shown here. As you can see, the code is still quite readable, and +babel+ has added a strict mode statement and compiled the code down into equivalent ES5 code.
+
+[source,shell]
+----
+» babel example.js
+'use strict';
+
+var double = function double(value) {
+  return value * 2;
+};
+console.log(double(3));
+----
+
+Besides compiling single files, their command-line interface (CLI) offers the ability to compile entire directories, as well as specifying the output filename or directory. There's a plethora of options, and you can find out more about them by running the +babel --help+ command or visiting their documentation (http://babeljs.io/).
+
+==== 2.2.2 Online Babel REPL
+
+An excellent way to get started with ES6 immediately and without any of the hassle of installing Node.js, +babel+, and compiling source code manually is by using the online Babel REPL (http://babeljs.io/repl). You're provided with an input area that's compiled in real-time, and you can see the compiled code side-by-side with your ES6 source code. Besides that, there's a few configuration flags that allow you to enable experimental features, such as ES2016 language improvements; turn on strict compilation, making the output harder to read but more compliant; and some other options.
+
+image::../images/c02g01-babel-repl.png["Babel REPL"]
+
+The REPL is an effective way of trying out some of the features introduced in this chapter. Some of the most sophisticated ES6 features, such as +Proxy+ and +WeakMap+, aren't implemented in Babel. These features are hard to implement in a transpiler like Babel because they're hard to represent in pure ES5 syntax. As a result, Babel leaves their declarations as they were, and hopes that the runtime executing the code supports these ES6 constructs.
+
+When it comes to trying out the latest features, developer tools in modern browsers like Google Chrome (stable and Canary), Mozilla Firefox, Microsoft Edge, are possible alternatives to the Babel REPL. Note that these browsers don't implement all of ES6 yet, and they don't support it consistently yet, so they're only reliable when it comes to playing around with the bleeding edge features in ES6.
+
+=== 2.3 Lexical Enhancements and Built-in Improvements
+
+Besides arrow functions, template literals, destructuring, rest, spread, +let+, and +const+, there's a few more lexical enhancements coming to the language, as well as improvements to existing built-ins like +Math+, +Number+, +String+, and +Array+.
+
+==== 2.3.1 Object Literals
+
+Object literals are getting a little bit better. In ES5, object literals could get a bit repetitive sometimes. Namely, when the values we want to assign to a property on our object is in a variable by the same name, like in the following example.
+
+[source,javascript]
+----
+function mapper (x, y) {
+  return {
+    x: x,
+    y: y
+  };
+}
+----
+
+ES6 makes our lives simpler by introducing a shorter syntax known as property value shorthand. If the variable is the same as the property name, you can use the shortcut in the following snippet.
+
+[source,javascript]
+----
+function mapper (x, y) {
+  return { x, y };
+}
+----
+
+That makes the code a bit easier to read, and it's also easy to unroll +x+ into +x: x+ in the back of your mind.
+
+When you need to define a property whose key depends on another variable, you'd typically first create an empty object and then add that property, as seen in the next bit of code where we declare a function that creates artifacts and flags them with the provided +type+.
+
+[source,javascript]
+----
+function createArtifact (type) {
+  var artifact = {};
+  artifact[type] = true;
+  return artifact;
+}
+----
+
+Object literals in ES6 allow computed property expressions, or the ability to define a property whose key is the result of evaluating an expression, rather than just using hardcoded strings. That means you could reduce the function we just saw to something like the following, which leverages a computed property expression to convey the function's intent much more clearly, and avoids the definition of an intermediary variable just so that we can assign to a dynamically determined property key.
+
+[source,javascript]
+----
+function createArtifact (type) {
+  return { [type]: true };
+}
+----
+
+Another improvement in object literals is a new way to declare methods on an object, where you can omit the colon and the +function+ keyword, as demonstrated with the next snippet.
+
+[source,javascript]
+----
+var es5 = { double: function (input) { return input * 2; } };
+var es6 = { double (input) { return input * 2; } };
+----
+
+The alternative method definition syntax mirrors that of method definitions in ES6 classes, which we'll summarize next.
+
+==== 2.3.2 Prototypal "Classes" in ES6
+
+Classes are one of the best-known ES6 features, but they're also not classes in the classical object-oriented programming (OOP) sense. ES6 classes are, in fact, syntactic sugar on top of prototypal inheritance. A calculator class in ES5 would look like the following example.
+
+[source,javascript]
+----
+function Calculator (initialValue) {
+  this.currentValue = initialValue;
+}
+Calculator.prototype.double = function () {
+  this.currentValue *= 2;
+  return this;
+};
+Calculator.prototype.read = function () {
+  return this.currentValue;
+};
+----
+
+The equivalent class declaration using the ES6 syntax can be found in the next snippet. Note how the constructor is now explicitly named, how instance methods for the class are now declared as part of the +class+ literal, and also how method declarations follow the same syntax as described earlier for object literals. Keep in mind that methods and properties in a class declaration aren't delimited by commas, in contrast with objects. This helps mitigate issues where you thought you were adding properties to a regular object but were instead adding them to a +class+ declaration, and viceversa.
+
+[source,javascript]
+----
+class Calculator {
+  constructor (initialValue) {
+    this.currentValue = initialValue;
+  }
+  double () {
+    this.currentValue *= 2;
+    return this;
+  }
+  read () {
+    return this.currentValue;
+  }
+}
+----
+
+Both the ES5 and the ES6 versions are equivalent, and they can be used as shown in the following code snippet.
+
+[source,javascript]
+----
+var calc = new Calculator(2.5);
+var result = calc.double().double().read();
+console.log(result);
+// <- 10
+----
+
+Additionally, ES6 classes can have +static+ class methods. These methods can be invoked without creating an instance of the class, sort of how +Math.random()+ and similar methods work. See the following piece of code for an example +static+ method as well as how it could be used.
+
+[source,javascript]
+----
+class Calculator {
+  static isDoublePrecision (calculator) {
+    return calculator.precision === 'double';
+  }
+}
+var calc = new Calculator();
+var doubles = Calculator.isDoublePrecision(calc);
+console.log(doubles);
+// <- false
+----
+
+ES6 classes also simplify prototypal inheritance by providing a single pattern to extend classes, using the +extends+ keyword. The next snippet shows how we can extend a +Vehicle+ class with a +Car+ class that defines a fixed +speed+ for the vehicle. In this example, +super+ can be used to invoke the +constructor+ method of the inherited class, initializing the +Car+ instance as a +Vehicle+ too.
+
+[source,javascript]
+----
+class Vehicle {
+  constructor (speed) {
+    this.position = 0;
+    this.speed = speed;
+  }
+  move () {
+    this.position += this.speed;
+  }
+}
+class Car extends Vehicle {
+  constructor () {
+    super(5)
+  }
+}
+var car = new Car();
+car.move();
+console.log(car.position);
+// <- 5
+----
+
+Furthermore, +super+ can be used to access methods as defined in the +Vehicle+ class. Suppose we changed the +move+ implementation in +Car+, we could still access the original +move+ implementation from +Vehicle+ by referencing it as +super.move+. Next, let's discuss new methods coming to the +Number+, +Math+, +String+, and +Array+ built-ins.
+
+==== 2.3.3 Improvements to Built-ins
+
+There have been several improvements to built-ins in ES6, as well as entirely new built-ins. In this section I'll briefly introduce you to these changes to the language, while further examination can be found in chapter 5.
+
+===== Changes to Number
+
+Historically, JavaScript has abused global variables and methods. The +parseInt+ and +isNaN+ methods, for instance, are globals even though in most other languages they'd have to be imported through an object like +Number+. We can observe error correction efforts being made in ES6, one of which is an attempt to "recall" these global methods into the built-ins they should've belonged to.
+
+In the case of +parseInt+, for example, there's now a +Number.parseInt+ method that's identical to the global version. While the specification can't deprecate +parseInt+ because doing so would break a lot of websites, it  can certainly attempt to steer the language towards a better future, which is why we're going to see that a lot of methods have been copied over to built-ins like +Number+, and in some cases slightly modified.
+
+Besides the +Number.parseInt+ reference to +parseInt+, +Number.parseFloat+ is in fact the only other global method that's referenced from +Number+ without any modifications. The remaining 2 methods, +isNaN+ and +isFinite+, are similar to their global namesakes, except that they don't coerce input into numbers. While coercion was acceptable in the global versions of these methods, +Number.*+ methods have a natural affinity for primitive number values, and as such it's reasonable that they don't include coercion logic that may lead to unexpected results such as +isNaN('1.')+ returning +false+. The lack of coercion results in the following differences.
+
+[source,javascript]
+----
+isNaN('0') === false // because Number('0') yields 0, and 0 is a number
+Number.isNaN('0') === true // because '0' is not a number
+isFinite('0') === true // because Number('0') yields 0, and 0 is finite
+Number.isFinite('0') === false // because '0' is not a number
+----
+
+ES6 also introduces brand new methods to +Number+, one of them is +Number.isInteger+ which returns +true+ for numeric values that don't have a decimal part as shown in the next code snippet.
+
+[source,javascript]
+----
+Number.isInteger(0) === true
+Number.isInteger(-1) === true
+Number.isInteger(1.2) === false
+Number.isInteger('1') === false
+Number.isInteger(Infinity) === false
+Number.isInteger(NaN) === false
+----
+
+There's a few more methods that help us cope with floating point arithmetic, but we won't delve into those parts of +Number+ until chapter 5. Let's discuss numbers a bit further. Specifically, the plethora of methods coming to +Math+.
+
+===== Additions to Math
+
+Over a dozen new methods are being incorporated by +Math+ in ES6. They fall into four categories: utility methods, exponentiation and logarithmic logic, trigonometry and compile-to-JavaScript helpers. That last category of methods is aimed at C programs being compiled into the +asm.js+ JavaScript flavor via +emscripten+ and similar. We'll defer the exponentiation, logarithmic, and trigonometric methods for chapter 5, and instead focus in the utility methods for now.
+
+There's two utility methods being added to +Math+. The first one is +Math.sign+, and it returns the sign part of a number: +1+ indicates a positive number, +-1+ a negative number, +0+ a positive zero, +-0+ a negative zero, and +NaN+ which indicates +NaN+. Note that these methods do coerce user input into numbers, in contrast to the methods introduced to +Number+. You can look at some examples in the following code snippet.
+
+[source,javascript]
+----
+Math.sign(-Infinity) === -1
+Math.sign(-1.23) === -1
+Math.sign(-0) === -0
+Math.sign(0) === 0
+Math.sign('1.2') === 1
+Math.sign(4.5) === 1
+Math.sign(NaN) === NaN
+Math.sign('foo') === NaN
+----
+
+The other utility method is +Math.trunc+ which returns the integer part of a number. This method coerces user input into a number and then returns that number with its decimal part stripped away, as shown in the next set of examples.
+
+[source,javascript]
+----
+Math.trunc(-1.23) === -1
+Math.trunc(0) === 0
+Math.trunc('1.2') === 1
+Math.trunc(4.5) === 4
+Math.trunc(NaN) === NaN
+Math.trunc('foo') === NaN
+----
+
+That's enough numbers for the time being. Let's take a look at +String+ features.
+
+===== Strings and Unicode
+
+The most significant addition to the language, when it comes to string manipulation, is template literals. Besides that, there's also a few new utility methods. Such is the case of +.startsWith+, which tells you whether a string starts with another one; +.endsWith+, which mirrors that functionality by telling you whether a string ends with another one; +.includes+, which tells you if a string is found anywhere in the current string; and +.repeat+, which returns the result of repeating a string a number of times. The following snippet has a couple of examples for each of the methods we've just described.
+
+[source,javascript]
+----
+'doge'.startsWith('abc') === false
+'doge'.startsWith('dog') === true
+'ponyfoo'.endsWith('foo') === true
+'ponyfoo'.endsWith('pony') === false
+'savannah'.includes('van') === true
+'savannah'.includes('hanna') === false
+'ha'.repeat(3) === 'hahaha'
+'ha'.repeat(0) === ''
+----
+
+Strings in ES6 also introduce non-breaking improvements to unicode support. We'll explore the details in chapter 5.
+
+===== New Array Methods
+
+Arrays are getting a few new methods of their own as well. One of the most interesting ones is +.find+. It takes a predicate callback and an optional context for +this+. The callback is invoked sequentially for each +element+ in the array with the following arguments: +element, index, array+. Whenever the predicate returns +true+ for an +element+, the iteration ends and +.find+ returns the corresponding +element+. The next piece of code shows how you could combine +.find+ with arrow functions to quickly find elements in an array that match a certain condition.
+
+[source,javascript]
+----
+['a', 'b', 'c'].find(el => el === 'b') // <- 'b'
+[-5, 7, 32, 57, 44].find(el => el > 7) // <- 32
+----
+
+Similarly, +.findIndex+ can be used to get back the +index+ for an +element+ that matches the provided predicate. The next example shows how you could use +.findIndex+ to get back the +index+ for the matched +element+.
+
+[source,javascript]
+----
+['a', 'ab', 'abc'].findIndex(el => el.endsWith('bc')) // <- 2
+----
+
+There's also a convenient utility method to fill all places in an +Array+ with a provided value: +.fill+. The next snippet shows a pair of examples on how to use it.
+
+[source,javascript]
+----
+['a', 'b', 'c'].fill(0)
+// <- [0, 0, 0]
+new Array(3).fill(0)
+// <- [0, 0, 0]
+----
+
+You could also determine a start index and an end index for +.fill+ in the second and third parameters respectively.
+
+[source,javascript]
+----
+['a', 'b', 'c'].fill('d', 1);
+// <- ['a', 'd', 'd']
+['a', 'b', 'c'].fill('d', 0, 2);
+// <- ['d', 'd', 'c']
+----
+
+You can use +Array.from+ to cast array-like objects into arrays.
+
+[source,javascript]
+----
+Array.from({ 0: 'foo', 1: 'bar', length: 2 });
+// <- ['foo', 'bar']
+----
+
+
+
+=== 2.4 Collections
+
+...
+
+==== 2.4.1 Sets
+
+...
+
+==== 2.4.2 WeakSets
+
+...
+
+==== 2.4.3 Maps
+
+...
+
+==== 2.4.4 WeakMaps
+
+...
+
+=== 2.5 Summary
+
+...

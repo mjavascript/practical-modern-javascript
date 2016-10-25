@@ -1,0 +1,55 @@
+{
+  "name": "oreillymedia/modular-es6",
+  "branches": ["master"],
+  "export_formats": ["html"],
+  "files": [
+    "sections/cover.html",
+    "sections/toc.html",
+    "chapters/ch03.asciidoc",
+    "chapters/ch04.asciidoc",
+    "chapters/ch05.asciidoc",
+    "chapters/ch06.asciidoc",
+    "chapters/ch07.asciidoc",
+    "chapters/ch08.asciidoc",
+    "chapters/ch09.asciidoc"
+  ],
+  "formats": {
+    "pdf": {
+      "version": "web",
+      "toc": true,
+      "index": true,
+      "syntaxhighlighting": true,
+      "show_comments": false,
+      "color_count": false,
+      "trim_size": "7inx9.1875in"
+    },
+    "epub": {
+      "toc": true,
+      "index": true,
+      "syntaxhighlighting": true,
+      "epubcheck": true,
+      "show_comments": false,
+      "downsample_images": false
+    },
+    "mobi": {
+      "toc": true,
+      "index": true,
+      "syntaxhighlighting": true,
+      "show_comments": false,
+      "downsample_images": false
+    },
+    "html": {
+      "toc": true,
+      "index": true,
+      "syntaxhighlighting": true,
+      "show_comments": false,
+      "consolidated": false
+    }
+  },
+  "theme": "oreillymedia/animal_theme",
+  "title": "Practical ES6",
+  "templating": false,
+  "print_isbn13": "",
+  "lang": "en",
+  "accent_color": "cmyk(100%, 3%, 50%, 0%)"
+}
