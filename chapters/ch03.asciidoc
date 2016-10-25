@@ -477,7 +477,7 @@ Default values can also be provided in nested property destructuring.
 ----
 var { metadata: { enemy = 'Satan' } } = character;
 console.log(enemy);
-// <- Satan
+// <- 'Satan'
 ----
 
 For use in combination with aliases, you should place the alias first, and then the default value, as shown next.
