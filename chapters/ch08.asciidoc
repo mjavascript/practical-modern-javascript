@@ -37,9 +37,9 @@ In ES3, +parseInt+ interpreted strings of digits starting with a +0+ as an octal
 ----
 console.log(parseInt(`01`));
 // <- 1
-console.log(parseInt(`12`));
+console.log(parseInt(`012`));
 // <- 10
-console.log(parseInt(`12`, 10));
+console.log(parseInt(`012`, 10));
 // <- 12
 ----
 
