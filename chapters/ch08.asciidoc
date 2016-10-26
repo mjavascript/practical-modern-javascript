@@ -1611,10 +1611,10 @@ Here's an example using +for..of+.
 ----
 for (let key of [`a`, `b`, `c`, `d`].keys()) {
   console.log(key)
-  // <- `a`
-  // <- `b`
-  // <- `c`
-  // <- `d`
+  // <- 0
+  // <- 1
+  // <- 2
+  // <- 3
 }
 ----
 
