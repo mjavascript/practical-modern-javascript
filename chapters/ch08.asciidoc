@@ -881,9 +881,9 @@ You can also provide +String#includes+ with a start index where searching should
 [source,javascript]
 ----
 `hello gary`.includes(`ga`, 4);
-// <- false
-`hello gary`.includes(`ga`, 7);
 // <- true
+`hello gary`.includes(`ga`, 7);
+// <- false
 ----
 
 Let's move onto something that's not just an +String#indexOf+ alternative.
