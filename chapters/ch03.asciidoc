@@ -706,7 +706,7 @@ Named parameters before the rest parameter won't be included in the +list+.
 
 [source,javascript]
 ----
-function print (first ...list) {
+function print (first, ...list) {
   console.log(first);
   console.log(list);
 }
