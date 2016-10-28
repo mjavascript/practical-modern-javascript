@@ -28,7 +28,7 @@ The book is publicly available in HTML format and **free forever**. Each book ch
 
 > The free-to-read version of Practical ES6 is subject to [the same license][license] as the rest of the content I publish on Pony Foo: [*Creative Commons Attribution-NonCommercial-ShareAlike*][license].
 
-It took me a bit of time but I've managed to get the `git` repository to trigger builds on the O'Reilly build server. The build server then pings back to ponyfoo.com, letting the site know a build is ready. Lastly, Pony Foo finally downloads the updated HTML files for the web version. Luckily I developed the code in such a way that I will be able to share HTML versions of other books in the series effortlessly.
+It took me a bit of time but I've managed to get the `git` repository to trigger builds on the O'Reilly build server. The build server then pings back to ponyfoo.com, letting the site know that a build is ready. Lastly, Pony Foo finally downloads the updated HTML files for the web version. Luckily I developed the code in such a way that I will be able to share HTML versions of other books in the series effortlessly.
 
 _**Read** the [HTML version of the book][toc] on Pony Foo! 🦄_
 
