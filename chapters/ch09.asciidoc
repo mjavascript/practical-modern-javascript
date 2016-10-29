@@ -111,6 +111,7 @@ The following screenshot shows our updated application in all its glory.
 
 image::../images/c09g02-grocery-list.png["Printing a grocery shopping list"]
 
+...
 
 9.1 CommonJS
 9.2 Modules in ES6
