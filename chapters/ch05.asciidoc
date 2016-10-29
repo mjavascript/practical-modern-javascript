@@ -402,7 +402,7 @@ A less contrived example would involve other steps. In the following piece of co
 ----
 fetch('/items')
   .then(res => res.json())
-  .then(items => fetch(`/item/${items[0].slug}`))
+  .then(items => fetch(`/item/${ items[0].slug }`))
   .then(res => res.json())
   .then(item => console.log(item));
 ----
@@ -1166,7 +1166,7 @@ Now that we're able to randomly generate vague answers, we can use a generator f
 ----
 function* ball () {
   while (true) {
-    yield `[a] ${answer()}`;
+    yield `[a] ${ answer() }`;
   }
 }
 ----
@@ -1191,8 +1191,8 @@ Interestingly, +yield+ expressions are not just used to produce output from the 
 function* ball () {
   let question;
   while (true) {
-    question = yield `[a] ${answer()}`;
-    console.log(`[q] ${question}`);
+    question = yield `[a] ${ answer() }`;
+    console.log(`[q] ${ question }`);
   }
 }
 ----
@@ -1239,8 +1239,8 @@ Whenever a question is yielded by the user-provided generator, execution in the 
 ----
 function ball (questions) {
   for (let question of questions()) {
-    console.log(`[q] ${question}`);
-    console.log(`[a] ${answer()}`);
+    console.log(`[q] ${ question }`);
+    console.log(`[a] ${ answer() }`);
   }
 }
 ----
@@ -1252,8 +1252,8 @@ One trade-off that you might've noticed is that +ball+ is no longer iterable and
 function* ball (questions) {
   for (let question of questions()) {
     yield [
-      `[q] ${question}`,
-      `[a] ${answer()}`
+      `[q] ${ question }`,
+      `[a] ${ answer() }`
     ];
   }
 }
@@ -1305,11 +1305,11 @@ function ball (questions) {
     if (question.done) {
       return;
     }
-    fetch(`/ask?q=${encodeURIComponent(question.value)}`)
+    fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
       .then(response => response.text())
       .then(answer => {
-        console.log(`[q] ${question.value}`);
-        console.log(`[a] ${answer}`);
+        console.log(`[q] ${ question.value }`);
+        console.log(`[a] ${ answer }`);
         ask();
       });
   }
@@ -1328,7 +1328,7 @@ function ball (questions) {
     if (question.done) {
       return;
     }
-    fetch(`/ask?q=${encodeURIComponent(question.value)}`)
+    fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
       .then(response => response.text())
       .then(answer => question = g.next(answer))
       .then(ask);
@@ -1341,8 +1341,8 @@ The user-provided generator would have to change, slightly. The answers would no
 [source,javascript]
 ----
 ball(function* questions () {
-  console.log(`[a-1] ${yield 'Will JavaScript fall out of grace?'}`);
-  console.log(`[a-2] ${yield 'How do you know that?'}`);
+  console.log(`[a-1] ${ yield 'Will JavaScript fall out of grace?' }`);
+  console.log(`[a-2] ${ yield 'How do you know that?' }`);
 });
 ----
 
@@ -1358,7 +1358,7 @@ In the case of our magic 8-ball, the iterator may experience network issues -- o
 
 [source,javascript]
 ----
-fetch(`/ask?q=${encodeURIComponent(question.value)}`)
+fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
   .then(response => response.text())
   .then(answer => question = g.next(answer), reason => g.throw(reason))
   .then(ask);
@@ -1370,12 +1370,12 @@ When +g.next+ is called, execution in generator code is unsuspended. The +g.thro
 ----
 ball(function* questions () {
   try {
-    console.log(`[a-1] ${yield 'Will JavaScript fall out of grace?'}`);
+    console.log(`[a-1] ${ yield 'Will JavaScript fall out of grace?' }`);
   } catch (e) {
     console.error('[a-1] Oops!', e);
   }
   try {
-    console.log(`[a-2] ${yield 'How do you know that?'}`);
+    console.log(`[a-2] ${ yield 'How do you know that?' }`);
   } catch (e) {
     console.error('[a-2] Oops!', e);
   }

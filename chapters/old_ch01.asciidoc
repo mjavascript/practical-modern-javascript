@@ -36,7 +36,7 @@ Up until ES5 you could wrap strings in single or double quotes. ES6 introduces t
 [source,javascript]
 ----
 var user = { name: 'Nicolas' };
-var text = +Hello, ${user.name}!+;
+var text = +Hello, ${ user.name }!+;
 // <- 'Hello, Nicolas!'
 ----
 

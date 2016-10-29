@@ -748,7 +748,7 @@ You may recall template literals from section 3.5, and how those can be used to 
 [source,javascript]
 ----
 function greet (name) {
-  return `Hello, ${name}!`;
+  return `Hello, ${ name }!`;
 }
 greet(`Gandalf`);
 // <- `Hello, Gandalf!`
@@ -1070,7 +1070,7 @@ When preceded by another code unit, however, they are combined together into a s
 [source,javascript]
 ----
 function overlined (text) {
-  return `${text}\u0305`;
+  return `${ text }\u0305`;
 }
 
 overlined(`o`);
@@ -1433,7 +1433,7 @@ The +Array.of+ method is exactly like the +cast+ function we played around with 
 Array.of = (...params) => params;
 ----
 
-You can think about +Array.of+ as an alternative for +new Array+ that doesn't have the +new Array(length)+ overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${count}+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
+You can think about +Array.of+ as an alternative for +new Array+ that doesn't have the +new Array(length)+ overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${ count }+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
 
 [source,javascript]
 ----

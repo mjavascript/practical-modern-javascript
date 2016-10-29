@@ -96,6 +96,7 @@ We can consume the +list.js+ template in a very similar way than what we did bef
 
 [source,javascript]
 ----
+// app.js
 const renderList = require(`./views/list`);
 const html = renderList([{
   name: `Banana bread`,
@@ -111,7 +112,37 @@ The following screenshot shows our updated application in all its glory.
 
 image::../images/c09g02-grocery-list.png["Printing a grocery shopping list"]
 
-...
+In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a +model+ object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the +item.js+ templating function, and joining their HTML representations with newlines.
+
+Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a +render+ function that could render any template, taking advantage of their shared API surface, we could easily do that by taking advantage of the dynamic nature of +require+, as shown next.
+
+[source,javascript]
+----
+// render.js
+module.exports = function render(template, model) {
+  return require(`./views/${ template }`)(model);
+};
+----
+
+Once we had such an API, we wouldn't have to worry about carefully constructing +require+ statements that match the directory structure of our view templates, because the +render.js+ module could take care of that. Rendering any template becomes a matter of calling the +render+ function with the template's name and the model for that template.
+
+[source,javascript]
+----
+// app.js
+const render = require(`./render`);
+console.log(render(`item`, {
+  name: `Banana bread`,
+  amount: 1
+}));
+console.log(render(`list`, [{
+  name: `Apple pie`,
+  amount: 2
+}, {
+  name: `Roasted almond`,
+  amount: 25
+}]));
+----
+
 
 9.1 CommonJS
 9.2 Modules in ES6

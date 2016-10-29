@@ -31,7 +31,7 @@ The proxy in the following code listing is able to track any and every property 
 ----
 const handler = {
   get (target, key) {
-    console.log(`Get on property "${key}"`);
+    console.log(`Get on property "${ key }"`);
     return target[key];
   }
 };
@@ -54,7 +54,7 @@ In the following code snippet we use +Reflect.get+ to provide the default behavi
 ----
 const handler = {
   get (target, key) {
-    console.log(`Get on property "${key}"`);
+    console.log(`Get on property "${ key }"`);
     return Reflect.get(target, key);
   }
 };
@@ -70,7 +70,7 @@ const handler = {
   get (target, key) {
     const [prefix] = key;
     if (prefix === '_') {
-      throw new Error(`Property "${key}" cannot be read through this proxy.`);
+      throw new Error(`Property "${ key }" cannot be read through this proxy.`);
     }
     return Reflect.get(target, key);
   }
@@ -103,7 +103,7 @@ const handler = {
 }
 function invariant (key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`);
   }
 }
 const target = {};
@@ -145,7 +145,7 @@ function proxied () {
 }
 function invariant (key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`);
   }
 }
 ----
@@ -171,7 +171,7 @@ function concealWithPrefix (original, prefix='_') {
 }
 function invariant (key, action) {
   if (key.startsWith(prefix)) {
-    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`);
   }
 }
 const target = {
@@ -324,7 +324,7 @@ const handler = {
 }
 function invariant (key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`);
   }
 }
 ----
@@ -398,7 +398,7 @@ const handler = {
 }
 function invariant (key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`);
   }
 }
 ----
@@ -481,7 +481,7 @@ const handler = {
 };
 function invariant (key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`);
   }
 }
 ----
@@ -616,7 +616,7 @@ const handler = {
 };
 function invariant (key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`);
   }
 }
 const target = {};
@@ -846,7 +846,7 @@ const handler = {
 }
 class Target {
   hello () {
-    console.log(`Hello, ${this.name}!`);
+    console.log(`Hello, ${ this.name }!`);
   }
 }
 ----

@@ -1,7 +1,7 @@
 [[ecmascript6-essentials]]
 == ES6 Essentials
 
-The sixth edition of the language comes with a plethora of non-breaking syntax improvements, most of which we'll tackle throughout this chapter. Many of these changes are syntactic sugar, that is: they could be represented in ES5, albeit using more complicated pieces of code. There's also changes in variable declaration that aren't syntactic sugar but instead a completely different way of declaring variables using +let+ and +const+, as we'll see towards the end of the chapter.
+The sixth edition of the language comes with a plethora of non-breaking syntax improvements, most of which we'll tackle throughout this chapter. Many of these changes are syntactic sugar, that is: they could be represented in ES5, albeit using more complicated pieces of code. There are also changes that aren't merely syntactic sugar but a completely different way of declaring variables using +let+ and +const+, as we'll see towards the end of the chapter.
 
 Object literals get a few syntax changes in ES6, and they're a good place to start.
 
@@ -884,7 +884,7 @@ With template literals, you're able to interpolate any JavaScript expressions in
 [source,javascript]
 ----
 var name = 'Shannon';
-var text = `Hello, ${name}!`;
+var text = `Hello, ${ name }!`;
 console.log(text);
 // <- 'Hello, Shannon!'
 ----
@@ -895,7 +895,7 @@ It will be up to your coding style guides to decide how much logic you want to c
 
 [source,javascript]
 ----
-`The time and date is ${new Date().toLocaleString()}.`
+`The time and date is ${ new Date().toLocaleString() }.`
 // <- 'the time and date is 8/26/2015, 3:15:20 PM'
 ----
 
@@ -903,7 +903,7 @@ You could interpolate mathematical operations.
 
 [source,javascript]
 ----
-`The result of 2+3 equals ${2+3}`
+`The result of 2+3 equals ${ 2 + 3 }`
 // <- 'The result of 2+3 equals 5'
 ----
 
@@ -911,7 +911,7 @@ You could even nest template literals, as they are also valid JavaScript express
 
 [source,javascript]
 ----
-`This a template literal ${`with another ${'one'} embedded inside it`}`
+`This a template literal ${ `with another ${ 'one' } embedded inside it` }`
 // <- 'This a template literal with another one embedded inside it'
 ----
 
@@ -961,14 +961,14 @@ var book = {
 };
 var html = `<article>
   <header>
-    <h1>${book.title}</h1>
+    <h1>${ book.title }</h1>
   </header>
-  <section>${book.excerpt}</section>
+  <section>${ book.excerpt }</section>
   <footer>
     <ul>
       ${
         book.tags
-          .map(tag => `<li>${tag}</li>`)
+          .map(tag => `<li>${ tag }</li>`)
           .join('\n      ')
       }
     </ul>
@@ -1012,7 +1012,7 @@ console.log(text);
 
 The +String.raw+ prefix we've added to our template literal is a tagged template. It's used to parse the template. Tagged templates receive a parameter with an array containing the static parts of the template, as well as the result of evaluating each expression, each in its own parameter.
 
-A template literal like +`Hello, ${name}. I am ${emotion} to meet you!`+, for instance, will invoke a tagged template +tag+ using the following parameters.
+A template literal like +`Hello, ${ name }. I am ${ emotion } to meet you!`+, for instance, will invoke a tagged template +tag+ using the following parameters.
 
 [source,javascript]
 ----
@@ -1038,7 +1038,7 @@ You can try the +tag+ template using code like in the following snippet. You'll 
 ----
 var name = 'Maurice';
 var emotion = 'thrilled';
-var text = tag`Hello, ${name}. I am ${emotion} to meet you!`;
+var text = tag`Hello, ${ name }. I am ${ emotion } to meet you!`;
 console.log(text)
 // <- 'Hello Maurice, I am thrilled to meet you!'
 ----
@@ -1054,7 +1054,7 @@ function upper (parts, ...values) {
 }
 var name = 'Maurice';
 var emotion = 'thrilled';
-var text = upper`Hello, ${name}. I am ${emotion} to meet you!`;
+var text = upper`Hello, ${ name }. I am ${ emotion } to meet you!`;
 console.log(text);
 // <- 'Hello MAURICE, I am THRILLED to meet you!'
 ----
@@ -1069,7 +1069,7 @@ function sanitized (parts, ...values) {
   );
 }
 var comment = 'A malicious comment<iframe src="http://evil.corp"></iframe>';
-var html = sanitized`<div>${comment}</div>`;
+var html = sanitized`<div>${ comment }</div>`;
 console.log(html);
 // <- '<div>A malicious comment</div>'
 ----

@@ -601,7 +601,7 @@ const morphling = {
 };
 console.log(+morphling);
 // <- Infinity
-console.log(`That is ${morphling}!`);
+console.log(`That is ${ morphling }!`);
 // <- 'That is a lot!'
 console.log(morphling + ' is powerful');
 // <- '[object Morphling] is powerful'

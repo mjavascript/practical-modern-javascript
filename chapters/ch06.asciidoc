@@ -254,7 +254,7 @@ map.set(1, 'one');
 map.set(2, 'two');
 map.set(3, 'three');
 for (let [key, value] of map) {
-  console.log(`${key}: ${value}`);
+  console.log(`${ key }: ${ value }`);
   // <- '1: one'
   // <- '2: two'
   // <- '3: three'
