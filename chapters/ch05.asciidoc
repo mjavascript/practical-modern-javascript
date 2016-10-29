@@ -719,7 +719,7 @@ This sort of abstraction of complexity into another function often helps keep co
 ====
 Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem, there is no way of knowing whether the sequence is infinite or not in code.
 
-image::../images/c04g01-halting-problem.png["The halting problem depicted by XKCD comic 1266"]
+image::../images/c05g01-halting-problem.png["The halting problem depicted by XKCD comic 1266"]
 
 You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While +for..of+ won't run into the problem unless there's no escape condition, using mechanisms such as spread or +Array.from+ would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
 ====

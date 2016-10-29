@@ -68,13 +68,17 @@ Our application could easily print a +<li>+ by leveraging the +item.js+ view tem
 [source,javascript]
 ----
 // app.js
-const renderItem = require('./views/item');
+const renderItem = require(`./views/item`);
 const html = renderItem({
-  name: 'Banana bread',
+  name: `Banana bread`,
   amount: 3
 });
 console.log(html);
 ----
+
+
+
+image::../images/c09g01-grocery-item.png["Printing an item for our grocery shopping list"]
 
 
 The following template renders the grocery list itself. It receives an array of items, and renders each of them by reusing the +item.js+ template from the previous code snippet.
