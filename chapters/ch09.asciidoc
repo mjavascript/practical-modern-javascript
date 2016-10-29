@@ -76,22 +76,40 @@ const html = renderItem({
 console.log(html);
 ----
 
-
+The following screenshot shows our tiny application in action.
 
 image::../images/c09g01-grocery-item.png["Printing an item for our grocery shopping list"]
 
-
-The following template renders the grocery list itself. It receives an array of items, and renders each of them by reusing the +item.js+ template from the previous code snippet.
+The next template we'll make renders the grocery list itself. It receives an array of items, and renders each of them by reusing the +item.js+ template from the previous code snippet.
 
 [source,javascript]
 ----
 // views/list.js
-const renderItem = require('./item');
+const renderItem = require(`./item`);
 
 module.exports = model => `<ul>
-  ${ model.forEach(renderItem) }
+  ${ model.map(renderItem).join(`\n`) }
 </ul>`;
 ----
+
+We can consume the +list.js+ template in a very similar way than what we did before, but we'll need to adjust the model passed into the template so that we provide a collection of items instead of a single one.
+
+[source,javascript]
+----
+const renderList = require(`./views/list`);
+const html = renderList([{
+  name: `Banana bread`,
+  amount: 3
+}, {
+  name: `Chocolate chip muffin`,
+  amount: 2
+}]);
+console.log(html);
+----
+
+The following screenshot shows our updated application in all its glory.
+
+image::../images/c09g02-grocery-list.png["Printing a grocery shopping list"]
 
 
 9.1 CommonJS
