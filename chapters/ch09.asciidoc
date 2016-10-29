@@ -49,7 +49,46 @@ node app
 # [1, 2]
 ----
 
-....
+The +require+ function in CommonJS modules can be treated dynamically, just like any other JavaScript function. This aspect of +require+ is sometimes leveraged to dynamically +require+ different modules that conform to one interface. As an example, let's conjure up a +templates+ directory with a number of view template functions. Our templates will take a model and return an HTML string.
+
+The template found in the following code snippet renders an item of a grocery shopping list by reading its attributes from a +model+ object.
+
+[source,javascript]
+----
+// views/item.js
+module.exports = model => `<li>
+  <span>${ model.amount }</span>
+  <span>x </span>
+  <span>${ model.name }</span>
+</li>`;
+----
+
+Our application could easily print a +<li>+ by leveraging the +item.js+ view template.
+
+[source,javascript]
+----
+// app.js
+const renderItem = require('./views/item');
+const html = renderItem({
+  name: 'Banana bread',
+  amount: 3
+});
+console.log(html);
+----
+
+
+The following template renders the grocery list itself. It receives an array of items, and renders each of them by reusing the +item.js+ template from the previous code snippet.
+
+[source,javascript]
+----
+// views/list.js
+const renderItem = require('./item');
+
+module.exports = model => `<ul>
+  ${ model.forEach(renderItem) }
+</ul>`;
+----
+
 
 9.1 CommonJS
 9.2 Modules in ES6
