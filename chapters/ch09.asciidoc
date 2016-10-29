@@ -114,7 +114,7 @@ image::../images/c09g02-grocery-list.png["Printing a grocery shopping list"]
 
 In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a +model+ object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the +item.js+ templating function, and joining their HTML representations with newlines.
 
-Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a +render+ function that could render any template, taking advantage of their shared API surface, we could easily do that by taking advantage of the dynamic nature of +require+, as shown next.
+Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a +render+ function that could render any template, we could easily do that thanks to the dynamic nature of +require+. The next example shows how we can construct the path to a template module. An important distinction is how +require+ calls doesn't necessarily need to be on the top level of a module. Calls to +require+ can be anywhere, even embedded within other functions.
 
 [source,javascript]
 ----
@@ -143,6 +143,9 @@ console.log(render(`list`, [{
 }]));
 ----
 
+image::../images/c09g03-dynamic-render.png["Printing different views through a normalized render function."]
+
+...
 
 9.1 CommonJS
 9.2 Modules in ES6
