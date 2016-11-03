@@ -1,4 +1,4 @@
-import counter from './counter';
+import counter from './counter'
 
-console.log(counter);
+console.log(counter)
 // <- 0

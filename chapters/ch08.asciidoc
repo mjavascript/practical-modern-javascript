@@ -13,7 +13,7 @@ Before ES6, your best bet when it comes to binary representation of integers was
 
 [source,javascript]
 ----
-parseInt(`101`, 2);
+parseInt(`101`, 2)
 // <- 5
 ----
 
@@ -35,11 +35,11 @@ In ES3, +parseInt+ interpreted strings of digits starting with a +0+ as an octal
 
 [source,javascript]
 ----
-console.log(parseInt(`01`));
+console.log(parseInt(`01`))
 // <- 1
-console.log(parseInt(`012`));
+console.log(parseInt(`012`))
 // <- 10
-console.log(parseInt(`012`, 10));
+console.log(parseInt(`012`, 10))
 // <- 12
 ----
 
@@ -47,7 +47,7 @@ When ES5 came around, the default radix in +parseInt+ changed, from +8+ to +10+.
 
 [source,javascript]
 ----
-console.log(parseInt(`100`, `8`));
+console.log(parseInt(`100`, `8`))
 // <- 64
 ----
 
@@ -78,15 +78,15 @@ The next snippet quickly shows that, when passed to +Number.isNaN+, anything tha
 
 [source,javascript]
 ----
-Number.isNaN(123);
+Number.isNaN(123)
 // <- false, integers are not NaN
-Number.isNaN(Infinity);
+Number.isNaN(Infinity)
 // <- false, Infinity is not NaN
-Number.isNaN(`a hundred`);
+Number.isNaN(`a hundred`)
 // <- false, `a hundred` is not NaN
-Number.isNaN(NaN);
+Number.isNaN(NaN)
 // <- true, NaN is NaN
-Number.isNaN(`a hundred` / `two`);
+Number.isNaN(`a hundred` / `two`)
 // <- true, `a hundred` / `two` is NaN, NaN is NaN
 ----
 
@@ -94,9 +94,9 @@ The +isNaN+ method, in contrast, casts non-numeric values passed to it before ev
 
 [source,javascript]
 ----
-isNaN(`a hundred`);
+isNaN(`a hundred`)
 // <- true, because Number(`a hundred`) is NaN
-isNaN(new Date());
+isNaN(new Date())
 // <- false, because Number(new Date()) uses Date#valueOf, which returns a unix timestamp
 ----
 
@@ -112,7 +112,7 @@ In most cases, what you actually want to know is whether a value identifies as a
 [source,javascript]
 ----
 function isNumber (value) {
-  return typeof value === `number` && !Number.isNaN(value);
+  return typeof value === `number` && !Number.isNaN(value)
 }
 ----
 
@@ -120,15 +120,15 @@ You can use that method to figure out whether a +value+ is a number or not. In t
 
 [source,javascript]
 ----
-isNumber(1);
+isNumber(1)
 // <- true
-isNumber(Infinity);
+isNumber(Infinity)
 // <- true
-isNumber(NaN);
+isNumber(NaN)
 // <- false
-isNumber(`two`);
+isNumber(`two`)
 // <- false
-isNumber(new Date());
+isNumber(new Date())
 // <- false
 ----
 
@@ -144,17 +144,17 @@ Here are a few examples using the global +isFinite+ function.
 
 [source,javascript]
 ----
-isFinite(NaN);
+isFinite(NaN)
 // <- false
-isFinite(Infinity);
+isFinite(Infinity)
 // <- false
-isFinite(-Infinity);
+isFinite(-Infinity)
 // <- false
-isFinite(null);
+isFinite(null)
 // <- true, because Number(null) is 0
-isFinite(-13);
+isFinite(-13)
 // <- true, because Number(-13) is -13
-isFinite(`10`);
+isFinite(`10`)
 // <- true, because Number(`10`) is 10
 ----
 
@@ -164,17 +164,17 @@ Here are a few examples using the +Number.isFinite+ method.
 
 [source,javascript]
 ----
-Number.isFinite(NaN);
+Number.isFinite(NaN)
 // <- false
-Number.isFinite(Infinity);
+Number.isFinite(Infinity)
 // <- false
-Number.isFinite(-Infinity);
+Number.isFinite(-Infinity)
 // <- false
-Number.isFinite(null);
+Number.isFinite(null)
 // <- false, because null is not a number
-Number.isFinite(-13);
+Number.isFinite(-13)
 // <- true
-Number.isFinite(`10`);
+Number.isFinite(`10`)
 // <- false, because `10` is not a number
 ----
 
@@ -182,7 +182,7 @@ Creating a polyfill for +Number.isFinite+ would involve returning +false+ for no
 
 [source,javascript]
 ----
-Number.isFinite = value => typeof value === `number` && isFinite(value);
+Number.isFinite = value => typeof value === `number` && isFinite(value)
 ----
 
 ==== 8.1.4 +Number.parseInt+
@@ -191,7 +191,7 @@ The +Number.parseInt+ method works the same as +parseInt+. It is, in fact, the s
 
 [source,javascript]
 ----
-console.log(Number.parseInt === parseInt);
+console.log(Number.parseInt === parseInt)
 // <- true
 ----
 
@@ -199,9 +199,9 @@ The +parseInt+ function has support for hexadecimal literal notation in strings.
 
 [source,javascript]
 ----
-parseInt(`0xf00`);
+parseInt(`0xf00`)
 // <- 3840
-parseInt(`0xf00`, 16);
+parseInt(`0xf00`, 16)
 // <- 3840
 ----
 
@@ -209,9 +209,9 @@ If you provided another +radix+, +parseInt+ would bail after the first non-digit
 
 [source,javascript]
 ----
-parseInt(`0xf00`, 10);
+parseInt(`0xf00`, 10)
 // <- 0
-parseInt(`5xf00`, 10);
+parseInt(`5xf00`, 10)
 // <- 5, illustrating there's no special treatment here
 ----
 
@@ -219,13 +219,13 @@ While +parseInt+ accepts input in hexadecimal literal notation strings, its inte
 
 [source,javascript]
 ----
-parseInt(`0b011`);
+parseInt(`0b011`)
 // <- 0
-parseInt(`0b011`, 2);
+parseInt(`0b011`, 2)
 // <- 0
-parseInt(`0o100`);
+parseInt(`0o100`)
 // <- 0
-parseInt(`0o100`, 8);
+parseInt(`0o100`, 8)
 // <- 0
 ----
 
@@ -233,9 +233,9 @@ It's up to you to drop the prefix before +parseInt+, if you wanted to use +parse
 
 [source,javascript]
 ----
-parseInt(`0b011`.slice(2), 2);
+parseInt(`0b011`.slice(2), 2)
 // <- 3
-parseInt(`0o110`.slice(2), 8);
+parseInt(`0o110`.slice(2), 8)
 // <- 72
 ----
 
@@ -243,9 +243,9 @@ To make matters even worse, the +Number+ function is perfectly able to cast thes
 
 [source,javascript]
 ----
-Number(`0b011`);
+Number(`0b011`)
 // <- 3
-Number(`0o110`);
+Number(`0o110`)
 // <- 72
 ----
 
@@ -255,7 +255,7 @@ Like +parseInt+, +parseFloat+ was added to +Number+ without any modifications wh
 
 [source,javascript]
 ----
-console.log(Number.parseFloat === parseFloat);
+console.log(Number.parseFloat === parseFloat)
 // <- true
 ----
 
@@ -282,7 +282,7 @@ You might want to consider the following code snippet as a polyfill for +Number.
 
 [source,javascript]
 ----
-Number.isInteger = value => Number.isFinite(value) && value % 1 === 0;
+Number.isInteger = value => Number.isFinite(value) && value % 1 === 0
 ----
 
 Next up we'll dive into floating point arithmetic, which is well-documented as having interesting corner cases.
@@ -293,9 +293,9 @@ The +EPSILON+ property is a new constant value being added to the +Number+ built
 
 [source,javascript]
 ----
-Number.EPSILON;
+Number.EPSILON
 // <- 2.220446049250313e-16
-Number.EPSILON.toFixed(20);
+Number.EPSILON.toFixed(20)
 // <- `0.00000000000000022204`
 ----
 
@@ -303,9 +303,9 @@ Let's take a look at the canonical example of floating point arithmetic.
 
 [source,javascript]
 ----
-0.1 + 0.2;
+0.1 + 0.2
 // <- 0.30000000000000004
-0.1 + 0.2 === 0.3;
+0.1 + 0.2 === 0.3
 // <- false
 ----
 
@@ -313,9 +313,9 @@ What's the margin of error in this operation? Let's move the operands around and
 
 [source,javascript]
 ----
-0.1 + 0.2 - 0.3;
+0.1 + 0.2 - 0.3
 // <- 5.551115123125783e-17
-5.551115123125783e-17.toFixed(20);
+5.551115123125783e-17.toFixed(20)
 // <- `0.00000000000000005551`
 ----
 
@@ -323,7 +323,7 @@ We could use +Number.EPSILON+ to figure out whether the difference is small enou
 
 [source,javascript]
 ----
-5.551115123125783e-17 < Number.EPSILON;
+5.551115123125783e-17 < Number.EPSILON
 // <- true
 ----
 
@@ -332,7 +332,7 @@ The following piece of code can be used to figure out out whether the result of 
 [source,javascript]
 ----
 function withinMarginOfError (left, right) {
-  return Math.abs(left - right) < Number.EPSILON;
+  return Math.abs(left - right) < Number.EPSILON
 }
 ----
 
@@ -340,9 +340,9 @@ The next snippet shows +withinMarginOfError+ in action.
 
 [source,javascript]
 ----
-withinMarginOfError(0.1 + 0.2, 0.3);
+withinMarginOfError(0.1 + 0.2, 0.3)
 // <- true
-withinMarginOfError(0.2 + 0.2, 0.3);
+withinMarginOfError(0.2 + 0.2, 0.3)
 // <- false
 ----
 
@@ -354,9 +354,9 @@ This is the largest integer that can be safely and precisely represented in Java
 
 [source,javascript]
 ----
-Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1;
+Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1
 // <- true
-Number.MAX_SAFE_INTEGER === 9007199254740991;
+Number.MAX_SAFE_INTEGER === 9007199254740991
 // <- true
 ----
 
@@ -364,9 +364,9 @@ As you might expect, there's also the opposite constant: the minimum. It's the n
 
 [source,javascript]
 ----
-Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER;
+Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER
 // <- true
-Number.MIN_SAFE_INTEGER === -9007199254740991;
+Number.MIN_SAFE_INTEGER === -9007199254740991
 // <- true
 ----
 
@@ -374,11 +374,11 @@ Floating point arithmetic becomes unreliable beyond the +[MIN_SAFE_INTEGER, MAX_
 
 [source,javascript]
 ----
-1 === 2;
+1 === 2
 // <- false
-Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2;
+Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2
 // <- true
-Number.MIN_SAFE_INTEGER - 1 === Number.MIN_SAFE_INTEGER - 2;
+Number.MIN_SAFE_INTEGER - 1 === Number.MIN_SAFE_INTEGER - 2
 // <- true
 ----
 
@@ -410,13 +410,13 @@ In the following example both operands are within bounds, but the result is inco
 
 [source,javascript]
 ----
-Number.isSafeInteger(9007199254740000);
+Number.isSafeInteger(9007199254740000)
 // <- true
-Number.isSafeInteger(993);
+Number.isSafeInteger(993)
 // <- true
-Number.isSafeInteger(9007199254740000 + 993);
+Number.isSafeInteger(9007199254740000 + 993)
 // <- false
-9007199254740000 + 993;
+9007199254740000 + 993
 // <- 9007199254740992, should be 9007199254740993
 ----
 
@@ -424,7 +424,7 @@ Certain operations and numbers, such as the following code snippet, may return c
 
 [source,javascript]
 ----
-9007199254740000 + 994;
+9007199254740000 + 994
 // <- 9007199254740994
 ----
 
@@ -432,13 +432,13 @@ In the next example, one of the operands is out of bounds, and thus we can't tru
 
 [source,javascript]
 ----
-Number.isSafeInteger(9007199254740993);
+Number.isSafeInteger(9007199254740993)
 // <- false
-Number.isSafeInteger(990);
+Number.isSafeInteger(990)
 // <- true
-Number.isSafeInteger(9007199254740993 + 990);
+Number.isSafeInteger(9007199254740993 + 990)
 // <- false
-9007199254740993 + 990;
+9007199254740993 + 990
 // <-  9007199254741982, should be 9007199254741983
 ----
 
@@ -446,13 +446,13 @@ A subtraction in our last example would produce a result that is within bounds, 
 
 [source,javascript]
 ----
-Number.isSafeInteger(9007199254740993);
+Number.isSafeInteger(9007199254740993)
 // <- false
-Number.isSafeInteger(990);
+Number.isSafeInteger(990)
 // <- true
-Number.isSafeInteger(9007199254740993 - 990);
+Number.isSafeInteger(9007199254740993 - 990)
 // <- true
-9007199254740993 - 990;
+9007199254740993 - 990
 // <-  9007199254740002, should be 9007199254740003
 ----
 
@@ -460,13 +460,13 @@ If both operands are out of bounds, the output could end up in the safe space, e
 
 [source,javascript]
 ----
-Number.isSafeInteger(9007199254740995);
+Number.isSafeInteger(9007199254740995)
 // <- false
-Number.isSafeInteger(9007199254740993);
+Number.isSafeInteger(9007199254740993)
 // <- false
-Number.isSafeInteger(9007199254740995 - 9007199254740993);
+Number.isSafeInteger(9007199254740995 - 9007199254740993)
 // <- true
-9007199254740995 - 9007199254740993;
+9007199254740995 - 9007199254740993
 // <- 4, should be 2
 ----
 
@@ -475,11 +475,11 @@ We can conclude that the only safe way to assert whether an operation produces c
 [source,javascript]
 ----
 function safeOp (result, ...operands) {
-  const values = [result, ...operands];
+  const values = [result, ...operands]
   if (!values.every(Number.isSafeInteger)) {
-    throw new RangeError('Operation cannot be trusted!');
+    throw new RangeError('Operation cannot be trusted!')
   }
-  return result;
+  return result
 }
 ----
 
@@ -487,15 +487,15 @@ You could use +safeOp+ to ensure all operands, including the +result+ are safely
 
 [source,javascript]
 ----
-safeOp(9007199254740000 + 993, 9007199254740000, 993);
+safeOp(9007199254740000 + 993, 9007199254740000, 993)
 // <- RangeError: Operation cannot be trusted!
-safeOp(9007199254740993 + 990, 9007199254740993, 990);
+safeOp(9007199254740993 + 990, 9007199254740993, 990)
 // <- RangeError: Operation cannot be trusted!
-safeOp(9007199254740993 - 990, 9007199254740993, 990);
+safeOp(9007199254740993 - 990, 9007199254740993, 990)
 // <- RangeError: Operation cannot be trusted!
-safeOp(9007199254740993 - 9007199254740995, 9007199254740993, 9007199254740995);
+safeOp(9007199254740993 - 9007199254740995, 9007199254740993, 9007199254740995)
 // <- RangeError: Operation cannot be trusted!
-safeOp(1 + 2, 1, 2);
+safeOp(1 + 2, 1, 2)
 // <- 3
 ----
 
@@ -543,7 +543,7 @@ Creating a simple polyfill for +Math.trunc+ would involve checking whether the v
 
 [source,javascript]
 ----
-Math.trunc = value => value > 0 ? Math.floor(value) : Math.ceil(value);
+Math.trunc = value => value > 0 ? Math.floor(value) : Math.ceil(value)
 ----
 
 ==== 8.2.3 +Math.cbrt+
@@ -575,7 +575,7 @@ This operation is the result of computing +e+ to the +value+ minus +1+. In JavaS
 [source,javascript]
 ----
 function expm1 (value) {
-  return Math.pow(Math.E, value) - 1;
+  return Math.pow(Math.E, value) - 1
 }
 ----
 
@@ -584,7 +584,7 @@ The <code>e<sup>value</sup></code> operation can be expressed as +Math.exp(value
 [source,javascript]
 ----
 function expm1 (value) {
-  return Math.exp(value) - 1;
+  return Math.exp(value) - 1
 }
 ----
 
@@ -592,13 +592,13 @@ Note that +Math.expm1+ has higher precision than merely doing +Math.exp(value) -
 
 [source,javascript]
 ----
-expm1(1e-20);
+expm1(1e-20)
 // <- 0
-Math.expm1(1e-20);
+Math.expm1(1e-20)
 // <- 1e-20
-expm1(1e-10);
+expm1(1e-10)
 // <- 1.000000082740371e-10
-Math.expm1(1e-10);
+Math.expm1(1e-10)
 // <- 1.00000000005e-10
 ----
 
@@ -611,7 +611,7 @@ This is the natural logarithm of +value+ plus +1+, -- <code><em>ln</em>(value + 
 [source,javascript]
 ----
 function log1p (value) {
-  return Math.log(value + 1);
+  return Math.log(value + 1)
 }
 ----
 
@@ -619,9 +619,9 @@ Just like with +Math.expm1+, +Math.log1p+ method is more precise than executing 
 
 [source,javascript]
 ----
-log1p(1.00000000005e-10);
+log1p(1.00000000005e-10)
 // <- 1.000000082690371e-10
-Math.log1p(1.00000000005e-10);
+Math.log1p(1.00000000005e-10)
 // <- 1e-10, exactly the inverse of Math.expm1(1e-10)
 ----
 
@@ -631,7 +631,7 @@ Base ten logarithm of a number -- <code><em>log</em><sub>10</sub>(value)</code>.
 
 [source,javascript]
 ----
-Math.log10(1000);
+Math.log10(1000)
 // <- 3
 ----
 
@@ -640,7 +640,7 @@ You could polyfill +Math.log10+ using the +Math.LN10+ constant.
 [source,javascript]
 ----
 function log10 (value) {
-  return Math.log(x) / Math.LN10;
+  return Math.log(x) / Math.LN10
 }
 ----
 
@@ -652,7 +652,7 @@ Base two logarithm of a number -- <code><em>log</em><sub>2</sub>(value)</code>.
 
 [source,javascript]
 ----
-Math.log2(1024);
+Math.log2(1024)
 // <- 10
 ----
 
@@ -661,7 +661,7 @@ You could polyfill +Math.log2+ using the +Math.LN2+ constant.
 [source,javascript]
 ----
 function log2 (value) {
-  return Math.log(x) / Math.LN2;
+  return Math.log(x) / Math.LN2
 }
 ----
 
@@ -669,9 +669,9 @@ Note that the polyfilled version won't be as precise as +Math.log2+, as demonstr
 
 [source,javascript]
 ----
-log2(1 << 29);
+log2(1 << 29)
 // <- 29.000000000000004
-Math.log2(1 << 29);
+Math.log2(1 << 29)
 // <- 29
 ----
 
@@ -692,7 +692,7 @@ Using +Math.hypot+ returns the square root of the sum of the squares of every pr
 
 [source,javascript]
 ----
-Math.hypot(1, 2, 3);
+Math.hypot(1, 2, 3)
 // <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
 ----
 
@@ -701,7 +701,7 @@ We could polyfill +Math.hypot+ by performing these operations manually. We can u
 [source,javascript]
 ----
 function hypot (...values) {
-  return Math.sqrt(values.reduce((sum, value) => sum + value * value, 0));
+  return Math.sqrt(values.reduce((sum, value) => sum + value * value, 0))
 }
 ----
 
@@ -709,9 +709,9 @@ Our handmade function is, surprisingly, more precise than the native one for thi
 
 [source,javascript]
 ----
-Math.hypot(1, 2, 3);
+Math.hypot(1, 2, 3)
 // <- 3.741657386773941
-hypot(1, 2, 3);
+hypot(1, 2, 3)
 // <- 3.7416573867739413
 ----
 
@@ -748,9 +748,9 @@ You may recall template literals from section 3.5, and how those can be used to 
 [source,javascript]
 ----
 function greet (name) {
-  return `Hello, ${ name }!`;
+  return `Hello, ${ name }!`
 }
-greet(`Gandalf`);
+greet(`Gandalf`)
 // <- `Hello, Gandalf!`
 ----
 
@@ -762,11 +762,11 @@ Prior to ES6, whenever we wanted to check if a string begins with a certain othe
 
 [source,javascript]
 ----
-`hello gary`.indexOf(`gary`);
+`hello gary`.indexOf(`gary`)
 // <- 6
-`hello gary`.indexOf(`hello`);
+`hello gary`.indexOf(`hello`)
 // <- 0
-`hello gary`.indexOf(`stephan`);
+`hello gary`.indexOf(`stephan`)
 // <- -1
 ----
 
@@ -774,11 +774,11 @@ If you wanted to check if a string started with another one, then, you'd compare
 
 [source,javascript]
 ----
-`hello gary`.indexOf(`gary`) === 0;
+`hello gary`.indexOf(`gary`) === 0
 // <- false
-`hello gary`.indexOf(`hello`) === 0;
+`hello gary`.indexOf(`hello`) === 0
 // <- true
-`hello gary`.indexOf(`stephan`) === 0;
+`hello gary`.indexOf(`stephan`) === 0
 // <- false
 ----
 
@@ -786,11 +786,11 @@ You can now use the +String#startsWith+ method instead, avoiding the unnecessary
 
 [source,javascript]
 ----
-`hello gary`.startsWith(`gary`);
+`hello gary`.startsWith(`gary`)
 // <- false
-`hello gary`.startsWith(`hello`);
+`hello gary`.startsWith(`hello`)
 // <- true
-`hello gary`.startsWith(`stephan`);
+`hello gary`.startsWith(`stephan`)
 // <- false
 ----
 
@@ -806,7 +806,7 @@ We can't simply check whether the index is +6+, because that this would give you
 
 [source,javascript]
 ----
-`hello ell`.indexOf(`ell`) === 6;
+`hello ell`.indexOf(`ell`) === 6
 // <- false, because the result was 1
 ----
 
@@ -814,7 +814,7 @@ We could use the +startIndex+ parameter for +indexOf+ to get around this problem
 
 [source,javascript]
 ----
-`hello ell`.indexOf(`ell`, 6) === 6;
+`hello ell`.indexOf(`ell`, 6) === 6
 // <- true
 ----
 
@@ -822,7 +822,7 @@ Instead of keeping all of these string searching implementation details in your 
 
 [source,javascript]
 ----
-`hello ell`.startsWith(`ell`, 6);
+`hello ell`.startsWith(`ell`, 6)
 // <- true
 ----
 
@@ -832,9 +832,9 @@ This method mirrors +String#startsWith+ in the same way that +String#lastIndexOf
 
 [source,javascript]
 ----
-`hello gary`.endsWith(`gary`);
+`hello gary`.endsWith(`gary`)
 // <- true
-`hello gary`.endsWith(`hello`);
+`hello gary`.endsWith(`hello`)
 // <- false
 ----
 
@@ -842,11 +842,11 @@ As the opposite of +String#startsWith+, there's a position index that indicates 
 
 [source,javascript]
 ----
-`hello gary`.endsWith(`gary`, 10);
+`hello gary`.endsWith(`gary`, 10)
 // <- true
-`hello gary`.endsWith(`gary`, 9);
+`hello gary`.endsWith(`gary`, 9)
 // <- false, it ends with `gar` in this case
-`hello gary`.endsWith(`pony`, 4);
+`hello gary`.endsWith(`pony`, 4)
 // <- true
 ----
 
@@ -858,11 +858,11 @@ You can use +String#includes+ to figure out whether a string contains another on
 
 [source,javascript]
 ----
-`hello gary`.includes(`hell`);
+`hello gary`.includes(`hell`)
 // <- true
-`hello gary`.includes(`ga`);
+`hello gary`.includes(`ga`)
 // <- true
-`hello gary`.includes(`rye`);
+`hello gary`.includes(`rye`)
 // <- false
 ----
 
@@ -880,9 +880,9 @@ You can also provide +String#includes+ with a start index where searching should
 
 [source,javascript]
 ----
-`hello gary`.includes(`ga`, 4);
+`hello gary`.includes(`ga`, 4)
 // <- true
-`hello gary`.includes(`ga`, 7);
+`hello gary`.includes(`ga`, 7)
 // <- false
 ----
 
@@ -894,13 +894,13 @@ This handy method allows you to repeat a string +count+ times.
 
 [source,javascript]
 ----
-`ha`.repeat(1);
+`ha`.repeat(1)
 // <- `ha`
-`ha`.repeat(2);
+`ha`.repeat(2)
 // <- `haha`
-`ha`.repeat(5);
+`ha`.repeat(5)
 // <- `hahahahaha`
-`ha`.repeat(0);
+`ha`.repeat(0)
 // <- ``
 ----
 
@@ -926,7 +926,7 @@ Using +NaN+ is interpreted as a +count+ of +0+.
 
 [source,javascript]
 ----
-`ha`.repeat(NaN);
+`ha`.repeat(NaN)
 // <- ``
 ----
 
@@ -945,7 +945,7 @@ Values in the +(-1, 0)+ range are rounded to +-0+ becase +count+ is passed throu
 [source,javascript]
 ----
 function ToInteger (number) {
-  return Math.floor(Math.abs(number)) * Math.sign(number);
+  return Math.floor(Math.abs(number)) * Math.sign(number)
 }
 ----
 
@@ -953,13 +953,13 @@ The +ToInteger+ function translates any values in the +(-1, 0)+ range into +-0+.
 
 [source,javascript]
 ----
-`na`.repeat(-0.1);
+`na`.repeat(-0.1)
 // <- ``, because count was rounded to -0
-`na`.repeat(-0.9);
+`na`.repeat(-0.9)
 // <- ``, because count was rounded to -0
-`na`.repeat(-0.9999);
+`na`.repeat(-0.9999)
 // <- ``, because count was rounded to -0
-`na`.repeat(-1);
+`na`.repeat(-1)
 // <- Uncaught RangeError: Invalid count value
 ----
 
@@ -971,12 +971,12 @@ function leftPad (text, spaces = 2) {
   return text
     .split(`\n`)
     .map(line => ` `.repeat(spaces) + line)
-    .join(`\n`);
+    .join(`\n`)
 }
 
 leftPad(`a
 b
-c`, 2);
+c`, 2)
 // <- `  a\n  b\n  c`
 ----
 
@@ -994,7 +994,7 @@ The +`\ud83d\udc0e\ud83d\udc71\u2764`+ string, found in the next code snippet, e
 
 [source,javascript]
 ----
-`\ud83d\udc0e\ud83d\udc71\u2764`;
+`\ud83d\udc0e\ud83d\udc71\u2764`
 // <- `🐎👱❤`
 ----
 
@@ -1002,7 +1002,7 @@ While that string consists of 5 code units, we know that the length should reall
 
 [source,javascript]
 ----
-`\ud83d\udc0e\ud83d\udc71\u2764`.length;
+`\ud83d\udc0e\ud83d\udc71\u2764`.length
 // <- 5
 `🐎👱❤`.length
 // <- 5, still
@@ -1012,7 +1012,7 @@ Counting code points before ES6 was tricky, as the language didn't make an effor
 
 [source,javascript]
 ----
-Object.keys(`🐎👱❤`);
+Object.keys(`🐎👱❤`)
 // <- [`0`, `1`, `2`, `3`, `4`]
 ----
 
@@ -1020,9 +1020,9 @@ If we now consider a +for+ loop, we can observe more clearly how this is a probl
 
 [source,javascript]
 ----
-const text = '🐎👱❤';
+const text = '🐎👱❤'
 for (let i = 0; i < text.length; i++) {
-  console.log(text[i]);
+  console.log(text[i])
   // <- '\ud83d'
   // <- '\udc0e'
   // <- '\ud83d'
@@ -1040,7 +1040,7 @@ Given the problems with looping by code units, the iterables produced by the str
 [source,javascript]
 ----
 for (let codePoint of `🐎👱❤`) {
-  console.log(codePoint);
+  console.log(codePoint)
   // <- '🐎'
   // <- '👱'
   // <- '❤'
@@ -1053,7 +1053,7 @@ We could use the spread operator, which relies on the iterator protocol, to spli
 
 [source,javascript]
 ----
-[...`🐎👱❤`].length;
+[...`🐎👱❤`].length
 // <- 3
 ----
 
@@ -1070,12 +1070,12 @@ When preceded by another code unit, however, they are combined together into a s
 [source,javascript]
 ----
 function overlined (text) {
-  return `${ text }\u0305`;
+  return `${ text }\u0305`
 }
 
-overlined(`o`);
+overlined(`o`)
 // <- `o̅`
-`hello world`.split(``).map(overlined).join(``);
+`hello world`.split(``).map(overlined).join(``)
 // <- `h̅e̅l̅l̅o̅ ̅w̅o̅r̅l̅d̅`
 ----
 
@@ -1083,13 +1083,13 @@ Attempts to näively figure out the actual length by counting code points prove 
 
 [source,javascript]
 ----
-`o̅`.length;
+`o̅`.length
 // <- 2
-[...`o̅`].length;
+[...`o̅`].length
 // <- 2, should be 1
-[...`h̅e̅l̅l̅o̅ ̅w̅o̅r̅l̅d̅`].length;
+[...`h̅e̅l̅l̅o̅ ̅w̅o̅r̅l̅d̅`].length
 // <- 22, should be 11
-[...`h̅e̅l̅l̅o̅ world`].length;
+[...`h̅e̅l̅l̅o̅ world`].length
 // <- 16, should be 11
 ----
 
@@ -1103,12 +1103,12 @@ We can use +String#codePointAt+ to get the base-10 numeric representation of a c
 
 [source,javascript]
 ----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`;
-text.codePointAt(0);
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+text.codePointAt(0)
 // <- 128014
-text.codePointAt(2);
+text.codePointAt(2)
 // <- 128113
-text.codePointAt(4);
+text.codePointAt(4)
 // <- 10084
 ----
 
@@ -1116,9 +1116,9 @@ Identifying the indices that need to be provided to +String#codePointAt+ may pro
 
 [source,javascript]
 ----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`;
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 for (let codePoint of text) {
-  console.log(codePoint.codePointAt(0));
+  console.log(codePoint.codePointAt(0))
   // <- 128014
   // <- 128113
   // <- 10084
@@ -1129,8 +1129,8 @@ We could also reduce our example to a single line of code by using a combination
 
 [source,javascript]
 ----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`;
-[...text].map(cp => cp.codePointAt(0));
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+[...text].map(cp => cp.codePointAt(0))
 // <- [128014, 128113, 10084]
 ----
 
@@ -1140,8 +1140,8 @@ Let's start by updating our example to print the hexadecimal version of our code
 
 [source,javascript]
 ----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`;
-[...text].map(cp => cp.codePointAt(0).toString(16));
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+[...text].map(cp => cp.codePointAt(0).toString(16))
 // <- [`1f40e`, `1f471`, `2764`]
 ----
 
@@ -1149,11 +1149,11 @@ We could wrap those base-16 values in +`\u{codePoint}`+ and voilá: you'd get th
 
 [source,javascript]
 ----
-`\u{1f40e}`;
+`\u{1f40e}`
 // <- `🐎`
-`\u{1f471}`;
+`\u{1f471}`
 // <- `👱`
-`\u{2764}`;
+`\u{2764}`
 // <- `❤`
 ----
 
@@ -1163,11 +1163,11 @@ This method takes in a number and returns a code point. Note how I can use the +
 
 [source,javascript]
 ----
-String.fromCodePoint(0x1f40e);
+String.fromCodePoint(0x1f40e)
 // <- `🐎`
-String.fromCodePoint(0x1f471);
+String.fromCodePoint(0x1f471)
 // <- `👱`
-String.fromCodePoint(0x2764);
+String.fromCodePoint(0x2764)
 // <- `❤`
 ----
 
@@ -1175,11 +1175,11 @@ You can just as well use plain base-10 literals and achieve the same results.
 
 [source,javascript]
 ----
-String.fromCodePoint(128014);
+String.fromCodePoint(128014)
 // <- `🐎`
-String.fromCodePoint(128113);
+String.fromCodePoint(128113)
 // <- `👱`
-String.fromCodePoint(10084);
+String.fromCodePoint(10084)
 // <- `❤`
 ----
 
@@ -1195,7 +1195,7 @@ As an exercise in futility, we could map a string to their numeric representatio
 
 [source,javascript]
 ----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`;
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 [...text]
   .map(cp => cp.codePointAt(0))
   .map(cp => String.fromCodePoint(cp))
@@ -1211,10 +1211,10 @@ Consider the following piece of code.
 
 [source,javascript]
 ----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`;
-text.split(``).map(cp => cp.codePointAt(0));
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+text.split(``).map(cp => cp.codePointAt(0))
 // <- [55357, 56334, 55357, 56433, 10084]
-text.split(``).reverse().map(cp => cp.codePointAt(0));
+text.split(``).reverse().map(cp => cp.codePointAt(0))
 // <- [10084, 56433, 128014, 55357]
 ----
 
@@ -1222,8 +1222,8 @@ The problem is that we're reversing individual code units, while we'd have to re
 
 [source,javascript]
 ----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`;
-[...text].reverse().join(``);
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+[...text].reverse().join(``)
 // <- '❤👱🐎'
 ----
 
@@ -1243,7 +1243,7 @@ There's different ways of representing strings that look identical to humans eve
 
 [source,javascript]
 ----
-`mañana` === `mañana`;
+`mañana` === `mañana`
 // <- false
 ----
 
@@ -1251,9 +1251,9 @@ What's going on here? We have an +ñ+ on the left version, while the version on 
 
 [source,javascript]
 ----
-[...`mañana`].map(cp => cp.codePointAt(0).toString(16));
+[...`mañana`].map(cp => cp.codePointAt(0).toString(16))
 // <- [`6d`, `61`, `f1`, `61`, `6e`, `61`]
-[...`mañana`].map(cp => cp.codePointAt(0).toString(16));
+[...`mañana`].map(cp => cp.codePointAt(0).toString(16))
 // <- [`6d`, `61`, `6e`, `303`, `61`, `6e`, `61`]
 ----
 
@@ -1261,9 +1261,9 @@ Just like with the +`hello̅`+ examples, the second string has a length of +7+, 
 
 [source,javascript]
 ----
-[...`mañana`].length;
+[...`mañana`].length
 // <- 6
-[...`mañana`].length;
+[...`mañana`].length
 // <- 7
 ----
 
@@ -1271,10 +1271,10 @@ If we normalize the second version, using +String#normalize+, we'll get back the
 
 [source,javascript]
 ----
-const normalized = `mañana`.normalize();
-[...normalized].map(cp => cp.codePointAt(0).toString(16));
+const normalized = `mañana`.normalize()
+[...normalized].map(cp => cp.codePointAt(0).toString(16))
 // <- [`6d`, `61`, `f1`, `61`, `6e`, `61`]
-normalized.length;
+normalized.length
 // <- 6
 ----
 
@@ -1283,13 +1283,13 @@ Note that we should use +String#normalize+ on both strings when comparing them i
 [source,javascript]
 ----
 function compare (left, right) {
-  return left.normalize() === right.normalize();
+  return left.normalize() === right.normalize()
 }
-const normal = `mañana`;
-const irregular = `mañana`;
-normal === irregular;
+const normal = `mañana`
+const irregular = `mañana`
+normal === irregular
 // <- false
-compare(normal, irregular);
+compare(normal, irregular)
 // <- true
 ----
 
@@ -1307,9 +1307,9 @@ Before ES6, JavaScript developers often needed to cast +arguments+ to a function
 [source,javascript]
 ----
 function cast () {
-  return Array.prototype.slice.call(arguments);
+  return Array.prototype.slice.call(arguments)
 }
-cast(`a`, `b`);
+cast(`a`, `b`)
 // <- [`a`, `b`]
 ----
 
@@ -1318,9 +1318,9 @@ We've already explored more terse ways of doing this in chapter 3, when we first
 [source,javascript]
 ----
 function cast () {
-  return [...arguments];
+  return [...arguments]
 }
-cast(`a`, `b`);
+cast(`a`, `b`)
 // <- [`a`, `b`]
 ----
 
@@ -1329,9 +1329,9 @@ Using the function rest parameter would be better for this particular case as it
 [source,javascript]
 ----
 function cast (...params) {
-  return params;
+  return params
 }
-cast(`a`, `b`);
+cast(`a`, `b`)
 // <- [`a`, `b`]
 ----
 
@@ -1339,7 +1339,7 @@ You may also want to cast +NodeList+ DOM element collections, like those returne
 
 [source,javascript]
 ----
-[...document.querySelectorAll(`div`)];
+[...document.querySelectorAll(`div`)]
 // <- [<div>, <div>, <div>, ...]
 ----
 
@@ -1347,7 +1347,7 @@ What happens when we try to cast a jQuery collection through the spread operator
 
 [source,javascript]
 ----
-[...$(`div`)];
+[...$(`div`)]
 // <- [<div>, <div>, <div>, ...]
 ----
 
@@ -1355,7 +1355,7 @@ The new +Array.from+ method is a bit different. It doesn't only rely on the iter
 
 [source,javascript]
 ----
-Array.from($(`div`));
+Array.from($(`div`))
 // <- [<div>, <div>, <div>, ...]
 ----
 
@@ -1363,7 +1363,7 @@ The one thing you cannot do with either +Array.from+ nor the spread operator is 
 
 [source,javascript]
 ----
-[].slice.call(document.querySelectorAll(`div`), 1);
+[].slice.call(document.querySelectorAll(`div`), 1)
 ----
 
 Of course, there's nothing stopping you from using +Array#slice+ after casting. This is a bit easier to read than the previous example, as it keeps the slice call closer to the index at which we want to slice the array.
@@ -1384,9 +1384,9 @@ With +Array.from+ you cannot slice, but you can dice. The +map+ function will ef
 [source,javascript]
 ----
 function typesOf () {
-  return Array.from(arguments, value => typeof value);
+  return Array.from(arguments, value => typeof value)
 }
-typesOf(null, [], NaN);
+typesOf(null, [], NaN)
 // <- [`object`, `object`, `number`]
 ----
 
@@ -1395,9 +1395,9 @@ Do note that, for the specific case of dealing with +arguments+, you could also 
 [source,javascript]
 ----
 function typesOf (...all) {
-  return all.map(value => typeof value);
+  return all.map(value => typeof value)
 }
-typesOf(null, [], NaN);
+typesOf(null, [], NaN)
 // <- [`object`, `object`, `number`]
 ----
 
@@ -1417,10 +1417,10 @@ const things = {
     amount: 1
   },
   length: 2
-};
-Array.from(things);
+}
+Array.from(things)
 // <- [<div>, <div>, <div>, ...]
-Array.from(things, thing => thing.type);
+Array.from(things, thing => thing.type)
 // <- [`fruit`, `vegetable`, ...]
 ----
 
@@ -1430,7 +1430,7 @@ The +Array.of+ method is exactly like the +cast+ function we played around with 
 
 [source,javascript]
 ----
-Array.of = (...params) => params;
+Array.of = (...params) => params
 ----
 
 You can think about +Array.of+ as an alternative for +new Array+ that doesn't have the +new Array(length)+ overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${ count }+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
@@ -1467,7 +1467,7 @@ Let's start with the signature of +Array#copyWithin+.
 
 [source,javascript]
 ----
-Array.prototype.copyWithin(target, start = 0, end = this.length);
+Array.prototype.copyWithin(target, start = 0, end = this.length)
 ----
 
 The +Array#copyWithin+ method copies a sequence of array elements within an array instance to the "paste position" starting at +target+. The elements to be copied are taken from the +[start, end)+ range. The +Array#copyWithin+ method returns the array instance itself.
@@ -1476,7 +1476,7 @@ Let's lead with a simple example. Consider the +items+ array in the following co
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,];
+const items = [1, 2, 3, ,,,,,,,]
 // <- [1, 2, 3, undefined x 7]
 ----
 
@@ -1484,8 +1484,8 @@ The function call shown below takes the +items+ array and determines that it'll 
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,];
-items.copyWithin(6, 1, 3);
+const items = [1, 2, 3, ,,,,,,,]
+items.copyWithin(6, 1, 3)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
 
@@ -1495,8 +1495,8 @@ If we consider that the items to be copied were taken from the +[start, end)+ ra
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,];
-const copy = items.slice(1, 3);
+const items = [1, 2, 3, ,,,,,,,]
+const copy = items.slice(1, 3)
 // <- [2, 3]
 ----
 
@@ -1504,11 +1504,11 @@ We could also consider the pasting part of the operation as an advanced usage of
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,];
-const copy = items.slice(1, 3);
+const items = [1, 2, 3, ,,,,,,,]
+const copy = items.slice(1, 3)
 // <- [2, 3]
-items.splice(6, 3 - 1, ...copy);
-console.log(items);
+items.splice(6, 3 - 1, ...copy)
+console.log(items)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
 
@@ -1517,10 +1517,10 @@ Now that we better understand the internals of +Array#copyWithin+, we can genera
 [source,javascript]
 ----
 function copyWithin (items, target, start = 0, end = items.length) {
-  const copy = items.slice(start, end);
-  const removed = end - start;
-  items.splice(target, removed, ...copy);
-  return items;
+  const copy = items.slice(start, end)
+  const removed = end - start
+  items.splice(target, removed, ...copy)
+  return items
 }
 ----
 
@@ -1528,7 +1528,7 @@ The example we've been trying so far would work just as well with our custom +co
 
 [source,javascript]
 ----
-copyWithin([1, 2, 3, ,,,,,,,], 6, 1, 3);
+copyWithin([1, 2, 3, ,,,,,,,], 6, 1, 3)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
 
@@ -1546,9 +1546,9 @@ You could also specify the starting index and end index. In this case, as shown 
 
 [source,javascript]
 ----
-[`a`, `b`, `c`,,,].fill(`x`, 2);
+[`a`, `b`, `c`,,,].fill(`x`, 2)
 // <- [`a`, `b`, `x`, `x`, `x`]
-new Array(5).fill(`x`, `x`, 3);
+new Array(5).fill(`x`, `x`, 3)
 // <- [`x`, `x`, `x`, undefined x 2]
 ----
 
@@ -1556,7 +1556,7 @@ The provided +value+ can be anything, and is not just limited to primitive value
 
 [source,javascript]
 ----
-new Array(3).fill({});
+new Array(3).fill({})
 // <- [{}, {}, {}]
 ----
 
@@ -1564,8 +1564,8 @@ You can't fill arrays using a mapping method that takes an +index+ parameter or 
 
 [source,javascript]
 ----
-const map = i => i * 2;
-new Array(3).fill(map);
+const map = i => i * 2
+new Array(3).fill(map)
 // <- [map, map, map]
 ----
 
@@ -1575,11 +1575,11 @@ The +Array#find+ method runs a +callback+ for each +item+ in an array until the 
 
 [source,javascript]
 ----
-[`a`, `b`, `c`, `d`, `e`].find(item => item === `c`);
+[`a`, `b`, `c`, `d`, `e`].find(item => item === `c`)
 // <- `c`
-[`a`, `b`, `c`, `d`, `e`].find((item, i) => i === 0);
+[`a`, `b`, `c`, `d`, `e`].find((item, i) => i === 0)
 // <- `a`
-[`a`, `b`, `c`, `d`, `e`].find(item => item === `z`);
+[`a`, `b`, `c`, `d`, `e`].find(item => item === `z`)
 // <- undefined
 ----
 
@@ -1587,11 +1587,11 @@ There's an +Array#findIndex+ method as well, and it leverages the same signature
 
 [source,javascript]
 ----
-[`a`, `b`, `c`, `d`, `e`].findIndex(item => item === `c`);
+[`a`, `b`, `c`, `d`, `e`].findIndex(item => item === `c`)
 // <- 2
-[`a`, `b`, `c`, `d`, `e`].findIndex((item, i) => i === 0);
+[`a`, `b`, `c`, `d`, `e`].findIndex((item, i) => i === 0)
 // <- 0
-[`a`, `b`, `c`, `d`, `e`].findIndex(item => item === `z`);
+[`a`, `b`, `c`, `d`, `e`].findIndex(item => item === `z`)
 // <- -1
 ----
 
@@ -1601,7 +1601,7 @@ Returns an iterator that yields a sequence holding the keys for the array. The r
 
 [source,javascript]
 ----
-[`a`, `b`, `c`, `d`].keys();
+[`a`, `b`, `c`, `d`].keys()
 // <- ArrayIterator {}
 ----
 
@@ -1622,9 +1622,9 @@ Unlike +Object.keys+, and most methods that iterate over arrays, this sequence d
 
 [source,javascript]
 ----
-Object.keys(new Array(4));
+Object.keys(new Array(4))
 // <- []
-[...new Array(4).keys()];
+[...new Array(4).keys()]
 // <- [0, 1, 2, 3]
 ----
 
@@ -1636,7 +1636,7 @@ Same thing as +Array#keys()+, but the returned iterator is a sequence of values 
 
 [source,javascript]
 ----
-[`a`, `b`, `c`, `d`].values();
+[`a`, `b`, `c`, `d`].values()
 // <- ArrayIterator {}
 ----
 
@@ -1664,7 +1664,7 @@ Each item in the sequence is a two dimensional array with the key and the value 
 
 [source,javascript]
 ----
-[...[`a`, `b`, `c`, `d`].entries()];
+[...[`a`, `b`, `c`, `d`].entries()]
 // <- [[0, `a`], [1, `b`], [2, `c`], [3, `d`]]
 ----
 
@@ -1676,10 +1676,10 @@ This is exactly the same as the +Array#values+ method.
 
 [source,javascript]
 ----
-const list = [`a`, `b`, `c`, `d`];
-list[Symbol.iterator] === list.values;
+const list = [`a`, `b`, `c`, `d`]
+list[Symbol.iterator] === list.values
 // <- true
-[...list[Symbol.iterator]()];
+[...list[Symbol.iterator]()]
 // <- [`a`, `b`, `c`, `d`]
 ----
 

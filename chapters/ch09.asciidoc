@@ -18,25 +18,25 @@ Interpreting the definition of a module format without looking at some code can 
 [source,javascript]
 ----
 function has (list, item) {
-  return list.includes(item);
+  return list.includes(item)
 }
 function union (list, item) {
   if (has(list, item)) {
-    return list;
+    return list
   }
-  return [...list, item];
+  return [...list, item]
 }
-module.exports = union;
+module.exports = union
 ----
 
 Suppose we take that snippet of code and save it as +union.js+. We can now consume +union.js+ in another CommonJS module. Let's call that one +app.js+. In order to consume +union.js+, we call +require+ passing in a relative path to the +union.js+ file. We can omit the file extension as long as it's +.js+ or +.json+.
 
 [source,javascript]
 ----
-const union = require(`./union`);
-console.log(union([1, 2], 3));
+const union = require(`./union`)
+console.log(union([1, 2], 3))
 // <- [1, 2, 3]
-console.log(union([1, 2], 2));
+console.log(union([1, 2], 2))
 // <- [1, 2]
 ----
 
@@ -60,7 +60,7 @@ module.exports = model => `<li>
   <span>${ model.amount }</span>
   <span>x </span>
   <span>${ model.name }</span>
-</li>`;
+</li>`
 ----
 
 Our application could easily print a +<li>+ by leveraging the +item.js+ view template.
@@ -68,12 +68,12 @@ Our application could easily print a +<li>+ by leveraging the +item.js+ view tem
 [source,javascript]
 ----
 // app.js
-const renderItem = require(`./views/item`);
+const renderItem = require(`./views/item`)
 const html = renderItem({
   name: `Banana bread`,
   amount: 3
-});
-console.log(html);
+})
+console.log(html)
 ----
 
 The following screenshot shows our tiny application in action.
@@ -85,11 +85,11 @@ The next template we'll make renders the grocery list itself. It receives an arr
 [source,javascript]
 ----
 // views/list.js
-const renderItem = require(`./item`);
+const renderItem = require(`./item`)
 
 module.exports = model => `<ul>
   ${ model.map(renderItem).join(`\n`) }
-</ul>`;
+</ul>`
 ----
 
 We can consume the +list.js+ template in a very similar way than what we did before, but we'll need to adjust the model passed into the template so that we provide a collection of items instead of a single one.
@@ -97,15 +97,15 @@ We can consume the +list.js+ template in a very similar way than what we did bef
 [source,javascript]
 ----
 // app.js
-const renderList = require(`./views/list`);
+const renderList = require(`./views/list`)
 const html = renderList([{
   name: `Banana bread`,
   amount: 3
 }, {
   name: `Chocolate chip muffin`,
   amount: 2
-}]);
-console.log(html);
+}])
+console.log(html)
 ----
 
 The following screenshot shows our updated application in all its glory.
@@ -120,8 +120,8 @@ Given that the views all have a similar API where they take a model and return a
 ----
 // render.js
 module.exports = function render(template, model) {
-  return require(`./views/${ template }`)(model);
-};
+  return require(`./views/${ template }`)(model)
+}
 ----
 
 Once we had such an API, we wouldn't have to worry about carefully constructing +require+ statements that match the directory structure of our view templates, because the +render.js+ module could take care of that. Rendering any template becomes a matter of calling the +render+ function with the template's name and the model for that template.
@@ -129,18 +129,18 @@ Once we had such an API, we wouldn't have to worry about carefully constructing 
 [source,javascript]
 ----
 // app.js
-const render = require(`./render`);
+const render = require(`./render`)
 console.log(render(`item`, {
   name: `Banana bread`,
   amount: 1
-}));
+}))
 console.log(render(`list`, [{
   name: `Apple pie`,
   amount: 2
 }, {
   name: `Roasted almond`,
   amount: 25
-}]));
+}]))
 ----
 
 image::../images/c09g03-dynamic-render.png["Printing different views through a normalized render function."]
@@ -179,22 +179,22 @@ In CommonJS modules, you export values by exposing them on +module.exports+. You
 
 [source,javascript]
 ----
-module.exports = `hello`;
+module.exports = `hello`
 ----
 
 [source,javascript]
 ----
-module.exports = { hello: `world` };
+module.exports = { hello: `world` }
 ----
 
 [source,javascript]
 ----
-module.exports = [`hello`, 'world'];
+module.exports = [`hello`, 'world']
 ----
 
 [source,javascript]
 ----
-module.exports = function hello () {};
+module.exports = function hello () {}
 ----
 
 ES6 modules are files that may expose an API through +export+ statements. Declarations in ES6 modules are scoped to that module, just like we observed about CommonJS. Any variables declared inside a module aren't available to other modules unless they're explicitly exported as part of that module's API and then imported in the module that wants to access them.
@@ -228,9 +228,9 @@ In CommonJS, +module.exports+ can be assigned-to dynamically.
 [source,javascript]
 ----
 function initialize () {
-  module.exports = `hello!`;
+  module.exports = `hello!`
 }
-initialize();
+initialize()
 ----
 
 In contrast with CommonJS, +export+ statements in ES6 modules can only be placed at the top level. "Top-level only" +export+ statements is a good constraint to have, as there aren't many good reasons to dynamically define and expose an API based on method calls. This limitation also helps compilers and static analysis tools parse ES6 modules.
@@ -240,7 +240,7 @@ In contrast with CommonJS, +export+ statements in ES6 modules can only be placed
 function initialize () {
   export default `hello!` // SyntaxError
 }
-initialize();
+initialize()
 ----
 
 There are a few other ways of exposing an API in ES6 modules, besides +export default+ statements.
@@ -251,8 +251,8 @@ In CommonJS modules, when you want to expose multiple values, you don't necessar
 
 [source,javascript]
 ----
-module.exports.counter = 0;
-module.exports.count = () => counter++;
+module.exports.counter = 0
+module.exports.count = () => counter++
 ----
 
 We can replicate this behavior in ES6 modules by using the named exports syntax. Instead of assigning properties to an implicit +module.exports+ object like with CommonJS, in ES6 you declare the bindings you want to +export+, as shown in the following code snippet.
@@ -267,8 +267,8 @@ Note that the last bit of code cannot be refactored to extract the variable decl
 
 [source,javascript]
 ----
-let counter = 0;
-const count = () => counter++;
+let counter = 0
+const count = () => counter++
 export counter // SyntaxError
 export count
 ----
@@ -281,8 +281,8 @@ ES6 modules let you +export+ lists of named top-level members, as seen in the fo
 
 [source,javascript]
 ----
-let counter = 0;
-const count = () => counter++;
+let counter = 0
+const count = () => counter++
 export { counter, count }
 ----
 
@@ -290,8 +290,8 @@ If you'd like to export a binding but give it a different name, you can use the 
 
 [source,javascript]
 ----
-let counter = 0;
-const count = () => counter++;
+let counter = 0
+const count = () => counter++
 export { counter, count as increment }
 ----
 
@@ -299,8 +299,8 @@ Finally, we can specify a default export when using the named member list syntax
 
 [source,javascript]
 ----
-let counter = 0;
-const count = () => counter++;
+let counter = 0
+const count = () => counter++
 export { counter as default, count as increment }
 ----
 
@@ -308,8 +308,8 @@ The following piece of code is equivalent to the previous one, albeit a tad more
 
 [source,javascript]
 ----
-let counter = 0;
-const count = () => counter++;
+let counter = 0
+const count = () => counter++
 export default counter
 export { count as increment }
 ----
@@ -325,10 +325,44 @@ In the next code snippet, our module's +counter+ export would be initially bound
 [source,javascript]
 ----
 export let counter = 0
-setInterval(() => counter++, 1000);
+setInterval(() => counter++, 1000)
 ----
 
-We've now covered almost every way in which we can expose an API in ES6 modules. Let's jump over to +import+ statements, which can be used to consume other modules.
+Finally, the JavaScript module system offers an +export..from+ syntax, where you can expose another module's interface.
+
+===== Exporting from another module
+
+We can expose another module's named exports using by adding a +from+ clause to an +export+ statement. The bindings are not imported into the local scope: our module acts as a pass-through where we expose another module's bindings without getting direct access to them.
+
+[source,javascript]
+----
+export { increment } from './counter'
+increment()
+// ReferenceError: increment is not defined
+----
+
+You can give aliases to named exports, as they pass through your module. If the module in the following example were named +aliased+, then consumers could +import { add } from './aliased'+ to get a reference to the +increment+ binding from the +counter+ module.
+
+[source,javascript]
+----
+export { increment as add } from './counter'
+----
+
+Our modules could also expose every single named export found in another module by using a wildcard, as shown in the next snippet. Note that this wouldn't include the default binding exported by the +counter+ module.
+
+[source,javascript]
+----
+export * from './counter'
+----
+
+When we want to expose another module's +default+ binding, we'll have to use the named export syntax adding an alias.
+
+[source,javascript]
+----
+export { default as counter } from './counter'
+----
+
+We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to +import+ statements, which can be used to consume other modules.
 
 ==== 9.2.3 +import+ Statements
 
@@ -340,9 +374,9 @@ Let's suppose we have the following code snippet in a +./counter.js+ module.
 
 [source,javascript]
 ----
-let counter = 0;
-const increment = () => counter++;
-const decrement = () => counter--;
+let counter = 0
+const increment = () => counter++
+const decrement = () => counter--
 export { counter as default, increment, decrement }
 ----
 
@@ -361,15 +395,15 @@ CommonJS modules let you import other modules using +require+ statements. When w
 
 [source,javascript]
 ----
-const counter = require(`./counter`);
+const counter = require(`./counter`)
 ----
 
 To import the default binding exported from an ES6 module, we'll have to give it a name. The syntax and semantics are a bit different than what we use when declaring a variable, because we're importing a binding and not just assigning values to variables. This distinction also makes it easier for static analysis tools and compilers to parse our code.
 
 [source,javascript]
 ----
-import counter from './counter';
-console.log(counter);
+import counter from './counter'
+console.log(counter)
 // <- 0
 ----
 
@@ -381,21 +415,21 @@ The following bit of code shows how we can import the +increment+ method from ou
 
 [source,javascript]
 ----
-import { increment } from './counter';
+import { increment } from './counter'
 ----
 
 To import multiple bindings, we separate them using commas.
 
 [source,javascript]
 ----
-import { increment, decrement } from './counter';
+import { increment, decrement } from './counter'
 ----
 
 The syntax and semantics are subtly different from destructuring. While destructuring relies on colons to create aliases, +import+ statements use an +as+ keyword, mirroring the syntax in +export+ statements. The following statement imports the +increment+ method as +add+.
 
 [source,javascript]
 ----
-import { increment as add } from './counter';
+import { increment as add } from './counter'
 ----
 
 You can combine a default export with named exports by separating them with a comma.
@@ -421,43 +455,9 @@ We can import the namespace object for a module by using a wildcard. Instead of 
 [source,javascript]
 ----
 import * as counter from './counter'
-counter.increment();
-counter.increment();
-console.log(counter.default); // <- 2
-----
-
-Finally, we'll go back to the +export+ statement, which offers a combined "export from" syntax.
-
-===== Exporting from another module
-
-We can expose another module's named exports using by adding a +from+ clause. The bindings are not imported into the local scope: our module acts as a pass-through where we expose another module's bindings without getting direct access to them.
-
-[source,javascript]
-----
-export { increment } from './counter'
-increment()
-// ReferenceError: increment is not defined
-----
-
-You can give aliases to named exports, as they pass through your module. If the module in the following example were named +aliased+, then consumers could +import { add } from './aliased'+ to get a reference to the +increment+ binding from the +counter+ module.
-
-[source,javascript]
-----
-export { increment as add } from './counter'
-----
-
-Our module could also expose every single named export found in another module by using a wildcard, as shown in the next snippet. Note that this wouldn't include the default export.
-
-[source,javascript]
-----
-export * from './counter'
-----
-
-If we wanted to expose another module's +default+ binding, we'd have to use the named export syntax and give it an alias.
-
-[source,javascript]
-----
-export { default as counter } from './counter'
+counter.increment()
+counter.increment()
+console.log(counter.default) // <- 2
 ----
 
 ....

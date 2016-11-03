@@ -18,41 +18,41 @@ The code snippet shown below represents a fruit using a constructor function and
 [source,javascript]
 ----
 function Fruit (name, calories) {
-  this.name = name;
-  this.calories = calories;
-  this.pieces = 1;
+  this.name = name
+  this.calories = calories
+  this.pieces = 1
 }
 Fruit.prototype.chop = function () {
-  this.pieces++;
-};
+  this.pieces++
+}
 Fruit.prototype.bite = function (person) {
   if (this.pieces < 1) {
-    return;
+    return
   }
-  const calories = this.calories / this.pieces;
-  person.satiety += calories;
-  this.calories -= calories;
-  this.pieces--;
-};
+  const calories = this.calories / this.pieces
+  person.satiety += calories
+  this.calories -= calories
+  this.pieces--
+}
 ----
 
 While fairly simple, the piece of code we just put together should be enough to note a few things. We have a constructor function that takes a couple of parameters, a pair of methods, and a number of properties. The next snippet codifies how one should create a +Fruit+ and a +person+ that chops the fruit into four slices and then takes three bites.
 
 [source,javascript]
 ----
-const person = { satiety: 0 };
-const apple = new Fruit('apple', 140);
-apple.chop();
-apple.chop();
-apple.chop();
-apple.bite(person);
-apple.bite(person);
-apple.bite(person);
-console.log(person.satiety);
+const person = { satiety: 0 }
+const apple = new Fruit('apple', 140)
+apple.chop()
+apple.chop()
+apple.chop()
+apple.bite(person)
+apple.bite(person)
+apple.bite(person)
+console.log(person.satiety)
 // <- 105
-console.log(apple.pieces);
+console.log(apple.pieces)
 // <- 1
-console.log(apple.calories);
+console.log(apple.calories)
 // <- 35
 ----
 
@@ -62,23 +62,23 @@ When using +class+ syntax, as shown in the following code listing, the +construc
 ----
 class Fruit {
   constructor (name, calories) {
-    this.name = name;
-    this.calories = calories;
-    this.pieces = 1;
+    this.name = name
+    this.calories = calories
+    this.pieces = 1
   }
   chop () {
-    this.pieces++;
+    this.pieces++
   }
   bite (person) {
     if (this.pieces < 1) {
-      return;
+      return
     }
-    const calories = this.calories / this.pieces;
-    person.satiety += calories;
-    this.calories -= calories;
-    this.pieces--;
+    const calories = this.calories / this.pieces
+    person.satiety += calories
+    this.calories -= calories
+    this.pieces--
   }
-};
+}
 ----
 
 A not-so-minor detail you might have missed is that there aren't any commas in between method declarations of the +Fruit+ class. That's not a mistake our copious copy editors missed, but rather part of the +class+ syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as class-scoped private functions.
@@ -100,9 +100,9 @@ Besides the class declaration syntax presented above, classes can also be declar
 ----
 const Person = class {
   constructor (name) {
-    this.name = name;
+    this.name = name
   }
-};
+}
 ----
 
 Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a +Jake+ class dynamically in arrow function which takes a name parameter and then feeds that to the parent +Person+ constructor via +super+.
@@ -111,11 +111,11 @@ Class expressions could be easily returned from a function, making it possible t
 ----
 const createPersonClass = name => class extends Person {
   constructor () {
-    super(name);
+    super(name)
   }
-};
-const Jake = createPersonClass('Jake');
-const jake = new Jake();
+}
+const Jake = createPersonClass('Jake')
+const jake = new Jake()
 ----
 
 We'll dig deeper into class inheritance later. Let's take a more nuanced look at properties and methods first.
@@ -127,7 +127,7 @@ It should be noted that the +constructor+ method declaration is an optional memb
 [source,javascript]
 ----
 class Fruit {
-};
+}
 // the constructor function below is equivalent to the class above
 function Fruit () {
 }
@@ -139,10 +139,10 @@ Any arguments passed to +new Log()+ will be received as parameters to the +const
 ----
 class Log {
   constructor (...args) {
-    console.log(args);
+    console.log(args)
   }
-};
-new Log('a', 'b', 'c');
+}
+new Log('a', 'b', 'c')
 // <- ['a' 'b' 'c']
 ----
 
@@ -152,24 +152,24 @@ The following example shows a class where we create and initialize an instance p
 ----
 class Counter {
   constructor (start) {
-    this.count = start;
+    this.count = start
   }
   get next () {
-    return this.count++;
+    return this.count++
   }
-};
+}
 ----
 
 In this case, you could consume the +Counter+ class as shown in the next snippet. Each time the +.next+ property is accessed, the count raises by one. While mildly useful, this sort of use case is usually better suited by methods than by magical +get+ property accessors, and we need to be careful not to abuse property accesors, as consuming an object that abuses of accessors may become very confusing.
 
 [source,javascript]
 ----
-const counter = new Counter(2);
-console.log(counter.next);
+const counter = new Counter(2)
+console.log(counter.next)
 // <- 2
-console.log(counter.next);
+console.log(counter.next)
 // <- 3
-console.log(counter.next);
+console.log(counter.next)
 // <- 4
 ----
 
@@ -179,24 +179,24 @@ When paired with setters, though, accessors may provide an interesting bridge be
 ----
 class LocalStorage {
   constructor (key) {
-    this.key = key;
+    this.key = key
   }
   get data () {
-    return JSON.parse(localStorage.getItem(this.key));
+    return JSON.parse(localStorage.getItem(this.key))
   }
   set data (data) {
-    localStorage.setItem(this.key, JSON.stringify(data));
+    localStorage.setItem(this.key, JSON.stringify(data))
   }
-};
+}
 ----
 
 Then you could use the +LocalStorage+ class as shown in the next example. Any value that's assigned to +ls.data+ will be converted to its JSON object string representation and stored in +localStorage+. Then, when the property is read from, the same +key+ will be used to retrieve the previously stored contents, parse them as JSON into an object, and returned.
 
 [source,javascript]
 ----
-const ls = new LocalStorage('groceries');
-ls.data = ['apples', 'bananas', 'grapes'];
-console.log(ls.data);
+const ls = new LocalStorage('groceries')
+ls.data = ['apples', 'bananas', 'grapes']
+console.log(ls.data)
 // <- ['apples', 'bananas', 'grapes']
 ----
 
@@ -206,18 +206,18 @@ Besides getters and setters, you can also define regular instance methods, as we
 ----
 class Person {
   constructor () {
-    this.satiety = 0;
+    this.satiety = 0
   }
   eat (fruit) {
     while (fruit.pieces > 0) {
-      fruit.bite(this);
+      fruit.bite(this)
     }
   }
-};
-const plum = new Fruit('plum', 40);
-const person = new Person();
-person.eat(plum);
-console.log(person.satiety);
+}
+const plum = new Fruit('plum', 40)
+const person = new Person()
+person.eat(plum)
+console.log(person.satiety)
 // <- 40
 ----
 
@@ -229,10 +229,10 @@ The following example defines a +MathHelper+ class with a static +sum+ method th
 ----
 class MathHelper {
   static sum (...numbers) {
-    return numbers.reduce((a, b) => a + b);
+    return numbers.reduce((a, b) => a + b)
   }
-};
-console.log(MathHelper.sum(1, 2, 3, 4, 5));
+}
+console.log(MathHelper.sum(1, 2, 3, 4, 5))
 // <- 15
 ----
 
@@ -245,41 +245,41 @@ You could use plain JavaScript to extend the +Fruit+ class, but as you will noti
 [source,javascript]
 ----
 function Banana () {
-  Fruit.call(this, 'banana', 105);
+  Fruit.call(this, 'banana', 105)
 }
-Banana.prototype = Object.create(Fruit.prototype);
+Banana.prototype = Object.create(Fruit.prototype)
 Banana.prototype.slice = function () {
-  this.pieces = 12;
-};
+  this.pieces = 12
+}
 ----
 
 Given the ephemeral knowledge one has to remember, and the fact that +Object.create+ was only made available in ES5, JavaScript developers have historically turned to libraries to resolve their prototype inheritance issues. One such example is +util.inherits+ in Node.js, which is usually favored over +Object.create+ for legacy support reasons.
 
 [source,javascript]
 ----
-const util = require('util');
+const util = require('util')
 function Banana () {
-  Fruit.call(this, 'banana', 105);
+  Fruit.call(this, 'banana', 105)
 }
-util.inherits(Banana, Fruit);
+util.inherits(Banana, Fruit)
 Banana.prototype.slice = function () {
-  this.pieces = 12;
-};
+  this.pieces = 12
+}
 ----
 
 Consuming the +Banana+ constructor is no different than how we used +Fruit+, except that the banana has a +name+ and calories already assigned to it, and they come with an extra +slice+ method we can use to promptly chop the banana instance into 12 pieces. The following piece of code shows the +Banana+ in action as we take a bite.
 
 [source,javascript]
 ----
-const person = { satiety: 0 };
-const banana = new Banana();
-banana.slice();
-banana.bite(person);
-console.log(person.satiety);
+const person = { satiety: 0 }
+const banana = new Banana()
+banana.slice()
+banana.bite(person)
+console.log(person.satiety)
 // <- 8.75
-console.log(banana.pieces);
+console.log(banana.pieces)
 // <- 11
-console.log(banana.calories);
+console.log(banana.calories)
 // <- 96.25
 ----
 
@@ -291,12 +291,12 @@ The +Fruit+ class is ripe for inheritance. In the following code snippet we crea
 ----
 class Banana extends Fruit {
   constructor () {
-    super('banana', 105);
+    super('banana', 105)
   }
   slice () {
     this.pieces = 12
   }
-};
+}
 ----
 
 Even though the +class+ keyword is static we can still leverage JavaScript's flexible and functional properties when declaring classes. Any expression that returns a constructor function can be fed to +extends+. For example, we could have a constructor function factory and use that as the base class.
@@ -307,17 +307,17 @@ The following piece of code has a +createJuicyFruit+ function where we forward t
 ----
 const createJuicyFruit = (...params) => class JuicyFruit extends Fruit {
   constructor () {
-    this.juice = 0;
-    super(...params);
+    this.juice = 0
+    super(...params)
   }
   squeeze () {
     if (this.calories <= 0) {
-      return;
+      return
     }
-    this.calories -= 10;
-    this.juice += 3;
+    this.calories -= 10
+    this.juice += 3
   }
-};
+}
 class Plum extends createJuicyFruit('plum', 30) {
 }
 ----
@@ -338,14 +338,14 @@ Symbols can be created using the +Symbol+ wrapper object. In the following piece
 
 [source,javascript]
 ----
-const first = Symbol();
+const first = Symbol()
 ----
 
 While you can use the `new` keyword with +Number+ and +String+, the `new` operator throws a `TypeError` when we try it on `Symbol`. This avoids mistakes and confusing behavior like +new Number(3) !== Number(3)+. The following snippet shows the error being thrown.
 
 [source,javascript]
 ----
-const oops = new Symbol();
+const oops = new Symbol()
 // <- TypeError, Symbol is not a constructor
 ----
 
@@ -353,18 +353,18 @@ For debugging purposes, you can create symbols using a description.
 
 [source,javascript]
 ----
-const mystery = Symbol('my symbol');
+const mystery = Symbol('my symbol')
 ----
 
 Like numbers or strings, symbols are immutable. Unlike other value types, however, symbols are unique. As shown in the next piece of code, descriptions don't affect that uniqueness. Symbols created using the same description are also unique and thus different from each other.
 
 [source,javascript]
 ----
-console.log(Symbol() === Symbol());
+console.log(Symbol() === Symbol())
 // <- false
-console.log(Symbol('my symbol') === Symbol('my symbol'));
+console.log(Symbol('my symbol') === Symbol('my symbol'))
 // <- false
-console.log(Number(3) === Number(3));
+console.log(Number(3) === Number(3))
 // <- true
 ----
 
@@ -372,9 +372,9 @@ Symbols are of type +symbol+, new in ES6. The following snippet shows how +typeo
 
 [source,javascript]
 ----
-console.log(typeof Symbol());
+console.log(typeof Symbol())
 // <- 'symbol'
-console.log(typeof Symbol('my symbol'));
+console.log(typeof Symbol('my symbol'))
 // <- 'symbol'
 ----
 
@@ -382,12 +382,12 @@ Symbols can be used as property keys on objects. Note how you can use a computed
 
 [source,javascript]
 ----
-const weapon = Symbol('weapon');
+const weapon = Symbol('weapon')
 const character = {
   name: 'Penguin',
   [weapon]: 'umbrella'
-};
-console.log(character[weapon]);
+}
+console.log(character[weapon])
 // <- 'umbrella'
 ----
 
@@ -396,12 +396,12 @@ Keep in mind that symbol keys are hidden from many of the traditional ways of pu
 [source,javascript]
 ----
 for (key in character) {
-  console.log(key);
+  console.log(key)
   // <- 'name'
 }
-console.log(Object.keys(character));
+console.log(Object.keys(character))
 // <- ['name']
-console.log(Object.getOwnPropertyNames(character));
+console.log(Object.getOwnPropertyNames(character))
 // <- ['name']
 ----
 
@@ -409,7 +409,7 @@ This aspect of symbols means that code that was written before ES6 and without s
 
 [source,javascript]
 ----
-console.log(JSON.stringify(character));
+console.log(JSON.stringify(character))
 // <- '{"name":"Penguin"}'
 ----
 
@@ -417,7 +417,7 @@ That being said, symbols are by no means a safe mechanism to conceal properties.
 
 [source,javascript]
 ----
-console.log(Object.getOwnPropertySymbols(character));
+console.log(Object.getOwnPropertySymbols(character))
 // <- [Symbol(weapon)]
 ----
 
@@ -431,15 +431,15 @@ Symbols, on the other hand, don't have these problem. They can be used as proper
 
 [source,javascript]
 ----
-const cache = Symbol('calendar');
+const cache = Symbol('calendar')
 function createCalendar (el) {
   if (cache in el) { // check if the symbol exists in the element
     return el[cache]; // use the cache to avoid re-instantiation
   }
   const api = el[cache] = {
     // the calendar API goes here
-  };
-  return api;
+  }
+  return api
 }
 ----
 
@@ -458,8 +458,8 @@ const character = {
   toJSON: () => ({
     key: 'value'
   })
-};
-console.log(JSON.stringify(character));
+}
+console.log(JSON.stringify(character))
 // <- '"{"key":"value"}"'
 ----
 
@@ -470,8 +470,8 @@ In contrast, if +toJSON+ was anything other than a function, the original +chara
 const character = {
   name: 'Thor',
   toJSON: true
-};
-console.log(JSON.stringify(character));
+}
+console.log(JSON.stringify(character))
 // <- '"{"name":"Thor","toJSON":true}"'
 ----
 
@@ -479,19 +479,19 @@ The reason why it would be better to implement the +toJSON+ modifier as a symbol
 
 [source,javascript]
 ----
-const json = Symbol('alternative to toJSON');
+const json = Symbol('alternative to toJSON')
 const character = {
   name: 'Thor',
   [json]: () => ({
     key: 'value'
   })
-};
-stringify(character);
+}
+stringify(character)
 function stringify (target) {
   if (json in target) {
-    return JSON.stringify(target[json]());
+    return JSON.stringify(target[json]())
   }
-  return JSON.stringify(target);
+  return JSON.stringify(target)
 }
 ----
 
@@ -499,7 +499,7 @@ Using a symbol means we need to use a computed property name to define the +json
 
 [source,javascript]
 ----
-stringify.as = json;
+stringify.as = json
 ----
 
 By exposing the +stringify+ function we'd be exposing the +stringify.as+ symbol as well, allowing consumers to tweak behavior by minimally modifying objects, using the custom symbol.
@@ -524,8 +524,8 @@ In the following code snippet, the first call to +Symbol.for+ creates a symbol i
 
 [source,javascript]
 ----
-const example = Symbol.for('example');
-console.log(example === Symbol.for('example'));
+const example = Symbol.for('example')
+console.log(example === Symbol.for('example'))
 // <- true
 ----
 
@@ -537,8 +537,8 @@ Given a symbol +symbol+, +Symbol.keyFor(symbol)+ returns the +key+ that was asso
 
 [source,javascript]
 ----
-const example = Symbol.for('example');
-console.log(Symbol.keyFor(example));
+const example = Symbol.for('example')
+console.log(Symbol.keyFor(example))
 // <- 'example'
 ----
 
@@ -546,7 +546,7 @@ Note that if the symbol isn't in the global runtime registry, then the method re
 
 [source,javascript]
 ----
-console.log(Symbol.keyFor(Symbol()));
+console.log(Symbol.keyFor(Symbol()))
 // <- undefined
 ----
 
@@ -554,8 +554,8 @@ Also keep in mind that it's not possible to match symbols in the global registry
 
 [source,javascript]
 ----
-const example = Symbol.for('example');
-console.log(Symbol.keyFor(Symbol('example')));
+const example = Symbol.for('example')
+console.log(Symbol.keyFor(Symbol('example')))
 // <- undefined
 ----
 
@@ -567,12 +567,12 @@ A runtime-wide registry means the symbols are accessible across code realms. The
 
 [source,javascript]
 ----
-const d = document;
-const frame = d.body.appendChild(d.createElement('iframe'));
-const framed = frame.contentWindow;
-const s1 = window.Symbol.for('example');
-const s2 = framed.Symbol.for('example');
-console.log(s1 === s2);
+const d = document
+const frame = d.body.appendChild(d.createElement('iframe'))
+const framed = frame.contentWindow
+const s1 = window.Symbol.for('example')
+const s2 = framed.Symbol.for('example')
+console.log(s1 === s2)
 // <- true
 ----
 
@@ -591,19 +591,19 @@ A great example of how symbols can add extensibility to the language without bre
 const morphling = {
   [Symbol.toPrimitive](hint) {
     if (hint === 'number') {
-      return Infinity;
+      return Infinity
     }
     if (hint === 'string') {
-      return 'a lot';
+      return 'a lot'
     }
-    return '[object Morphling]';
+    return '[object Morphling]'
   }
-};
-console.log(+morphling);
+}
+console.log(+morphling)
 // <- Infinity
-console.log(`That is ${ morphling }!`);
+console.log(`That is ${ morphling }!`)
 // <- 'That is a lot!'
-console.log(morphling + ' is powerful');
+console.log(morphling + ' is powerful')
 // <- '[object Morphling] is powerful'
 ----
 
@@ -611,10 +611,10 @@ Another example of a well-known symbol is +Symbol.match+. A regular expression t
 
 [source,javascript]
 ----
-const text = '/an example string/';
-const regex = /an example string/;
-regex[Symbol.match] = false;
-console.log(text.startsWith(regex));
+const text = '/an example string/'
+const regex = /an example string/
+regex[Symbol.match] = false
+console.log(text.startsWith(regex))
 // <- true
 ----
 
@@ -626,9 +626,9 @@ Well-known symbols are shared across realms. The following example shows how +Sy
 
 [source,javascript]
 ----
-const frame = document.createElement('iframe');
-document.body.appendChild(frame);
-console.log(Symbol.iterator === frame.contentWindow.Symbol.iterator);
+const frame = document.createElement('iframe')
+document.body.appendChild(frame)
+console.log(Symbol.iterator === frame.contentWindow.Symbol.iterator)
 // <- true
 ----
 
@@ -636,7 +636,7 @@ Note that even though well-known symbols are shared across code realms, they're 
 
 [source,javascript]
 ----
-console.log(Symbol.keyFor(Symbol.iterator));
+console.log(Symbol.keyFor(Symbol.iterator))
 // <- undefined
 ----
 
@@ -662,7 +662,7 @@ const defaults = {
   scripts: false,
   iframes: false,
   highlightSyntax: true
-};
+}
 ----
 
 One possibility would be to use the +defaults+ object as the default value for the +options+ parameter, using destructuring. In this case, the user must provide values for every option whenever they decide to provide any options at all.
@@ -678,7 +678,7 @@ The default values have to be merged with user-provided configuration, somehow. 
 [source,javascript]
 ----
 function md (input, options) {
-  const config = Object.assign({}, defaults, options);
+  const config = Object.assign({}, defaults, options)
 }
 ----
 
@@ -689,15 +689,15 @@ For any properties that had a default value where the user also provided a value
 const defaults = {
   first: 'first',
   second: 'second'
-};
-function print (options) {
-  console.log(Object.assign({}, defaults, options));
 }
-print();
+function print (options) {
+  console.log(Object.assign({}, defaults, options))
+}
+print()
 // <- { first: 'first', second: 'second' }
-print({ third: 3 });
+print({ third: 3 })
 // <- { first: 'first', second: 'second', third: 3 }
-print({ second: false });
+print({ second: false })
 // <- { first: 'first', second: false }
 ----
 
@@ -709,7 +709,7 @@ In the following bit of code you might expect the +f+ property to be added to +t
 
 [source,javascript]
 ----
-Object.assign({}, { a: { b: 'c', d: 'e' } }, { a: { f: 'g' } });
+Object.assign({}, { a: { b: 'c', d: 'e' } }, { a: { f: 'g' } })
 // <- { a: { f: 'g' } }
 ----
 
@@ -717,7 +717,7 @@ In the same vein, arrays don't get any special treatment either. If you expected
 
 [source,javascript]
 ----
-Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] });
+Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 // <- { a: ['e', 'f'] }
 ----
 
@@ -733,7 +733,7 @@ When +NaN+ is compared to +NaN+, the strict equality comparison operator returns
 ----
 NaN === NaN
 // <- false
-Object.is(NaN, NaN);
+Object.is(NaN, NaN)
 // <- true
 ----
 
@@ -743,7 +743,7 @@ Similarly, when +-0+ is compared to ++0+, the +===+ operator produces +true+ whi
 ----
 -0 === +0
 // <- true
-Object.is(-0, +0);
+Object.is(-0, +0)
 // <- false
 ----
 
@@ -757,17 +757,17 @@ Before ES6, we were introduced to +Object.create+ in ES5. Using that method, we 
 
 [source,javascript]
 ----
-const baseCat = { type: 'cat', legs: 4 };
-const cat = Object.create(baseCat);
-cat.name = 'Milanesita';
+const baseCat = { type: 'cat', legs: 4 }
+const cat = Object.create(baseCat)
+cat.name = 'Milanesita'
 ----
 
 The +Object.create+ method is, however, limited to newly created objects. In contrast, we could use +Object.setPrototypeOf+ to change the prototype of an object that already exists, as shown in the following code snippet.
 
 [source,javascript]
 ----
-const baseCat = { type: 'cat', legs: 4 };
-const cat = Object.setPrototypeOf({ name: 'Milanesita' }, baseCat);
+const baseCat = { type: 'cat', legs: 4 }
+const cat = Object.setPrototypeOf({ name: 'Milanesita' }, baseCat)
 ----
 
 Note however that there are serious performance implications when using +Obect.setPrototypeOf+ as opposed to +Object.create+, and some careful consideration is in order before you decide to go ahead and sprinkle +Object.setPrototypeOf+ all over a codebase.

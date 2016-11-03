@@ -1,4 +1,4 @@
-const renderItem = require(`./item`);
+const renderItem = require(`./item`)
 
 module.exports = model => `<ul>
   ${
@@ -8,4 +8,4 @@ module.exports = model => `<ul>
       .split(`\n`)
       .join(`\n  `)
   }
-</ul>`;
+</ul>`

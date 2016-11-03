@@ -15,7 +15,7 @@ var book = {
   title: 'Modular ES6',
   author: 'Nicolas',
   publisher: 'O´Reilly'
-};
+}
 ----
 
 There's three improvements coming to object literal syntax in ES6: property value shorthands, computed property names, and method definitions. Let's go through them and describe their use cases as well.
@@ -26,25 +26,25 @@ Whenever you find yourself declaring a property whose value is a reference to a 
 
 [source,javascript]
 ----
-var listeners = [];
+var listeners = []
 function listen () {}
-var api = { listeners, listen };
+var api = { listeners, listen }
 ----
 
 As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without dilluting its meaning. In the following snippet I re-implemented part of +localStorage+, a browser API for persistent storage, as an in-memory polyfill. If it weren't for the shorthand syntax, the +api+ object would be more verbose to type out.
 
 [source,javascript]
 ----
-var store = {};
-var api = { getItem,  setItem, clear };
+var store = {}
+var api = { getItem,  setItem, clear }
 function getItem (key) {
-  return key in store ? store[key] : null;
+  return key in store ? store[key] : null
 }
 function setItem (key, value) {
-  store[key] = value;
+  store[key] = value
 }
 function clear () {
-  store = {};
+  store = {}
 }
 ----
 
@@ -56,22 +56,22 @@ Sometimes you have to declare objects that contain properties with names based o
 
 [source,javascript]
 ----
-var expertise = 'journalism';
+var expertise = 'journalism'
 var person = {
   name: 'Sharon',
   age: 27
-};
+}
 person[expertise] = {
   years: 5,
   interests: ['international', 'politics', 'internet']
-};
+}
 ----
 
 Object literals in ES6 aren't constrained to declarations with static names. With computed property names, you can wrap any expression in square brackets, and use that as the property name. When the declaration is reached, your expression is evaluated and used as the property name. The following example shows how the piece of code we just saw could declare the person object in a single step, without having to resort to a second statement adding the person's +expertise+.
 
 [source,javascript]
 ----
-var expertise = 'journalism';
+var expertise = 'journalism'
 var person = {
   name: 'Sharon',
   age: 27,
@@ -79,23 +79,23 @@ var person = {
     years: 5,
     interests: ['international', 'politics', 'internet']
   }
-};
+}
 ----
 
 You can't combine the property value shorthands with computed property names. Value shorthands are simple compile-time syntactic sugar that helps avoid repetition, while computed name expressions are evaluated at runtime. Given that we're trying to mix these two incompatible features, the following example would throw a syntax error. In most cases this combination would lead to code that's hard to interpret for other humans, so it's probably a good thing that you can't combine the two.
 
 [source,javascript]
 ----
-var expertise = 'journalism';
+var expertise = 'journalism'
 var journalism = {
   years: 5,
   interests: ['international', 'politics', 'internet']
-};
+}
 var person = {
   name: 'Sharon',
   age: 27,
   [expertise]
-};
+}
 ----
 
 A common scenario for computed property names is when we want to add an entity to an object map that uses the +entity.id+ field as its keys, as shown next. Instead of having to have a third statement where we add the +grocery+ to the +groceries+ map, we can inline that declaration in the +groceries+ object literal itself.
@@ -108,10 +108,10 @@ var grocery = {
   units: 6,
   price: 10,
   currency: 'USD'
-};
+}
 var groceries = {
   [grocery.id]: grocery
-};
+}
 ----
 
 Another case may be whenever a function receives a parameter that it should then use to build out an object. In ES5 code, you'd need to allocate a variable declaring an object literal, then add the dynamic property, and then return the object. The following example shows exactly that, when creating an envelope that could later be used for AJAX messages which follow a convention: they have an +error+ property with a description when something goes wrong, and a +success+ property when things turn out okay.
@@ -121,9 +121,9 @@ Another case may be whenever a function receives a parameter that it should then
 function getEnvelope (type, description) {
   var envelope = {
     data: {}
-  };
-  envelope[type] = description;
-  return envelope;
+  }
+  envelope[type] = description
+  return envelope
 }
 ----
 
@@ -135,7 +135,7 @@ function getEnvelope (type, description) {
   return {
     data: {},
     [type]: description
-  };
+  }
 }
 ----
 
@@ -150,42 +150,42 @@ Typically, you can declare methods on an object by adding properties to it, as s
 var emitter = {
   emit: function (eventName) {
   }
-};
+}
 ----
 
 Property getters and setters, in contrast, have a different syntax. In this case, there's no need for the +function+ keyword, and no colons are involved. Getters are prefixed by +get+ and setters are prefixed with +set+. Then there's the property name, a list of parameters, and the method body. The next example shows a simple object that defines a getter and a setter.
 
 [source,javascript]
 ----
-var reserves = 4;
+var reserves = 4
 var spaceship = {
   get fuel () {
-    return reserves;
+    return reserves
   },
   set fuel (value) {
-    reserves = value;
+    reserves = value
   }
-};
+}
 ----
 
 Starting in ES6, you can declare regular methods on an object literal using a similar syntax. The only difference is that you need to omit a prefix like +get+ and +set+. This syntax complements getters and setters while providing a terse alternative to traditional method declarations where you need to use the +function+ keyword. The following example shows a method definition using the ES6 syntax alongside the rest of our +spaceship+ object.
 
 [source,javascript]
 ----
-var reserves = 4;
+var reserves = 4
 var spaceship = {
   get fuel () {
-    return reserves;
+    return reserves
   },
   set fuel (value) {
-    reserves = value;
+    reserves = value
   },
   deplete () {
-    reserves = 0;
+    reserves = 0
   }
-};
-spaceship.fuel = 10;
-spaceship.deplete();
+}
+spaceship.fuel = 10
+spaceship.deplete()
 ----
 
 One problem with this syntax is that it tightly couples a method to an object. While that's fine for getters and setters, it might not be okay for other methods. In terms of modular design, it would be cleaner to keep your code decoupled, and the syntax discourages it. By dropping the +function+ keyword and inferring the property name from the method, we are making it hard to extract +deplete+ from the object literal.
@@ -209,7 +209,7 @@ You could also create anonymous functions, by omitting the name, when assigning 
 ----
 var example = function (parameters) {
   // function body
-};
+}
 ----
 
 Starting with ES6, you can use arrow functions as another way of writing anonymous functions. Keep in mind, there's several slightly different ways of writing them. The following piece of code shows an arrow function that's very similar to the anonymous function we just saw. The only difference seems to be the missing +function+ keyword and the +=>+ arrow to the right of the parameter list.
@@ -218,7 +218,7 @@ Starting with ES6, you can use arrow functions as another way of writing anonymo
 ----
 var example = (parameters) => {
   // function body
-};
+}
 ----
 
 While arrow functions look very similar to your typical anonymous function, they are fundamentally different: arrow functions can't have a name, and they are bound to their lexical scope. Let's dig into their semantic differences with traditional functions, the many ways to declare an arrow function, and practical use cases.
@@ -233,14 +233,14 @@ var timer = {
   seconds: 0,
   start () {
     setInterval(() => {
-      this.seconds++;
-    }, 1000);
+      this.seconds++
+    }, 1000)
   }
-};
-timer.start();
+}
+timer.start()
 setTimeout(function () {
   console.log(timer.seconds)
-}, 3500);
+}, 3500)
 // <- 3
 ----
 
@@ -258,7 +258,7 @@ Let's look one more time at the arrow function syntax we've learned so far.
 ----
 var example = (parameters) => {
   // function body
-};
+}
 ----
 
 An arrow function with exactly one parameter can omit the parenthesis. This is optional. It's useful when passing the arrow function to another method, as it reduces the amount of parenthesis involved, making it easier for humans to parse the code.
@@ -266,22 +266,22 @@ An arrow function with exactly one parameter can omit the parenthesis. This is o
 [source,javascript]
 ----
 var double = value => {
-  return value * 2;
-};
+  return value * 2
+}
 ----
 
 Arrow functions are heavily used for simple functions, such as the +double+ function we just saw. The following flavor of arrow functions does away with the function body. Instead, you provide an expression such as +value * 2+. When the function is called, the expression is evaluated and its result is returned. The +return+ statement is implicit, and there's no need for brackets denoting the function body anymore, as you can only use a single expression.
 
 [source,javascript]
 ----
-var double = (value) => value * 2;
+var double = (value) => value * 2
 ----
 
 Note that you can combine implicit parenthesis and implicit return, making for concise arrow functions.
 
 [source,javascript]
 ----
-var double = value => value * 2;
+var double = value => value * 2
 ----
 
 .Implicitly Returning Object Literals
@@ -290,7 +290,7 @@ When you need to implicitly return an object literal, you'll need to wrap that o
 
 [source,javascript]
 ----
-var objectFactory = () => ({ modular: 'es6' });
+var objectFactory = () => ({ modular: 'es6' })
 ----
 
 In the following example, JavaScript interprets +number+ as a label and then figures out we have a +value+ expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be +undefined+.
@@ -363,43 +363,43 @@ var character = {
     gender: 'male'
   },
   batarang: ['gas pellet', 'bat-mobile control', 'bat-cuffs']
-};
+}
 ----
 
 If you wanted a +pseudonym+ variable referencing +character.batman+, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing +pseudonym+ in several places in your codebase and you'd prefer to avoid typing out +character.pseudonym+ each time.
 
 [source,javascript]
 ----
-var pseudonym = character.pseudonym;
+var pseudonym = character.pseudonym
 ----
 
 With destructuring in assignment, the syntax becomes a bit more clear. As you can see in the next example, you don't have to write +pseudonym+ twice, while still clearly conveying intent. The following statement is equivalent to the previous one written in ES5 code.
 
 [source,javascript]
 ----
-var { pseudonym } = character;
+var { pseudonym } = character
 ----
 
 Just like you could declare multiple comma-separated variables with a single +var+ statement, you can also declare multiple variables within the brackets of a destructuring expression.
 
 [source,javascript]
 ----
-var { pseudonym, name } = character;
+var { pseudonym, name } = character
 ----
 
 In a similar fashion, you could mix and match destructuring with regular variable declarations in the same +var+ statement. While this might look a bit confusing at first, it'll be up to any JavaScript coding style guides you follow to determine whether it's appropriate to declare several variables in a single statement. In any case, it goes to show the flexibility offered by destructuring syntax.
 
 [source,javascript]
 ----
-var { pseudonym, name } = character, two = 2;
+var { pseudonym, name } = character, two = 2
 ----
 
 If you want to extract a property named +pseudonym+ but would like to declare it as a variable named +alias+, you can use the following destructuring syntax known as aliasing. Note that you can use +alias+ or any other valid variable name.
 
 [source,javascript]
 ----
-var { pseudonym: alias } = character;
-console.log(alias);
+var { pseudonym: alias } = character
+console.log(alias)
 // <- 'Batman'
 ----
 
@@ -407,7 +407,7 @@ While aliases don't look any simpler than the ES5 flavor, +alias = character.pse
 
 [source,javascript]
 ----
-var { metadata: { gender } } = character;
+var { metadata: { gender } } = character
 ----
 
 In cases like the previous one, where you have deeply nested properties being destructured, you might be able to convey a property name more clearly if you choose an alias. Consider the next snippet, where a property named +code+ wouldn't have been as indicative of its contents as +colorCode+ could be.
@@ -418,8 +418,8 @@ var palette = {
     name: 'Red',
     code: '#f00'
   }
-};
-var { color: { code: colorCode } } = palette;
+}
+var { color: { code: colorCode } } = palette
 ----
 
 The scenario we just saw repeats itself frequently, because properties are often named in the context of their host object. While +palette.color.code+ is perfectly descriptive, +code+ on its own could mean a wide variety of things, and aliases such as +colorCode+ can help you bring context back into the variable name while still using destructuring.
@@ -428,9 +428,9 @@ Whenever you access an inexistent property in ES5 notation, you get a value of +
 
 [source,javascript]
 ----
-console.log(character.boots);
+console.log(character.boots)
 // <- undefined
-console.log(character['boots']);
+console.log(character['boots'])
 // <- undefined
 ----
 
@@ -438,8 +438,8 @@ With destructuring, the same behavior prevails. When declaring a destructured va
 
 [source,javascript]
 ----
-var { boots } = character;
-console.log(boots);
+var { boots } = character
+console.log(boots)
 // <- undefined
 ----
 
@@ -447,9 +447,9 @@ A destructured declaration accessing a nested property of a parent object that's
 
 [source,javascript]
 ----
-var { batmobile: { gear } } = character;
+var { batmobile: { gear } } = character
 // <- Exception
-var { missing } = null;
+var { missing } = null
 // <- Exception
 ----
 
@@ -457,8 +457,8 @@ When you think of that piece of code as the equivalent ES5 code shown next, it b
 
 [source,javascript]
 ----
-var nothing = null;
-var missing = nothing.missing;
+var nothing = null
+var missing = nothing.missing
 // <- Exception
 ----
 
@@ -466,8 +466,8 @@ As part of destructuring, you can provide default values for those cases where t
 
 [source,javascript]
 ----
-var { boots = true } = character;
-console.log(boots);
+var { boots = true } = character
+console.log(boots)
 // <- true
 ----
 
@@ -475,8 +475,8 @@ Default values can also be provided in nested property destructuring.
 
 [source,javascript]
 ----
-var { metadata: { enemy = 'Satan' } } = character;
-console.log(enemy);
+var { metadata: { enemy = 'Satan' } } = character
+console.log(enemy)
 // <- 'Satan'
 ----
 
@@ -484,17 +484,17 @@ For use in combination with aliases, you should place the alias first, and then 
 
 [source,javascript]
 ----
-var { boots: footwear = true } = character;
+var { boots: footwear = true } = character
 ----
 
 It's possible to mix destructuring with computed property names. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler isn't always able to infer a variable name.
 
 [source,javascript]
 ----
-var person = { scientist: true };
-var type = 'scientist';
-var { [type]: value } = person;
-console.log(value);
+var person = { scientist: true }
+var type = 'scientist'
+var { [type]: value } = person
+console.log(value)
 // <- true
 ----
 
@@ -508,9 +508,9 @@ The syntax for destructuring arrays is similar to that of objects. The following
 
 [source,javascript]
 ----
-var coordinates = [12, -7];
-var [x, y] = coordinates;
-console.log(x);
+var coordinates = [12, -7]
+var [x, y] = coordinates
+console.log(x)
 // <- 12
 ----
 
@@ -518,9 +518,9 @@ When destructuring arrays, you can skip uninteresting properties or those that y
 
 [source,javascript]
 ----
-var names = ['James', 'L.', 'Howlett'];
-var [ firstName,, lastName ] = names;
-console.log(lastName);
+var names = ['James', 'L.', 'Howlett']
+var [ firstName,, lastName ] = names
+console.log(lastName)
 // <- 'Howlett'
 ----
 
@@ -528,9 +528,9 @@ Array destructuring allows for default values just like object destructuring.
 
 [source,javascript]
 ----
-var names = ['James', 'L.'];
-var [ firstName = 'John',, lastName = 'Doe' ] = names;
-console.log(lastName);
+var names = ['James', 'L.']
+var [ firstName = 'John',, lastName = 'Doe' ] = names
+console.log(lastName)
 // <- 'Doe'
 ----
 
@@ -538,20 +538,20 @@ In ES5, when you have to swap the values of two variables, you typically resort 
 
 [source,javascript]
 ----
-var left = 5;
-var right = 7;
-var aux = left;
-left = right;
-right = aux;
+var left = 5
+var right = 7
+var aux = left
+left = right
+right = aux
 ----
 
 Destructuring helps you avoid the +aux+ declaration and focus on your intent. Once again, destructuring helps us convey intent more tersely and effectively for the use case.
 
 [source,javascript]
 ----
-var left = 5;
-var right = 7;
-[left, right] = [right, left];
+var left = 5
+var right = 7
+[left, right] = [right, left]
 ----
 
 The last area of destructuring we'll be covering is function parameters.
@@ -563,7 +563,7 @@ Function parameters in ES6 enjoy the benefits of destructuring as well. One of t
 [source,javascript]
 ----
 function powerOf (base, exponent = 2) {
-  return Math.pow(base, exponent);
+  return Math.pow(base, exponent)
 }
 ----
 
@@ -571,7 +571,7 @@ Destructuring can be applied to arrow functions as well, but in that case you mu
 
 [source,javascript]
 ----
-var double = (input = 0) => input * 2;
+var double = (input = 0) => input * 2
 ----
 
 Given that this behaves like destructuring, default values aren't just limited to the rightmost parameters of a function. You could give default values to any parameter, in any position.
@@ -579,9 +579,9 @@ Given that this behaves like destructuring, default values aren't just limited t
 [source,javascript]
 ----
 function sumOf (a = 1, b = 2, c = 3) {
-  return a + b + c;
+  return a + b + c
 }
-console.log(sumOf(undefined, undefined, 4));
+console.log(sumOf(undefined, undefined, 4))
 // <- 1 + 2 + 4 = 7
 ----
 
@@ -590,10 +590,10 @@ In JavaScript it's not uncommon to provide a function with an +options+ object, 
 [source,javascript]
 ----
 function carFactory (options = { brand: 'Volkswagen', year: 1999 }) {
-  console.log(options.brand);
-  console.log(options.year);
+  console.log(options.brand)
+  console.log(options.year)
 }
-carFactory();
+carFactory()
 // <- 'Volkswagen'
 // <- 1999
 ----
@@ -602,7 +602,7 @@ The problem with this approach is that as soon as the consumer of +carFactory+ p
 
 [source,javascript]
 ----
-carFactory({ year: 2000 });
+carFactory({ year: 2000 })
 // <- undefined
 // <- 2000
 ----
@@ -612,10 +612,10 @@ A better approach would be to destructure +options+ entirely, providing default 
 [source,javascript]
 ----
 function carFactory ({ brand = 'Volkswagen', year = 1999 }) {
-  console.log(brand);
-  console.log(year);
+  console.log(brand)
+  console.log(year)
 }
-carFactory({ year: 2000 });
+carFactory({ year: 2000 })
 // <- 'Volkswagen'
 // <- 2000
 ----
@@ -625,10 +625,10 @@ In this case, however, we've once again lost the default value for the case wher
 [source,javascript]
 ----
 function carFactory ({ brand = 'Volkswagen', year = 1999 } = {}) {
-  console.log(brand);
-  console.log(year);
+  console.log(brand)
+  console.log(year)
 }
-carFactory();
+carFactory()
 // <- 'Volkswagen'
 // <- 1999
 ----
@@ -642,9 +642,9 @@ Whenever there's a function that returns an object or an array, destructuring ma
 [source,javascript]
 ----
 function getCoordinates () {
-  return { x: 10, y: 22, z: -1, type: '3d' };
+  return { x: 10, y: 22, z: -1, type: '3d' }
 }
-var { x, y } = getCoordinates();
+var { x, y } = getCoordinates()
 ----
 
 The case for default option values bears repeating. Imagine you have a +random+ function which yields random integers between a +min+ and a +max+ value, and that it should default to values between 1 and 10. This is particularly interesting as an alternative to named parameters in other languages like Python and C#. This pattern, where you're able to define default values for options and then let consumers override them individually, offers great flexibility.
@@ -652,11 +652,11 @@ The case for default option values bears repeating. Imagine you have a +random+ 
 [source,javascript]
 ----
 function random ({ min = 1, max = 10 } = {}) {
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min)) + min
 }
-console.log(random());
+console.log(random())
 // <- 7
-console.log(random({ max: 24 }));
+console.log(random({ max: 24 }))
 // <- 18
 ----
 
@@ -665,10 +665,10 @@ Regular expressions are another great fit for destructuring. Destructuring empow
 [source,javascript]
 ----
 function splitDate (date) {
-  var rdate = /(\d+).(\d+).(\d+)/;
-  return rdate.exec(date);
+  var rdate = /(\d+).(\d+).(\d+)/
+  return rdate.exec(date)
 }
-var [, year, month, day] = splitDate('2015-11-06');
+var [, year, month, day] = splitDate('2015-11-06')
 ----
 
 Let's turn our attention to spread and rest operators next.
@@ -680,10 +680,10 @@ Before ES6, interacting with an arbitrary amount of function parameters was comp
 [source,javascript]
 ----
 function print () {
-  var list = Array.prototype.slice.call(arguments);
-  console.log(list);
+  var list = Array.prototype.slice.call(arguments)
+  console.log(list)
 }
-print('a', 'b', 'c');
+print('a', 'b', 'c')
 // <- ['a', 'b', 'c']
 ----
 
@@ -696,9 +696,9 @@ You can now precede the last parameter in any JavaScript function with three dot
 [source,javascript]
 ----
 function print (...list) {
-  console.log(list);
+  console.log(list)
 }
-print('a', 'b', 'c');
+print('a', 'b', 'c')
 // <- ['a', 'b', 'c']
 ----
 
@@ -707,10 +707,10 @@ Named parameters before the rest parameter won't be included in the +list+.
 [source,javascript]
 ----
 function print (first, ...list) {
-  console.log(first);
-  console.log(list);
+  console.log(first)
+  console.log(list)
 }
-print('a', 'b', 'c');
+print('a', 'b', 'c')
 // <- 'a'
 // <- [b', 'c']
 ----
@@ -719,8 +719,8 @@ Note that arrow functions with a rest parameter must include parenthesis, even w
 
 [source,javascript]
 ----
-var sumAll = (...numbers) => numbers.reduce((total, next) => total + next);
-console.log(sumAll(1, 2, 5));
+var sumAll = (...numbers) => numbers.reduce((total, next) => total + next)
+console.log(sumAll(1, 2, 5))
 // <- 8
 ----
 
@@ -729,12 +729,12 @@ Compare that with the ES5 version of the same function. Granted, it's all in the
 [source,javascript]
 ----
 function sumAll () {
-  var numbers = Array.prototype.slice.call(arguments);
+  var numbers = Array.prototype.slice.call(arguments)
   return numbers.reduce(function (a, b) {
-    return a + b;
-  });
+    return a + b
+  })
 }
-console.log(sumAll(1, 2, 5));
+console.log(sumAll(1, 2, 5))
 // <- 8
 ----
 
@@ -747,9 +747,9 @@ The spread operator can be used to cast the an array-like object into a true arr
 [source,javascript]
 ----
 function cast () {
-  return [...arguments];
+  return [...arguments]
 }
-cast('a', 'b', 'c');
+cast('a', 'b', 'c')
 // <- ['a', 'b', 'c']
 ----
 
@@ -758,9 +758,9 @@ You can place elements to the left and to the right of a spread operation and st
 [source,javascript]
 ----
 function cast () {
-  return ['left', ...arguments, 'right'];
+  return ['left', ...arguments, 'right']
 }
-cast('a', 'b', 'c');
+cast('a', 'b', 'c')
 // <- ['left', 'a', 'b', 'c', 'right']
 ----
 
@@ -768,8 +768,8 @@ Spread is an useful way of combining multiple arrays. The following example show
 
 [source,javascript]
 ----
-var all = [1, ...[2, 3], 4, ...[5], 6, 7];
-console.log(all);
+var all = [1, ...[2, 3], 4, ...[5], 6, 7]
+console.log(all)
 // <- [1, 2, 3, 4, 5, 6, 7]
 ----
 
@@ -781,10 +781,10 @@ When you want to extract an element or two from the beginning of an array, the c
 
 [source,javascript]
 ----
-var list = ['a', 'b', 'c', 'd', 'e'];
-var first = list.shift();
-var second = list.shift();
-console.log(first);
+var list = ['a', 'b', 'c', 'd', 'e']
+var first = list.shift()
+var second = list.shift()
+console.log(first)
 // <- 'a'
 ----
 
@@ -792,8 +792,8 @@ In ES6, you can combine spread with array destructuring. The following piece of 
 
 [source,javascript]
 ----
-var [first, second, ...rest] = ['a', 'b', 'c', 'd', 'e'];
-console.log(rest);
+var [first, second, ...rest] = ['a', 'b', 'c', 'd', 'e']
+console.log(rest)
 // <- ['c', 'd', 'e']
 ----
 
@@ -804,7 +804,7 @@ Before ES6, whenever you have a dynamic list of arguments that need to be applie
 
 [source,javascript]
 ----
-func.apply(null, ['a', 'b', 'c']);
+func.apply(null, ['a', 'b', 'c'])
 ----
 
 Besides spreading onto arrays, you can also spread items onto function calls. The following example shows how you could use the spread operator to pass an arbitrary number of arguments to the +multiply+ function.
@@ -812,10 +812,10 @@ Besides spreading onto arrays, you can also spread items onto function calls. Th
 [source,javascript]
 ----
 function multiply (left, right) {
-  return left * right;
+  return left * right
 }
-var result = multiply(...[2, 3]);
-console.log(result);
+var result = multiply(...[2, 3])
+console.log(result)
 // <- 6
 ----
 
@@ -824,7 +824,7 @@ Spreading arguments onto a function call can be combined with regular arguments 
 [source,javascript]
 ----
 function print (...list) {
-  console.log(list);
+  console.log(list)
 }
 print(1, ...[2, 3], 4, ...[5])
 // <- ['1', '2', '3', '4', '5']
@@ -865,14 +865,14 @@ Template literals are a vast improvement upon regular JavaScript strings. Instea
 
 [source,javascript]
 ----
-var text = `This is my first template literal`;
+var text = `This is my first template literal`
 ----
 
 Given that template literals are delimited by backticks, you're now able to declare strings with both +'+ and +"+ quotation marks in them without having to escape either, as shown below.
 
 [source,javascript]
 ----
-var text = `I'm "amazed" at these opportunities!`;
+var text = `I'm "amazed" at these opportunities!`
 ----
 
 One of the most appealing features of template literals is their ability to interpolate JavaScript expressions.
@@ -883,9 +883,9 @@ With template literals, you're able to interpolate any JavaScript expressions in
 
 [source,javascript]
 ----
-var name = 'Shannon';
-var text = `Hello, ${ name }!`;
-console.log(text);
+var name = 'Shannon'
+var text = `Hello, ${ name }!`
+console.log(text)
 // <- 'Hello, Shannon!'
 ----
 
@@ -926,18 +926,18 @@ Before template literals, if you wanted to represent strings in multiple lines o
 var escaped =
 'The first line\n\
 A second line\n\
-Then a third line';
+Then a third line'
 
 var concatenated =
 'The first line\n' +
 'A second line\n' +
-'Then a third line';
+'Then a third line'
 
 var joined = [
 'The first line',
 'A second line',
 'Then a third line'
-].join('\n');
+].join('\n')
 ----
 
 Under ES6, you could use backticks instead. Template literals support multiline strings by default. Note how there's no +\n+ escapes, no concatenation, and no arrays involved.
@@ -947,7 +947,7 @@ Under ES6, you could use backticks instead. Template literals support multiline 
 var multiline =
 `The first line
 A second line
-Then a third line`;
+Then a third line`
 ----
 
 Multiline strings really shine when you have, for instance, a chunk of HTML you want to interpolate some variables into. If you need to display a list within the template, you could iterate the list, mapping its items into the corresponding markup, and then return the joined result from an interpolated expression. This makes it a breeze to declare subcomponents within your templates, as shown in the following piece of code.
@@ -958,7 +958,7 @@ var book = {
   title: 'Modular ES6',
   excerpt: 'Here goes some properly sanitized HTML',
   tags: ['es6', 'template-literals', 'es6-in-depth']
-};
+}
 var html = `<article>
   <header>
     <h1>${ book.title }</h1>
@@ -973,7 +973,7 @@ var html = `<article>
       }
     </ul>
   </footer>
-</article>`;
+</article>`
 ----
 
 The template we've just prepared would produce output like what's shown in the following snippet of code. Note how spacing was preserved, and how +<li>+ tags are properly indented thanks for how we joined them together using a few spaces.
@@ -1004,8 +1004,8 @@ By default, JavaScript interprets +\+ as an escape character with special meanin
 [source,javascript]
 ----
 var text = String.raw`The "\n" newline won't result in a new line.
-It'll be escaped.`;
-console.log(text);
+It'll be escaped.`
+console.log(text)
 // The "\n" newline won't result in a new line.
 // It'll be escaped.
 ----
@@ -1016,7 +1016,7 @@ A template literal like +`Hello, ${ name }. I am ${ emotion } to meet you!`+, fo
 
 [source,javascript]
 ----
-tag(['Hello, ', '. I am ', ' to meet you!'], 'Maurice', 'thrilled');
+tag(['Hello, ', '. I am ', ' to meet you!'], 'Maurice', 'thrilled')
 ----
 
 The template is built by taking each part of the template and placing one of the expressions next to it, until there's no more parts of the template left. It might be hard to interpret the argument list without looking at a potential implementation of the default template literal +tag+, so let's do that.
@@ -1028,7 +1028,7 @@ The following snippet of code shows a possible implementation of the default +ta
 function tag (parts, ...values) {
   return parts.reduce(
     (all, part, i) => all + values[i - 1] + part
-  );
+  )
 }
 ----
 
@@ -1036,9 +1036,9 @@ You can try the +tag+ template using code like in the following snippet. You'll 
 
 [source,javascript]
 ----
-var name = 'Maurice';
-var emotion = 'thrilled';
-var text = tag`Hello, ${ name }. I am ${ emotion } to meet you!`;
+var name = 'Maurice'
+var emotion = 'thrilled'
+var text = tag`Hello, ${ name }. I am ${ emotion } to meet you!`
 console.log(text)
 // <- 'Hello Maurice, I am thrilled to meet you!'
 ----
@@ -1050,12 +1050,12 @@ Multiple use cases apply to tagged templates. One possible use case might be to 
 function upper (parts, ...values) {
   return parts.reduce(
     (all, part, i) => all + values[i - 1].toUpperCase() + part
-  );
+  )
 }
-var name = 'Maurice';
-var emotion = 'thrilled';
-var text = upper`Hello, ${ name }. I am ${ emotion } to meet you!`;
-console.log(text);
+var name = 'Maurice'
+var emotion = 'thrilled'
+var text = upper`Hello, ${ name }. I am ${ emotion } to meet you!`
+console.log(text)
 // <- 'Hello MAURICE, I am THRILLED to meet you!'
 ----
 
@@ -1066,11 +1066,11 @@ A decidedly more useful use case would be to sanitize expressions interpolated i
 function sanitized (parts, ...values) {
   return parts.reduce(
     (all, part, i) => all + sanitize(values[i - 1]) + part
-  );
+  )
 }
-var comment = 'A malicious comment<iframe src="http://evil.corp"></iframe>';
-var html = sanitized`<div>${ comment }</div>`;
-console.log(html);
+var comment = 'A malicious comment<iframe src="http://evil.corp"></iframe>'
+var html = sanitized`<div>${ comment }</div>`
+console.log(html)
 // <- '<div>A malicious comment</div>'
 ----
 
@@ -1086,13 +1086,13 @@ JavaScript has always had a complicated ruleset when it comes to scoping, drivin
 ----
 function isItTwo (value) {
   if (value === 2) {
-    var two = true;
+    var two = true
   }
-  return two;
+  return two
 }
-isItTwo(2);
+isItTwo(2)
 // <- true
-isItTwo('two');
+isItTwo('two')
 // <- undefined
 ----
 
@@ -1101,11 +1101,11 @@ JavaScript code like this works, even though +two+ was declared in a code branch
 [source,javascript]
 ----
 function isItTwo (value) {
-  var two;
+  var two
   if (value === 2) {
-    two = true;
+    two = true
   }
-  return two;
+  return two
 }
 ----
 
@@ -1118,7 +1118,7 @@ Instead of having to declare a new +function+ if we want a deeper scoping level,
 [source,javascript]
 ----
 {{{{{ var deep = 'This is available from outer scope.'; }}}}}
-console.log(deep);
+console.log(deep)
 // <- 'This is available from outer scope.'
 ----
 
@@ -1133,11 +1133,11 @@ The +let+ statement is an alternative to +var+. It follows block scoping rules i
 
 [source,javascript]
 ----
-let topmost = {};
+let topmost = {}
 {
-  let inner = {};
+  let inner = {}
   {
-    let innermost = {};
+    let innermost = {}
   }
   // attempts to access innermost here would throw
 }
@@ -1150,11 +1150,11 @@ An useful aspect of +let+ statements is that you can use them when declaring a +
 [source,javascript]
 ----
 for (let i = 0; i < 2; i++) {
-  console.log(i);
+  console.log(i)
   // <- 0
   // <- 1
 }
-console.log(i);
+console.log(i)
 // <- i is not defined
 ----
 
@@ -1168,9 +1168,9 @@ In so many words: if you have code such as the following code snippet, it'll thr
 [source,javascript]
 ----
 {
-  name = 'Barbara Penner';
+  name = 'Barbara Penner'
   // <- ReferenceError: name is not defined
-  let name = 'Stephen Hawking';
+  let name = 'Stephen Hawking'
 }
 ----
 
@@ -1179,10 +1179,10 @@ If your code tries to access +name+ in any way before the +let name+ statement i
 [source,javascript]
 ----
 function readName () {
-  return name;
+  return name
 }
-let name = 'Stephen Hawking';
-console.log(readName());
+let name = 'Stephen Hawking'
+console.log(readName())
 // <- 'Stephen Hawking'
 ----
 
@@ -1191,11 +1191,11 @@ But the following snippet will, because access to +name+ occurs before leaving t
 [source,javascript]
 ----
 function readName () {
-  return name;
+  return name
 }
-console.log(readName());
+console.log(readName())
 // ReferenceError: name is not defined
-let name = 'Stephen Hawking';
+let name = 'Stephen Hawking'
 ----
 
 Note that the semantics for these examples doesn't change when +name+ isn't actually assigned a value when initially declared. The next snippet throws as well, as it still tries to access +name+ before leaving the TDZ.
@@ -1203,11 +1203,11 @@ Note that the semantics for these examples doesn't change when +name+ isn't actu
 [source,javascript]
 ----
 function readName () {
-  return name;
+  return name
 }
-console.log(readName());
+console.log(readName())
 // ReferenceError: name is not defined
-let name;
+let name
 ----
 
 The following bit of code works because it leaves the TDZ before accessing +name+ in any way.
@@ -1215,10 +1215,10 @@ The following bit of code works because it leaves the TDZ before accessing +name
 [source,javascript]
 ----
 function readName () {
-  return name;
+  return name
 }
-let name;
-console.log(readName());
+let name
+console.log(readName())
 // <- undefined
 ----
 
@@ -1236,13 +1236,13 @@ The following snippet shows how +const+ follows block scoping rules exactly like
 
 [source,javascript]
 ----
-const pi = 3.1415;
+const pi = 3.1415
 {
-  const pi = 6;
-  console.log(pi);
+  const pi = 6
+  console.log(pi)
   // <- 6
 }
-console.log(pi);
+console.log(pi)
 // <- 3.1415
 ----
 
@@ -1250,7 +1250,7 @@ We've mentioned major differences between +let+ and +const+. The first one is th
 
 [source,javascript]
 ----
-const pi = 3.1415;
+const pi = 3.1415
 const e; // SyntaxError, missing initializer
 ----
 
@@ -1258,9 +1258,9 @@ Besides the assignment when initializing a +const+, variables declared using a +
 
 [source,javascript]
 ----
-const people = ['Tesla', 'Musk'];
-people = [];
-console.log(people);
+const people = ['Tesla', 'Musk']
+people = []
+console.log(people)
 // <- ['Tesla', 'Musk']
 ----
 
@@ -1268,21 +1268,21 @@ Creating a +const+ variable doesn't mean that the assigned value becomes immutab
 
 [source,javascript]
 ----
-const people = ['Tesla', 'Musk'];
-people.push('Berners-Lee');
-console.log(people);
-// <- ['Tesla', 'Musk', 'Berners-Lee'];
+const people = ['Tesla', 'Musk']
+people.push('Berners-Lee')
+console.log(people)
+// <- ['Tesla', 'Musk', 'Berners-Lee']
 ----
 
 A +const+ statement only prevents the variable being declared from changing its value. Another way of representing that difference is the following piece of code, where we create a +humans+ variable using +var+, assign the +people+ variable we created using +const+ earlier, and then assign something else to the +humans+ variable, because it wasn't declared using +const+.
 
 [source,javascript]
 ----
-const people = ['Tesla', 'Musk'];
-var humans = people;
-humans = 'evil';
-console.log(humans);
-// <- 'evil';
+const people = ['Tesla', 'Musk']
+var humans = people
+humans = 'evil'
+console.log(humans)
+// <- 'evil'
 ----
 
 Let's take a moment to discuss the merits of +const+ and +let+.
@@ -1295,19 +1295,19 @@ Using the +const+ statement is a great way to prevent accidents. The following p
 
 [source,javascript]
 ----
-var items = ['a', 'b', 'c'];
-var todo = checklist(items);
-todo.check();
-console.log(items);
+var items = ['a', 'b', 'c']
+var todo = checklist(items)
+todo.check()
+console.log(items)
 // <- ['b', 'c']
-items = ['d', 'e'];
-todo.check();
-console.log(items);
+items = ['d', 'e']
+todo.check()
+console.log(items)
 // <- ['d', 'e'], would be ['c'] if items had been constant
 function checklist (items) {
   return {
     check: () => items.shift()
-  };
+  }
 }
 ----
 

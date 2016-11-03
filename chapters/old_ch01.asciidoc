@@ -13,8 +13,8 @@ One of the best known features in ES6 is the arrow function. They are an alterna
 
 [source,javascript]
 ----
-var double = x => x * 2;
-double(3);
+var double = x => x * 2
+double(3)
 // <- 6
 ----
 
@@ -23,7 +23,7 @@ In other words, that code is equivalent to the following.
 [source,javascript]
 ----
 var double = function (x) { return x * 2; }
-double(3);
+double(3)
 // <- 6
 ----
 
@@ -35,8 +35,8 @@ Up until ES5 you could wrap strings in single or double quotes. ES6 introduces t
 
 [source,javascript]
 ----
-var user = { name: 'Nicolas' };
-var text = +Hello, ${ user.name }!+;
+var user = { name: 'Nicolas' }
+var text = +Hello, ${ user.name }!+
 // <- 'Hello, Nicolas!'
 ----
 
@@ -44,11 +44,11 @@ Template literals can be multiline without having to resort to arrays, escapes, 
 
 [source,javascript]
 ----
-var multiline = +
+var multiline = `
 this is
 a multiline
 template literal
-+;
+`
 ----
 
 Let's discuss destructuring, one of the most popular features in ES6, next.
@@ -59,30 +59,30 @@ Sometimes we need to store references to deeply nested object properties, as see
 
 [source,javascript]
 ----
-var monthly = billing.monthly;
-var yearly = billing.yearly;
+var monthly = billing.monthly
+var yearly = billing.yearly
 ----
 
 In ES6 the destructuring syntax helps eliminate duplication by providing a more concise way of expressing our intent. You could read the next piece of code as "declare +monthly+ and +yearly+ variables from +billing+". The snippet is equivalent to the one we saw earlier, without destructuring.
 
 [source,javascript]
 ----
-var {monthly,yearly} = billing;
+var {monthly,yearly} = billing
 ----
 
 You could also destructure assignment for arrays. Here's a situation I've encountered countless times, pulling +x+ and +y+ coordinates from an array.
 
 [source,javascript]
 ----
-var x = coords[0];
-var y = coords[1];
+var x = coords[0]
+var y = coords[1]
 ----
 
 With destructuring our intent becomes much more clear, and we don't need to hardcode the indices either.
 
 [source,javascript]
 ----
-var [x,y] = coords;
+var [x,y] = coords
 ----
 
 You can also use destructuring in function parameters, to swap variables for without an auxiliary, and in many other use cases. Destructuring also has a few more features such as aliases and default values. They are explored in chapter 4. There's also the rest and spread operators, let's visit those now.
@@ -94,10 +94,10 @@ Rest parameters are declared by adding three dots before the last parameter to a
 [source,javascript]
 ----
 function list (first, ...rest) {
-  console.log(first);
-  console.log(rest);
+  console.log(first)
+  console.log(rest)
 }
-list(1, 2, 3);
+list(1, 2, 3)
 // <- 1
 // <- [2, 3]
 ----
@@ -130,9 +130,9 @@ You can mix and match the spread operator with other arguments. All of the follo
 
 [source,javascript]
 ----
-list(1, 2, 3, 4, 5, 6);
-list(...[1, 2, 3, 4, 5, 6]);
-list(1, ...[2, 3], ...[4, 5], 6);
+list(1, 2, 3, 4, 5, 6)
+list(...[1, 2, 3, 4, 5, 6])
+list(1, ...[2, 3], ...[4, 5], 6)
 ----
 
 Let's also take a moment to look at +let+ and +const+ declarations.
@@ -144,8 +144,8 @@ These two statements are new to the language in ES6. JavaScript has been traditi
 [source,javascript]
 ----
 if (valid(model)) {
-  let doc = new Document(model);
-  doc.save();
+  let doc = new Document(model)
+  doc.save()
 }
 console.log(doc)
 // <- ReferenceError: doc is not defined
@@ -157,14 +157,14 @@ Constants are another flavor of variable declaration coming in ES6, using the +c
 
 [source,javascript]
 ----
-const person = { name: 'Nicolas' };
+const person = { name: 'Nicolas' }
 ----
 
 Attempts to assign a value to +person+ after initialization will fail silently (or loudly, with an +Error+, in strict mode). That doesn't mean the person object is immutable, the following piece of code would still be perfectly valid when using +const+.
 
 [source,javascript]
 ----
-const person = { name: 'Nicolas' };
+const person = { name: 'Nicolas' }
 person.dob = new Date(1988, 5, 9)
 ----
 
@@ -195,8 +195,8 @@ Suppose you had a file named +example.js+ containing the following bits of ES6 c
 
 [source,javascript]
 ----
-var double = value => value * 2;
-console.log(double(3));
+var double = value => value * 2
+console.log(double(3))
 ----
 
 You can easily compile the code by executing the following command in your command-line. It would print output similar to what's shown here. As you can see, the code is still quite readable, and +babel+ has added a strict mode statement and compiled the code down into equivalent ES5 code.
@@ -204,12 +204,12 @@ You can easily compile the code by executing the following command in your comma
 [source,shell]
 ----
 » babel example.js
-'use strict';
+'use strict'
 
 var double = function double(value) {
-  return value * 2;
-};
-console.log(double(3));
+  return value * 2
+}
+console.log(double(3))
 ----
 
 Besides compiling single files, their command-line interface (CLI) offers the ability to compile entire directories, as well as specifying the output filename or directory. There's a plethora of options, and you can find out more about them by running the +babel --help+ command or visiting their documentation (http://babeljs.io/).
@@ -238,7 +238,7 @@ function mapper (x, y) {
   return {
     x: x,
     y: y
-  };
+  }
 }
 ----
 
@@ -247,7 +247,7 @@ ES6 makes our lives simpler by introducing a shorter syntax known as property va
 [source,javascript]
 ----
 function mapper (x, y) {
-  return { x, y };
+  return { x, y }
 }
 ----
 
@@ -258,9 +258,9 @@ When you need to define a property whose key depends on another variable, you'd 
 [source,javascript]
 ----
 function createArtifact (type) {
-  var artifact = {};
-  artifact[type] = true;
-  return artifact;
+  var artifact = {}
+  artifact[type] = true
+  return artifact
 }
 ----
 
@@ -269,7 +269,7 @@ Object literals in ES6 allow computed property expressions, or the ability to de
 [source,javascript]
 ----
 function createArtifact (type) {
-  return { [type]: true };
+  return { [type]: true }
 }
 ----
 
@@ -277,8 +277,8 @@ Another improvement in object literals is a new way to declare methods on an obj
 
 [source,javascript]
 ----
-var es5 = { double: function (input) { return input * 2; } };
-var es6 = { double (input) { return input * 2; } };
+var es5 = { double: function (input) { return input * 2; } }
+var es6 = { double (input) { return input * 2; } }
 ----
 
 The alternative method definition syntax mirrors that of method definitions in ES6 classes, which we'll summarize next.
@@ -290,15 +290,15 @@ Classes are one of the best-known ES6 features, but they're also not classes in 
 [source,javascript]
 ----
 function Calculator (initialValue) {
-  this.currentValue = initialValue;
+  this.currentValue = initialValue
 }
 Calculator.prototype.double = function () {
-  this.currentValue *= 2;
-  return this;
-};
+  this.currentValue *= 2
+  return this
+}
 Calculator.prototype.read = function () {
-  return this.currentValue;
-};
+  return this.currentValue
+}
 ----
 
 The equivalent class declaration using the ES6 syntax can be found in the next snippet. Note how the constructor is now explicitly named, how instance methods for the class are now declared as part of the +class+ literal, and also how method declarations follow the same syntax as described earlier for object literals. Keep in mind that methods and properties in a class declaration aren't delimited by commas, in contrast with objects. This helps mitigate issues where you thought you were adding properties to a regular object but were instead adding them to a +class+ declaration, and viceversa.
@@ -307,14 +307,14 @@ The equivalent class declaration using the ES6 syntax can be found in the next s
 ----
 class Calculator {
   constructor (initialValue) {
-    this.currentValue = initialValue;
+    this.currentValue = initialValue
   }
   double () {
-    this.currentValue *= 2;
-    return this;
+    this.currentValue *= 2
+    return this
   }
   read () {
-    return this.currentValue;
+    return this.currentValue
   }
 }
 ----
@@ -323,9 +323,9 @@ Both the ES5 and the ES6 versions are equivalent, and they can be used as shown 
 
 [source,javascript]
 ----
-var calc = new Calculator(2.5);
-var result = calc.double().double().read();
-console.log(result);
+var calc = new Calculator(2.5)
+var result = calc.double().double().read()
+console.log(result)
 // <- 10
 ----
 
@@ -335,12 +335,12 @@ Additionally, ES6 classes can have +static+ class methods. These methods can be 
 ----
 class Calculator {
   static isDoublePrecision (calculator) {
-    return calculator.precision === 'double';
+    return calculator.precision === 'double'
   }
 }
-var calc = new Calculator();
-var doubles = Calculator.isDoublePrecision(calc);
-console.log(doubles);
+var calc = new Calculator()
+var doubles = Calculator.isDoublePrecision(calc)
+console.log(doubles)
 // <- false
 ----
 
@@ -350,11 +350,11 @@ ES6 classes also simplify prototypal inheritance by providing a single pattern t
 ----
 class Vehicle {
   constructor (speed) {
-    this.position = 0;
-    this.speed = speed;
+    this.position = 0
+    this.speed = speed
   }
   move () {
-    this.position += this.speed;
+    this.position += this.speed
   }
 }
 class Car extends Vehicle {
@@ -362,9 +362,9 @@ class Car extends Vehicle {
     super(5)
   }
 }
-var car = new Car();
-car.move();
-console.log(car.position);
+var car = new Car()
+car.move()
+console.log(car.position)
 // <- 5
 ----
 
@@ -485,9 +485,9 @@ You could also determine a start index and an end index for +.fill+ in the secon
 
 [source,javascript]
 ----
-['a', 'b', 'c'].fill('d', 1);
+['a', 'b', 'c'].fill('d', 1)
 // <- ['a', 'd', 'd']
-['a', 'b', 'c'].fill('d', 0, 2);
+['a', 'b', 'c'].fill('d', 0, 2)
 // <- ['d', 'd', 'c']
 ----
 
@@ -495,7 +495,7 @@ You can use +Array.from+ to cast array-like objects into arrays.
 
 [source,javascript]
 ----
-Array.from({ 0: 'foo', 1: 'bar', length: 2 });
+Array.from({ 0: 'foo', 1: 'bar', length: 2 })
 // <- ['foo', 'bar']
 ----
 
