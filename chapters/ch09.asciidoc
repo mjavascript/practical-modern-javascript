@@ -7,7 +7,7 @@ A while later, the RequireJS library was born. It provided a way of defining the
 
 Other complexity management mechanisms exist, such as the dependency injection mechanism in AngularJS, where you define named components using functions where you can, in turn, specify other named component dependencies. AngularJS carries the load of dependency injection on your behalf, so you only have to name components and specify dependencies.
 
-CommonJS surfaced as an alternative to RequireJS, and it was swiftly popularized by Node.js soon afterwards. In this chapter we'll take a look at CommonJS, which is still heavily in use today. We'll then cover the module system introduced to native JavaScript in ES6, and lastly we'll explore interoperability between CommonJS and native JavaScript modules -- also known as "ES modules".
+CommonJS (CJS) surfaced as an alternative to RequireJS, and it was swiftly popularized by Node.js soon afterwards. In this chapter we'll take a look at CommonJS, which is still heavily in use today. We'll then cover the module system introduced to native JavaScript in ES6, and lastly we'll explore interoperability between CommonJS and native JavaScript modules -- also known as ECMAScript modules (ESM).
 
 === 9.1 CommonJS
 
@@ -49,7 +49,7 @@ node app
 # [1, 2]
 ----
 
-The +require+ function in CommonJS modules can be treated dynamically, just like any other JavaScript function. This aspect of +require+ is sometimes leveraged to dynamically +require+ different modules that conform to one interface. As an example, let's conjure up a +templates+ directory with a number of view template functions. Our templates will take a model and return an HTML string.
+The +require+ function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of +require+ is sometimes leveraged to dynamically +require+ different modules that conform to one interface. As an example, let's conjure up a +templates+ directory with a number of view template functions. Our templates will take a model and return an HTML string.
 
 The template found in the following code snippet renders an item of a grocery shopping list by reading its attributes from a +model+ object.
 
@@ -145,7 +145,7 @@ console.log(render(`list`, [{
 
 image::../images/c09g03-dynamic-render.png["Printing different views through a normalized render function."]
 
-Moving on, you'll notice that ES6 modules are heavily influenced by CommonJS. In the next few sections we'll look at +export+ and +import+ statements, and learn how ES6 modules are compatible with CommonJS.
+Moving on, you'll notice that ES6 modules are heavily influenced by CommonJS. In the next few sections we'll look at +export+ and +import+ statements, and learn how ESM is compatible with CJS.
 
 === 9.2 JavaScript Modules
 
@@ -197,7 +197,7 @@ module.exports = [`hello`, 'world']
 module.exports = function hello () {}
 ----
 
-ES6 modules are files that may expose an API through +export+ statements. Declarations in ES6 modules are scoped to that module, just like we observed about CommonJS. Any variables declared inside a module aren't available to other modules unless they're explicitly exported as part of that module's API and then imported in the module that wants to access them.
+ES6 modules are files that may expose an API through +export+ statements. Declarations in ESM are scoped to the local module, just like we observed about CommonJS. Any variables declared inside a module aren't available to other modules unless they're explicitly exported as part of that module's API and then imported in the module that wants to access them.
 
 ===== Exporting a Default Binding
 
@@ -233,7 +233,7 @@ function initialize () {
 initialize()
 ----
 
-In contrast with CommonJS, +export+ statements in ES6 modules can only be placed at the top level. "Top-level only" +export+ statements is a good constraint to have, as there aren't many good reasons to dynamically define and expose an API based on method calls. This limitation also helps compilers and static analysis tools parse ES6 modules.
+In contrast with CJS, +export+ statements in ESM can only be placed at the top level. "Top-level only" +export+ statements is a good constraint to have, as there aren't many good reasons to dynamically define and expose an API based on method calls. This limitation also helps compilers and static analysis tools parse ES6 modules.
 
 [source,javascript]
 ----
@@ -243,11 +243,11 @@ function initialize () {
 initialize()
 ----
 
-There are a few other ways of exposing an API in ES6 modules, besides +export default+ statements.
+There are a few other ways of exposing an API in ESM, besides +export default+ statements.
 
 ===== Named Exports
 
-In CommonJS modules, when you want to expose multiple values, you don't necessarily need to explicitly export an object containing every one of those values. You could simply add properties onto the implicit +module.exports+ object. There's still a single binding being exported, containing all properties the +module.exports+ object ends up holding. While the following example exports two individual values, both are exposed as properties on the exported object.
+When you want to expose multiple values from CJS modules you don't necessarily need to explicitly export an object containing every one of those values. You could simply add properties onto the implicit +module.exports+ object. There's still a single binding being exported, containing all properties the +module.exports+ object ends up holding. While the following example exports two individual values, both are exposed as properties on the exported object.
 
 [source,javascript]
 ----
@@ -255,7 +255,7 @@ module.exports.counter = 0
 module.exports.count = () => counter++
 ----
 
-We can replicate this behavior in ES6 modules by using the named exports syntax. Instead of assigning properties to an implicit +module.exports+ object like with CommonJS, in ES6 you declare the bindings you want to +export+, as shown in the following code snippet.
+We can replicate this behavior in ESM by using the named exports syntax. Instead of assigning properties to an implicit +module.exports+ object like with CommonJS, in ES6 you declare the bindings you want to +export+, as shown in the following code snippet.
 
 [source,javascript]
 ----
@@ -273,7 +273,7 @@ export counter // SyntaxError
 export count
 ----
 
-By being rigid in how its declarative module syntax works, ES6 modules favor static analysis once again at the expense of flexibility. Flexibility inevitably comes at the cost of added complexity, which is a good reason not to offer flexible interfaces.
+By being rigid in how its declarative module syntax works, ESM favors static analysis, once again at the expense of flexibility. Flexibility inevitably comes at the cost of added complexity, which is a good reason not to offer flexible interfaces.
 
 ===== Exporting Lists
 
@@ -348,7 +348,7 @@ You can give aliases to named exports, as they pass through your module. If the 
 export { increment as add } from './counter'
 ----
 
-Our modules could also expose every single named export found in another module by using a wildcard, as shown in the next snippet. Note that this wouldn't include the default binding exported by the +counter+ module.
+An ESM module could also expose every single named export found in another module by using a wildcard, as shown in the next snippet. Note that this wouldn't include the default binding exported by the +counter+ module.
 
 [source,javascript]
 ----
@@ -446,7 +446,19 @@ You can also explicitly name the +default+ binding, which needs an alias.
 import { default as counter, increment } from './counter'
 ----
 
-We also have namespace imports.
+The following example demonstrates how ESM semantics differ from those of CJS. Remember: we're exporting and importing bindings, and not direct references. For practical purposes, you can think of the +counter+ binding found in the next example as a property getter that reaches into the +counter+ module and returns its local +counter+ variable.
+
+[source,javascript]
+----
+import counter, { increment } from './counter'
+console.log(counter) // <- 0
+increment()
+console.log(counter) // <- 1
+increment()
+console.log(counter) // <- 2
+----
+
+Lastly, there are also namespace imports.
 
 ===== Wildcard +import+ statements
 
