@@ -414,7 +414,7 @@ import { default as counter, increment } from './counter'
 
 We also have namespace imports.
 
-===== +import+ All The Things
+===== Wildcard +import+ statements
 
 We can import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the +*+ must be followed by an alias where all the bindings will be placed. If there was a +default+ export, it'll be placed in the namespace binding as well.
 
