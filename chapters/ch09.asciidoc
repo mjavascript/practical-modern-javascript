@@ -472,9 +472,48 @@ counter.increment()
 console.log(counter.default) // <- 2
 ----
 
-....
+=== 9.3 Practical Considerations for ES Modules
 
-9.4 Module Loading
-9.5 Interoperability
-9.6 Best Practices
-9.7 Summary
+When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a +random+ module with a locally scoped +calc+ function, which computes a random number in the +[0, n)+ range; and a public API with the +range+ method, which computes a random number in the +[min, max]+ range.
+
+[source,javascript]
+----
+const random = (function() {
+  const calc = n => Math.floor(Math.random() * n)
+  const range = (max = 1, min = 0) => calc(max + 1 - min) + min
+  return { range }
+})()
+----
+
+Compare that to the following piece of code, used in an ESM module called +random+. The immediately-invoking function expression wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML +<script>+ tags.
+
+[source,javascript]
+----
+const calc = n => Math.floor(Math.random() * n)
+const range = (max = 1, min = 0) => calc(max + 1 - min) + min
+export { range }
+----
+
+While we don't have the problem of having to wrap our modules in an IIFE anymore, we still have to be careful about how we define, test, document, and use each module.
+
+Deciding what constitutes a module is difficult. A lot of factors come into play, some of which I've outlined in the form of questions below.
+
+- Is it highly complex?
+- Is it too large?
+- How well-defined is its API?
+- Is said API properly documented?
+- Is it easy to write tests for the module?
+- How hard is it to add new features?
+- Is it difficult to remove existing functionality?
+
+Complexity is a more powerful metric to track than length. A module can be several thousand lines long but simple, such as a dictionary that maps identifiers to localized strings in a particular language; or it could be a couple dozen lines long but very hard to reason about, such as a data model that also includes domain validation and business logic rules. Complexity can be mitigated by splitting our code up into smaller modules that are only concerned with one aspect of the problem we're trying to solve. As long as they're not highly complex, large modules are not as much of an issue.
+
+Having a well-defined API that's also properly documented is a key aspect of effective modular application design. A module's API should be focused, and follow information hiding principles. That is: only reveal what is necessary for consumers to interact with it. By not exposing internal aspects of a module, which may be undocumented and prone to change, we keep a simple interface overall and avoid unintended usage patterns. By documenting the public API, even if its documented in code or self-documenting, we reduce the barrier of entry for humans looking to utilize the module.
+
+Tests should only be written against the public interface to a module, while its internals must be treated as uninteresting implementation details. Tests need to cover the different aspects of a module's public interface, but changes to the internal implementation shouldn't break our test coverage as long as the API remains the same in terms of inputs and outputs.
+
+Ease of adding or removing functionality from a module is yet another useful metric. How hard would it be to add a new feature? Do you have to edit several different modules in order to implement something? Is this a repetitive process? Maybe you could abstract those edits behind a higher level module that hides that complexity. Or maybe doing so would mostly add indirection and make following the codebase harder to read, but with little added benefit or justification. From the other end of the spectrum, how deeply entrenched is the API? Would it be easy to remove a portion of the module, delete it entirely, or even replace it with something else? If modules become too co-dependant, then it can be hard to make edits as the codebase ages, mutates and grows in size.
+
+We'll plunge deeper into proper module design, effective module interaction and module testing over the next three books in this series.
+
+With that said, let's turn over to chapter 10 on leveraging all of these new language features and syntax effectively.

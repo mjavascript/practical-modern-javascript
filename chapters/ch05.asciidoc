@@ -1619,3 +1619,11 @@ function saveProducts (productList) {
 ----
 
 As you may have noticed, the implementation doesn't hardcode any important aspects of the operation, which means you could use the inputs and output pattern in a generic way as long as you have zero or more inputs you want to pipe into one output. The consumer ends up with an elegant-looking method that's easy to understand -- they +yield+ input stores and +return+ an output store. Furthermore, our use of promises makes it easy to concatenate this operation with others. This way, we're keeping a potential tangle of conditional statements and flow control mechanisms in check, by abstracting away flow control into the iteration mechanism under the +saveProducts+ method.
+
+=== 5.4 Beyond ES6: +async+/+await+
+
+...
+
+=== 5.5 Async Iterators
+
+...
