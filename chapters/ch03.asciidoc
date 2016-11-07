@@ -366,7 +366,7 @@ var character = {
 }
 ----
 
-If you wanted a +pseudonym+ variable referencing +character.batman+, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing +pseudonym+ in several places in your codebase and you'd prefer to avoid typing out +character.pseudonym+ each time.
+If you wanted a +pseudonym+ variable referencing +character.pseudonym+, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing +pseudonym+ in several places in your codebase and you'd prefer to avoid typing out +character.pseudonym+ each time.
 
 [source,javascript]
 ----
