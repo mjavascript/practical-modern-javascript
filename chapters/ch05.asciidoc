@@ -2084,7 +2084,7 @@ Async Functions, then, are little more than a sensible default when it comes to 
 
 Noting that Async Functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows together.
 
-=== 5.5 Async Iterators
+=== 5.5 Asynchronous Iteration
 
 As explained in section 5.2, You may recall how iterators leverage +Symbol.iterator+ as an interface to define how an object is to be iterated.
 
@@ -2126,6 +2126,8 @@ for (const item of sequence) {
 ----
 
 The contract for an iterator mandates that the +next+ method of +Symbol.iterator+ instances returns an object with +value+ and +done+ properties. The +value+ property indicates the current value in the sequence, while +done+ is a boolean indicating whether the sequence has ended.
+
+=== 5.5.1 Async Iterators
 
 In *async iterators*, the contract has a subtle difference: +next+ is supposed to return a +Promise+ that resolves to an object containing +value+ and +done+ properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new +Symbol.asyncIterator+ is introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing +Symbol.iterator+.
 
@@ -2176,6 +2178,8 @@ async function print () {
 }
 print()
 ----
+
+==== 5.5.2 Async Generators
 
 Like with regular iterators, there's async generators to complement async iterators. An async generator function is like a generator function, except that it also supports +await+ and +for await..of+ declarations. The following example shows a +fetchInterval+ generator that fetches a resource periodically at an interval.
 
