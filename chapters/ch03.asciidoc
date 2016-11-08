@@ -857,8 +857,6 @@ The following table summarizes the use cases we've discussed for the spread oper
 |+new+ and +apply+|+new (Date.bind.apply(Date, [null,2015,31,8]))+| +new Date(...[2015,31,8])+
 |=======
 
-Next up, another interesting addition to the language. Template literals are a new way to define strings.
-
 === 3.5 Template Literals
 
 Template literals are a vast improvement upon regular JavaScript strings. Instead of using single or double quotes, template literals are declared using backticks, as shown next.
