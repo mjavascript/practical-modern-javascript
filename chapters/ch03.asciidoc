@@ -819,7 +819,7 @@ console.log(result)
 // <- 6
 ----
 
-Spreading arguments onto a function call can be combined with regular arguments as much as necessary, just like with array literals. The next example calls +print+ with a coule of regular arguments and a couple of arrays being spread over the parameter list. Note how conveniently the rest +list+ parameter matches all the provided arguments. Spread and rest can help make code intent more clear without dilluting your codebase.
+Spreading arguments onto a function call can be combined with regular arguments as much as necessary, just like with array literals. The next example calls +print+ with a couple of regular arguments and a couple of arrays being spread over the parameter list. Note how conveniently the rest +list+ parameter matches all the provided arguments. Spread and rest can help make code intent more clear without dilluting your codebase.
 
 [source,javascript]
 ----
