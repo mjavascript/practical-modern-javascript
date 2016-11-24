@@ -3,13 +3,13 @@
 
 Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes, and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript useful for defining protocols, and we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the +Object+ built-in in ES6.
 
-=== 4.1 Classes
+=== 3.1 Classes
 
 Many features in ES6 such as destructuring are in fact syntactic sugar, and classes are no exception to that. As we know, JavaScript is a prototype-based language, and classes are syntactic sugar on top of prototypical inheritance. In that sense, JavaScript classes don't introduce any fundamental changes to the language: they're merely a different way of declaring object prototypes.
 
 The +class+ keyword acts, then, as a device that makes JavaScript more inviting to programmers coming from other paradigms, who might not be all that familiar with prototype chains.
 
-==== 4.1.1 Class Fundamentals
+==== 3.1.1 Class Fundamentals
 
 When learning about new language features, it's always a good idea to look at existing constructs first, and then see how the new feature improves those use cases. We'll start by looking at a simple prototype-based JavaScript constructor and then compare that with the newer classes syntax in ES6.
 
@@ -120,7 +120,7 @@ const jake = new Jake()
 
 We'll dig deeper into class inheritance later. Let's take a more nuanced look at properties and methods first.
 
-==== 4.1.2 Properties and Methods in Classes
+==== 3.1.2 Properties and Methods in Classes
 
 It should be noted that the +constructor+ method declaration is an optional member of a +class+ declaration. The following bit of code is an entirely valid +class+ declaration that's comparable to an empty constructor function.
 
@@ -238,7 +238,7 @@ console.log(MathHelper.sum(1, 2, 3, 4, 5))
 
 Finally, it's worth mentioning that you could also declare static property accessors, such as getters or setters (+static get+, +static set+). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, after all.
 
-==== 4.1.3 Extending JavaScript Classes
+==== 3.1.3 Extending JavaScript Classes
 
 You could use plain JavaScript to extend the +Fruit+ class, but as you will notice by reading the next code snippet, declaring a sub-class involves esoteric knowledge such as +Parent.call(this)+ in order to pass in parameters to the parent class so that we can properly initialize the sub-class, and setting the prototype of the sub-class to an instance of the parent class' prototype. We won't be delving into detailed minutia about these constructs, as you can readily find heaps of information about prototypal inheritance around the web, and our focus in in the newly introduced +class+ syntax anyways.
 
@@ -324,15 +324,15 @@ class Plum extends createJuicyFruit('plum', 30) {
 
 Let's move onto +Symbol+. While not iteration or flow control mechanism, learning about +Symbol+ is crucial to shaping an understanding of iteration protocols, which are discussed at length later in the chapter.
 
-=== 4.2 Symbols
+=== 3.2 Symbols
 
-Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as +'text'+ for strings, or +1+ for numbers. The purpose of symbols is primarily to implement protocols. As we'll learn in section 4.3, the iterable protocol uses a symbol to define how objects are iterated.
+Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as +'text'+ for strings, or +1+ for numbers. The purpose of symbols is primarily to implement protocols. As we'll learn in section 3.3, the iterable protocol uses a symbol to define how objects are iterated.
 
 There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the +Symbol+ built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
 
 We'll explore each of these, looking into possible use cases along the way. Let's begin with local symbols.
 
-==== 4.2.1 Local Symbols
+==== 3.2.1 Local Symbols
 
 Symbols can be created using the +Symbol+ wrapper object. In the following piece of code, we create our +first+ symbol.
 
@@ -423,7 +423,7 @@ console.log(Object.getOwnPropertySymbols(character))
 
 Now that we've established how symbols work. What can we use them for?
 
-==== 4.2.2 Practical use cases for Symbols
+==== 3.2.2 Practical use cases for Symbols
 
 Symbols could be used by a library to map objects to DOM elements. For example, a library that needs to associate the API object for a calendar to the provided DOM element. Before ES6, there wasn't a clear way of mapping DOM elements to objects. You could add a property to a DOM element pointing to the API, but polluting DOM elements with custom properties is a bad practice. You have to be careful to use property keys that won't be used by other libraries, or worse, by the language itself in the future. That leaves you with using an array lookup table containing an entry for each DOM/API pair. That, however, might be slow in long-running applications where the array lookup table might grow in size, slowing down the lookup operation over time.
 
@@ -510,7 +510,7 @@ A benefit of defining behavior via symbols is that you could augment and customi
 
 Besides local symbols, there's also a global symbol registry, accessible from across code realms. Let's look into what that means.
 
-==== 4.2.3 Global Symbol Registry
+==== 3.2.3 Global Symbol Registry
 
 A code realm is any JavaScript execution context, such as the page your application is running in, an +<iframe>+ within that page, an script running through +eval+, or a worker of any kind -- such as web workers, service workers, or shared workers. Each of these execution contexts has its own global object. Global variables defined on the +window+ object of a page, for example, aren't available to a +ServiceWorker+. In contrast, the global symbol registry is shared across all code realms.
 
@@ -580,7 +580,7 @@ There's tradeoffs in using widely available symbols. On the one hand, they make 
 
 There's one more kind of symbols, the built-in well-known symbols.
 
-==== 4.2.4 Well-known Symbols
+==== 3.2.4 Well-known Symbols
 
 So far we've covered symbols you can create using the +Symbol+ function and those you can create through +Symbol.for+. The third and last kind of symbols we're going to cover is the well-known symbols. These are built into the language instead of created by the user, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
 
@@ -642,13 +642,13 @@ console.log(Symbol.keyFor(Symbol.iterator))
 
 One of the most useful well-known symbols is +Symbol.iterator+, used by a few different language constructs to iterate over a sequence, as defined by a function assigned to a property using that symbol on any object. In the next chapter we'll go over +Symbol.iterator+ in detail, using it extensively along with the iterator and iterable protocols.
 
-=== 4.3 Object Built-in Improvements
+=== 3.3 Object Built-in Improvements
 
 While we've already addressed syntax enhancements coming to object literals in chapter 2, there's a few new static methods available to the +Object+ built-in which we haven't addressed yet. It's time to take a look at what these methods bring to the table.
 
 We've already looked at +Object.getOwnPropertySymbols+, but let's also take a look at +Object.assign+, +Object.is+, and +Object.setPrototypeOf+.
 
-==== 4.3.1 Extending objects with +Object.assign+
+==== 3.3.1 Extending objects with +Object.assign+
 
 The need to provide default values for a configuration object is not at all uncommon. Typically, libraries and well-designed component interfaces come with sensible defaults that cater to the most frequented use cases.
 
@@ -723,7 +723,7 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 
 You could also use a library like +assignment+ on npm, which always performs assignments recursively, the +.extend+ method in jQuery, or a custom version of +_.assignWith+ in Lodash.
 
-==== 4.3.2 Comparing objects with +Object.is+
+==== 3.3.2 Comparing objects with +Object.is+
 
 The +Object.is+ method is a slightly different version of the strict equality comparison operator, +===+. For the most part, +Object.is(a, b)+ is equal to +a === b+. There are two differences: the case of +NaN+ and the case of +-0+ and ++0+.
 
@@ -749,7 +749,7 @@ Object.is(-0, +0)
 
 These differences may not seem like much, but dealing with +NaN+ has always been cumbersome because of its special quirks, such as +typeof NaN+ being +'number'+ and it not being equal to itself.
 
-==== 4.3.3 +Object.setPrototypeOf+
+==== 3.3.3 +Object.setPrototypeOf+
 
 The +Object.setPrototypeOf+ method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using +__proto__+ which is a legacy feature.
 

@@ -5,11 +5,11 @@ Having covered the essential aspects of ES6 in chapter 2, and symbols in chapter
 
 To kick off the chapter, we'll start by discussing promises. Promises have existed in user-land for a long time, but they're a native part of the language starting in ES6.
 
-=== 5.1 Promises
+=== 4.1 Promises
 
 Promises can be vaguely defined as "a proxy for a value that will eventually become available". They can be used for both synchronous and asynchronous code flows, although they make asynchronous flows easier to reason about -- once you've mastered promises, that is.
 
-==== 5.1.1 Getting Started with Promises
+==== 4.1.1 Getting Started with Promises
 
 As an example, let's take a look at the upcoming browser +fetch+ API. This API is a simplification of +XMLHttpRequest+. It aims to be super simple to use for the most basic use cases: making a +GET+ request against an HTTP resource. It also provides a comprehensive API that caters to advanced use cases as well, but that's not our focus for now. In its most basic incarnation, you can make a +GET /items+ request using a piece of code like the following.
 
@@ -135,7 +135,7 @@ Promise
 // <- 123
 ----
 
-When a +p+ promise is fulfilled, reactions registered with +p.then+ are executed. When a +p+ promise is rejected, reactions registered with +p.catch+ are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, +throw+ an error, or return a +Promise+ or thenable. Thenables are objects considered promise-like that can be casted into a +Promise+ using +Promise.resolve+ as observed in section 5.1.3.
+When a +p+ promise is fulfilled, reactions registered with +p.then+ are executed. When a +p+ promise is rejected, reactions registered with +p.catch+ are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, +throw+ an error, or return a +Promise+ or thenable. Thenables are objects considered promise-like that can be casted into a +Promise+ using +Promise.resolve+ as observed in section 4.1.3.
 
 A reaction may return a value, which would cause the promise returned by +.then+ to become fulfilled with that value. In this sense, promises can be chained to transform the fulfillment value of the previous promise over and over, as shown in the following snippet of code.
 
@@ -173,7 +173,7 @@ const p = fetch('/items')
 
 Let's take a step back and pace ourselves, walking over more examples in each particular use case.
 
-==== 5.1.2 Promise Continuation and Chaining
+==== 4.1.2 Promise Continuation and Chaining
 
 In the previous section we've established that you can chain any number of +.then+ calls, each returning its own new promise, but how exactly does this work? What is a good mental model of promises, and what happens when an error is raised?
 
@@ -294,7 +294,7 @@ Here is an enumeration of what is going on as that piece of code is executed.
 
 You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure. It all starts with a single promise, which we'll next learn how to construct. Then you add branches with +.then+ or +.catch+. You can tack as many +.then+ or +.catch+ calls as you want onto each branch, creating new branches, and so on.
 
-==== 5.1.3 Creating a Promise From Scratch
+==== 4.1.3 Creating a Promise From Scratch
 
 We already know that promises can be created using a function such as +fetch+, +Promise.resolve+, +Promise.reject+, or the +Promise+ constructor function. We've already used +fetch+ extensively to create promises in previous examples. Let's take a more nuanced look at the other three ways we can create a promise.
 
@@ -375,7 +375,7 @@ fetch('/items').then(() => { throw new Error('arbitrarily')})
 
 Presumably, you won't be calling +new Promise+ directly very often. The promise constructor is often invoked internally by libraries that support promises or native functions like +fetch+. Given that +.then+ and +.catch+ provide tree structures that unfold beyond the original promise, a single call to +new Promise+ in the entry point to an API is often sufficient. Regardless, understanding promise creation is essential when leveraging promise-based control flows.
 
-==== 5.1.4 Promise States and Fates
+==== 4.1.4 Promise States and Fates
 
 Promises can be in three distinct states: pending, fulfilled, and rejected. Pending is the default state. A promise can then transition into either fulfillment or rejection.
 
@@ -418,9 +418,9 @@ Promise
   // <- [2, 4, 6]
 ----
 
-Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in section 5.1.3, when a +.catch+ reaction executes without errors, it will fulfill, following +.then+ reactions.
+Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in section 4.1.3, when a +.catch+ reaction executes without errors, it will fulfill, following +.then+ reactions.
 
-==== 5.1.5 Leveraging +Promise.all+ and +Promise.race+
+==== 4.1.5 Leveraging +Promise.all+ and +Promise.race+
 
 When writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There's also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excell at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API methods: +Promise.all+ and +Promise.race+.
 
@@ -510,11 +510,11 @@ Promise
   .catch(err => console.log(err))
 ----
 
-=== 5.2 Iterator Protocol and Iterable Protocol
+=== 4.2 Iterator Protocol and Iterable Protocol
 
 JavaScript gets two new protocols in ES6: iterators and iterables. These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into lazyness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
 
-==== 5.2.1 Understanding Iteration Principles
+==== 4.2.1 Understanding Iteration Principles
 
 Any object can adhere to the iterable protocol by assigning a function to the +Symbol.iterator+ property for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to +Symbol.iterator+, is called once.
 
@@ -611,7 +611,7 @@ for (let element of $('li')) {
 
 Iterable sequences aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that topic and its implications.
 
-==== 5.2.2 Infinite Sequences
+==== 4.2.2 Infinite Sequences
 
 Iterators are lazy in nature. Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the lazyness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or +Array.from+ to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
 
@@ -726,9 +726,9 @@ You typically have a good idea of whether a sequence is infinite or not. Wheneve
 
 Besides the technical implications of creating iterable objects, lets go over a couple of practical examples on how we can benefit from iterators.
 
-==== 5.2.3 Iterating Object Maps as Key-Value Pairs
+==== 4.2.3 Iterating Object Maps as Key-Value Pairs
 
-There's an abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudo-arrays that are meant to be iterated, the random number generator we came up with in section 5.2.2, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
+There's an abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudo-arrays that are meant to be iterated, the random number generator we came up with in section 4.2.2, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
 
 Oftentimes, JavaScript objects are used to represent a map between string keys and arbitrary values. In the next snippet, as an example, we have a map of color names and hexadecimal RGB representations of that color. There are cases when you'd welcome the ability to effortlessly looping over the different color names, hexadecimal representations, or key-value pairs.
 
@@ -814,7 +814,7 @@ for (let [, color] of colors) {
 
 A song player might be another interesting use case.
 
-==== 5.2.4 Building Versatility Into Iterating a Playlist
+==== 4.2.4 Building Versatility Into Iterating a Playlist
 
 Imagine you were developing a song player where a playlist could be reproduced once and then stop or on "repeat" (indefinitely). Whenever you have a use case of looping through a list indefinitely, you could leverage the iterable protocol as well.
 
@@ -941,13 +941,13 @@ console.log([...playlist(['a', 'b'], 3, true)])
 
 Iterators are an important tool in ES6 that help us not only to decouple code but also to come up with constructs that were previously harder to implement, such as the ability of dealing with a sequence of songs indistinctly -- regardless of whether the sequence is finite or infinite. This indifference is, in part, what makes writing code leveraging the iterator protocol more elegant. It also makes it risky to cast an unknown iterable into an array (with, say, the +...+ spread operator), as you're risking crashing your program due to an infinite loop.
 
-Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a +Symbol.iterator+ method. They make it easier to implement functions, such as the +range+ or +take+ functions in section 5.2.2, while also allowing for a few more interesting use cases.
+Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a +Symbol.iterator+ method. They make it easier to implement functions, such as the +range+ or +take+ functions in section 4.2.2, while also allowing for a few more interesting use cases.
 
-=== 5.3 Generator Functions and Generator Objects
+=== 4.3 Generator Functions and Generator Objects
 
 Generators are a new feature in ES6. The way they work is that you declare a generator function that returns generator objects +g+. Those +g+ objects can then be iterated using any of +Array.from(g)+, +[...g]+, or +for..of+ loops. Generator functions allow you to declare a special kind of +iterator+. These iterators can suspend execution while retaining their context.
 
-==== 5.3.1 Generator Fundamentals
+==== 4.3.1 Generator Fundamentals
 
 We already examined iterators in the previous section, learning how their +.next()+ method is called once at a time to pull values from a sequence. Instead of a +next+ method whenever you return a value, generators use the +yield+ keyword to add values into the sequence.
 
@@ -1092,7 +1092,7 @@ Here's the sequence produced by the +trailmix+ generator function.
 
 Besides iterating over a generator object using spread, +for..of+, and +Array.from+, we could use the generator object directly, and iterate over that. Let's investigate how that'd work.
 
-==== 5.3.2 Iterating over Generators by Hand
+==== 4.3.2 Iterating over Generators by Hand
 
 Generator iteration isn't limited to +for..of+, +Array.from+, or the spread operator. Just like with any iterable object, you can use its +Symbol.iterator+ to pull values on demand using +.next+, rather than in an strictly synchronous +for..of+ loop or all at once with +Array.from+ or spread. Given that a generator object is both iterable and iterator, you won't need to call +g[Symbol.iterator]()+ to get an iterator: you can use +g+ directly because it's the same object as the one returned by the +Symbol.iterator+ method.
 
@@ -1137,7 +1137,7 @@ console.log(g.next())
 
 Moving onto a more practical example, let's write a magic 8-ball generator where we'll put that sort of message-passing into action.
 
-=== 5.3.3 Coding A Magic 8-ball Generator
+=== 4.3.3 Coding A Magic 8-ball Generator
 
 A magic 8-ball consists of an interface that, when asked a question, returns a vague, random answer, as a result. The following function returns an answer at random, out of a pool of ten possible values. Note how I used template literals to define every string: that way, I don't need to worry about escaping single or double quotes in my strings.
 
@@ -1213,7 +1213,7 @@ console.log(g.next('How do you know that?').value)
 
 As a consumer of the +ball+ generator, the first call to +g.next+ doesn't seem something you should need to do. Similarly, using +g.next+ to pull sequence values out of a generator and pass input into the generator doesn't seem like a responsibility that should befall the consumer of your generator code. If we flipped responsibilities around, by writing the looping code and having the consumer of a piece of code create a generator function, the resulting code would be more pleasant to both read and write.
 
-=== 5.3.4 Consuming Generator Functions for Flexibility
+=== 4.3.4 Consuming Generator Functions for Flexibility
 
 In the previous section our 8-ball was a generator function, while the user code using the 8-ball was in charge of looping over the generator's sequence. Now, we'll be writing the questions in a generator function that gets passed to a method, which loops over the generator we provide and answers each question at a time.
 
@@ -1259,7 +1259,7 @@ function* ball (questions) {
 }
 ----
 
-The consumer of +ball+ can now pass in a generator function with their questions, and get back an iterable generator object consisting of +[q,a]+ pairs. Destructuring allows you to effortlessly consume the tuples in that sequence which you can then print to the +console+, push onto an array, or further compose with other generator functions such as +take+ from section 5.2.2, which allowed us to lazily take only the first few items in an iterable sequence.
+The consumer of +ball+ can now pass in a generator function with their questions, and get back an iterable generator object consisting of +[q,a]+ pairs. Destructuring allows you to effortlessly consume the tuples in that sequence which you can then print to the +console+, push onto an array, or further compose with other generator functions such as +take+ from section 4.2.2, which allowed us to lazily take only the first few items in an iterable sequence.
 
 [source,javascript]
 ----
@@ -1277,7 +1277,7 @@ When we compare the API in the previous section with the one we've just created,
 
 Yet another benefit of asking consumers to provide a generator function is that providing them with the +yield+ keyword opens up a world of possibilities where execution in their code may be suspended while your iterator performs an asynchronous operation in between +g.next+ calls. Let's explore asynchronous uses of generators in the next section.
 
-=== 5.3.5 Dealing with asynchronous flows
+=== 4.3.5 Dealing with asynchronous flows
 
 Staying on the subject of our magic 8-ball, and going back to the example where we call +ball+ with a user-provided +questions+ generator, let's reminisce about what would change about our code if the answers were to be provided asynchronously. The beauty of generators is that if the way we iterate over the questions were to become asynchronous, the generator wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch the answers to the questions, and all it'd take would be to ask a service for the answer to the current question, return that value via an intermediary +yield+ statement or in some other way, and then call +g.next+ on the +questions+ generator object.
 
@@ -1316,7 +1316,7 @@ function ball (questions) {
 }
 ----
 
-The problem when taking this approach is that we're back at the case where the consumer didn't have control over how answers are used. To solve that, we could use the +g.next(value)+ message-passing feature that we discussed in section 5.3.3 as a way of forwarding answers to the user-provided generator.
+The problem when taking this approach is that we're back at the case where the consumer didn't have control over how answers are used. To solve that, we could use the +g.next(value)+ message-passing feature that we discussed in section 4.3.3 as a way of forwarding answers to the user-provided generator.
 
 [source,javascript]
 ----
@@ -1350,7 +1350,7 @@ Always keep in mind that while a +yield+ expression is being evaluated, executio
 
 While generators let us write asynchronous code that appears synchronous, this introduces an inconvenience. How do we handle errors that arise in the iteration? If an HTTP request fails, for instance, how do we notify the generator and then handle the error notification in the generator function?
 
-=== 5.3.6 Throwing Errors at a Generator
+=== 4.3.6 Throwing Errors at a Generator
 
 Before shifting our thinking into user-provided generators, where they retain control of seemingly-synchronous functions thanks to +yield+ and suspension, we would've been hard pressed to find a user case for +g.throw+, a method found on generator objects that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between +yield+ expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to +throw+ that error into the generator.
 
@@ -1384,7 +1384,7 @@ ball(function* questions () {
 
 Generator functions allow you to use error handling semantics -- +try+, +catch+, and +throw+ -- which were previously only useful in synchronous code paths. Having the ability to use +try+/+catch+ blocks in generator code lets us treat the code as if it were synchronous, even when there's HTTP requests sitting behind +yield+ expressions, in iterator code.
 
-=== 5.3.7 Returning on Behalf of a Generator
+=== 4.3.7 Returning on Behalf of a Generator
 
 Besides +g.next+ and +g.throw+, generator objects have one more method at their disposal to determine how a generator sequence is iterated: +g.return(value)+. This method unsuspends the generator function and executes +return value+ at the location of +yield+, typically ending the sequence being iterated by the generator object. This is no different to what would occur if the generator function actually had a +return+ statement in it.
 
@@ -1477,7 +1477,7 @@ Due to the confusing nature of the differences between +yield+ expressions and +
 
 In the following section, we'll build an iterator that leverages differences in +yield+ versus +return+ to perform both input and output based on the same generator function.
 
-=== 5.3.8 Asynchronous I/O Using Generators
+=== 4.3.8 Asynchronous I/O Using Generators
 
 The following piece of code shows a self-describing generator function where we indicate input sources and an output destination. This hypothetical method could be used to pull product information from the yielded endpoints, which could then be saved to the returned endpoint. An interesting aspect of this interface is that as a user you don't have to spend any time figuring out how to read and write information. You merely determine the sources and destination, and the underlying implementation figures out the rest.
 
@@ -1622,13 +1622,13 @@ As you may have noticed, the implementation doesn't hardcode any important aspec
 
 We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into +async+ / +await+, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this chapter.
 
-=== 5.4 Async Functions
+=== 4.4 Async Functions
 
 Languages like Python and C# have had +async+ / +await+ for a while. JavaScript is now also getting native syntax to describe asynchronous operations.
 
 Let's go over a quick recap comparing promises, callbacks and generators. Afterwards we'll look into Async Functions in JavaScript, and how this new feature can help make our code more readable.
 
-==== 5.4.1 Flavors of Async Code
+==== 4.4.1 Flavors of Async Code
 
 Let's suppose we had code like the following. Here I'm wrapping a +fetch+ request in a +getRandomArticle+ function. The promise fulfills with the JSON +body+ when successful, and follows standard +fetch+ rejection mechanics otherwise.
 
@@ -1728,7 +1728,7 @@ Besides involving an unintuitive syntax into the mix, your iterator code will be
 
 A better alternative would be to use an Async Function.
 
-==== 5.4.2 Using +async+ / +await+
+==== 4.4.2 Using +async+ / +await+
 
 Async Functions let us take a +Promise+-based implementation and take advantage of the synchronous-looking generator style. A huge benefit in this approach is that you won't have to change the original +getRandomArticle+ at all: as long as it returns a promise it can be awaited.
 
@@ -1798,7 +1798,7 @@ async function write () {
 
 What about concurrent asynchronous flows?
 
-==== 5.4.3 Concurrent Async Flows
+==== 4.4.3 Concurrent Async Flows
 
 In asynchronous code flows, it is commonplace to execute two or more tasks concurrently. While Async Functions make it easier to write asynchronous code, they also lend themselves to code that executes one asynchronous operation at a time. A function with multiple +await+ expressions in it will be suspended once at a time on each +await+ expression until that +Promise+ is settled, before unsuspending execution and moving onto the next +await+ expression -- this is a similar case to what we observe with generators and +yield+.
 
@@ -1844,7 +1844,7 @@ async function race () {
 }
 ----
 
-==== 5.4.4 Error Handling
+==== 4.4.4 Error Handling
 
 Errors are swallowed silently within an +async+ function, just like inside normal Promises, due to Async Functions being wrapped in a +Promise+. Uncaught exceptions raised in the body of your Async Function or during suspended execution while evaluating an +await+ expresion will reject the promise returned by the +async+ function.
 
@@ -1863,7 +1863,7 @@ read()
 
 As you can see, there's quite a few ways in which we can notice exceptions and then handle, log, or offload them.
 
-==== 5.4.6 Understanding Async Function Internals
+==== 4.4.6 Understanding Async Function Internals
 
 Async Functions leverage both generators and promises internally. Let's suppose we have the following Async Function.
 
@@ -2084,9 +2084,9 @@ Async Functions, then, are little more than a sensible default when it comes to 
 
 Noting that Async Functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows together.
 
-=== 5.5 Asynchronous Iteration
+=== 4.5 Asynchronous Iteration
 
-As explained in section 5.2, You may recall how iterators leverage +Symbol.iterator+ as an interface to define how an object is to be iterated.
+As explained in section 4.2, You may recall how iterators leverage +Symbol.iterator+ as an interface to define how an object is to be iterated.
 
 [source,javascript]
 ----
@@ -2127,7 +2127,7 @@ for (const item of sequence) {
 
 The contract for an iterator mandates that the +next+ method of +Symbol.iterator+ instances returns an object with +value+ and +done+ properties. The +value+ property indicates the current value in the sequence, while +done+ is a boolean indicating whether the sequence has ended.
 
-=== 5.5.1 Async Iterators
+=== 4.5.1 Async Iterators
 
 In *async iterators*, the contract has a subtle difference: +next+ is supposed to return a +Promise+ that resolves to an object containing +value+ and +done+ properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new +Symbol.asyncIterator+ is introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing +Symbol.iterator+.
 
@@ -2179,7 +2179,7 @@ async function print () {
 print()
 ----
 
-==== 5.5.2 Async Generators
+==== 4.5.2 Async Generators
 
 Like with regular iterators, there's async generators to complement async iterators. An async generator function is like a generator function, except that it also supports +await+ and +for await..of+ declarations. The following example shows a +fetchInterval+ generator that fetches a resource periodically at an interval.
 
@@ -2207,4 +2207,4 @@ async function process () {
 process()
 ----
 
-As highlighted in section 5.2.2, it's important to break out of this kinds of sequences, in order to avoid infinite loops.
+As highlighted in section 4.2.2, it's important to break out of this kinds of sequences, in order to avoid infinite loops.

@@ -3,11 +3,11 @@
 
 Thus far in the book, we've discussed entirely new language syntax, such as property value shorthands, arrow functions, destructuring, or generators; and entirely new built-ins, such as +WeakMap+, +Proxy+, or +Symbol+. This chapter, on the other hand, is mostly devoted to existing built-ins that were improved in ES6. Those improvements consist mostly of new instance methods, properties, and utility methods.
 
-=== 8.1 Numbers
+=== 7.1 Numbers
 
 ES6 introduces numeric literal representations for binary and octal numbers.
 
-==== 8.1.1 Binary and Octal Literals
+==== 7.1.1 Binary and Octal Literals
 
 Before ES6, your best bet when it comes to binary representation of integers was to just pass them to +parseInt+ with a radix of +2+.
 
@@ -70,7 +70,7 @@ console.log(0xf00); // <- 3840
 
 Besides these minor syntax changes where octal and binary literals were introduced, a few methods were added to +Number+ in ES6. The first four +Number+ methods that we'll be discussing -- +Number.isNaN+, +Number.isFinite+, +Number.parseInt+, and +Number.parseFloat+ -- already existed as functions in the global namespace. In addition, the methods in +Number+ are slightly different in that they don't coerce non-numeric values into numbers before producing a result.
 
-==== 8.1.2 +Number.isNaN+
+==== 7.1.2 +Number.isNaN+
 
 This method is almost identical to the global +isNaN+ method. +Number.isNaN+ returns whether the provided +value+ is +NaN+, whereas +isNaN+ returns whether +value+ is not a number. These two questions have slightly different answers.
 
@@ -134,7 +134,7 @@ isNumber(new Date())
 
 There is a function, that was already in the language, that somewhat resembles our custom +isNumber+ function: +isFinite+.
 
-==== 8.1.3 +Number.isFinite+
+==== 7.1.3 +Number.isFinite+
 
 The rarely-promoted +isFinite+ method has been available since ES3. It returns a boolean value indicating whether the provided +value+ matches none of: +Infinity+, +-Infinity+, and +NaN+.
 
@@ -185,7 +185,7 @@ Creating a polyfill for +Number.isFinite+ would involve returning +false+ for no
 Number.isFinite = value => typeof value === `number` && isFinite(value)
 ----
 
-==== 8.1.4 +Number.parseInt+
+==== 7.1.4 +Number.parseInt+
 
 The +Number.parseInt+ method works the same as +parseInt+. It is, in fact, the same.
 
@@ -249,7 +249,7 @@ Number(`0o110`)
 // <- 72
 ----
 
-==== 8.1.5 +Number.parseFloat+
+==== 7.1.5 +Number.parseFloat+
 
 Like +parseInt+, +parseFloat+ was added to +Number+ without any modifications whatsoever.
 
@@ -263,7 +263,7 @@ Luckily, +parseFloat+ didn't have any special behavior with regard to hexadecima
 
 The +parseFloat+ function was added to +Number+ for completeness. In future versions of the language, there will be less global namespace pollution. When a function serves a specific purpose, it'll be added to the relevant built-in, rather than as a global.
 
-==== 8.1.6 +Number.isInteger+
+==== 7.1.6 +Number.isInteger+
 
 This is a new method coming in ES6, and it wasn't previously available as a global function. The +isInteger+ method returns +true+ if the provided +value+ is a finite number that doesn't have a decimal part.
 
@@ -287,7 +287,7 @@ Number.isInteger = value => Number.isFinite(value) && value % 1 === 0
 
 Next up we'll dive into floating point arithmetic, which is well-documented as having interesting corner cases.
 
-==== 8.1.7 +Number.EPSILON+
+==== 7.1.7 +Number.EPSILON+
 
 The +EPSILON+ property is a new constant value being added to the +Number+ built-in. The following snippet shows its value.
 
@@ -348,7 +348,7 @@ withinMarginOfError(0.2 + 0.2, 0.3)
 
 Using floating point representation, not every integer can be represented precisely.
 
-==== 8.1.8 +Number.MAX_SAFE_INTEGER+ and +Number.MIN_SAFE_INTEGER+
+==== 7.1.8 +Number.MAX_SAFE_INTEGER+ and +Number.MIN_SAFE_INTEGER+
 
 This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standardfootnote:[IEEE 754 is the Floating Point Standard. On Wikipedia: https://ponyfoo.com/s/pes-floating-point], for that matter. The next bit of code shows exactly how large +Number.MAX_SAFE_INTEGER+ is.
 
@@ -384,7 +384,7 @@ Number.MIN_SAFE_INTEGER - 1 === Number.MIN_SAFE_INTEGER - 2
 
 When it comes to checking whether an integer is safe, a +Number.isSafeInteger+ function has been added to the language.
 
-==== 8.1.10 +Number.isSafeInteger+
+==== 7.1.10 +Number.isSafeInteger+
 
 This method returns +true+ for any integer in the +[MIN_SAFE_INTEGER, MAX_SAFE_INTEGER]+ range. Like with other +Number+ methods introduced in ES6, there's no type coercion involved. The input must be numeric, an integer, and within the aforementioned bounds in order for the method to return +true+. The next snippet shows a comprehensive set of inputs and outputs.
 
@@ -501,13 +501,13 @@ safeOp(1 + 2, 1, 2)
 
 That's all there is when it comes to +Number+, but we're not done with arithmetics-related improvements quite yet. Let's turn our attention to the +Math+ built-in.
 
-=== 8.2 Math
+=== 7.2 Math
 
 ES6 introduces heaps of new static methods to the +Math+ built-in. Some of them were specifically engineered towards making it easier to compile C into JavaScript, and you'll seldom need them for day-to-day JavaScript application development. Others are complements to the existing rounding, exponentiation, and trigonometry API surface.
 
 Let's get right to it.
 
-==== 8.2.1 +Math.sign+
+==== 7.2.1 +Math.sign+
 
 Many languages have a mathematical +sign+ method that returns a vector (+-1+, +0+, or +1+) representation for the sign of the provided input. JavaScript's +Math.sign+ method does exactly that. However, the JavaScript flavor of this method has two more possible return values: +-0+, and +NaN+. Check out the examples in the following code snippet.
 
@@ -525,7 +525,7 @@ Math.sign(`7`); // <- 1, because Number(`7`) is 7
 
 Note how +Math.sign+ casts its input into numeric values? While methods introduced to the +Number+ built-in don't cast their input via +Number(value)+, most of the methods added to +Math+ share this trait, as we shall see.
 
-==== 8.2.2 +Math.trunc+
+==== 7.2.2 +Math.trunc+
 
 We already had +Math.floor+ and +Math.ceil+ in JavaScript, with which we can round a number down or up, respectively. Now we also have +Math.trunc+ as an alternative, which discards the decimal part without any rounding. Here, too, the input is coerced into a numeric value through +Number(value)+.
 
@@ -546,7 +546,7 @@ Creating a simple polyfill for +Math.trunc+ would involve checking whether the v
 Math.trunc = value => value > 0 ? Math.floor(value) : Math.ceil(value)
 ----
 
-==== 8.2.3 +Math.cbrt+
+==== 7.2.3 +Math.cbrt+
 
 The +Math.cbrt+ method is short for "cubic root", similarly to how +Math.sqrt+ is short for "square root". The following snippet has a few usage examples.
 
@@ -568,7 +568,7 @@ Math.cbrt(`one`); // <- NaN, because Number(`one`) is NaN
 
 Let's move on.
 
-==== 8.2.4 +Math.expm1+
+==== 7.2.4 +Math.expm1+
 
 This operation is the result of computing +e+ to the +value+ minus +1+. In JavaScript, the +e+ constant is defined as +Math.E+. The function in the following snippet is a rough equivalent of +Math.expm1+.
 
@@ -604,7 +604,7 @@ Math.expm1(1e-10)
 
 The inverse function of +Math.expm1+ is +Math.log1p+.
 
-==== 8.2.5 +Math.log1p+
+==== 7.2.5 +Math.log1p+
 
 This is the natural logarithm of +value+ plus +1+, -- <code><em>ln</em>(value + 1)</code> -- and the inverse function of +Math.expm1+. The base +e+ logarithm of a number can be expressed as +Math.log+ in JavaScript.
 
@@ -625,7 +625,7 @@ Math.log1p(1.00000000005e-10)
 // <- 1e-10, exactly the inverse of Math.expm1(1e-10)
 ----
 
-==== 8.2.6 +Math.log10+
+==== 7.2.6 +Math.log10+
 
 Base ten logarithm of a number -- <code><em>log</em><sub>10</sub>(value)</code>.
 
@@ -646,7 +646,7 @@ function log10 (value) {
 
 And then there's +Math.log2+.
 
-==== 8.2.7 +Math.log2+
+==== 7.2.7 +Math.log2+
 
 Base two logarithm of a number -- <code><em>log</em><sub>2</sub>(value)</code>.
 
@@ -675,7 +675,7 @@ Math.log2(1 << 29)
 // <- 29
 ----
 
-==== 8.2.8 Trigonometric Functions
+==== 7.2.8 Trigonometric Functions
 
 The +Math+ object is getting trigonometric functions in ES6.
 
@@ -686,7 +686,7 @@ The +Math+ object is getting trigonometric functions in ES6.
 - +Math.acosh(value)+ returns the hyperbolic arc-cosine of +value+
 - +Math.atanh(value)+ returns the hyperbolic arc-tangent of +value+
 
-==== 8.2.9 +Math.hypot+
+==== 7.2.9 +Math.hypot+
 
 Using +Math.hypot+ returns the square root of the sum of the squares of every provided argument.
 
@@ -715,9 +715,9 @@ hypot(1, 2, 3)
 // <- 3.7416573867739413
 ----
 
-==== 8.2.10 Bitwise Computation Helpers
+==== 7.2.10 Bitwise Computation Helpers
 
-At the beginning of section 8.2, we talked about how some of the new +Math+ methods are specifically engineered towards making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
+At the beginning of section 7.2, we talked about how some of the new +Math+ methods are specifically engineered towards making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
 
 ===== +Math.clz32+
 
@@ -741,9 +741,9 @@ Returns the result of a C-like 32-bit multiplication.
 
 Rounds +value+ to the nearest 32-bit float representation of a number.
 
-=== 8.3 Strings and Unicode
+=== 7.3 Strings and Unicode
 
-You may recall template literals from section 3.5, and how those can be used to mix strings and variables, or any valid JavaScript expression, to produce string output.
+You may recall template literals from section 2.5, and how those can be used to mix strings and variables, or any valid JavaScript expression, to produce string output.
 
 [source,javascript]
 ----
@@ -756,7 +756,7 @@ greet(`Gandalf`)
 
 Strings are getting a number of new methods in ES6, besides the template literal syntax. These can be categorized as string manipulation methods and unicode related methods. Let's start with the former.
 
-==== 8.3.1 +String#startsWith+
+==== 7.3.1 +String#startsWith+
 
 Prior to ES6, whenever we wanted to check if a string begins with a certain other string, we'd use the +String#indexOf+ method, as shown in the following code snippet. A result of +0+ means that the string starts with the provided value.
 
@@ -826,7 +826,7 @@ Instead of keeping all of these string searching implementation details in your 
 // <- true
 ----
 
-==== 8.3.2 +String#endsWith+
+==== 7.3.2 +String#endsWith+
 
 This method mirrors +String#startsWith+ in the same way that +String#lastIndexOf+ mirrors +String#indexOf+. It tells us whether a string ends with another string.
 
@@ -852,7 +852,7 @@ As the opposite of +String#startsWith+, there's a position index that indicates 
 
 +String#includes+ is one last method that can simplify a specific use case for +String#indexOf+.
 
-==== 8.3.3 +String#includes+
+==== 7.3.3 +String#includes+
 
 You can use +String#includes+ to figure out whether a string contains another one, as shown in the following piece of code.
 
@@ -888,7 +888,7 @@ You can also provide +String#includes+ with a start index where searching should
 
 Let's move onto something that's not just an +String#indexOf+ alternative.
 
-==== 8.3.4 +String#repeat+
+==== 7.3.4 +String#repeat+
 
 This handy method allows you to repeat a string +count+ times.
 
@@ -982,7 +982,7 @@ c`, 2)
 
 Let's switch protocols and learn about Unicode.
 
-==== 8.3.5 Unicode
+==== 7.3.5 Unicode
 
 JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://ponyfoo.com/s/pes-unicode-encodings]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
 
@@ -1033,7 +1033,7 @@ for (let i = 0; i < text.length; i++) {
 
 Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the string iterator to go over code points, even when those code points are made of surrogate pairs.
 
-==== 8.3.6 +String.prototype[Symbol.iterator]+
+==== 7.3.6 +String.prototype[Symbol.iterator]+
 
 Given the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
 
@@ -1097,7 +1097,7 @@ As Unicode expert Mathias Bynens points out, splitting by code points isn't enou
 
 Let's look at more Unicode-related methods introduced in ES6.
 
-==== 8.3.7 +String#codePointAt+
+==== 7.3.7 +String#codePointAt+
 
 We can use +String#codePointAt+ to get the base-10 numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo +`🐎👱❤`+ string.
 
@@ -1157,7 +1157,7 @@ We could wrap those base-16 values in +`\u{codePoint}`+ and voilá: you'd get th
 // <- `❤`
 ----
 
-==== 8.3.8 +String.fromCodePoint+
+==== 7.3.8 +String.fromCodePoint+
 
 This method takes in a number and returns a code point. Note how I can use the +0x+ prefix with the terse base-16 code points we got from +String#codePointAt+ moments ago.
 
@@ -1205,7 +1205,7 @@ const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 
 Reversing an string has potential to cause issues as well.
 
-==== 8.3.9 Unicode-Aware String Reversal
+==== 7.3.9 Unicode-Aware String Reversal
 
 Consider the following piece of code.
 
@@ -1237,7 +1237,7 @@ This way we avoid breaking up code points. Once again, keep in mind that this wo
 
 The last Unicode-related method we'll be addressing is +.normalize+.
 
-==== 8.3.10 +String#normalize+
+==== 7.3.10 +String#normalize+
 
 There's different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
 
@@ -1293,13 +1293,13 @@ compare(normal, irregular)
 // <- true
 ----
 
-=== 8.4 Array
+=== 7.4 Array
 
 Over the years, libraries like Underscore and Lodash spoke loudly of missing features when it comes to arrays. As a result, ES5 brought in heaps of functional methods to arrays: +Array#filter+, +Array#map+, +Array#reduce+, +Array#reduceRight+, +Array#forEach+, +Array#some+, and +Array#every+.
 
 ES6 brings a few more methods that will help manipulate, fill, and filter arrays.
 
-==== 8.4.1 +Array.from+
+==== 7.4.1 +Array.from+
 
 
 Before ES6, JavaScript developers often needed to cast +arguments+ to a function into an array.
@@ -1424,7 +1424,7 @@ Array.from(things, thing => thing.type)
 // <- [`fruit`, `vegetable`, ...]
 ----
 
-==== 8.4.2 +Array.of+
+==== 7.4.2 +Array.of+
 
 The +Array.of+ method is exactly like the +cast+ function we played around with earlier. Next is a code snippet that shows how +Array.of+ might be polyfilled.
 
@@ -1461,7 +1461,7 @@ console.log(Array.of(-1, -2)); // <- [-1, -2]
 console.log(Array.of(-1)); // <- [-1]
 ----
 
-==== 8.4.3 +Array#copyWithin+
+==== 7.4.3 +Array#copyWithin+
 
 Let's start with the signature of +Array#copyWithin+.
 
@@ -1532,7 +1532,7 @@ copyWithin([1, 2, 3, ,,,,,,,], 6, 1, 3)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
 
-==== 8.4.4 +Array#fill+
+==== 7.4.4 +Array#fill+
 
 A convenient utility method to replace all items in an array with the provided +value+. Note that sparse arrays will be filled in their entirety, while existing items will be replaced by the fill value.
 
@@ -1569,7 +1569,7 @@ new Array(3).fill(map)
 // <- [map, map, map]
 ----
 
-==== 8.4.5 +Array#find+ and +Array#findIndex+
+==== 7.4.5 +Array#find+ and +Array#findIndex+
 
 The +Array#find+ method runs a +callback+ for each +item+ in an array until the first one that returns +true+, and then returns that +item+. The method follows the signature of +(callback(item, i, array), context)+ that's also present in +Array#map+, +Array#filter+, and others. You can think of +Array#find+ as a version of +Array#some+ that returns the matching element instead of just +true+.
 
@@ -1595,7 +1595,7 @@ There's an +Array#findIndex+ method as well, and it leverages the same signature
 // <- -1
 ----
 
-==== 8.4.6 +Array#keys+
+==== 7.4.6 +Array#keys+
 
 Returns an iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with +for..of+, the spread operator, or by manually calling +.next()+.
 
@@ -1630,7 +1630,7 @@ Object.keys(new Array(4))
 
 Now onto values.
 
-==== 8.4.7 +Array#values+
+==== 7.4.7 +Array#values+
 
 Same thing as +Array#keys()+, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
 
@@ -1650,7 +1650,7 @@ You can use +for..of+ or any other methods like a spread operator to pull out th
 
 Note that omitting the +.values()+ method call would still produce a copy of the array: the sequence is iterated and spread over a new array.
 
-==== 8.4.8 +Array#entries+
+==== 7.4.8 +Array#entries+
 
 Similar to both preceding methods, except +Array#entries+ returns an iterator with a sequence of key-value pairs.
 
@@ -1670,7 +1670,7 @@ Each item in the sequence is a two dimensional array with the key and the value 
 
 Great, one last method left!
 
-==== 8.4.9 +Array.prototype[Symbol.iterator]+
+==== 7.4.9 +Array.prototype[Symbol.iterator]+
 
 This is exactly the same as the +Array#values+ method.
 

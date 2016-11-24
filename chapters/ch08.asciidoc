@@ -9,7 +9,7 @@ Other complexity management mechanisms exist, such as the dependency injection m
 
 CommonJS (CJS) surfaced as an alternative to RequireJS, and it was swiftly popularized by Node.js soon afterwards. In this chapter we'll take a look at CommonJS, which is still heavily in use today. We'll then cover the module system introduced to native JavaScript in ES6, and lastly we'll explore interoperability between CommonJS and native JavaScript modules -- also known as ECMAScript modules (ESM).
 
-=== 9.1 CommonJS
+=== 8.1 CommonJS
 
 Unlike other module formats where modules are declared programatically, in CommonJS every file is a module. CommonJS modules have an implicit local scope, while the +global+ scope needs to be accessed explicitly. CommonJS modules can dynamically export a public interface consumers can interact with. CommonJS modules import their dependencies dynamically as well, resolving dependencies through +require+ function calls. These +require+ function calls are synchronous and return the interface exposed by required modules.
 
@@ -147,11 +147,11 @@ image::../images/c09g03-dynamic-render.png["Printing different views through a n
 
 Moving on, you'll notice that ES6 modules are heavily influenced by CommonJS. In the next few sections we'll look at +export+ and +import+ statements, and learn how ESM is compatible with CJS.
 
-=== 9.2 JavaScript Modules
+=== 8.2 JavaScript Modules
 
 As we explored the CommonJS module system, you might've noticed how the API is simple but powerful and flexible. ES6 modules offer an even simpler API that's almost as powerful at the expense of some flexibility.
 
-==== 9.2.1 Strict Mode
+==== 8.2.1 Strict Mode
 
 In the ES6 module system, strict mode is turned on by default. Strict mode is a featurefootnote:[Read a comprehensive article about strict mode on Mozilla's MDN: https://ponyfoo.com/s/pes-strict-mode] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can make optimizations making JavaScript runtime faster and safer.
 
@@ -173,7 +173,7 @@ In the ES6 module system, strict mode is turned on by default. Strict mode is a 
 
 Let's now dive into the +export+ statement.
 
-==== 9.2.2 +export+ Statements
+==== 8.2.2 +export+ Statements
 
 In CommonJS modules, you export values by exposing them on +module.exports+. You can expose anything from a value type to an object, an array, or a function, as seen in the next few code snippets.
 
@@ -364,7 +364,7 @@ export { default as counter } from './counter'
 
 We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to +import+ statements, which can be used to consume other modules.
 
-==== 9.2.3 +import+ Statements
+==== 8.2.3 +import+ Statements
 
 We can load a module from another one using +import+ statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. No browsers have implemented module loading as of this writing. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
@@ -472,7 +472,7 @@ counter.increment()
 console.log(counter.default) // <- 2
 ----
 
-=== 9.3 Practical Considerations for ES Modules
+=== 8.3 Practical Considerations for ES Modules
 
 When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a +random+ module with a locally scoped +calc+ function, which computes a random number in the +[0, n)+ range; and a public API with the +range+ method, which computes a random number in the +[min, max]+ range.
 
