@@ -238,7 +238,7 @@ console.log(MathHelper.sum(1, 2, 3, 4, 5))
 
 Finally, it's worth mentioning that you could also declare static property accessors, such as getters or setters (+static get+, +static set+). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, after all.
 
-==== 4.1.3 Extending JavaScript Clases
+==== 4.1.3 Extending JavaScript Classes
 
 You could use plain JavaScript to extend the +Fruit+ class, but as you will notice by reading the next code snippet, declaring a sub-class involves esoteric knowledge such as +Parent.call(this)+ in order to pass in parameters to the parent class so that we can properly initialize the sub-class, and setting the prototype of the sub-class to an instance of the parent class' prototype. We won't be delving into detailed minutia about these constructs, as you can readily find heaps of information about prototypal inheritance around the web, and our focus in in the newly introduced +class+ syntax anyways.
 
