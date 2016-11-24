@@ -1,1049 +1,1716 @@
-[[managing-property-access-with-proxies]]
-== Managing Property Access with Proxies
+[[built-in-improvements]]
+== Built-in Improvements in ES6
 
-Proxies are an interesting and powerful feature coming in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a +Proxy+ to determine the desired behavior whenever the properties of an underlying +target+ object are accessed. A +handler+ object can be used to configure traps for your +Proxy+, which define and restrict how the underlying object is accessed, as we'll see in a bit.
+Thus far in the book, we've discussed entirely new language syntax, such as property value shorthands, arrow functions, destructuring, or generators; and entirely new built-ins, such as +WeakMap+, +Proxy+, or +Symbol+. This chapter, on the other hand, is mostly devoted to existing built-ins that were improved in ES6. Those improvements consist mostly of new instance methods, properties, and utility methods.
 
-=== 7.1 Getting Started with Proxy
+=== 8.1 Numbers
 
-By default, proxies don't do much -- in fact they don't do anything. If you don't provide any configuration, your +proxy+ will just work as a pass-through to the +target+ object, also known as a "no-op forwarding +Proxy+" meaning that all operations on the +Proxy+ object defer to the underlying object.
+ES6 introduces numeric literal representations for binary and octal numbers.
 
-In the following piece of code, we create a no-op forwarding +Proxy+. You can observe how by assigning a value to +proxy.exposed+, that value is passed onto +target.exposed+. You could think of proxies as the gatekeepers of their underlying objects: they may allow certain operations to go through and prevent others from passing, but they carefully inspect every single interaction with their underlying objects.
+==== 8.1.1 Binary and Octal Literals
+
+Before ES6, your best bet when it comes to binary representation of integers was to just pass them to +parseInt+ with a radix of +2+.
 
 [source,javascript]
 ----
-const target = {}
-const handler = {}
-const proxy = new Proxy(target, handler)
-proxy.exposed = true
-console.log(target.exposed)
+parseInt(`101`, 2)
+// <- 5
+----
+
+You can now use the new +0b+ prefix to represent binary integer literals. You could also use the +0B+ prefix, with a capital +B+. The two notations are equivalent.
+
+[source,javascript]
+----
+console.log(0b000); // <- 0
+console.log(0b001); // <- 1
+console.log(0b010); // <- 2
+console.log(0b011); // <- 3
+console.log(0b100); // <- 4
+console.log(0b101); // <- 5
+console.log(0b110); // <- 6
+console.log(0b111); // <- 7
+----
+
+In ES3, +parseInt+ interpreted strings of digits starting with a +0+ as an octal value. That meant things got weird quickly when you forgot to specify a radix of +10+. As a result, specifying the radix of +10+ became a best practice, so that user input like +012+ wouldn't unexpectedly be parsed as the integer +10+.
+
+[source,javascript]
+----
+console.log(parseInt(`01`))
+// <- 1
+console.log(parseInt(`012`))
+// <- 10
+console.log(parseInt(`012`, 10))
+// <- 12
+----
+
+When ES5 came around, the default radix in +parseInt+ changed, from +8+ to +10+. It was still recommended you specified a +radix+ for backwards compatibility purposes. If you wanted to parse strings as octal values, you could explicitly pass in a radix of +8+ as the second argument.
+
+[source,javascript]
+----
+console.log(parseInt(`100`, `8`))
+// <- 64
+----
+
+You can now use the +0o+ prefix for octal literals, which are new in ES6. You could also use +0O+, which is equivalent. Having a +0+ followed by an uppercase +O+ may be hard to distinguish in some typefaces, which is why it is suggested that you stick with the lowercase +0o+ notation.
+
+[source,javascript]
+----
+console.log(0o001); // <- 1
+console.log(0o010); // <- 8
+console.log(0o100); // <- 64
+----
+
+You might be used to hexadecimal literals present in other languages, commonly prefixed with +0x+. Those were already introduced to the JavaScript language in ES5. The prefix for literal hexadecimal notation is either +0x+, or +0X+, as shown in the following code snippet.
+
+[source,javascript]
+----
+console.log(0x0ff); // <- 255
+console.log(0xf00); // <- 3840
+----
+
+Besides these minor syntax changes where octal and binary literals were introduced, a few methods were added to +Number+ in ES6. The first four +Number+ methods that we'll be discussing -- +Number.isNaN+, +Number.isFinite+, +Number.parseInt+, and +Number.parseFloat+ -- already existed as functions in the global namespace. In addition, the methods in +Number+ are slightly different in that they don't coerce non-numeric values into numbers before producing a result.
+
+==== 8.1.2 +Number.isNaN+
+
+This method is almost identical to the global +isNaN+ method. +Number.isNaN+ returns whether the provided +value+ is +NaN+, whereas +isNaN+ returns whether +value+ is not a number. These two questions have slightly different answers.
+
+The next snippet quickly shows that, when passed to +Number.isNaN+, anything that's not +NaN+ will return +false+, while +NaN+ will produce +true+. Note how in the last case we're already passing +NaN+ to +Number.isNaN+, as that's the result of dividing two strings.
+
+[source,javascript]
+----
+Number.isNaN(123)
+// <- false, integers are not NaN
+Number.isNaN(Infinity)
+// <- false, Infinity is not NaN
+Number.isNaN(`a hundred`)
+// <- false, `a hundred` is not NaN
+Number.isNaN(NaN)
+// <- true, NaN is NaN
+Number.isNaN(`a hundred` / `two`)
+// <- true, `a hundred` / `two` is NaN, NaN is NaN
+----
+
+The +isNaN+ method, in contrast, casts non-numeric values passed to it before evaluating them against +NaN+. This results in significantly different return values. In the following example, each alternative produces different results because +isNaN+, unlike +Number.isNaN+, casts the +value+ passed to it through +Number+ first.
+
+[source,javascript]
+----
+isNaN(`a hundred`)
+// <- true, because Number(`a hundred`) is NaN
+isNaN(new Date())
+// <- false, because Number(new Date()) uses Date#valueOf, which returns a unix timestamp
+----
+
++Number.isNaN+ is more precise than its global counterpart, because it doesn't incur in casting. There's still a few reasons why +Number.isNaN+ can be a source of confusion.
+
+1. +isNaN+ casts input through +Number(value)+ before comparison
+2. +Number.isNaN+ doesn't
+3. Neither +Number.isNaN+ nor +isNaN+ answer the "is this not a number?" question
+4. They answer whether +value+ -- or +Number(value)+ -- is +NaN+
+
+In most cases, what you actually want to know is whether a value identifies as a number -- +typeof NaN === `number`+ -- and is a number. The +isNumber+ function in the following code snippet does just that. Note that it'd work with both +isNaN+ and +Number.isNaN+ due to type checking. Everything that reports a +typeof+ value of +`number`+ is a number, except for +NaN+, so we filter out those out as false positive results.
+
+[source,javascript]
+----
+function isNumber (value) {
+  return typeof value === `number` && !Number.isNaN(value)
+}
+----
+
+You can use that method to figure out whether a +value+ is a number or not. In the next snippet there's a few examples of how +isNumber+ works.
+
+[source,javascript]
+----
+isNumber(1)
 // <- true
-console.log(proxy.somethingElse)
-// <- undefined
-----
-
-We can make the proxy object a bit more interesting by adding traps. Traps allow you to intercept interactions with +target+ in several different ways, as long as those interactions happen through the +proxy+ object. For instance, we could use a +get+ trap to log every attempt to pull a value out of a property in +target+, or a +set+ trap to prevent certain properties from being written to. Let's kick things off by learning more about +get+ traps.
-
-==== 7.1.1 Trapping +get+ accessors
-
-The proxy in the following code listing is able to track any and every property access event because it has a +handler.get+ trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor. We can already imagine +Proxy+ becoming a staple when it comes to developer tooling, as it's particularly well equipped for code instrumentation and introspection.
-
-[source,javascript]
-----
-const handler = {
-  get (target, key) {
-    console.log(`Get on property "${ key }"`)
-    return target[key]
-  }
-}
-const target = {}
-const proxy = new Proxy(target, handler)
-proxy.numbers = 123
-proxy.numbers
-// 'Get on property "numbers"'
-// <- 123
-proxy['something-else']
-// 'Get on property "something-else"'
-// <- undefined
-----
-
-As a complement to proxies, ES6 introduces a +Reflect+ built-in object. The traps in ES6 proxies are mapped one-to-one to the +Reflect+ API: For every trap, there’s a matching reflection method in +Reflect+. These methods can be particularly useful when we want to provide the default behavior of proxy traps, but we don't want to concern ourselves with the implementation of that behavior.
-
-In the following code snippet we use +Reflect.get+ to provide the default behavior for +get+ operations, while not worrying about accessing the +key+ property in +target+ by hand. While in this case the operation may seem trivial, the default behavior for other traps may be harder to remember and implement correctly. However, when using the +Reflect+ API, we just need to forward the method call to the reflection API and return the result.
-
-[source,javascript]
-----
-const handler = {
-  get (target, key) {
-    console.log(`Get on property "${ key }"`)
-    return Reflect.get(target, key)
-  }
-}
-const target = {}
-const proxy = new Proxy(target, handler)
-----
-
-The +get+ trap doesn't necessarily have to return the original +target[key]+ value. Imagine the case where you wanted properties prefixed by an underscore to be inaccessible. In this case, you could throw an error, letting the consumer know that the property is inaccessible through the proxy.
-
-[source,javascript]
-----
-const handler = {
-  get (target, key) {
-    const [prefix] = key
-    if (prefix === '_') {
-      throw new Error(`Property "${ key }" cannot be read through this proxy.`)
-    }
-    return Reflect.get(target, key)
-  }
-}
-const target = {}
-const proxy = new Proxy(target, handler)
-proxy._secret
-// <- Uncaught Error: Property "_secret" cannot be read through this proxy.
-----
-
-To the keen observer, it may be apparent that disallowing access to certain properties through the proxy becomes most useful when creating a proxy with clearly defined access rules for the underlying +target+ object, and exposing that proxy instead of the +target+ object. That way you can still access the underlying object freely, but consumers are forced to go through the proxy and play by its rules, putting you in control of exactly how they can interact with the object. This wasn't possible before proxies were introduced in ES6.
-
-==== 7.1.2 Trapping +set+ accessors
-
-As the counterpart of +get+ traps, +set+ traps can intercept property assignment. Suppose we wanted to prevent assignment on properties starting with an underscore. We could replicate the +get+ trap we implemented earlier to block assignment as well.
-
-The +Proxy+ in the next example prevents underscored property access for both +get+ and +set+ when accessing +target+ through +proxy+. Note how the +set+ trap returns +true+ here? Returning +true+ in a +set+ trap means that setting the property +key+ to the provided +value+ should succeed. If the return value for the +set+ trap is +false+, setting the property value will throw a +TypeError+ under strict mode, and otherwise fail silently. If we were using +Reflect.set+ instead, as brought up earlier, we wouldn't need to concern ourselves with these implementation details: we could just +return Reflect.set(target, key, value)+. That way, when somebody reads our code later, they'll be able to understand that we're using +Reflect.set+, which is equivalent to the default operation, equivalent to the case where a +Proxy+ object isn't part of the equation.
-
-[source,javascript]
-----
-const handler = {
-  get (target, key) {
-    invariant(key, 'get')
-    return Reflect.get(target, key)
-  },
-  set (target, key, value) {
-    invariant(key, 'set')
-    return Reflect.set(target, key, value)
-  }
-}
-function invariant (key, action) {
-  if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
-  }
-}
-const target = {}
-const proxy = new Proxy(target, handler)
-----
-
-The following piece of code demonstrates how the +proxy+ responds to consumer interaction.
-
-[source,javascript]
-----
-proxy.text = 'the great black pony ate your lunch'
-console.log(target.text)
-// <- 'the great black pony ate your lunch'
-proxy._secret
-// <- Error: Invalid attempt to get private "_secret" property
-proxy._secret = 'invalidate'
-// <- Error: Invalid attempt to set private "_secret" property
-----
-
-The object being proxied, +target+ in our latest example, should be completely hidden from consumers, so that they are forced to access it exclusively through +proxy+. Preventing direct access to the +target+ object means that they will have to obey the access rules defined on the +proxy+ object -- such as _"properties prefixed with an underscore are off-limits"_.
-
-To that end, you could wrap the proxied object in a function and then return the +proxy+.
-
-[source,javascript]
-----
-function proxied () {
-  const target = {}
-  const handler = {
-    get (target, key) {
-      invariant(key, 'get')
-      return Reflect.get(target, key)
-    },
-    set (target, key, value) {
-      invariant(key, 'set')
-      return Reflect.set(target, key, value)
-    }
-  }
-  return new Proxy(target, handler)
-}
-function invariant (key, action) {
-  if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
-  }
-}
-----
-
-Usage stays the same, except that now access to +target+ is completely governed by +proxy+ and its mischievous traps. At this point, any +_secret+ properties in +target+ are completely inaccessible through the proxy, and since +target+ can't be accessed directly from outside the +proxied+ function, they're sealed off from consumers for good.
-
-A general purpose approach would be to offer a proxying function that takes an +original+ object and returns a proxy. You can then call that function whenever you're about to expose a public API, as shown in the following code block. The +concealWithPrefix+ function wraps the +original+ object in a +Proxy+ where properties prefixed with a +prefix+ value (or +_+ if none is provided) can't be accessed.
-
-[source,javascript]
-----
-function concealWithPrefix (original, prefix='_') {
-  const handler = {
-    get (original, key) {
-      invariant(key, 'get')
-      return Reflect.get(original, key)
-    },
-    set (original, key, value) {
-      invariant(key, 'set')
-      return Reflect.set(original, key, value)
-    }
-  }
-  return new Proxy(original, handler)
-}
-function invariant (key, action) {
-  if (key.startsWith(prefix)) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
-  }
-}
-const target = {
-  _secret: 'secret',
-  text: 'everyone-can-read-this'
-}
-const proxy = concealWithPrefix(target)
-// expose proxy to consumers
-----
-
-You might be tempted to argue that you could achieve the same behavior in ES5 simply by using variables privately scoped to the +concealWithPrefix+ function, without the need for the +Proxy+ itself. The difference is that proxies allow you to "privatize" property access dynamically. Without relying on +Proxy+, you couldn't mark every property that starts with an underscore as private. You could use +Object.freeze+ on the object, but then you wouldn't be able to modify the properties yourself, either. Or you could define get and set accessors for every property, but then again you wouldn't be able to block access on every single property, only the ones you explicitly configured getters and setters for.
-
-==== 7.1.3 Schema Validation with Proxies
-
-Sometimes we have an object with user input that we want to validate against a schema, a model of how that input is supposed to be structured, what properties it should have, what types those properties should be, and how those properties should be filled. We'd like to verify that a +customer+ email field contains an email address, a numeric +cost+ field contains a number, and a required +name+ field isn't missing.
-
-There is a number of ways in which you could do schema validation. You could use a validation function that throws errors if an invalid value is found on the object, but you'd have to ensure the object is off limits once you've deemed it valid. You could validate each property individually, but you'd have to remember to validate them whenever they're changed. You could also use a +Proxy+. By providing consumers with a +Proxy+ to the actual model object, you'd ensure that the object never enters an invalid state, as an exception would be thrown otherwise.
-
-Another aspect of schema validation via +Proxy+ is that it helps you separate validation concerns from the +target+ object, where validation occurs sometimes in the wild. The +target+ object would stay as a plain old JavaScript object (or POJO, for short), meaning that while you give consumers a validating proxy, you keep an untainted version of the data that's always valid, as guaranteed by the proxy.
-
-Just like a validation function, the handler settings can be reutilized across several +Proxy+ instances, without having to rely on prototypal inheritance or ES6 classes.
-
-In the following example, we have a simple +validator+ object, with a +set+ trap that looks up properties in a map. When a property gets set through the proxy, its key is looked up on the map. If the map contains a rule for that property, it'll run that function to assert whether the assignment is deemed valid. As long as the +person+ properties are set through a proxy using the +validator+, the model invariants will be satisfied according to our predefined validation rules.
-
-[source,javascript]
-----
-const validations = new Map()
-const validator = {
-  set (target, key, value) {
-    if (validations.has(key)) {
-      return validations[key](value)
-    }
-    return true
-  }
-}
-validations.set('age', validateAge)
-
-function validateAge (value) {
-  if (typeof value !== 'number' || Number.isNaN(value)) {
-    throw new TypeError('Age must be a number')
-  }
-  if (value <= 0) {
-    throw new TypeError('Age must be a positive number')
-  }
-  return true
-}
-----
-
-The following piece of code shows how we could consume the +validator+ handler. This general-purpose proxy handler is passed into a +Proxy+ for the +person+ object. The handler then enforces our schema by ensuring that values set through the proxy pass the schema validation rules for any given property. In this case, we've added a validation rule that says +age+ must be a positive numeric value.
-
-[source,javascript]
-----
-const person = {}
-const proxy = new Proxy(person, validator)
-proxy.age = 'twenty three'
-// <- TypeError: Age must be a number
-proxy.age = NaN
-// <- TypeError: Age must be a number
-proxy.age = 0
-// <- TypeError: Age must be a positive number
-proxy.age = 28
-console.log(person.age)
-// <- 28
-----
-
-While proxies offer previously-unavailable granular control over what a consumer can and cannot do with an object, as defined by access rules defined by the implementor, there's also a harsher variant of proxies that allows us to completely shut off access to +target+ whenever we deem it necessary: revocable proxies.
-
-=== 7.2 Revocable Proxies
-
-Revocable proxies offer more fine-grained control than plain +Proxy+ objects. The API is a bit different in that there is no +new+ keyword involved, as opposed to +new Proxy(target, handler)+; and a +{ proxy, revoke }+ object is returned, instead of just the +proxy+ object being returned. Once +revoke()+ is called, the +proxy+ will throw an error on any operation.
-
-Let's go back to our pass-through +Proxy+ example and make it revocable. Note how we're no longer using +new+, how calling +revoke()+ over and over has no effect, and how an error is thrown if we attempt to interact with the underlying object in any way.
-
-[source,javascript]
-----
-const target = {}
-const handler = {}
-const { proxy, revoke } = Proxy.revocable(target, handler)
-proxy.isUsable = true
-console.log(proxy.isUsable)
+isNumber(Infinity)
 // <- true
-revoke()
-revoke()
-revoke()
-console.log(proxy.isUsable)
-// <- TypeError: illegal operation attempted on a revoked proxy
-----
-
-This type of +Proxy+ is particularly useful because you can completely cut off access to the +proxy+ granted to a consumer. You could expose a revocable +Proxy+ and keep around the +revoke+ method, perhaps in a +WeakMap+ collection. When it becomes clear that the consumer shouldn't have access to +target+ anymore, -- not even through +proxy+ -- you +.revoke()+ their access rights.
-
-The following example shows two functions. The +getStorage+ function can be used to get proxied access into +storage+, and it keeps a reference to the +revoke+ function for the returned +proxy+ object. Whenever we want to cut off access to +storage+ for a given +proxy+, +revokeStorage+ will call its associated +revoke+ function and remove the entry from the +WeakMap+. Note that making both functions accessible to the same set of consumers won't pose security concerns: once access through a proxy has been revoked, it can't be restored.
-
-[source,javascript]
-----
-const proxies = new WeakMap()
-const storage = {}
-
-function getStorage () {
-  const handler = {}
-  const { proxy, revoke } = Proxy.revocable(storage, handler)
-  proxies.set(proxy, { revoke })
-  return proxy
-}
-
-function revokeStorage (proxy) {
-  proxies.get(proxy).revoke()
-  proxies.delete(proxy)
-}
-----
-
-Given that +revoke+ is available on the same scope where your +handler+ traps are defined, you could set up unforgiving access rules such that if a consumer attempts to access a private property more than once you revoke their +proxy+ access entirely.
-
-=== 7.3 Proxy Trap Handlers
-
-Perhaps the most interesting aspect of proxies is how you can use them to intercept just about any interaction with the +target+ object -- not only plain +get+ or +set+ operations.
-
-We've already covered +get+, which traps property access; and +set+, which traps property assignment. Next up we'll discuss the different kinds of traps you can set up.
-
-==== 7.3.1 +has+ Trap
-
-We can use +handler.has+ to conceal any property you want. It's a trap for the +in+ operator. In the +set+ trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the +proxy+ to figure out whether these properties exist. There are three alternatives here.
-
-- Do nothing, in which case +key in proxy+ falls through to +Reflect.has(target, key)+, the equivalent of +key in target+
-- Return +true+ or +false+ regardless of whether +key+ is or is not present in +target+
-- Throw an error signaling that the +in+ operation is illegal
-
-Throwing an error is quite final, and it certainly doesn't help in those cases where you want to conceal the fact that the property even exists. You would be acknowledging that the property is, in fact, protected. Throwing is, however, valid in those cases where you want the consumer to understand why the operation is failing, as you can explain the failure reason in an error message.
-
-It's often best to indicate that the property is not +in+ the object, by returning +false+ instead of throwing. A fall-through case where you return the result of the +key in target+ expression is a good default case to have.
-
-Going back to the getter/setter example in section 7.1.2, we'll want to return +false+ for properties in the prefixed property space and use the default for all other properties. This will keep our inaccessible properties well hidden from unwanted visitors.
-
-[source,javascript]
-----
-const handler = {
-  get (target, key) {
-    invariant(key, 'get')
-    return Reflect.get(target, key)
-  },
-  set (target, key, value) {
-    invariant(key, 'set')
-    return Reflect.set(target, key, value)
-  },
-  has (target, key) {
-    if (key.startsWith('_')) {
-      return false
-    }
-    return Reflect.has(target, key)
-  }
-}
-function invariant (key, action) {
-  if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
-  }
-}
-----
-
-Note how accessing properties through the proxy will now return +false+ when querying one of the private properties, with the consumer being none the wiser -- completely unaware that we've intentionally hid the property from them. Note how +_secret in target+ returns +true+ because we're bypassing the proxy. That means we can still use the underlying object unchallenged by tight access control rules while consumers have no choice but to stick to the proxy's rules.
-
-[source,javascript]
-----
-const target = {
-  _secret: 'securely-stored-value',
-  wellKnown: 'publicly-known-value'
-}
-const proxy = new Proxy(target, handler)
-console.log('wellKnown' in proxy)
-// <- true
-console.log('_secret' in proxy)
+isNumber(NaN)
 // <- false
-console.log('_secret' in target)
-// <- true
-----
-
-We could've thrown an exception instead. That would be useful in situations where attempts to access properties in the private space is seen as a mistake that would've resulted in an invalid state, rather than as a security concern in code that aims to be embedded into third party websites.
-
-==== 7.3.2 +deleteProperty+ Trap
-
-Setting a property to +undefined+ clears its value, but the property is still part of the object. Using the +delete+ operator on a property with code like +delete cat.furBall+ means that the +furBall+ property will be forever gone from the +cat+ object.
-
-[source,javascript]
-----
-const cat = { furBall: true }
-cat.furBall = undefined
-console.log('furBall' in cat)
-// <- true
-delete cat.furBall
-console.log('furBall' in cat)
+isNumber(`two`)
+// <- false
+isNumber(new Date())
 // <- false
 ----
 
-The code in the last example where we prevented access to prefixed properties has a problem: you can't change the value of a +_secret+ property, nor even use +in+ to learn about its existence, but you still can remove the property entirely using the +delete+ operator through the +proxy+ object. The following code sample shows that shortcoming in action.
+There is a function, that was already in the language, that somewhat resembles our custom +isNumber+ function: +isFinite+.
+
+==== 8.1.3 +Number.isFinite+
+
+The rarely-promoted +isFinite+ method has been available since ES3. It returns a boolean value indicating whether the provided +value+ matches none of: +Infinity+, +-Infinity+, and +NaN+.
+
+The +isFinite+ method coerces values through +Number(value)+, while +Number.isFinite+ doesn't. This means that values that can be coerced into non-+NaN+ numbers will be considered finite numbers by +isNumber+ -- even though they aren't explicit numbers.
+
+Here are a few examples using the global +isFinite+ function.
 
 [source,javascript]
 ----
-const target = { _secret: 'foo' }
-const proxy = new Proxy(target, handler)
-console.log('_secret' in proxy)
+isFinite(NaN)
 // <- false
-console.log('_secret' in target)
+isFinite(Infinity)
+// <- false
+isFinite(-Infinity)
+// <- false
+isFinite(null)
+// <- true, because Number(null) is 0
+isFinite(-13)
+// <- true, because Number(-13) is -13
+isFinite(`10`)
+// <- true, because Number(`10`) is 10
+----
+
+Using +Number.isFinite+ is a safer bet, as it doesn't incur in unexpected casting. You could always use +Number.isFinite(Number(value))+ if you did want the +value+ to be casted into its numeric representation. Separating the two aspects, casting versus computing, results in more explicit code.
+
+Here are a few examples using the +Number.isFinite+ method.
+
+[source,javascript]
+----
+Number.isFinite(NaN)
+// <- false
+Number.isFinite(Infinity)
+// <- false
+Number.isFinite(-Infinity)
+// <- false
+Number.isFinite(null)
+// <- false, because null is not a number
+Number.isFinite(-13)
 // <- true
-delete proxy._secret
-console.log('_secret' in target)
+Number.isFinite(`10`)
+// <- false, because `10` is not a number
+----
+
+Creating a polyfill for +Number.isFinite+ would involve returning +false+ for non-numeric values, effectively turning off the type-casting feature, and then calling +isFinite+ on the input value.
+
+[source,javascript]
+----
+Number.isFinite = value => typeof value === `number` && isFinite(value)
+----
+
+==== 8.1.4 +Number.parseInt+
+
+The +Number.parseInt+ method works the same as +parseInt+. It is, in fact, the same.
+
+[source,javascript]
+----
+console.log(Number.parseInt === parseInt)
+// <- true
+----
+
+The +parseInt+ function has support for hexadecimal literal notation in strings. Specifying the +radix+ is not even necessary: based on the +0x+ prefix, +parseInt+ infers that the number must be base 16.
+
+[source,javascript]
+----
+parseInt(`0xf00`)
+// <- 3840
+parseInt(`0xf00`, 16)
+// <- 3840
+----
+
+If you provided another +radix+, +parseInt+ would bail after the first non-digit character.
+
+[source,javascript]
+----
+parseInt(`0xf00`, 10)
+// <- 0
+parseInt(`5xf00`, 10)
+// <- 5, illustrating there's no special treatment here
+----
+
+While +parseInt+ accepts input in hexadecimal literal notation strings, its interface hasn't changed in ES6. Therefore, binary and octal literal notation strings won't be interpreted as such. This introduces a new inconsistency in ES6, where +parseInt+ understands +0x+, but not +0b+ nor +0o+.
+
+[source,javascript]
+----
+parseInt(`0b011`)
+// <- 0
+parseInt(`0b011`, 2)
+// <- 0
+parseInt(`0o100`)
+// <- 0
+parseInt(`0o100`, 8)
+// <- 0
+----
+
+It's up to you to drop the prefix before +parseInt+, if you wanted to use +parseInt+ to read these literals. You'll also need to specify the corresponding +radix+ of 2 for binary numbers or 8 for octals.
+
+[source,javascript]
+----
+parseInt(`0b011`.slice(2), 2)
+// <- 3
+parseInt(`0o110`.slice(2), 8)
+// <- 72
+----
+
+To make matters even worse, the +Number+ function is perfectly able to cast these strings into the correct numbers.
+
+[source,javascript]
+----
+Number(`0b011`)
+// <- 3
+Number(`0o110`)
+// <- 72
+----
+
+==== 8.1.5 +Number.parseFloat+
+
+Like +parseInt+, +parseFloat+ was added to +Number+ without any modifications whatsoever.
+
+[source,javascript]
+----
+console.log(Number.parseFloat === parseFloat)
+// <- true
+----
+
+Luckily, +parseFloat+ didn't have any special behavior with regard to hexadecimal literal strings, meaning that +Number.parseFloat+ is unlikely to introduce any confusion.
+
+The +parseFloat+ function was added to +Number+ for completeness. In future versions of the language, there will be less global namespace pollution. When a function serves a specific purpose, it'll be added to the relevant built-in, rather than as a global.
+
+==== 8.1.6 +Number.isInteger+
+
+This is a new method coming in ES6, and it wasn't previously available as a global function. The +isInteger+ method returns +true+ if the provided +value+ is a finite number that doesn't have a decimal part.
+
+[source,javascript]
+----
+console.log(Number.isInteger(Infinity)); // <- false
+console.log(Number.isInteger(-Infinity)); // <- false
+console.log(Number.isInteger(NaN)); // <- false
+console.log(Number.isInteger(null)); // <- false
+console.log(Number.isInteger(0)); // <- true
+console.log(Number.isInteger(-10)); // <- true
+console.log(Number.isInteger(10.3)); // <- false
+----
+
+You might want to consider the following code snippet as a polyfill for +Number.isInteger+. The modulus operator returns the remainder of dividing the same operands. If we divide by one, we're effectively getting the decimal part. If that's +0+, then it means the number is an integer.
+
+[source,javascript]
+----
+Number.isInteger = value => Number.isFinite(value) && value % 1 === 0
+----
+
+Next up we'll dive into floating point arithmetic, which is well-documented as having interesting corner cases.
+
+==== 8.1.7 +Number.EPSILON+
+
+The +EPSILON+ property is a new constant value being added to the +Number+ built-in. The following snippet shows its value.
+
+[source,javascript]
+----
+Number.EPSILON
+// <- 2.220446049250313e-16
+Number.EPSILON.toFixed(20)
+// <- `0.00000000000000022204`
+----
+
+Let's take a look at the canonical example of floating point arithmetic.
+
+[source,javascript]
+----
+0.1 + 0.2
+// <- 0.30000000000000004
+0.1 + 0.2 === 0.3
 // <- false
 ----
 
-We can use +handler.deleteProperty+ to prevent a +delete+ operation from working. Just like with the +get+ and +set+ traps, throwing in the +deleteProperty+ trap will be enough to prevent the deletion of a property. In this case, throwing is okay because we want the consumer to know that external operations on prefixed properties are forbidden.
+What's the margin of error in this operation? Let's move the operands around and find out.
 
 [source,javascript]
 ----
-const handler = {
-  get (target, key) {
-    invariant(key, 'get')
-    return Reflect.get(target, key)
-  },
-  set (target, key, value) {
-    invariant(key, 'set')
-    return Reflect.set(target, key, value)
-  },
-  deleteProperty (target, key) {
-    invariant(key, 'delete')
-    return Reflect.deleteProperty(target, key)
-  }
-}
-function invariant (key, action) {
-  if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
-  }
-}
+0.1 + 0.2 - 0.3
+// <- 5.551115123125783e-17
+5.551115123125783e-17.toFixed(20)
+// <- `0.00000000000000005551`
 ----
 
-If we ran the exact same piece of code we tried earlier, we'd run into the exception while trying to delete +_secret+ from the +proxy+. The following example shows the mechanics of the updated +handler+.
+We could use +Number.EPSILON+ to figure out whether the difference is small enough to be negligible, +Number.EPSILON+ denotes a safe margin of error for floating point arithmetic rounding operations.
 
 [source,javascript]
 ----
-const target = { _secret: 'foo' }
-const proxy = new Proxy(target, handler)
-console.log('_secret' in proxy)
+5.551115123125783e-17 < Number.EPSILON
 // <- true
-delete proxy._secret
-// <- Error: Invalid attempt to delete private "_secret" property
 ----
 
-Consumers interacting with +target+ through the +proxy+ can no longer delete properties in the +_secret+ property space. That's one less thing to worry about!
-
-==== 7.3.3 +defineProperty+ Trap
-
-The +Object.defineProperty+ function can be used to add new properties to a +target+ object, using a property +key+ and a property +descriptor+. For the most part, +Object.defineProperty(target, key, descriptor)+ is used in two kinds of situations.
-
-1. When we need to ensure cross-browser support of getters and setters
-2. When we want to define a custom property accessor
-
-Properties added by hand are read-write, they are deletable, and they are enumerable.
-
-Properties added through +Object.defineProperty+, in contrast, default to being read-only, non-deletable, and non-enumerable. By default, the property is akin to bindings declared using the +const+ statement in that it's read-only, but that doesn't make it immutable.
-
-When creating properties through +defineProperty+, you can customize the following aspects of the property descriptor.
-
-- +configurable = false+ disables most changes to the property descriptor and makes the property undeletable
-- +enumerable = false+ hides the property from +for..in+ loops and +Object.keys+
-- +writable = false+ makes the property value read-only
-- +value = undefined+ is the initial value for the property
-- +get = undefined+ is a method that acts as the getter for the property
-- +set = undefined+ is a method that receives the new +value+ and updates the property's +value+
-
-Note that you'll have to choose between configuring the +value+ and +writable+ pair or +get+ and +set+ pair. When choosing the former you're configuring a data descriptor. You get a data descriptor when creating plain properties, such as in +pizza.topping = 'ham'+, too. In that case, +topping+ has a +value+ and it may or may not be +writable+. If you pick the second pair of options, you're creating an accessor descriptor which is entirely defined by the methods you can use to +get()+ or +set(value)+ for the property.
-
-The following code sample shows how property descriptors can be completely different depending on whether we use the declarative option or go through the programmatic API. We use +Object.getOwnPropertyDescriptor+, which receives a +target+ object+ and a property +key+, to pull the object descriptor for properties we create.
+The following piece of code can be used to figure out out whether the result of a floating point operation is within the expected margin of error. We use +Math.abs+, because that way the order of +left+ and +right+ won't matter. In other words, +withinMarginOfError(left, right)+ will produce the same result as +withinMarginOfError(right, left)+.
 
 [source,javascript]
 ----
-const pizza = {}
-pizza.topping = 'ham'
-Object.defineProperty(pizza, 'extraCheese', { value: true })
-console.log(Object.getOwnPropertyDescriptor(pizza, 'topping'))
-// <- { value: 'ham', writable: true, enumerable: true, configurable: true }
-console.log(Object.getOwnPropertyDescriptor(pizza, 'extraCheese'))
-// <- { value: true, writable: false, enumerable: false, configurable: false }
+function withinMarginOfError (left, right) {
+  return Math.abs(left - right) < Number.EPSILON
+}
 ----
 
-The +handler.defineProperty+ trap can be used to intercept properties being defined. Note that this trap intercepts the declarative +pizza.extraCheese = false+ property declaration flavor as well as +Object.defineProperty+ calls. As arguments for the trap, you get the +target+ object, the property +key+ and the +descriptor+.
-
-The next example prevents the addition of any properties added through the +proxy+. When the handler returns false, the property declaration fails loudly with an exception under strict mode, and silently without an exception when we're in sloppy mode. Strict mode is superior to sloppy mode due to its performance gains and hardened semantics. It is also the default mode in ES6 modules, as we'll see in chapter 9. For those reasons, we'll assume strict mode in all the code examples.
+The next snippet shows +withinMarginOfError+ in action.
 
 [source,javascript]
 ----
-const handler = {
-  defineProperty (target, key, descriptor) {
-    return false
+withinMarginOfError(0.1 + 0.2, 0.3)
+// <- true
+withinMarginOfError(0.2 + 0.2, 0.3)
+// <- false
+----
+
+Using floating point representation, not every integer can be represented precisely.
+
+==== 8.1.8 +Number.MAX_SAFE_INTEGER+ and +Number.MIN_SAFE_INTEGER+
+
+This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standardfootnote:[IEEE 754 is the Floating Point Standard. On Wikipedia: https://ponyfoo.com/s/pes-floating-point], for that matter. The next bit of code shows exactly how large +Number.MAX_SAFE_INTEGER+ is.
+
+[source,javascript]
+----
+Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1
+// <- true
+Number.MAX_SAFE_INTEGER === 9007199254740991
+// <- true
+----
+
+As you might expect, there's also the opposite constant: the minimum. It's the negative value of +Number.MAX_SAFE_INTEGER+.
+
+[source,javascript]
+----
+Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER
+// <- true
+Number.MIN_SAFE_INTEGER === -9007199254740991
+// <- true
+----
+
+Floating point arithmetic becomes unreliable beyond the +[MIN_SAFE_INTEGER, MAX_SAFE_INTEGER]+ range. The +1 === 2+ statement evaluates to +false+, because these are different values. If we add +Number.MAX_SAFE_INTEGER+ to each operand, however, it'd seem +1 === 2+ is indeed true.
+
+[source,javascript]
+----
+1 === 2
+// <- false
+Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2
+// <- true
+Number.MIN_SAFE_INTEGER - 1 === Number.MIN_SAFE_INTEGER - 2
+// <- true
+----
+
+When it comes to checking whether an integer is safe, a +Number.isSafeInteger+ function has been added to the language.
+
+==== 8.1.10 +Number.isSafeInteger+
+
+This method returns +true+ for any integer in the +[MIN_SAFE_INTEGER, MAX_SAFE_INTEGER]+ range. Like with other +Number+ methods introduced in ES6, there's no type coercion involved. The input must be numeric, an integer, and within the aforementioned bounds in order for the method to return +true+. The next snippet shows a comprehensive set of inputs and outputs.
+
+[source,javascript]
+----
+Number.isSafeInteger(`one`); // <- false
+Number.isSafeInteger(`0`); // <- false
+Number.isSafeInteger(null); // <- false
+Number.isSafeInteger(NaN); // <- false
+Number.isSafeInteger(Infinity); // <- false
+Number.isSafeInteger(-Infinity); // <- false
+Number.isSafeInteger(Number.MIN_SAFE_INTEGER - 1); // <- false
+Number.isSafeInteger(Number.MIN_SAFE_INTEGER); // <- true
+Number.isSafeInteger(1); // <- true
+Number.isSafeInteger(1.2); // <- false
+Number.isSafeInteger(Number.MAX_SAFE_INTEGER); // <- true
+Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1); // <- false
+----
+
+When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operandsfootnote:[Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://ponyfoo.com/s/pes-math-axel]. One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of +left+, +right+, and the result of +left op right+ is, thus, necessary to verify that we can indeed trust the result.
+
+In the following example both operands are within bounds, but the result is incorrect.
+
+[source,javascript]
+----
+Number.isSafeInteger(9007199254740000)
+// <- true
+Number.isSafeInteger(993)
+// <- true
+Number.isSafeInteger(9007199254740000 + 993)
+// <- false
+9007199254740000 + 993
+// <- 9007199254740992, should be 9007199254740993
+----
+
+Certain operations and numbers, such as the following code snippet, may return correct results even when operands are out of bounds. The fact that correct results can't be guaranteed, however, means that these operations can't be trusted.
+
+[source,javascript]
+----
+9007199254740000 + 994
+// <- 9007199254740994
+----
+
+In the next example, one of the operands is out of bounds, and thus we can't trust the result to be accurate.
+
+[source,javascript]
+----
+Number.isSafeInteger(9007199254740993)
+// <- false
+Number.isSafeInteger(990)
+// <- true
+Number.isSafeInteger(9007199254740993 + 990)
+// <- false
+9007199254740993 + 990
+// <-  9007199254741982, should be 9007199254741983
+----
+
+A subtraction in our last example would produce a result that is within bounds, but that result would also be inaccurate.
+
+[source,javascript]
+----
+Number.isSafeInteger(9007199254740993)
+// <- false
+Number.isSafeInteger(990)
+// <- true
+Number.isSafeInteger(9007199254740993 - 990)
+// <- true
+9007199254740993 - 990
+// <-  9007199254740002, should be 9007199254740003
+----
+
+If both operands are out of bounds, the output could end up in the safe space, even though the result is incorrect.
+
+[source,javascript]
+----
+Number.isSafeInteger(9007199254740995)
+// <- false
+Number.isSafeInteger(9007199254740993)
+// <- false
+Number.isSafeInteger(9007199254740995 - 9007199254740993)
+// <- true
+9007199254740995 - 9007199254740993
+// <- 4, should be 2
+----
+
+We can conclude that the only safe way to assert whether an operation produces correct output is with a utility function such as the one below. If we can't ascertain that the operation and both operands are within bounds, then the result may be inaccurate, and that's a problem. It's best to +throw+ in those situations and have a way to error-correct, but that's specific to your programs. The important part is to actually catch these kinds of difficult bugs to deal with.
+
+[source,javascript]
+----
+function safeOp (result, ...operands) {
+  const values = [result, ...operands]
+  if (!values.every(Number.isSafeInteger)) {
+    throw new RangeError('Operation cannot be trusted!')
   }
+  return result
 }
-const target = {}
-const proxy = new Proxy(target, handler)
-proxy.extraCheese = false
-// <- TypeError: 'defineProperty' on proxy: trap returned false for property 'extraCheese'
 ----
 
-If we go back to the prefixed properties use case, we could add a +defineProperty+ trap to prevent the creation of private properties through the proxy. In the following example we will +throw+ on attempts to define a property in the private prefixed space by reusing the +invariant+ function.
+You could use +safeOp+ to ensure all operands, including the +result+ are safely within bounds.
 
 [source,javascript]
 ----
-const handler = {
-  defineProperty (target, key, descriptor) {
-    invariant(key, 'define')
-    return Reflect.defineProperty(target, key, descriptor)
-  }
-}
-function invariant (key, action) {
-  if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
-  }
-}
+safeOp(9007199254740000 + 993, 9007199254740000, 993)
+// <- RangeError: Operation cannot be trusted!
+safeOp(9007199254740993 + 990, 9007199254740993, 990)
+// <- RangeError: Operation cannot be trusted!
+safeOp(9007199254740993 - 990, 9007199254740993, 990)
+// <- RangeError: Operation cannot be trusted!
+safeOp(9007199254740993 - 9007199254740995, 9007199254740993, 9007199254740995)
+// <- RangeError: Operation cannot be trusted!
+safeOp(1 + 2, 1, 2)
+// <- 3
 ----
 
-Let's try it out on a +target+ object. We'll attempt to declare a property with and without the prefix. Setting a property in the private property space at the +proxy+ level will now throw an error.
+That's all there is when it comes to +Number+, but we're not done with arithmetics-related improvements quite yet. Let's turn our attention to the +Math+ built-in.
+
+=== 8.2 Math
+
+ES6 introduces heaps of new static methods to the +Math+ built-in. Some of them were specifically engineered towards making it easier to compile C into JavaScript, and you'll seldom need them for day-to-day JavaScript application development. Others are complements to the existing rounding, exponentiation, and trigonometry API surface.
+
+Let's get right to it.
+
+==== 8.2.1 +Math.sign+
+
+Many languages have a mathematical +sign+ method that returns a vector (+-1+, +0+, or +1+) representation for the sign of the provided input. JavaScript's +Math.sign+ method does exactly that. However, the JavaScript flavor of this method has two more possible return values: +-0+, and +NaN+. Check out the examples in the following code snippet.
 
 [source,javascript]
 ----
-const target = {}
-const proxy = new Proxy(target, handler)
-proxy.topping = 'cheese'
-proxy._secretIngredient = 'salsa'
-// <- Error: Invalid attempt to define private "_secretIngredient" property
+Math.sign(1); // <- 1
+Math.sign(0); // <- 0
+Math.sign(-0); // <- -0
+Math.sign(-30); // <- -1
+Math.sign(NaN); // <- NaN
+Math.sign(`one`); // <- NaN, because Number(`one`) is NaN
+Math.sign(`0`); // <- 0, because Number(`0`) is 0
+Math.sign(`7`); // <- 1, because Number(`7`) is 7
 ----
 
-The +proxy+ object is safely hiding +_secret+ properties behind a trap that guards them from definition through either +proxy[key] = value+ or +Object.defineProperty(proxy, key, { value })+. If we factor in the previous traps we saw, we could prevent +_secret+ properties from being read, written, queried, and created.
+Note how +Math.sign+ casts its input into numeric values? While methods introduced to the +Number+ built-in don't cast their input via +Number(value)+, most of the methods added to +Math+ share this trait, as we shall see.
 
-There's one more trap that can help conceal +_secret+ properties.
+==== 8.2.2 +Math.trunc+
 
-==== 7.3.4 +ownKeys+ Trap
-
-The +handler.ownKeys+ method may be used to return an +Array+ of properties that will be used as a result for +Reflect.ownKeys()+. It should include all properties of `target`: enumerable, non-enumerable, and symbols as well. A default implementation, as always, could pass throught to the reflection method on the proxied +target+ object.
+We already had +Math.floor+ and +Math.ceil+ in JavaScript, with which we can round a number down or up, respectively. Now we also have +Math.trunc+ as an alternative, which discards the decimal part without any rounding. Here, too, the input is coerced into a numeric value through +Number(value)+.
 
 [source,javascript]
 ----
-const handler = {
-  ownKeys (target) {
-    return Reflect.ownKeys(target)
-  }
-}
+Math.trunc(12.34567); // <- 12
+Math.trunc(-13.58); // <- -13
+Math.trunc(-0.1234); // <- -0
+Math.trunc(NaN); // <- NaN
+Math.trunc(`one`); // <- NaN, because Number(`one`) is NaN
+Math.trunc(`123.456`); // <- 123, because Number(`123.456`) is 123.456
 ----
 
-Interception wouldn't affect the output of +Object.keys+ in this case, since we're simply passing through to the default implementation.
+Creating a simple polyfill for +Math.trunc+ would involve checking whether the value is greater than zero and applying one of +Math.floor+ or +Math.ceil+, as shown in the following code snippet.
 
 [source,javascript]
 ----
-const target = {
-  [Symbol('id')]: 'ba3dfcc0',
-  _secret: 'sauce',
-  _toppingCount: 3,
-  toppings: ['cheese', 'tomato', 'bacon']
-}
-const proxy = new Proxy(target, handler)
-for (let key of Object.keys(proxy)) {
-  console.log(key)
-  // <- '_secret'
-  // <- '_toppingCount'
-  // <- 'toppings'
-}
+Math.trunc = value => value > 0 ? Math.floor(value) : Math.ceil(value)
 ----
 
-Do note that the +ownKeys+ interceptor is used during all of the following operations.
+==== 8.2.3 +Math.cbrt+
 
-- +Reflect.ownKeys()+ return every own key on the object
-- +Object.getOwnPropertyNames()+ returns only non-symbol properties
-- +Object.getOwnPropertySymbols()+ returns only symbol properties
-- +Object.keys()+ returns only non-symbol enumerable properties
-- +for..in+ returns only non-symbol enumerable properties
-
-In the use case where we want to shut off access to a prefixed property space, we could take the output of +Reflect.ownKeys(target)+ and filter off of that. That'd be the same approach that methods such as +Object.getOwnPropertySymbols+ follow internally.
-
-In the next example, we're careful to ensure that any keys that aren't strings, namely +Symbol+ property keys, always return true. Then, we filter out string keys that begin with +'_'+.
+The +Math.cbrt+ method is short for "cubic root", similarly to how +Math.sqrt+ is short for "square root". The following snippet has a few usage examples.
 
 [source,javascript]
 ----
-const handler = {
-  ownKeys (target) {
-    return Reflect.ownKeys(target).filter(key => {
-      const isStringKey = typeof key === 'string'
-      if (isStringKey) {
-        return !key.startsWith('_')
-      }
-      return true
-    })
-  }
-}
+Math.cbrt(-1); // <- -1
+Math.cbrt(3); // <- 1.4422495703074083
+Math.cbrt(8); // <- 2
+Math.cbrt(27); // <- 3
 ----
 
-If we now used the +handler+ in the snippet above to pull the object keys, we'll only find the properties in the public, non-prefixed space. Note how the +Symbol+ isn't being returned either. That's because +Object.keys+ filters out +Symbol+ property keys before returning its result.
+Note that this method also coerces non-numerical values into numbers.
 
 [source,javascript]
 ----
-const target = {
-  [Symbol('id')]: 'ba3dfcc0',
-  _secret: 'sauce',
-  _toppingCount: 3,
-  toppings: ['cheese', 'tomato', 'bacon']
-}
-const proxy = new Proxy(target, handler)
-for (let key of Object.keys(proxy)) {
-  console.log(key)
-  // <- 'toppings'
-}
+Math.cbrt(`8`); // <- 2, because Number(`8`) is 8
+Math.cbrt(`one`); // <- NaN, because Number(`one`) is NaN
 ----
 
-Symbol iteration wouldn't be affected by our +handler+ because Symbol keys have a type of +'symbol'+, which would cause our +.filter+ function to return true.
+Let's move on.
+
+==== 8.2.4 +Math.expm1+
+
+This operation is the result of computing +e+ to the +value+ minus +1+. In JavaScript, the +e+ constant is defined as +Math.E+. The function in the following snippet is a rough equivalent of +Math.expm1+.
 
 [source,javascript]
 ----
-const target = {
-  [Symbol('id')]: 'ba3dfcc0',
-  _secret: 'sauce',
-  _toppingCount: 3,
-  toppings: ['cheese', 'tomato', 'bacon']
-}
-const proxy = new Proxy(target, handler)
-for (let key of Object.getOwnPropertySymbols(proxy)) {
-  console.log(key)
-  // <- Symbol(id)
+function expm1 (value) {
+  return Math.pow(Math.E, value) - 1
 }
 ----
 
-We were able to hide properties prefixed with +_+ from key enumeration while leaving symbols and other properties unaffected. What's more, there's no need to repeat ourselves in several trap handlers: a single +ownKeys+ trap took care of all different enumeration methods. The only caveat is that we need to be careful about handling +Symbol+ property keys.
-
-=== 7.4 Advanced Proxy Traps
-
-For the most part, the traps that we discussed so far have to do with property access and manipulation. Up next is the last trap we'll cover that's related to property access. Every other trap in this section has to do with the object we are proxying itself, instead of its properties.
-
-==== 7.4.1 +getOwnPropertyDescriptor+ Trap
-
-The +getOwnPropertyDescriptor+ trap is triggered when querying an object for the property descriptor for some +key+. It should return a property descriptor or +undefined+ when the property doesn't exist. There is also the option of throwing an exception, aborting the operation entirely.
-
-If we go back to the canonical private property space example, we could implement a trap, such as the one in the next code snippet, to prevent consumers from learning about property descriptors of private properties.
+The <code>e<sup>value</sup></code> operation can be expressed as +Math.exp(value)+ as well.
 
 [source,javascript]
 ----
-const handler = {
-  getOwnPropertyDescriptor (target, key) {
-    invariant(key, 'get property descriptor for')
-    return Reflect.getOwnPropertyDescriptor(target, key)
-  }
+function expm1 (value) {
+  return Math.exp(value) - 1
 }
-function invariant (key, action) {
-  if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
-  }
-}
-const target = {}
-const proxy = new Proxy(target, handler)
-Reflect.getOwnPropertyDescriptor(proxy, '_secret')
-// <- Error: Invalid attempt to get property descriptor for private "_secret" property
 ----
 
-One problem with this approach might be that you're effectively telling external consumers that they're unauthorized to access prefixed properties. It might be best to conceal them entirely by returning +undefined+. That way, private properties will behave no differently than properties that are truly absent from the +target+ object. The following example shows how +Object.getOwnPropertyDescriptor+ returns +undefined+ for an inexistent +dressing+ property, and how it does the same for a +_secret+ property. Existing properties that aren't in the private property space produce their property descriptors as usual.
+Note that +Math.expm1+ has higher precision than merely doing +Math.exp(value) - 1+, and should be the preferred alternative.
 
 [source,javascript]
 ----
-const handler = {
-  getOwnPropertyDescriptor (target, key) {
-    if (key.startsWith('_')) {
-      return
-    }
-    return Reflect.getOwnPropertyDescriptor(target, key)
-  }
-}
-const target = {
-  _secret: 'sauce',
-  topping: 'mozzarella'
-}
-const proxy = new Proxy(target, handler)
-console.log(Object.getOwnPropertyDescriptor(proxy, 'dressing'))
-// <- undefined
-console.log(Object.getOwnPropertyDescriptor(proxy, '_secret'))
-// <- undefined
-console.log(Object.getOwnPropertyDescriptor(proxy, 'topping'))
-// <- { value: 'mozzarella', writable: true, enumerable: true, configurable: true }
+expm1(1e-20)
+// <- 0
+Math.expm1(1e-20)
+// <- 1e-20
+expm1(1e-10)
+// <- 1.000000082740371e-10
+Math.expm1(1e-10)
+// <- 1.00000000005e-10
 ----
 
-When you're trying to hide things, it's best to have them try and behave as if they fell in some other category than the category they're actually in, thus concealing their behavior and passing it off for something else. Throwing, however, sends the wrong message when we want to conceal something: why does a property throw instead of return +undefined+? It must exist but be inaccessible. This is not unlike situations in HTTP API design where we might prefer to return "404 Not Found" responses for sensitive resources, such as an administration back end, when the user is unauthorized to access them, instead of the technically correct "401 Unauthorized" status code.
+The inverse function of +Math.expm1+ is +Math.log1p+.
 
-When debugging concerns outweight security concerns, you should at least consider the +throw+ statement. In any case, it's important to understand your use case in order to figure out the optimal and least surprising behavior for a given component.
+==== 8.2.5 +Math.log1p+
 
-==== 7.4.2 +apply+ Trap
-
-The +apply+ trap is quite interesting, it's specifically tailored to work with functions. When the proxied +target+ function is invoked, the +apply+ trap is triggered. All of the statements in the following code sample would go through the +apply+ trap in your proxy +handler+ object.
+This is the natural logarithm of +value+ plus +1+, -- <code><em>ln</em>(value + 1)</code> -- and the inverse function of +Math.expm1+. The base +e+ logarithm of a number can be expressed as +Math.log+ in JavaScript.
 
 [source,javascript]
 ----
-proxy('cats', 'dogs')
-proxy(...['cats', 'dogs'])
-proxy.call(null, 'cats', 'dogs')
-proxy.apply(null, ['cats', 'dogs'])
-Reflect.apply(proxy, null, ['cat', 'dogs'])
+function log1p (value) {
+  return Math.log(value + 1)
+}
 ----
 
-The +apply+ trap receives three arguments.
-
-- +target+ is the function being proxied
-- +ctx+ is the context passed as +this+ to +target+ when applying a call
-- +args+ is the arguments passed to +target+ when applying the call
-
-The default implementation that doesn't alter the outcome would return the results of calling +Reflect.apply+.
+Just like with +Math.expm1+, +Math.log1p+ method is more precise than executing the +Math.log(value + 1)+ operation by hand.
 
 [source,javascript]
 ----
-const handler = {
-  apply (target, ctx, args) {
-    return Reflect.apply(target, ctx, args)
-  }
-}
+log1p(1.00000000005e-10)
+// <- 1.000000082690371e-10
+Math.log1p(1.00000000005e-10)
+// <- 1e-10, exactly the inverse of Math.expm1(1e-10)
 ----
 
-Besides being able to log all parameters of every function call for +proxy+, this trap could also be used to add extra parameters or to modify the results of a function call. All of these examples would work without changing the underlying +target+ function, which makes the trap reusable across any functions that need the extra functionality.
+==== 8.2.6 +Math.log10+
 
-The example below proxies a +sum+ function through a +twice+ trap handler that doubles the results of +sum+ without affecting the code around it other than using the +proxy+ instead of the +sum+ function directly.
+Base ten logarithm of a number -- <code><em>log</em><sub>10</sub>(value)</code>.
 
 [source,javascript]
 ----
-const twice = {
-  apply (target, ctx, args) {
-    return Reflect.apply(target, ctx, args) * 2
-  }
+Math.log10(1000)
+// <- 3
+----
+
+You could polyfill +Math.log10+ using the +Math.LN10+ constant.
+
+[source,javascript]
+----
+function log10 (value) {
+  return Math.log(x) / Math.LN10
 }
-function sum (a, b) {
-  return a + b
+----
+
+And then there's +Math.log2+.
+
+==== 8.2.7 +Math.log2+
+
+Base two logarithm of a number -- <code><em>log</em><sub>2</sub>(value)</code>.
+
+[source,javascript]
+----
+Math.log2(1024)
+// <- 10
+----
+
+You could polyfill +Math.log2+ using the +Math.LN2+ constant.
+
+[source,javascript]
+----
+function log2 (value) {
+  return Math.log(x) / Math.LN2
 }
-const proxy = new Proxy(sum, twice)
-console.log(proxy(1, 2))
+----
+
+Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example. Keep in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://ponyfoo.com/s/pes-bitwise-shift].
+
+[source,javascript]
+----
+log2(1 << 29)
+// <- 29.000000000000004
+Math.log2(1 << 29)
+// <- 29
+----
+
+==== 8.2.8 Trigonometric Functions
+
+The +Math+ object is getting trigonometric functions in ES6.
+
+- +Math.sinh(value)+ returns the hyperbolic sine of +value+
+- +Math.cosh(value)+ returns the hyperbolic cosine of +value+
+- +Math.tanh(value)+ returns the hyperbolic tangent of +value+
+- +Math.asinh(value)+ returns the hyperbolic arc-sine of +value+
+- +Math.acosh(value)+ returns the hyperbolic arc-cosine of +value+
+- +Math.atanh(value)+ returns the hyperbolic arc-tangent of +value+
+
+==== 8.2.9 +Math.hypot+
+
+Using +Math.hypot+ returns the square root of the sum of the squares of every provided argument.
+
+[source,javascript]
+----
+Math.hypot(1, 2, 3)
+// <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
+----
+
+We could polyfill +Math.hypot+ by performing these operations manually. We can use +Math.sqrt+ to compute the square root and +Array#reduce+footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://ponyfoo.com/s/pes-native-arrays], combined with the spread operator, to sum the squares.
+
+[source,javascript]
+----
+function hypot (...values) {
+  return Math.sqrt(values.reduce((sum, value) => sum + value * value, 0))
+}
+----
+
+Our handmade function is, surprisingly, more precise than the native one for this particular use case. In the next code sample, we see the hand-rolled +hypot+ function offers precision with one more decimal place.
+
+[source,javascript]
+----
+Math.hypot(1, 2, 3)
+// <- 3.741657386773941
+hypot(1, 2, 3)
+// <- 3.7416573867739413
+----
+
+==== 8.2.10 Bitwise Computation Helpers
+
+At the beginning of section 8.2, we talked about how some of the new +Math+ methods are specifically engineered towards making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
+
+===== +Math.clz32+
+
+The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number". Keeping into account that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://ponyfoo.com/s/pes-bitwise-shift], let's take a look at the next code snippet describing sample input and output for +Math.clz32+.
+
+[source,javascript]
+----
+Math.clz32(0); // <- 32
+Math.clz32(1); // <- 31
+Math.clz32(1 << 1); // <- 30
+Math.clz32(1 << 2); // <- 29
+Math.clz32(1 << 29); // <- 2
+Math.clz32(1 << 31); // <- 0
+----
+
+===== +Math.imul+
+
+Returns the result of a C-like 32-bit multiplication.
+
+===== +Math.fround+
+
+Rounds +value+ to the nearest 32-bit float representation of a number.
+
+=== 8.3 Strings and Unicode
+
+You may recall template literals from section 3.5, and how those can be used to mix strings and variables, or any valid JavaScript expression, to produce string output.
+
+[source,javascript]
+----
+function greet (name) {
+  return `Hello, ${ name }!`
+}
+greet(`Gandalf`)
+// <- `Hello, Gandalf!`
+----
+
+Strings are getting a number of new methods in ES6, besides the template literal syntax. These can be categorized as string manipulation methods and unicode related methods. Let's start with the former.
+
+==== 8.3.1 +String#startsWith+
+
+Prior to ES6, whenever we wanted to check if a string begins with a certain other string, we'd use the +String#indexOf+ method, as shown in the following code snippet. A result of +0+ means that the string starts with the provided value.
+
+[source,javascript]
+----
+`hello gary`.indexOf(`gary`)
+// <- 6
+`hello gary`.indexOf(`hello`)
+// <- 0
+`hello gary`.indexOf(`stephan`)
+// <- -1
+----
+
+If you wanted to check if a string started with another one, then, you'd compare them with +String#indexOf+ and check whether the lookup value is found at the beginning of the string: the +0+ index.
+
+[source,javascript]
+----
+`hello gary`.indexOf(`gary`) === 0
+// <- false
+`hello gary`.indexOf(`hello`) === 0
+// <- true
+`hello gary`.indexOf(`stephan`) === 0
+// <- false
+----
+
+You can now use the +String#startsWith+ method instead, avoiding the unnecessary complexity of checking whether an index matches +0+.
+
+[source,javascript]
+----
+`hello gary`.startsWith(`gary`)
+// <- false
+`hello gary`.startsWith(`hello`)
+// <- true
+`hello gary`.startsWith(`stephan`)
+// <- false
+----
+
+In order to figure out whether a string contains a value starting at an specific index, using +String#indexOf+, we would have to grab a slice of that string first.
+
+[source,javascript]
+----
+`hello gary`.slice(6).indexOf(`gary`) === 0
+// <- true
+----
+
+We can't simply check whether the index is +6+, because that this would give you false negatives when the queried value is found before reaching that index of +6+. The following example shows how, even when the query +`ell`+ string is indeed at index +6+, merely comparing the +String#indexOf+ result with +6+ is insufficient to attain a correct result.
+
+[source,javascript]
+----
+`hello ell`.indexOf(`ell`) === 6
+// <- false, because the result was 1
+----
+
+We could use the +startIndex+ parameter for +indexOf+ to get around this problem without relying on +String#slice+. Note that we're still comparing against +6+ in this case, because the string wasn't sliced up in a setup operation.
+
+[source,javascript]
+----
+`hello ell`.indexOf(`ell`, 6) === 6
+// <- true
+----
+
+Instead of keeping all of these string searching implementation details in your head and writing code that's most concerned with how to search, as opposed to what is being searched, we could use +String#startsWith+ passing in the optional +startIndex+ parameter as well.
+
+[source,javascript]
+----
+`hello ell`.startsWith(`ell`, 6)
+// <- true
+----
+
+==== 8.3.2 +String#endsWith+
+
+This method mirrors +String#startsWith+ in the same way that +String#lastIndexOf+ mirrors +String#indexOf+. It tells us whether a string ends with another string.
+
+[source,javascript]
+----
+`hello gary`.endsWith(`gary`)
+// <- true
+`hello gary`.endsWith(`hello`)
+// <- false
+----
+
+As the opposite of +String#startsWith+, there's a position index that indicates where the lookup should end, instead of where it should start. It defaults to the length of the string.
+
+[source,javascript]
+----
+`hello gary`.endsWith(`gary`, 10)
+// <- true
+`hello gary`.endsWith(`gary`, 9)
+// <- false, it ends with `gar` in this case
+`hello gary`.endsWith(`pony`, 4)
+// <- true
+----
+
++String#includes+ is one last method that can simplify a specific use case for +String#indexOf+.
+
+==== 8.3.3 +String#includes+
+
+You can use +String#includes+ to figure out whether a string contains another one, as shown in the following piece of code.
+
+[source,javascript]
+----
+`hello gary`.includes(`hell`)
+// <- true
+`hello gary`.includes(`ga`)
+// <- true
+`hello gary`.includes(`rye`)
+// <- false
+----
+
+This is equivalent to the ES5 use case of +String#indexOf+ where we'd test the result against +-1+, checking to see whether the search string was anywhere to be found, as demonstrated in the next code snippet.
+
+[source,javascript]
+----
+`hello gary`.indexOf(`ga`) !== -1
+// <- true
+`hello gary`.indexOf(`rye`) !== -1
+// <- false
+----
+
+You can also provide +String#includes+ with a start index where searching should begin.
+
+[source,javascript]
+----
+`hello gary`.includes(`ga`, 4)
+// <- true
+`hello gary`.includes(`ga`, 7)
+// <- false
+----
+
+Let's move onto something that's not just an +String#indexOf+ alternative.
+
+==== 8.3.4 +String#repeat+
+
+This handy method allows you to repeat a string +count+ times.
+
+[source,javascript]
+----
+`ha`.repeat(1)
+// <- `ha`
+`ha`.repeat(2)
+// <- `haha`
+`ha`.repeat(5)
+// <- `hahahahaha`
+`ha`.repeat(0)
+// <- ``
+----
+
+The provided +count+ should be a positive and finite number.
+
+[source,javascript]
+----
+`ha`.repeat(Infinity)
+// <- RangeError
+`ha`.repeat(-1)
+// <- RangeError
+----
+
+Decimal values are floored to the nearest integer.
+
+[source,javascript]
+----
+`ha`.repeat(3.9)
+// <- `hahaha`, count was floored to 3
+----
+
+Using +NaN+ is interpreted as a +count+ of +0+.
+
+[source,javascript]
+----
+`ha`.repeat(NaN)
+// <- ``
+----
+
+Non-numeric values are coerced into numbers.
+
+[source,javascript]
+----
+`ha`.repeat(`ha`)
+// <- ``, because Number(`ha`) is NaN
+`ha`.repeat(`3`)
+// <- `hahaha`, because Number(`3`) is 3
+----
+
+Values in the +(-1, 0)+ range are rounded to +-0+ becase +count+ is passed through +ToInteger+], as documented by the specificationfootnote:[+String#repeat+ in ECMAScript 6 Specification, section 21.1.3.13: https://ponyfoo.com/s/pes-array-repeat]. That step in the specification dictates that +count+ be casted with a formula like the one in the next code snippet.
+
+[source,javascript]
+----
+function ToInteger (number) {
+  return Math.floor(Math.abs(number)) * Math.sign(number)
+}
+----
+
+The +ToInteger+ function translates any values in the +(-1, 0)+ range into +-0+. As a result, when passed to +String#repeat+, numbers in the +(-1, 0)+ range will be treated as zero, while numbers in the +[-1, -Infinity)+ range will result an exception, as we learned earlier.
+
+[source,javascript]
+----
+`na`.repeat(-0.1)
+// <- ``, because count was rounded to -0
+`na`.repeat(-0.9)
+// <- ``, because count was rounded to -0
+`na`.repeat(-0.9999)
+// <- ``, because count was rounded to -0
+`na`.repeat(-1)
+// <- Uncaught RangeError: Invalid count value
+----
+
+An example use case for +String#repeat+ may be the typical padding function. The +leftPad+ function shown below takes a multiline string and pads every line with as many +spaces+ as desired, using a default of two spaces.
+
+[source,javascript]
+----
+function leftPad (text, spaces = 2) {
+  return text
+    .split(`\n`)
+    .map(line => ` `.repeat(spaces) + line)
+    .join(`\n`)
+}
+
+leftPad(`a
+b
+c`, 2)
+// <- `  a\n  b\n  c`
+----
+
+Let's switch protocols and learn about Unicode.
+
+==== 8.3.5 Unicode
+
+JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://ponyfoo.com/s/pes-unicode-encodings]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
+
+For code points beyond +U+FFFF+, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji +`🐎`+ code point is represented with the +`\ud83d\udc0e`+ contiguous code units. In ES6 notation you can also represent code points using the +`\u{1f40e}`+ notation (that example is also the horse emoji).
+
+Note that the internal representation hasn't changed, so there's still two code units behind that single code point. In fact, +`\u{1f40e}`.length+ evaluates to +2+, one for each code unit.
+
+The +`\ud83d\udc0e\ud83d\udc71\u2764`+ string, found in the next code snippet, evaluates to a few emoji.
+
+[source,javascript]
+----
+`\ud83d\udc0e\ud83d\udc71\u2764`
+// <- `🐎👱❤`
+----
+
+While that string consists of 5 code units, we know that the length should really be 3 -- as there's only 3 emoji.
+
+[source,javascript]
+----
+`\ud83d\udc0e\ud83d\udc71\u2764`.length
+// <- 5
+`🐎👱❤`.length
+// <- 5, still
+----
+
+Counting code points before ES6 was tricky, as the language didn't make an effort to help in the Unicode department. Take for instance +Object.keys+, as seen in the following code snippet. It returns five keys for our 3-emoji string, because those 3 code points use 5 code units in total.
+
+[source,javascript]
+----
+Object.keys(`🐎👱❤`)
+// <- [`0`, `1`, `2`, `3`, `4`]
+----
+
+If we now consider a +for+ loop, we can observe more clearly how this is a problem. In the following example, we wanted to exfill each individual emoji from the +text+ string, but we get each code point instead.
+
+[source,javascript]
+----
+const text = '🐎👱❤'
+for (let i = 0; i < text.length; i++) {
+  console.log(text[i])
+  // <- '\ud83d'
+  // <- '\udc0e'
+  // <- '\ud83d'
+  // <- '\udc71'
+  // <- '\u2764'
+}
+----
+
+Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the string iterator to go over code points, even when those code points are made of surrogate pairs.
+
+==== 8.3.6 +String.prototype[Symbol.iterator]+
+
+Given the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
+
+[source,javascript]
+----
+for (let codePoint of `🐎👱❤`) {
+  console.log(codePoint)
+  // <- '🐎'
+  // <- '👱'
+  // <- '❤'
+}
+----
+
+Measuring the length of a string in terms of code points, as we saw earlier, is impossible with +String#length+, because it counts code units instead. We can, however, use an iterator to split the string into its code points, like we did in the +for..of+ example.
+
+We could use the spread operator, which relies on the iterator protocol, to split an string into an array made up of its conforming code points and then pull that array's +length+, getting the correct code point count, as seen next.
+
+[source,javascript]
+----
+[...`🐎👱❤`].length
+// <- 3
+----
+
+Keep in mind that splitting strings into code points isn't enough if you want to be 100% precise about string length. Take for instance the combining overline Unicode code unit, represented with +\u0305+. On its own, this code unit is just an overline, as shown below.
+
+[source,javascript]
+----
+`\u0305`
+// <- ` ̅`
+----
+
+When preceded by another code unit, however, they are combined together into a single glyph.
+
+[source,javascript]
+----
+function overlined (text) {
+  return `${ text }\u0305`
+}
+
+overlined(`o`)
+// <- `o̅`
+`hello world`.split(``).map(overlined).join(``)
+// <- `h̅e̅l̅l̅o̅ ̅w̅o̅r̅l̅d̅`
+----
+
+Attempts to näively figure out the actual length by counting code points prove insufficient, just like when using +String#length+ to count code points, as shown next.
+
+[source,javascript]
+----
+`o̅`.length
+// <- 2
+[...`o̅`].length
+// <- 2, should be 1
+[...`h̅e̅l̅l̅o̅ ̅w̅o̅r̅l̅d̅`].length
+// <- 22, should be 11
+[...`h̅e̅l̅l̅o̅ world`].length
+// <- 16, should be 11
+----
+
+As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iteratorfootnote:[See also "JavaScript has a Unicode problem", https://ponyfoo.com/s/pes-unicode-mathias]. In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length. Forunately, these kinds of glyphs are used infrequently.
+
+Let's look at more Unicode-related methods introduced in ES6.
+
+==== 8.3.7 +String#codePointAt+
+
+We can use +String#codePointAt+ to get the base-10 numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo +`🐎👱❤`+ string.
+
+[source,javascript]
+----
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+text.codePointAt(0)
+// <- 128014
+text.codePointAt(2)
+// <- 128113
+text.codePointAt(4)
+// <- 10084
+----
+
+Identifying the indices that need to be provided to +String#codePointAt+ may prove cumbersome, which is why you should instead loop through a string iterator that can identify them on your behalf. You can then call +.codePointAt(0)+ for each code point in the sequence, and +0+ will always be the correct start index.
+
+[source,javascript]
+----
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+for (let codePoint of text) {
+  console.log(codePoint.codePointAt(0))
+  // <- 128014
+  // <- 128113
+  // <- 10084
+}
+----
+
+We could also reduce our example to a single line of code by using a combination of the spread operator and +Array#map+.
+
+[source,javascript]
+----
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+[...text].map(cp => cp.codePointAt(0))
+// <- [128014, 128113, 10084]
+----
+
+You can take the base-16 representation of those base-10 code points, and use them to create a string with the new unicode code point escape syntax of +\u{codePoint}+. This syntax allows you to represent unicode code points that are beyond the BMP (or basic multilingual plane). That is, code points outside the +[U+0000, U+FFFF]+ range that are typically represented using the +\u1234+ syntax.
+
+Let's start by updating our example to print the hexadecimal version of our code points.
+
+[source,javascript]
+----
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+[...text].map(cp => cp.codePointAt(0).toString(16))
+// <- [`1f40e`, `1f471`, `2764`]
+----
+
+We could wrap those base-16 values in +`\u{codePoint}`+ and voilá: you'd get the emoji values once again.
+
+[source,javascript]
+----
+`\u{1f40e}`
+// <- `🐎`
+`\u{1f471}`
+// <- `👱`
+`\u{2764}`
+// <- `❤`
+----
+
+==== 8.3.8 +String.fromCodePoint+
+
+This method takes in a number and returns a code point. Note how I can use the +0x+ prefix with the terse base-16 code points we got from +String#codePointAt+ moments ago.
+
+[source,javascript]
+----
+String.fromCodePoint(0x1f40e)
+// <- `🐎`
+String.fromCodePoint(0x1f471)
+// <- `👱`
+String.fromCodePoint(0x2764)
+// <- `❤`
+----
+
+You can just as well use plain base-10 literals and achieve the same results.
+
+[source,javascript]
+----
+String.fromCodePoint(128014)
+// <- `🐎`
+String.fromCodePoint(128113)
+// <- `👱`
+String.fromCodePoint(10084)
+// <- `❤`
+----
+
+You can pass in as many code points as you'd like to +String.fromCodePoint+.
+
+[source,javascript]
+----
+String.fromCodePoint(128014, 128113, 10084)
+// <- '🐎👱❤'
+----
+
+As an exercise in futility, we could map a string to their numeric representation of code points, and back to the code points themselves.
+
+[source,javascript]
+----
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+[...text]
+  .map(cp => cp.codePointAt(0))
+  .map(cp => String.fromCodePoint(cp))
+  .join(``)
+// <- `🐎👱❤`
+----
+
+Reversing an string has potential to cause issues as well.
+
+==== 8.3.9 Unicode-Aware String Reversal
+
+Consider the following piece of code.
+
+[source,javascript]
+----
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+text.split(``).map(cp => cp.codePointAt(0))
+// <- [55357, 56334, 55357, 56433, 10084]
+text.split(``).reverse().map(cp => cp.codePointAt(0))
+// <- [10084, 56433, 128014, 55357]
+----
+
+The problem is that we're reversing individual code units, while we'd have to reverse code points for a correct solution. If, instead, we were to use the spread operator to split the string by its code points, and then reversed that, the code points would be preserved and the string would be properly reversed.
+
+[source,javascript]
+----
+const text = `\ud83d\udc0e\ud83d\udc71\u2764`
+[...text].reverse().join(``)
+// <- '❤👱🐎'
+----
+
+This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clustersfootnote:[See also "JavaScript has a Unicode problem", https://ponyfoo.com/s/pes-unicode-mathias].
+
+[source,javascript]
+----
+[...`hello\u0305`].reverse().join(``)
+// <- ` ̅olleh`
+----
+
+The last Unicode-related method we'll be addressing is +.normalize+.
+
+==== 8.3.10 +String#normalize+
+
+There's different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
+
+[source,javascript]
+----
+`mañana` === `mañana`
+// <- false
+----
+
+What's going on here? We have an +ñ+ on the left version, while the version on the right has a combining tilde character + ̃+ and an +n+. The two are visually identical, but if we take a look at the code points, we'll notice they're different.
+
+[source,javascript]
+----
+[...`mañana`].map(cp => cp.codePointAt(0).toString(16))
+// <- [`6d`, `61`, `f1`, `61`, `6e`, `61`]
+[...`mañana`].map(cp => cp.codePointAt(0).toString(16))
+// <- [`6d`, `61`, `6e`, `303`, `61`, `6e`, `61`]
+----
+
+Just like with the +`hello̅`+ examples, the second string has a length of +7+, even though visually it is also +6+ glyphs long.
+
+[source,javascript]
+----
+[...`mañana`].length
+// <- 6
+[...`mañana`].length
+// <- 7
+----
+
+If we normalize the second version, using +String#normalize+, we'll get back the same code points we had in the first version.
+
+[source,javascript]
+----
+const normalized = `mañana`.normalize()
+[...normalized].map(cp => cp.codePointAt(0).toString(16))
+// <- [`6d`, `61`, `f1`, `61`, `6e`, `61`]
+normalized.length
 // <- 6
 ----
 
-Moving onto another use case, suppose we want to preserve the context for +this+ across function calls. In the following example we have a +logger+ object with a +.get+ method that returns the +logger+ object itself.
+Note that we should use +String#normalize+ on both strings when comparing them if we want to test for equality.
 
 [source,javascript]
 ----
-const logger = {
-  test () {
-    return this
-  }
+function compare (left, right) {
+  return left.normalize() === right.normalize()
+}
+const normal = `mañana`
+const irregular = `mañana`
+normal === irregular
+// <- false
+compare(normal, irregular)
+// <- true
+----
+
+=== 8.4 Array
+
+Over the years, libraries like Underscore and Lodash spoke loudly of missing features when it comes to arrays. As a result, ES5 brought in heaps of functional methods to arrays: +Array#filter+, +Array#map+, +Array#reduce+, +Array#reduceRight+, +Array#forEach+, +Array#some+, and +Array#every+.
+
+ES6 brings a few more methods that will help manipulate, fill, and filter arrays.
+
+==== 8.4.1 +Array.from+
+
+
+Before ES6, JavaScript developers often needed to cast +arguments+ to a function into an array.
+
+[source,javascript]
+----
+function cast () {
+  return Array.prototype.slice.call(arguments)
+}
+cast(`a`, `b`)
+// <- [`a`, `b`]
+----
+
+We've already explored more terse ways of doing this in chapter 2, when we first learned about rest and spread. You could, for instance, use the spread operator. As you no doubt remember, the spread operator leverages the iterator protocol to produce a sequence of values in arbitrary objects. The downside is that the objects we want to cast with spread must adhere to the iterator protocol by having implemeted +Symbol.iterator+. Luckily for us, +arguments+ does implement the iterator protocol in ES6.
+
+[source,javascript]
+----
+function cast () {
+  return [...arguments]
+}
+cast(`a`, `b`)
+// <- [`a`, `b`]
+----
+
+Using the function rest parameter would be better for this particular case as it wouldn't involve the +arguments+ object, nor any added logic in the function body.
+
+[source,javascript]
+----
+function cast (...params) {
+  return params
+}
+cast(`a`, `b`)
+// <- [`a`, `b`]
+----
+
+You may also want to cast +NodeList+ DOM element collections, like those returned from +document.querySelectorAll+, through the spread operator. Once again, this is made possible thanks to ES6 adding conformance to the iterator protocol for +NodeList+.
+
+[source,javascript]
+----
+[...document.querySelectorAll(`div`)]
+// <- [<div>, <div>, <div>, ...]
+----
+
+What happens when we try to cast a jQuery collection through the spread operator? If you're on a modern version of jQuery that implements the iterator protocol, spreading a jQuery object will work, otherwise you may get an exception.
+
+[source,javascript]
+----
+[...$(`div`)]
+// <- [<div>, <div>, <div>, ...]
+----
+
+The new +Array.from+ method is a bit different. It doesn't only rely on the iterator protocol to figure out how to pull values from an object. It also has support for arraylikes out the box. The following code snippet will work with any version of jQuery.
+
+[source,javascript]
+----
+Array.from($(`div`))
+// <- [<div>, <div>, <div>, ...]
+----
+
+The one thing you cannot do with either +Array.from+ nor the spread operator is to pick a start index. Suppose you wanted to pull every +<div>+ after the first one. With +Array#slice+, you could do the following.
+
+[source,javascript]
+----
+[].slice.call(document.querySelectorAll(`div`), 1)
+----
+
+Of course, there's nothing stopping you from using +Array#slice+ after casting. This is a bit easier to read than the previous example, as it keeps the slice call closer to the index at which we want to slice the array.
+
+[source,javascript]
+----
+Array.from(document.querySelectorAll(`div`)).slice(1)
+----
+
++Array.from+ has three arguments, although only the +input+ is required. To wit:
+
+- +input+ -- the arraylike or iterable object you want to cast
+- +map+ -- a mapping function that's executed on every item of +input+
+- +context+ -- the +this+ binding to use when calling +map+
+
+With +Array.from+ you cannot slice, but you can dice. The +map+ function will efficiently map the values into something else as they're being added to the array that results from calling +Array.from+.
+
+[source,javascript]
+----
+function typesOf () {
+  return Array.from(arguments, value => typeof value)
+}
+typesOf(null, [], NaN)
+// <- [`object`, `object`, `number`]
+----
+
+Do note that, for the specific case of dealing with +arguments+, you could also combine rest parameters and +Array#map+. In this case in particular, we may be better off just doing something like the snippet of code found next. It's not as verbose as the previous example. Like with the +Array#slice+ example we saw earlier, the mapping is more explicit in this case.
+
+[source,javascript]
+----
+function typesOf (...all) {
+  return all.map(value => typeof value)
+}
+typesOf(null, [], NaN)
+// <- [`object`, `object`, `number`]
+----
+
+When dealing with arraylike objects, it makes sense to use +Array.from+ if they don't implement +Symbol.iterator+.
+
+[source,javascript]
+----
+const things = {
+  0: {
+    type: `fruit`,
+    name: `Apple`,
+    amount: 3
+  },
+  1: {
+    type: `vegetable`,
+    name: `Onion`,
+    amount: 1
+  },
+  length: 2
+}
+Array.from(things)
+// <- [<div>, <div>, <div>, ...]
+Array.from(things, thing => thing.type)
+// <- [`fruit`, `vegetable`, ...]
+----
+
+==== 8.4.2 +Array.of+
+
+The +Array.of+ method is exactly like the +cast+ function we played around with earlier. Next is a code snippet that shows how +Array.of+ might be polyfilled.
+
+[source,javascript]
+----
+Array.of = (...params) => params
+----
+
+You can think about +Array.of+ as an alternative for +new Array+ that doesn't have the +new Array(length)+ overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${ count }+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
+
+[source,javascript]
+----
+new Array(); // <- []
+new Array(undefined); // <- [undefined]
+new Array(1); // <- [undefined x 1]
+new Array(3); // <- [undefined x 3]
+new Array(`3`); // <- [`3`]
+new Array(1, 2); // <- [1, 2]
+new Array(-1, -2); // <- [-1, -2]
+new Array(-1); // <- RangeError: Invalid array length
+----
+
+In contrast, +Array.of+ has more consistent behavior because it doesn't have the special +length+ case. This makes it a more desirable way of consistently creating new arrays programatically.
+
+[source,javascript]
+----
+console.log(Array.of()); // <- []
+console.log(Array.of(undefined)); // <- [undefined]
+console.log(Array.of(1)); // <- [1]
+console.log(Array.of(3)); // <- [3]
+console.log(Array.of(`3`)); // <- [`3`]
+console.log(Array.of(1, 2)); // <- [1, 2]
+console.log(Array.of(-1, -2)); // <- [-1, -2]
+console.log(Array.of(-1)); // <- [-1]
+----
+
+==== 8.4.3 +Array#copyWithin+
+
+Let's start with the signature of +Array#copyWithin+.
+
+[source,javascript]
+----
+Array.prototype.copyWithin(target, start = 0, end = this.length)
+----
+
+The +Array#copyWithin+ method copies a sequence of array elements within an array instance to the "paste position" starting at +target+. The elements to be copied are taken from the +[start, end)+ range. The +Array#copyWithin+ method returns the array instance itself.
+
+Let's lead with a simple example. Consider the +items+ array in the following code snippet.
+
+[source,javascript]
+----
+const items = [1, 2, 3, ,,,,,,,]
+// <- [1, 2, 3, undefined x 7]
+----
+
+The function call shown below takes the +items+ array and determines that it'll start "pasting" items in the sixth position. It further determines that the items to be copied will be taken starting in the second position (zero-based), until the third position (also zero-based).
+
+[source,javascript]
+----
+const items = [1, 2, 3, ,,,,,,,]
+items.copyWithin(6, 1, 3)
+// <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
+----
+
+Reasoning about +Array#copyWithin+ is hard. Let's break it down.
+
+If we consider that the items to be copied were taken from the +[start, end)+ range, then we could express that using an +Array#slice+ call. These are the items that were pasted at the +target+ position. We can use +.slice+ to grab the copy.
+
+[source,javascript]
+----
+const items = [1, 2, 3, ,,,,,,,]
+const copy = items.slice(1, 3)
+// <- [2, 3]
+----
+
+We could also consider the pasting part of the operation as an advanced usage of +Array#splice+. The next code snippet does just that, passing the paste position to splice, telling it to remove as many items as we want to copy, and inserting the pasted items. Note that we're using the spread operator so that elements are inserted individually, and not as an array, through +.splice+.
+
+[source,javascript]
+----
+const items = [1, 2, 3, ,,,,,,,]
+const copy = items.slice(1, 3)
+// <- [2, 3]
+items.splice(6, 3 - 1, ...copy)
+console.log(items)
+// <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
+----
+
+Now that we better understand the internals of +Array#copyWithin+, we can generalize the example in order to implement the custom +copyWithin+ function shown in the following code snippet.
+
+[source,javascript]
+----
+function copyWithin (items, target, start = 0, end = items.length) {
+  const copy = items.slice(start, end)
+  const removed = end - start
+  items.splice(target, removed, ...copy)
+  return items
 }
 ----
 
-If we want to ensure that +get+ always returns +logger+, we could bind that method to +logger+, as shown next.
+The example we've been trying so far would work just as well with our custom +copyWithin+ function.
 
 [source,javascript]
 ----
-logger.test = logger.test.bind(logger)
+copyWithin([1, 2, 3, ,,,,,,,], 6, 1, 3)
+// <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
 
-The problem with that approach is that we'd have to do it for every single function on +logger+ that relies on +this+ being a reference to the +logger+ object itself. A better solution could involve using a proxy with a +get+ trap handler, where we modify returned functions by binding them to the +target+ object.
+==== 8.4.4 +Array#fill+
+
+A convenient utility method to replace all items in an array with the provided +value+. Note that sparse arrays will be filled in their entirety, while existing items will be replaced by the fill value.
 
 [source,javascript]
 ----
-const selfish = {
-  get (target, key) {
-    const value = Reflect.get(target, key)
-    if (typeof value !== 'function') {
-      return value
-    }
-    return value.bind(target)
-  }
-}
-const proxy = new Proxy(logger, selfish)
+[`a`, `b`, `c`].fill(`x`); // <- [`x`, `x`, `x`]
+new Array(3).fill(`x`); // <- [`x`, `x`, `x`]
 ----
 
-This would work for any kind of object, even class instances, without any further modification. The following snippet demonstrates how the original logger is vulnerable to +.call+ and similar operations that can change the +this+ context, while the +proxy+ object ignores those kinds of changes.
+You could also specify the starting index and end index. In this case, as shown next, only the items in those positions would be filled.
 
 [source,javascript]
 ----
-const something = {}
-console.log(logger.test() === logger)
-// <- true
-console.log(logger.test.call(something) === something)
-// <- true
-console.log(proxy.test() === logger)
-// <- true
-console.log(proxy.test.call(something) === logger)
-// <- true
+[`a`, `b`, `c`,,,].fill(`x`, 2)
+// <- [`a`, `b`, `x`, `x`, `x`]
+new Array(5).fill(`x`, `x`, 3)
+// <- [`x`, `x`, `x`, undefined x 2]
 ----
 
-There's a subtle problem that arises from using +selfish+ in its current incarnation, though. Whenever we get a reference to a method through the +proxy+, we get a freshly created bound function that's the result of +value.bind(target)+. Consequently, methods no longer appear to be equal to themselves. As shown next, this can result in confusing behavior.
+The provided +value+ can be anything, and is not just limited to primitive values.
 
 [source,javascript]
 ----
-console.log(proxy.test !== proxy.test)
-// <- true
+new Array(3).fill({})
+// <- [{}, {}, {}]
 ----
 
-This could be resolved using a +WeakMap+. We'll go back to our +selfish+ trap handler options, and move that into a factory function. Within that function we'll keep a +cache+ of bound methods, so that we create the bound version of each function only once. While we're at it, we'll make our +selfish+ function receive the +target+ object we want to be proxying, so that the details of how we are binding every method become an implementation concern.
+You can't fill arrays using a mapping method that takes an +index+ parameter or anything like that.
 
 [source,javascript]
 ----
-function selfish (target) {
-  const cache = new WeakMap()
-  const handler = {
-    get (target, key) {
-      const value = Reflect.get(target, key)
-      if (typeof value !== 'function') {
-        return value
-      }
-      if (!cache.has(value)) {
-        cache.set(value, value.bind(target))
-      }
-      return cache.get(value)
-    }
-  }
-  const proxy = new Proxy(target, handler)
-  return proxy
-}
+const map = i => i * 2
+new Array(3).fill(map)
+// <- [map, map, map]
 ----
 
-Now that we are caching bound functions and tracking them by the original value, the same object is always returned and simple comparisons don't surprise consumers of +selfish+ anymore.
+==== 8.4.5 +Array#find+ and +Array#findIndex+
+
+The +Array#find+ method runs a +callback+ for each +item+ in an array until the first one that returns +true+, and then returns that +item+. The method follows the signature of +(callback(item, i, array), context)+ that's also present in +Array#map+, +Array#filter+, and others. You can think of +Array#find+ as a version of +Array#some+ that returns the matching element instead of just +true+.
 
 [source,javascript]
 ----
-const selfishLogger = selfish(logger)
-console.log(selfishLogger.test === selfishLogger.test)
-// <- true
-console.log(selfishLogger.test() === selfishLogger)
-// <- true
-console.log(selfishLogger.test.call(something) === selfishLogger)
-// <- true
-----
-
-The +selfish+ function can now be reused whenever we want all methods on an object to be bound to the host object itself. This is particularly convenient when dealing with classes that heavily rely on +this+ being the instance object.
-
-There are dozens of ways of binding methods to their parent object, all with their own sets of advantages and drawbacks. The proxy-based solution might be the most convenient and hassle-free, but browser support isn't great yet, and +Proxy+ implementations are known to be pretty slow.
-
-We haven't used an +apply+ trap for the +selfish+ examples, which illustrates that not everything is one-size-fits-all. Using an +apply+ trap for this use case would involve the current +selfish+ proxy returning proxies for +value+ functions, and then returning a bound function in the +apply+ trap for the +value+ proxy. While this may sound more correct, in the sense that we're not using +.bind+ but instead relying on +Reflect.apply+, we'd still need the +WeakMap+ cache and +selfish+ proxy. That is to say we'd be adding an extra layer of abstraction, a second proxy, and getting little value in terms of separation of concerns or maintainability, since both proxy layers would remain coupled to some degree, it'd be best to keep everything in a single layer. While abstractions are a great thing, too many abstractions can become more insurmountable than the problem they attempt to fix.
-
-Up to what point is the abstraction justifiable over a few +.bind+ statements in the +constructor+ of a class object? These are hard questions that always depend on context, but they must be considered when designing a component system so that you don't add complexity for complexity's sake, while also adding abstraction layers that help you avoid repeating yourself.
-
-==== 7.4.3 +construct+ Trap
-
-The +construct+ trap intercepts uses of the +new+ operator. In the following code sample, we implement a custom +construct+ trap that behaves identically to the +construct+ trap. We use the spread operator, in combination with the +new+ keyword, so that we can pass any arguments to the +Target+ constructor.
-
-[source,javascript]
-----
-const handler = {
-  construct (Target, args) {
-    return new Target(...args)
-  }
-}
-----
-
-The previous example is identical to using +Reflect.construct+, shown next. Note that in this case we're not spreading the +args+ over the parameters to the method call. Reflection methods mirror the method signature of proxy traps, and as such +Reflect.construct+ has a signature of +Target, args+, just like the +construct+ trap method.
-
-[source,javascript]
-----
-const handler = {
-  construct (Target, args) {
-    return Reflect.construct(Target, args)
-  }
-}
-----
-
-Traps like +construct+ allow us to modify or extend the behavior of an object without using a factory function or changing the implementation, leading to more maintainable code. It should be noted, however, that proxies should always have a clearly defined goal, and that goal shouldn't meddle too much with the implementation of the underlying target. That is to say, a proxy trap for +construct+ that acts as a switch for several different underlying classes is probably the wrong kind of abstraction: a simple function would do.
-
-Use cases for +construct+ traps should mostly revolve around rebalancing constructor parameters or doing things that should always be done around the constructor, such as logging and tracking object creation.
-
-The following example shows how a proxy could be used to offer a slightly different experience to a portion of the consumers, without changing the implementation of the class. When using the +ProxiedTarget+, we can leverage the constructor parameters to declare a +name+ property on the target instance.
-
-[source,javascript]
-----
-const handler = {
-  construct (Target, args) {
-    const [ name ] = args
-    const target = Reflect.construct(Target, args)
-    target.name = name
-    return target
-  }
-}
-class Target {
-  hello () {
-    console.log(`Hello, ${ this.name }!`)
-  }
-}
-----
-
-In this case, we could've changed +Target+ directly so that it receives a +name+ parameter in its constructor and stores that as an instance property. That is not always the case. You could be unable to modify a class directly, either because you don't own that code or because other code relies on a particular structure already. The following code snippet shows the +Target+ class in action, with its regular API and the modified +ProxiedTarget+ API resulting from using proxy traps for +construct+.
-
-[source,javascript]
-----
-const target = new Target()
-target.name = `Nicolás`
-target.hello()
-// <- 'Hello, Nicolás'
-
-const ProxiedTarget = new Proxy(Target, handler)
-const proxy = new ProxiedTarget(`Nicolás`)
-proxy.hello()
-// <- 'Hello, Nicolás'
-----
-
-Let's move onto the next few traps.
-
-==== 7.4.4 +getPrototypeOf+ Trap
-
-We can use the +handler.getPrototypeOf+ method as a trap for all of the following operations.
-
-- +Object.prototype.__proto__+ property
-- +Object.prototype.isPrototypeOf+ method
-- +Object.getPrototypeOf+ method
-- +Reflect.getPrototypeOf+ method
-- +instanceof+ operator
-
-This traps is quite powerful, as it allows us to dynamically determine the reported underlying prototype for an object.
-
-You could, for instance, use this trap to make an object pretend it's an +Array+ when accessed through the proxy. The following example does exactly that, by returning +Array.prototype+ as the prototype of proxied objects. Note that +instanceof+ indeed returns +true+ when asked if our plain object is an +Array+.
-
-[source,javascript]
-----
-const handler = {
-  getPrototypeOf: target => Array.prototype
-}
-const target = {}
-const proxy = new Proxy(target, handler)
-console.log(proxy instanceof Array)
-// <- true
-----
-
-On its own, this isn't sufficient for the +proxy+ to be a true +Array+. The following code snippet shows how the +Array#push+ method isn't available on our +proxy+ even though we're reporting a prototype of +Array+.
-
-[source,javascript]
-----
-console.log(proxy.push)
+[`a`, `b`, `c`, `d`, `e`].find(item => item === `c`)
+// <- `c`
+[`a`, `b`, `c`, `d`, `e`].find((item, i) => i === 0)
+// <- `a`
+[`a`, `b`, `c`, `d`, `e`].find(item => item === `z`)
 // <- undefined
 ----
 
-Naturally, we can keep patching the +proxy+ until we get the behavior we want. In this case, we may want to use a +get+ trap to mix the +Array.prototype+ with the actual back-end +target+. Whenever a property isn't found on the +target+, we'll use reflection again to look the property up on +Array.prototype+ as well. As it turns out, this behavior is good enough to be able to leverage +Array+'s methods.
+There's an +Array#findIndex+ method as well, and it leverages the same signature. Instead of returning a boolean value, or the element itself, +Array.findIndex+ returns the index of the matching element, or +-1+ if no matches occur. Here's a few examples
 
 [source,javascript]
 ----
-const handler = {
-  getPrototypeOf: target => Array.prototype,
-  get (target, key) {
-    return (
-      Reflect.get(target, key) ||
-      Reflect.get(Array.prototype, key)
-    )
-  }
+[`a`, `b`, `c`, `d`, `e`].findIndex(item => item === `c`)
+// <- 2
+[`a`, `b`, `c`, `d`, `e`].findIndex((item, i) => i === 0)
+// <- 0
+[`a`, `b`, `c`, `d`, `e`].findIndex(item => item === `z`)
+// <- -1
+----
+
+==== 8.4.6 +Array#keys+
+
+Returns an iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with +for..of+, the spread operator, or by manually calling +.next()+.
+
+[source,javascript]
+----
+[`a`, `b`, `c`, `d`].keys()
+// <- ArrayIterator {}
+----
+
+Here's an example using +for..of+.
+
+[source,javascript]
+----
+for (let key of [`a`, `b`, `c`, `d`].keys()) {
+  console.log(key)
+  // <- 0
+  // <- 1
+  // <- 2
+  // <- 3
 }
-const target = {}
-const proxy = new Proxy(target, handler)
 ----
 
-Note now how +proxy.push+ points to the +Array#push+ method, how we can use it unobtrusively as if we were working with an array object, and also how printing the object logs it as the object it is rather than as an array of +['first', 'second']+.
+Unlike +Object.keys+, and most methods that iterate over arrays, this sequence doesn't ignore array holes.
 
 [source,javascript]
 ----
-console.log(proxy.push)
-// <- function push () { [native code] }
-proxy.push('first', 'second')
-console.log(proxy)
-// <- { 0: 'first', 1: 'second', length: 2 }
+Object.keys(new Array(4))
+// <- []
+[...new Array(4).keys()]
+// <- [0, 1, 2, 3]
 ----
 
-Conversely to the +getPrototypeOf+ trap, there's +setPrototypeOf+.
+Now onto values.
 
-==== 7.4.5 +setPrototypeOf+ Trap
+==== 8.4.7 +Array#values+
 
-There is an +Object.setPrototypeOf+ method in ES6 that can be used to change the prototype of an object into a reference to another object. It's considered the proper way of setting the prototype, as opposed to setting the special +__proto__+ property, which is a feature that's supported in most browsers but was deprecated in ES6.
-
-Deprecation means that browser vendors are discouraging the use of +__proto__+. In other contexts, deprecation also means that the feature might be removed in the future. The web platform, however, doesn't break backwards compatibility, and +__proto__+ is unlikely to ever be removed. That being said, deprecation also means you're discouraged from using the feature. Thus, using +Object.setPrototypeOf+ method is preferrable than changing +__proto__+ when we want to modify the underlying prototype for an object.
-
-You can use +handler.setPrototypeOf+ to set up a trap for +Object.setPrototypeOf+. The snippet of code shown below doesn't alter the default behavior of changing a prototype into +base+. Note that, for completeness, there is a +Reflect.setPrototypeOf+ method that's equivalent to +Object.setPrototypeOf+.
+Same thing as +Array#keys()+, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
 
 [source,javascript]
 ----
-const handler = {
-  setPrototypeOf (target, proto) {
-    Object.setPrototypeOf(target, proto)
-  }
-}
-const base = {}
-function Target () {}
-const proxy = new Proxy(Target, handler)
-proxy.setPrototypeOf(proxy, base)
-console.log(proxy.prototype === base)
+[`a`, `b`, `c`, `d`].values()
+// <- ArrayIterator {}
+----
+
+You can use +for..of+ or any other methods like a spread operator to pull out the iterable sequence. The example below uses the spread operator on an array's +.values()+ to create a copy of that array.
+
+[source,javascript]
+----
+[...[`a`, `b`, `c`, `d`].values()]
+// <- [`a`, `b`, `c`, `d`]
+----
+
+Note that omitting the +.values()+ method call would still produce a copy of the array: the sequence is iterated and spread over a new array.
+
+==== 8.4.8 +Array#entries+
+
+Similar to both preceding methods, except +Array#entries+ returns an iterator with a sequence of key-value pairs.
+
+[source,javascript]
+----
+[`a`, `b`, `c`, `d`].entries()
+// <- ArrayIterator {}
+----
+
+Each item in the sequence is a two dimensional array with the key and the value for an item in the array.
+
+[source,javascript]
+----
+[...[`a`, `b`, `c`, `d`].entries()]
+// <- [[0, `a`], [1, `b`], [2, `c`], [3, `d`]]
+----
+
+Great, one last method left!
+
+==== 8.4.9 +Array.prototype[Symbol.iterator]+
+
+This is exactly the same as the +Array#values+ method.
+
+[source,javascript]
+----
+const list = [`a`, `b`, `c`, `d`]
+list[Symbol.iterator] === list.values
 // <- true
+[...list[Symbol.iterator]()]
+// <- [`a`, `b`, `c`, `d`]
 ----
 
-There are several use cases for +setPrototypeOf+ traps. You could have an empty method body, in which case the trap would sink calls to +Object.setPrototypeOf+ into a no-op: an operation where nothing occurs. You could +throw+ an exception making the failure explicit, if you deem the new prototype to be invalid or you want to prevent consumers from changing the prototype of the proxied object.
-
-You could implement a trap like the following, which mitigates security concerns in a proxy that might be passed away to third party code, as a way of limiting access to the underlying +Target+. That way, consumers of +proxy+ would be unable to modify the prototype of the underlying object.
+The example below combines a spread operator, an array, and +Symbol.iterator+ to iterate over its values. Can you follow the code?
 
 [source,javascript]
 ----
-const handler = {
-  setPrototypeOf (target, proto) {
-    throw new Error('Changing the prototype is forbidden')
-  }
-}
-const base = {}
-function Target () {}
-const proxy = new Proxy(Target, handler)
-proxy.setPrototypeOf(proxy, base)
-// <- Error: Changing the prototype is forbidden
+[...[`a`, `b`, `c`, `d`][Symbol.iterator]()]
+// <- [`a`, `b`, `c`, `d`]
 ----
 
-In these cases, it's best to fail with an exception so that consumers can understand what is going on. By explicitly disallowing prototype changes, the consumer can start looking elsewhere. If we didn't throw an exception, the consumer could still eventually learn that the prototype isn't changing through debugging. You may as well save them from the pain!
-
-==== 7.4.6 +isExtensible+ Trap
-
-An extensible object is an object that you can add new properties to, an object you can extend.
-
-The +handler.isExtensible+ method can be used for logging or auditing calls to +Object.isExtensible+, but not to decide whether an object is extensible. That's because this trap is subject to a harsh invariant that puts a hard limit to what you can do with it: a +TypeError+ is thrown if +Object.isExtensible(proxy) !== Object.isExtensible(target)+.
-
-If you didn't want consumers to know whether the underlying object is extensible or not, you could +throw+ an error in an +isExtensible+ trap.
-
-While this trap is nearly useless, other than for auditing purposes, the hard invariant makes sense because there's also the +preventExtensions+ trap that's a bit more permissive.
-
-==== 7.4.7 +preventExtensions+ Trap
-
-You can use +handler.preventExtensions+ to trap the +Object.preventExtensions+ method. When extensions are prevented on an object, new properties can't be added any longer: the object can't be extended.
-
-Imagine a scenario where you want to be able to selectively +preventExtensions+ on some objects, but not all of them. In that scenario, you could use a +WeakSet+ to keep track of the objects that should be extensible. If an object is in the set, then the +preventExtensions+ trap should be able to capture those requests and discard them.
-
-The following snippet does exactly that: it keeps objects that can be extended in a +WeakSet+ and prevents the rest from being extended. Note that the trap always returns the opposite of +Reflect.isExtensible(target)+. Returning +true+ means the object can't be extended anymore, while +false+ means the object can still be extended.
+Let's break it down. First, there's the array.
 
 [source,javascript]
 ----
-const canExtend = new WeakSet()
-const handler = {
-  preventExtensions (target) {
-    const canPrevent = !canExtend.has(target)
-    if (canPrevent) {
-      Object.preventExtensions(target)
-    }
-    return !Reflect.isExtensible(target)
-  }
-}
+[`a`, `b`, `c`, `d`]
+// <- [`a`, `b`, `c`, `d`]
 ----
 
-Now that we've set up the +handler+ and +WeakSet+, we can create a target object and a +proxy+ for that target, adding the target to our set. Then, we could try +Object.preventExtensions+ on the proxy and we'll notice it fails to prevent extensions to +target+. This is the intended behavior, as the +target+ can be found in the +canExtend+ set. Note that while we're seeing a +TypeError+ exception, because the consumer intended to prevent extensions but failed to do so due to the trap, this would be a silent error under sloppy mode.
+Then we get an iterator.
 
 [source,javascript]
 ----
-const target = {}
-const proxy = new Proxy(target, handler)
-canExtend.add(target)
-Object.preventExtensions(proxy)
-// <- TypeError: 'preventExtensions' on proxy: trap returned falsy
+[`a`, `b`, `c`, `d`][Symbol.iterator]()
+// <- ArrayIterator {}
 ----
 
-If we removed the +target+ from the +canExtend+ set before calling +Object.preventExtensions+, then +target+ would be made non-extensible as originally intended. The following code snippet shows that behavior in action.
+Last, we spread the iterator over a new array, creating a copy.
 
 [source,javascript]
 ----
-const target = {}
-const proxy = new Proxy(target, handler)
-canExtend.add(target)
-canExtend.delete(target)
-Object.preventExtensions(proxy)
-console.log(Object.isExtensible(proxy))
-// <- false
+[...[`a`, `b`, `c`, `d`][Symbol.iterator]()]
+// <- [`a`, `b`, `c`, `d`]
 ----
-
-As we've learned over the last few pages, there's a myriad of use cases for proxies. We can use +Proxy+ for all of the following, and that's just the tip of the iceberg.
-
-- Add validation rules on plain old JavaScript objects, and enforce them
-- Keep track of every interaction that goes through a proxy
-- Implement your own observable objects
-- Decorate and extend objects without changing their implementation
-- Make certain properties on an object completely invisible to consumers
-- Revoke access at will when the consumer should no longer be able to access an object
-- Modify the arguments passed to a proxied method
-- Modify the result produced by a proxied method
-- Prevent deletion of specific properties through the proxy
-- Prevent new definitions from succeeding, according to the desired property descriptor
-- Shuffle arguments around in a constructor
-- Return a result other than the object created via +new+ and a constructor
-- Swap out the prototype of an object for something else
-
-Proxies are an extremely powerful feature in ES6, with infinite practical applications.

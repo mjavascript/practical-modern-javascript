@@ -1,2210 +1,569 @@
-[[iteration-and-flow-control]]
-== Iteration and Flow Control
+[[leveraging-es-collections]]
+== Leveraging ECMAScript Collections
 
-Having covered the essential aspects of ES6 in chapter 3, and symbols in chapter 4, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn towards the end of the chapter.
-
-To kick off the chapter, we'll start by discussing promises. Promises have existed in user-land for a long time, but they're a native part of the language starting in ES6.
-
-=== 5.1 Promises
-
-Promises can be vaguely defined as "a proxy for a value that will eventually become available". They can be used for both synchronous and asynchronous code flows, although they make asynchronous flows easier to reason about -- once you've mastered promises, that is.
-
-==== 5.1.1 Getting Started with Promises
-
-As an example, let's take a look at the upcoming browser +fetch+ API. This API is a simplification of +XMLHttpRequest+. It aims to be super simple to use for the most basic use cases: making a +GET+ request against an HTTP resource. It also provides a comprehensive API that caters to advanced use cases as well, but that's not our focus for now. In its most basic incarnation, you can make a +GET /items+ request using a piece of code like the following.
+JavaScript data structures are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map +npm+ package names to their metadata, as shown next.
 
 [source,javascript]
 ----
-fetch('/items')
-----
-
-The +fetch('/items')+ statement doesn't seem all that exciting. It makes a "fire and forget" +GET+ request against +/items+, meaning you ignore the response and whether the request succeeded. The +fetch+ method returns a +Promise+. You can chain a callback using the +.then+ method on that promise, and that callback will be executed once the +/items+ resource finishes loading, receiving a +response+ object parameter.
-
-[source,javascript]
-----
-fetch('/items').then(response => {
-  // do something
-})
-----
-
-.An alternative to callbacks and events
-****
-
-Traditionally JavaScript relied on callbacks instead of promises and chaining. If the +fetch+ function asked for a callback, you'd have to add a that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors -- that may or may not occur -- during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how +fetch+ would look like if it had a callback-based API.
-
-[source,javascript]
-----
-fetch('/items', (err, res) => {
-  if (err) {
-    // handle error
-  } else {
-    // handle response
-  }
-})
-----
-
-The callback wouldn't be invoked until the +/items+ resource has been retrieved, or an error arises from the +fetch+ operation. Execution remains asynchronous and non-blocking. Note that in this model you could only specify a single callback. That callback would be responsible for all functionality derived from the response, and it'd be up to the consumer to come up with a mechanism to compose different aspects of handling the response into that single callback.
-
-Besides traditional callbacks, another API design choice might have been to use an event-driven model. In this case the object returned by +fetch+ would be able to register callbacks for different kinds of events, binding as many event handlers as needed for any events -- just like when you attach event listeners to the browser DOM. Typically there's an +error+ event that's raised when things go awry, and other events that are raised when something notable happens. In the following piece of code, we show how +fetch+ would look like if it had an event-based API.
-
-[source,javascript]
-----
-fetch('/items')
-  .on('error', err => {
-    // handle error
-  })
-  .on('data', res => {
-    // handle response
-  })
-----
-
-Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize concerns in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in.
-****
-
-The following bit of code displays the promise-based API with which +fetch+ is actually implemented in browsers. Calls to +fetch+ return a +Promise+ object. Much like with events, you can bind as many reactions as you'd like, using the +.then+ and +.catch+ methods.
-
-[source,javascript]
-----
-const p = fetch('/items')
-p.then(res => {
-  // handle response
-})
-p.catch(error => {
-  // handle error
-})
-----
-
-Reactions passed to +.then+ can be used to handle the fulfillment of a promise, which is accompanied by a fulfillment value; and reactions passed to +.catch+ are executed with a rejection +reason+ that can be used when handling rejections. You can also register a reaction to rejections in the second argument passed to +.then+. The previous piece of code could also be expressed as the following.
-
-[source,javascript]
-----
-const p = fetch('/items')
-p.then(
-  res => {
-    // handle response
-  },
-  err => {
-    // handle error
-  }
-)
-----
-
-Another alternative is to omit the fulfillment reaction in +.then(fulfillment, rejection)+, this being similar to the omission of a rejection reaction when calling +.then+. Using +.then(null, rejection)+ is equivalent to +.catch(rejection)+, as shown in the following snippet of code.
-
-[source,javascript]
-----
-const p = fetch('/items')
-p.then(res => {
-  // handle response
-})
-p.then(null, error => {
-  // handle error
-})
-----
-
-When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the +.on+ method attach the event listener and then returning the event emitter itself. Promises are different. The +.then+ and +.catch+ methods return a new promise every time. That's important because chaining can have wildly different results depending on where you append a +.then+ or a +.catch+ call onto.
-
-.A major source of confusion
-[WARNING]
-====
-The +.then+ and +.catch+ methods return a new promise every time, creating a tree-like data structure. If you had a +p1+ promise and a +p2+ promise returned by +p1.then+, the +p1+ and +p2+ promises would be nodes connected by the +p1.then+ reaction handler. Reactions create new promises that are attached to the tree as children of the promise they're reacting to.
-====
-
-A promise is created by passing the +Promise+ constructor a resolver that decides how and when the promise is settled, by calling either a +resolve+ method that will settle the promise in fulfillment or a +reject+ method that'd settle the promise as a rejection. Until the promise is settled by calling either function, it'll be in pending state and any reactions attached to it won't be executed. The following snippet of code creates a promise from scratch where we'll wait for a second before randomly settling the promise with a fulfillment or rejection result.
-
-[source,javascript]
-----
-new Promise(function (resolve, reject) {
-  setTimeout(function () {
-    if (Math.random() > 0.5) {
-      resolve('random success')
-    } else {
-      reject(new Error('random failure'))
-    }
-  }, 1000)
-})
-----
-
-Promises can also be created using +Promise.resolve+ and +Promise.reject+, these methods create promises that will immediately settle with a fulfillment value and a rejection reason respectively.
-
-[source,javascript]
-----
-Promise
-  .resolve({ result: 123 })
-  .then(data => console.log(data.result))
-// <- 123
-----
-
-When a +p+ promise is fulfilled, reactions registered with +p.then+ are executed. When a +p+ promise is rejected, reactions registered with +p.catch+ are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, +throw+ an error, or return a +Promise+ or thenable. Thenables are objects considered promise-like that can be casted into a +Promise+ using +Promise.resolve+ as observed in section 5.1.3.
-
-A reaction may return a value, which would cause the promise returned by +.then+ to become fulfilled with that value. In this sense, promises can be chained to transform the fulfillment value of the previous promise over and over, as shown in the following snippet of code.
-
-[source,javascript]
-----
-Promise
-  .resolve(2)
-  .then(x => x * 7)
-  .then(x => x - 3)
-  .then(x => console.log(x))
-// <- 11
-----
-
-A reaction may return a promise. In contrast with the previous piece of code, the promise returned by the first +.then+ call in the following snippet will be blocked until the one returned by its reaction is fulfilled, which will take two seconds to settle because of the +setTimeout+ call.
-
-[source,javascript]
-----
-Promise
-  .resolve(2)
-  .then(x => new Promise(function (resolve) {
-    setTimeout(() => resolve(x * 1000), x * 1000)
-  }))
-  .then(x => console.log(x))
-// <- 2000
-----
-
-A reaction may also +throw+ an error, which would cause the promise returned by +.then+ to become rejected and thus follow the +.catch+ branch, using said error as the rejection reason. The following example shows how we attach a fulfillment reaction to the +fetch+ operation. Once the +fetch+ is fulfilled the reaction will throw an error and cause the rejection reaction attached to the promise returned by +.then+ to be executed.
-
-[source,javascript]
-----
-const p = fetch('/items')
-  .then(res => { throw new Error('unexpectedly'); })
-  .catch(error => console.error(error))
-----
-
-Let's take a step back and pace ourselves, walking over more examples in each particular use case.
-
-==== 5.1.2 Promise Continuation and Chaining
-
-In the previous section we've established that you can chain any number of +.then+ calls, each returning its own new promise, but how exactly does this work? What is a good mental model of promises, and what happens when an error is raised?
-
-When an error happens in a promise resolver, you can catch that error using +p.catch+ as shown next.
-
-[source,javascript]
-----
-new Promise((resolve, reject) => reject(new Error('oops')))
-  .catch(err => console.error(err))
-----
-
-A promise will settle as a rejection when the resolver calls +reject+, but also if an exception is thrown inside the resolver as well, as demonstrated by the next snippet.
-
-[source,javascript]
-----
-new Promise((resolve, reject) => { throw new Error('oops'); })
-  .catch(err => console.error(err))
-----
-
-Errors that occur while executing a fulfillment or rejection reaction behave in the same way: they result in a promise being rejected, the one returned by the +.then+ or +.catch+ call that was passed the reaction where the error originated. It's easier to explain this with code, such as the following piece.
-
-[source,javascript]
-----
-Promise
-  .resolve(2)
-  .then(x => { throw new Error('failed'); })
-  .catch(err => console.error(err))
-----
-
-It might be easier to decompose that series of chained method calls into variables, as shown next. The following piece of code might help you visualize the fact that, if you attached the +.catch+ reaction to +p1+, you wouldn't be able to catch the error originated in the +.then+ reaction. While +p1+ is fulfilled, +p2+ -- a different promise than +p1+, resulting from calling +p1.then+ -- is rejected due to the error being thrown. That error could be caught, instead, if we attached the rejection reaction to +p2+.
-
-[source,javascript]
-----
-const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
-const p3 = p2.catch(err => console.error(err))
-----
-
-Here is another situation where it might help you to think of promises as a tree-like data structure. In the following illustration it becomes obvious that, given the error originates in the +p2+ node, we couldn't notice it by attaching a rejection reaction to +p1+.
-
-[illustration that depicts p1/p2/p3 as-is vs p3 being p1.then]
-
-We've established that the promise you attach your reactions onto is important, as it determines what errors it can capture and what errors it can not. It's also worth noting that as long as an error remains uncaught in a promise chain, a rejection handler will be able to capture it. In the following example we've introduced an intermediary +.then+ call in between +p2+, where the error originated; and +p4+, where we attach the rejection reaction. When +p2+ settles with a rejection, +p3+ becomes settled with a rejection as it depends on +p2+ directly. When +p3+ settles with a rejection, the rejection handler in +p4+ fires.
-
-[source,javascript]
-----
-const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
-const p3 = p2.then(x => x * 2)
-const p4 = p3.catch(err => console.error(err))
-----
-
-Typically, promises like +p4+ fulfill because the rejection handler in +.catch+ doesn't raise any errors. That means a fulfillment handler attached with +p4.then+ would be executed afterwards. The following example shows how you could print a statement to the browser console by creating a +p4+ fulfillment handler that depends on +p3+ to settle successfully with fulfillment.
-
-[source,javascript]
-----
-const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
-const p3 = p2.catch(err => console.error(err))
-const p4 = p3.then(() => console.log('crisis averted'))
-----
-
-Similarly, if an error occurred in the +p3+ rejection handler, we could capture that one as well using +.catch+. The next piece of code shows how an exception being thrown in +p3+ could be captured using +p3.catch+ just like with any other errors arising in previous examples.
-
-[source,javascript]
-----
-const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
-const p3 = p2.catch(err => { throw new Error('oops', err); })
-const p4 = p3.catch(err => console.error(err))
-----
-
-The following example prints +err.message+ once instead of twice. That's because no errors happened in the first +.catch+, so the rejection branch for that promise wasn't executed.
-
-[source,javascript]
-----
-fetch('/items')
-  .then(res => res.a.prop.that.does.not.exist)
-  .catch(err => console.error(err.message))
-  .catch(err => console.error(err.message))
-// <- 'Cannot read property "prop" of undefined'
-----
-
-In contrast, the next snippet will print +err.message+ twice. It works by saving a reference to the promise returned by +.then+, and then tacking two +.catch+ reactions onto it. The second +.catch+ in the previous example was capturing errors produced in the promise returned from the first +.catch+, while in this case both rejection handlers branch off of +p+.
-
-[source,javascript]
-----
-const p = fetch('/items').then(res => res.a.prop.that.does.not.exist)
-p.catch(err => console.error(err.message))
-p.catch(err => console.error(err.message))
-// <- 'Cannot read property "prop" of undefined'
-// <- 'Cannot read property "prop" of undefined'
-----
-
-We should observe, then, that promises can be chained arbitrarily. As we just saw, you can save a reference to any point in the promise chain and then append more promises on top of it. This is one of the fundamental points to understanding promises.
-
-Let's use the following snippet as a crutch to enumerate the sequence of events that arise from creating and chaining a few promises. Take a moment to inspect the following bit of code.
-
-[source,javascript]
-----
-const p1 = fetch('/items')
-const p2 = p1.then(res => res.a.prop.that.does.not.exist)
-const p3 = p2.catch(err => {})
-const p4 = p3.catch(err => console.error(err.message))
-----
-
-Here is an enumeration of what is going on as that piece of code is executed.
-
-1. +fetch+ returns a brand new +p1+ promise
-2. +p1.then+ returns a brand new +p2+ promise, which will react if +p1+ is fulfilled
-3. +p2.catch+ returns a brand new +p3+ promise, which will react if +p2+ is rejected
-4. +p3.catch+ returns a brand new +p4+ promise, which will react if +p3+ is rejected
-5. When +p1+ is fulfilled, the +p1.then+ reaction is executed
-6. Afterwards, +p2+ is rejected because of an error in the +p1.then+ reaction
-7. Since +p2+ was rejected, +p2.catch+ reactions are executed, and the +p2.then+ branch is ignored
-8. The +p3+ promise from +p2.catch+ is fulfilled, because it doesn't produce an error or result in a rejected promise
-9. Because +p3+ was fulfilled, the +p3.catch+ is never followed. The +p3.then+ branch would've been used instead
-
-You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure. It all starts with a single promise, which we'll next learn how to construct. Then you add branches with +.then+ or +.catch+. You can tack as many +.then+ or +.catch+ calls as you want onto each branch, creating new branches, and so on.
-
-==== 5.1.3 Creating a Promise From Scratch
-
-We already know that promises can be created using a function such as +fetch+, +Promise.resolve+, +Promise.reject+, or the +Promise+ constructor function. We've already used +fetch+ extensively to create promises in previous examples. Let's take a more nuanced look at the other three ways we can create a promise.
-
-Promises can be created from scratch by using +new Promise(resolver)+. The +resolver+ parameter is a function that will be used to settle the promise. The +resolver+ takes two arguments, a +resolve+ function and a +reject+ function.
-
-The pair of promises shown in the next snippet are settled in fulfillment and rejection, respectively. Here we're settling the first promise with a fulfillment value of +'result'+, and rejecting the second promise with an +Error+ object, specifying +'reason'+ as its message.
-
-[source,javascript]
-----
-new Promise(resolve => resolve('result'))
-new Promise((resolve, reject) => reject(new Error('reason')))
-----
-
-Resolving and rejecting promises without a value is possible, but not that useful. Usually promises will fulfill with a +result+ such as the response from an AJAX call as we've seen with +fetch+. You'll definitely want to state the +reason+ for your rejections -- typically wrapping them in an +Error+ object so that you can report back a stack trace.
-
-As you may have guessed, there's nothing inherently synchronous about promises. Settlement can be completely asynchronous for fulfillment and rejection alike. That's the whole point of promises! The following example creates a promise that becomes fulfilled after two seconds elapse.
-
-[source,javascript]
-----
-new Promise(resolve => setTimeout(resolve, 2000))
-----
-
-Note that only the first call made to one of these functions will have an impact -- once a promise is settled its outcome can't change. The following code snippet creates a promise that's fulfilled after the provided +delay+ or rejected after a three second timeout. We're taking advantage of the fact that calling either of these functions after a promise has been settled have no effect, in order to create a race condition where the first call to be made will be the one that sticks.
-
-[source,javascript]
-----
-function resolveUnderThreeSeconds (delay) {
-  return new Promise(function (resolve, reject) {
-    setTimeout(resolve, delay)
-    setTimeout(reject, 3000)
-  })
+const registry = {}
+function add (name, meta) {
+  registry[name] = meta
 }
-resolveUnderThreeSeconds(2000); // becomes fulfilled after 2s
-resolveUnderThreeSeconds(7000); // becomes rejected after 3s
-----
-
-When creating a new promise +p1+, you could call +resolve+ with another promise +p2+ -- besides calling +resolve+ with non-promise values. In those cases, +p1+ will be resolved but blocked on the outcome of +p2+. Once +p2+ settles, +p1+ will be settled with its value and outcome. The following bit of code is, thus, effectively the same as simply doing +fetch('/items')+.
-
-[source,javascript]
-----
-new Promise(resolve => resolve(fetch('/items')))
-----
-
-Note that you this behavior is only possible when using +resolve+. If you try to replicate the same behavior with +reject+ you'll find that the +p1+ promise is rejected with the +p2+ promise as the rejection +reason+. While +resolve+ may result in a promise being fulfilled or rejected, +reject+ always results in the promise being rejected. If you +resolve+ to a rejected promise or a promise that's eventually rejected, then your promise will be rejected as well. The opposite isn't true for rejections. If you +reject+ in a resolver, the promise will be rejected no matter what value is passed into +reject+.
-
-In some cases you'll know beforehand about a value you want to settle a promise with. In these cases you could create a promise from scratch, as shown next. This can be convenient when you want to set off the benefits of promise chaining, but don't otherwise have a clear initiator which returns a +Promise+ -- such as a call to +fetch+.
-
-[source,javascript]
-----
-new Promise(resolve => resolve(12))
-----
-
-That could prove to be too verbose when you don't need anything other than a pre-settled promise. You could use +Promise.resolve+ instead, as a shortcut. The following statement is equivalent to the previous one. The differences between this statement and the previous one are purely semantics: you avoid declaring a +resolver+ function and the syntax is more friendly to promise continuation and chaining when it comes to readability.
-
-[source,javascript]
-----
-Promise.resolve(12)
-----
-
-Like in the +resolve(fetch)+ case we saw earlier, you could use +Promise.resolve+ as a way of wrapping another promise or casting a thenable into a proper promise. The following piece of code shows how you could use +Promise.resolve+ to cast a thenable into a proper promise and then consume it as if it were any other promise.
-
-[source,javascript]
-----
-Promise
-  .resolve({ then: resolve => resolve(12) })
-  .then(x => console.log(x))
-// <- 12
-----
-
-When you already know the rejection reason for a promise, you can use +Promise.reject+. The following piece of code creates a promise that's going to settle into a rejection along with the specified +reason+. You can use +Promise.reject+ within a reaction as a dynamic alternative to +throw+ statements. Another use for +Promise.reject+ is as an implicit return value for an arrow function, something that can't be done with a +throw+ statements.
-
-[source,javascript]
-----
-Promise.reject(reason)
-fetch('/items').then(() => Promise.reject(new Error('arbitrarily')))
-fetch('/items').then(() => { throw new Error('arbitrarily')})
-----
-
-Presumably, you won't be calling +new Promise+ directly very often. The promise constructor is often invoked internally by libraries that support promises or native functions like +fetch+. Given that +.then+ and +.catch+ provide tree structures that unfold beyond the original promise, a single call to +new Promise+ in the entry point to an API is often sufficient. Regardless, understanding promise creation is essential when leveraging promise-based control flows.
-
-==== 5.1.4 Promise States and Fates
-
-Promises can be in three distinct states: pending, fulfilled, and rejected. Pending is the default state. A promise can then transition into either fulfillment or rejection.
-
-A promise can be resolved or rejected exactly once. Attempting to resolve or reject a promise for a second time won't have any effect.
-
-When a promise is resolved with a non-promise, non-thenable value, it settles in fulfillment. When a promise is rejected, it's also considered to be settled.
-
-A promise +p1+ that's resolved to another promise or thenable +p2+ stays in the pending state, but is nevertheless resolved: it can't be resolved again nor rejected. When +p2+ settles, its outcome is forwarded to +p1+, which becomes settled as well.
-
-Once a promise is fulfilled, reactions that were attached with +p.then+ will be executed as soon as possible. The same goes for rejected promises and +p.catch+ reactions. Reactions attached after a promise is settled are also executed as soon as possible.
-
-The contrived example shown next could be used to explain how you can make a +fetch+ request, and create a second +fetch+ promise in a +.then+ reaction to the first request. The second request will only begin when and if the first promise settles in fulfillment. The +console.log+ statement will only begin when and if the second promise settles in fulfillment, printing +done+ to the console.
-
-[source,javascript]
-----
-fetch('/items')
-  .then(() => fetch('/item/first'))
-  .then(() => console.log('done'))
-----
-
-A less contrived example would involve other steps. In the following piece of code we use the outcome of the first +fetch+ request in order to construct the second request. To do that, we use the +res.json+ method which returns a promise that resolves to the object from parsing a JSON response. Then we use that object to construct the endpoint we want to request in our second call to +fetch+, and finally we print the +item+ object from the second response to the console.
-
-[source,javascript]
-----
-fetch('/items')
-  .then(res => res.json())
-  .then(items => fetch(`/item/${ items[0].slug }`))
-  .then(res => res.json())
-  .then(item => console.log(item))
-----
-
-We're not limited to returning promises or thenables. We could also return values from +.then+ and +.catch+ reactions. Those values would be passed to the next reaction in the chain. In this sense, a reaction can be regarded as the transformation of input from the previous reaction in the chain into the input for the next reaction in the chain. The example below starts by creating a promise fulfilled with +[1, 2, 3]+. Then there's a reaction which maps those values into +[2, 4, 6]+. Those values are then printed to the console in the following reaction in the chain.
-
-[source,javascript]
-----
-Promise
-  .resolve([1, 2, 3])
-  .then(values => values.map(value => value * 2))
-  .then(values => console.log(values))
-  // <- [2, 4, 6]
-----
-
-Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in section 5.1.3, when a +.catch+ reaction executes without errors, it will fulfill, following +.then+ reactions.
-
-==== 5.1.5 Leveraging +Promise.all+ and +Promise.race+
-
-When writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There's also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excell at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API methods: +Promise.all+ and +Promise.race+.
-
-In most cases you'll want code that can be executed concurrently to take advantage of that, as it could make your code run much faster. Suppose you wanted to pull the description of two products in your catalog, using two distinct API calls, and then print out both of them to the console. The following piece of code would run both operations concurrently, but it would need separate print statements. In the case of printing to the console, that wouldn't make much of a difference, but if we needed to make single function call passing in both products, we couldn't do that with two separate +fetch+ requests.
-
-[source,javascript]
-----
-fetch('/products/chair')
-  .then(r => r.json())
-  .then(p => console.log(p))
-fetch('/products/table')
-  .then(r => r.json())
-  .then(p => console.log(p))
-----
-
-The +Promise.all+ method takes an array of promises and returns a single promise +p+. When all promises passed to +Promise.all+ are fulfilled, +p+ becomes fulfilled as well with an array of results sorted according to the provided promises. If a single promise becomes rejected, +p+ settles with its rejection reason immediately. The following example uses +Promise.all+ to fetch both products and print them to the console using a single +console.log+ statement.
-
-[source,javascript]
-----
-Promise
-  .all([
-    fetch('/products/chair'),
-    fetch('/products/table')
-  ])
-  .then(products => console.log(products[0], products[1]))
-----
-
-Given that the results are provided as an array, its indices have no semantic meaning to our code. Using parameter destructuring to pull out variable names for each product might make more sense when reading the code. The following example uses destructuring to clean that up. Keep in mind that even though there's a single argument, destructuring forces us to use parenthesis in the arrow function parameter declaration.
-
-[source,javascript]
-----
-Promise
-  .all([
-    fetch('/products/chair'),
-    fetch('/products/table')
-  ])
-  .then(([chair, table]) => console.log(chair, table))
-----
-
-The following example shows how if a single promise is rejected, +p+ will be rejected as well. It's important to understand that as a single rejected promise might prevent an otherwise fulfilled array of promises from fulfilling +p+. In the example, rather than wait until +p2+ and +p3+ settle, +p+ becomes immediately rejected.
-
-[source,javascript]
-----
-const p1 = Promise.reject('failed')
-const p2 = fetch('/products/chair')
-const p3 = fetch('/products/table')
-const p = Promise
-  .all([p1, p2, p3])
-  .catch(reason => console.log(reason))
-  // <- 'failed'
-----
-
-In summary, +Promise.all+ has three possible outcomes.
-
-- Settle with all fulfillment +results+ as soon as all of its dependencies are fulfilled
-- Settle with a single rejection +reason+ as soon as one of its dependencies is rejected
-- Stay in a pending state because at least one dependency stays in pending state and no dependencies are rejected
-
-The +Promise.race+ method is similar to +Promise.all+, except the first dependency to settle will "win" the race, and its result will be passed along to the promise returned by +Promise.race+.
-
-[source,javascript]
-----
-Promise
-  .race([
-    new Promise(resolve => setTimeout(() => resolve(1), 1000)),
-    new Promise(resolve => setTimeout(() => resolve(2), 2000))
-  ])
-  .then(result => console.log(result))
-  // <- 1
-----
-
-Rejections will also finish the race, and the resulting promise will be rejected. Using +Promise.race+ could be useful in scenarios where we want to time out a promise we otherwise have no control over. For instance, in the following piece of code there's a race between a +fetch+ request and a promise that becomes rejected after a five second timeout. If the request takes more than five seconds the race will be rejected.
-
-[source,javascript]
-----
-function timeout (delay) {
-  return new Promise(function (resolve, reject) {
-    setTimeout(() => reject('timeout'), delay)
-  })
+function get (name) {
+  return registry[name]
 }
-Promise
-  .race([
-    fetch('/large-resource-download'),
-    timeout(5000)
-  ])
-  .then(res => console.log(res))
-  .catch(err => console.log(err))
+add('contra', { description: 'Asynchronous flow control' })
+add('dragula', { description: 'Drag and drop' })
+add('woofmark', { description: 'Markdown and WYSIWYG editor' })
 ----
 
-=== 5.2 Iterator Protocol and Iterable Protocol
+There's several problems with this approach, outlined below.
 
-JavaScript gets two new protocols in ES6: iterators and iterables. These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into lazyness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
+- Security issues where user-provided keys like +__proto__+, +toString+, or anything in +Object.prototype+ break expectations and make interaction with this kind of hash-map data structures more cumbersome
+- Iteration over list items is verbose with +Object.keys(registry).forEach+
+- Keys are limited to strings, making it hard to create hash-maps where you'd like to index values by DOM elements or other non-string references
 
-==== 5.2.1 Understanding Iteration Principles
-
-Any object can adhere to the iterable protocol by assigning a function to the +Symbol.iterator+ property for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to +Symbol.iterator+, is called once.
-
-The spread operator was first introduced in chapter 3, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical +iterable+ object, as shown in the following code snippet, +Symbol.iterator+ would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
+The first problem could be fixed using a prefix, and being careful to always get or set values in the hash-map through functions that add those prefixes, to avoid mistakes.
 
 [source,javascript]
 ----
-const sequence = [...iterable]
-----
-
-As you might remember, symbol properties can't be directly embedded into object literal keys. The following bit of code shows how you'd add a Symbol property using pre-ES6 language semantics.
-
-[source,javascript]
-----
-const example = {}
-example[Symbol.iterator] = fn
-----
-
-We could, however, use a computed property name to fit the symbol key in the object literal, avoiding an extra statement like the one in the previous snippet, as demonstrated next.
-
-[source,javascript]
-----
-const example = {
-  [Symbol.iterator]: fn
+const registry = {}
+function add (name, meta) {
+  registry['pkg:' + name] = meta
+}
+function get (name) {
+  return registry['pkg:' + name]
 }
 ----
 
-The method assigned to +Symbol.iterator+ must return an object that adheres to the iterator protocol. That protocol defines how to get values out of an iterable sequence. The protocol dictates iterators must be objects with a +next+ method. The +next+ method takes no arguments and should return an object with the two properties found below.
-
-- +value+ is the current item in the sequence
-- +done+ is a boolean indicating whether the sequence has ended
-
-Let's use the following piece of code as a crutch to understand the concepts behind iteration protocols. We're turning the +sequence+ object into an iterable by adding a +Symbol.iterator+ property. The iterable returns an iterator object. Each time +next+ is asked for the following value in the sequence, an element from the +items+ array is provided, until there's no more +items+ left.
+An alternative could also be using +Object.create(null)+ instead of an empty object literal. In this case, the created object won't inherit from +Object.prototype+, meaning it won't be harmed by +__proto__+ and friends.
 
 [source,javascript]
 ----
-const sequence = {
-  [Symbol.iterator]() {
-    const items = ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
-    return {
-      next: () => ({
-        done: items.length === 0,
-        value: items.shift()
-      })
-    }
-  }
+const registry = Object.create(null)
+function add (name, meta) {
+  registry[name] = meta
+}
+function get (name) {
+  return registry[name]
 }
 ----
 
-JavaScript is a progressive language: new features are additive, and they practically never break existing code. For that reason, iterables can't be taken advantage of in existing constructs such as +forEach+ and +for..in+. In ES6, there's a few ways to go over iterables: +for..of+, the +...+ spread operator, and +Array.from+.
-
-The +for..of+ iteration method can be used to loop over any iterable. The following example demonstrates how we could use +for..of+ to loop over the +sequence+ object we put together in the previous example, because it is an iterable object.
+For iteration we could create a +list+ function that returns key/value tuples.
 
 [source,javascript]
 ----
-for (let item of sequence) {
-  console.log(item)
-  // <- 'i'
-  // <- 't'
-  // <- 'e'
-  // <- 'r'
-  // <- 'a'
-  // <- 'b'
-  // <- 'l'
-  // <- 'e'
+const registry = Object.create(null)
+function list () {
+  return Object.keys(registry).map(key => [key, registry[key]])
 }
 ----
 
-Regular objects can be made iterable with +Symbol.iterator+, as we've just learned. Under the ES6 paradigm, constructs like +Array+, +String+, +NodeList+ in the DOM, and +arguments+ are all iterable by default, giving +for..of+ increased usability. To get an array out of any iterable sequence of values, you could use the spread operator, spreading every +item+ in the sequence onto an element in the resulting array. We could also use +Array.from+ to the same effect. In addition, +Array.from+ can also cast array-like objects, those with a +length+ property and items in zero-based integer properties, into arrays.
+Or we could implement the iterator protocol on our hash-map. Here we are trading complexity in favor of convenience: the iterator code is more complicated to read than the former case where we had a +list+ function with familiar +Object.keys+ and +Array#map+ methods. In the following example, however, accessing the list is even easier and more convenient than through +list+: following the iterator protocol means there's no need for a custom +list+ function.
 
 [source,javascript]
 ----
-console.log([...sequence])
-// <- ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
-console.log(Array.from(sequence))
-// <- ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
-console.log(Array.from({ 0: 'a', 1: 'b', 2: 'c', length: 3 }))
-// <- ['a', 'b', 'c']
-----
-
-As a recap, the +sequence+ object adheres to the iterable protocol by assigning a method to +[Symbol.iterator]+. That means that the object is iterable: it can be iterated. Said method returns an object that adheres to the +iterator+ protocol. The iterator method is called once whenever we need to start iterating over the object, and the returned iterator is used to pull values out of +sequence+. To iterate over iterables, we can use +for..of+, the spread operator, or +Array.from+.
-
-In essence, the selling point about these protocols is that they provide expressive ways to effortlessly iterate over collections and array-likes. Having the ability to define how any object may be iterated is huge, because it enables libraries to converge under a protocol the language natively understands: iterables. The upside is that implementing the iterator protocol in doesn't have a high effort cost because, due to its additive nature, it won't break existing behavior.
-
-For example, jQuery and +document.querySelectorAll+ both return array-likes. If jQuery implemented the iterator protocol on their collection's prototype, then you could iterate over collection elements using the native +for..of+ construct.
-
-[source,javascript]
-----
-for (let element of $('li')) {
-  console.log(element)
-  // <- a <li> in the jQuery collection
-}
-----
-
-Iterable sequences aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that topic and its implications.
-
-==== 5.2.2 Infinite Sequences
-
-Iterators are lazy in nature. Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the lazyness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or +Array.from+ to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
-
-The following example shows an iterator that represents an infinite sequence of random floating numbers between 0 and 1. Note how items returned by +next+ don't ever have a +done+ property set to +true+, which would signal that the sequence has ended. It uses a pair of arrow functions that implicitly return objects. The first one returns the iterator object used to loop over the infinite sequence of random numbers. The second arrow function is used to pull each individual value in the sequence, using +Math.random+.
-
-[source,javascript]
-----
-const random = {
-  [Symbol.iterator]: () => ({
-    next: () => ({ value: Math.random() })
-  })
-}
-----
-
-Attempting to cast the iterable +random+ object into an array using either +Array.from(random)+ or +[...random]+ would crash our program, since the sequence never ends. We must be very careful with these types of sequences as they can easily crash and burn our browser and Node.js server processes.
-
-There's a few different ways you can access a sequence safely, without risking an infinite loop. The first option is to use destructuring to pull values in specific positions of the sequence, as shown in the following piece of code.
-
-[source,javascript]
-----
-const [one, another] = random
-console.log(one)
-// <- 0.23235511826351285
-console.log(another)
-// <- 0.28749457537196577
-----
-
-Destructuring infinite sequences doesn't scale very well, particularly if we want to apply dynamic conditions, such as pulling the first +i+ values out of the sequence or pulling values until we find one that doesn't match a condition. In those cases we're better off using +for..of+, where we're better able to define conditions that prevent infinite loops while taking as many elements as we need, in a programmatic fashion. The next example  loops over our infinite sequence using +for..of+, but it breaks the loop as soon as a value is higher than +0.8+. Given that +Math.random+ produces values anywhere between +0+ and +1+, the loop will eventually break.
-
-[source,javascript]
-----
-for (let value of random) {
-  if (value > 0.8) {
-    break
-  }
-  console.log(value)
-}
-----
-
-It can be hard to understand code like that when reading it later, as a lot of the code is focused on how the sequence is iterated, printing values from +random+ until one value is large enough; and not on what the sequence looks like, the first N values until a larger value is found. Abstracting away part of the logic into another method might make the code more readable.
-
-As another example, a common pattern when extracting values from an infinite or very large sequence is to "take" the first few elements in the sequence. While you could accomodate that use case through +for..of+ and +break+, you'd be better off abstracting it into a +take+ method. The following example shows a potential implementation of +take+. It receives a +sequence+ parameter and the +amount+ of entries you'd like to take from the +sequence+. It returns an iterable object, and whenever that object is iterated it constructs an iterator for the provided +sequence+. The +next+ method defers to the original +sequence+ while the +amount+ is at least +1+, and then ends the sequence.
-
-[source,javascript]
-----
-function take (sequence, amount) {
+const registry = Object.create(null)
+registry[Symbol.iterator] = () => {
+  const keys = Object.keys(registry)
   return {
-    [Symbol.iterator]() {
-      const iterator = sequence[Symbol.iterator]()
-      return {
-        next() {
-          if (amount-- < 1) {
-            return { done: true }
-          }
-          return iterator.next()
-        }
-      }
-    }
-  }
-}
-----
-
-Our implementation works great on infinite sequences because it provides them with a constant exit condition: whenever the +amount+ is depleted, the sequence returned by +take+ ends. Instead of looping to pull values out of +random+, you can now write a piece of code like the following.
-
-[source,javascript]
-----
-[...take(random, 2)]
-// <- [0.304253100650385, 0.5851333604659885]
-----
-
-This pattern allows you to reduce any infinite sequence into a finite one. If your desired finite sequence wasn't just "the first N values", but rather our original "all values before the first one larger than 0.8", you could easily adapt +take+ by changing its exit condition. The +range+ function shown next has a +low+ parameter that defaults to +0+, and a +high+ parameter defaulting to +1+. Whenever a value in the sequence is out of bounds, we stop pulling values from it.
-
-[source,javascript]
-----
-function range (sequence, low=0, high=1) {
-  return {
-    [Symbol.iterator]() {
-      const iterator = sequence[Symbol.iterator]()
-      return {
-        next() {
-          const item = iterator.next()
-          if (item.value < low || item.value > high) {
-            return { done: true }
-          }
-          return item
-        }
-      }
-    }
-  }
-}
-----
-
-Now, instead of breaking in the +for..of+ loop because we fear that the infinite sequence will never end, we guaranteed that the loop will eventually break outside of our desired range. This way, your code becomes less concerned with how the sequence is generated, and more concerned with what the sequence will be used for. As shown in the example below, you won't even need a +for..of+ loop here either, because the escape condition now resides in the intermediary +range+ function.
-
-[source,javascript]
-----
-const low = [...range(random, 0, 0.8)]
-// <- [0.6891209243331105, 0.05978861474432051, 0.0939619520213455]
-----
-
-This sort of abstraction of complexity into another function often helps keep code focused on its intent, while striving to avoid a +for..of+ loop when all we wanted was to produce a derivated sequence. It also shows how sequences can be composed and piped into one another. In this case, we first created a multi-purpose and infinite +random+ sequence, and then piped it through a +range+ function that returns a derivated sequence that ends when it meets values that are below or above a desired range. An important aspect of iterators is that despite having been composed, the iterators produced by the +range+ function can be lazily iterated as well, effectively meaning you can compose as many iterators you need into mapping, filtering, and exit condition helpers.
-
-.Identifying infinite sequences
-[WARNING]
-====
-Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem, there is no way of knowing whether the sequence is infinite or not in code.
-
-image::../images/c05g01-halting-problem.png["The halting problem depicted by XKCD comic 1266"]
-
-You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While +for..of+ won't run into the problem unless there's no escape condition, using mechanisms such as spread or +Array.from+ would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
-====
-
-Besides the technical implications of creating iterable objects, lets go over a couple of practical examples on how we can benefit from iterators.
-
-==== 5.2.3 Iterating Object Maps as Key-Value Pairs
-
-There's an abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudo-arrays that are meant to be iterated, the random number generator we came up with in section 5.2.2, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
-
-Oftentimes, JavaScript objects are used to represent a map between string keys and arbitrary values. In the next snippet, as an example, we have a map of color names and hexadecimal RGB representations of that color. There are cases when you'd welcome the ability to effortlessly looping over the different color names, hexadecimal representations, or key-value pairs.
-
-[source,javascript]
-----
-const colors = {
-  green: '#0e0',
-  orange: '#f50',
-  pink: '#e07'
-}
-----
-
-The following code snippet implements an iterable that produces a +[key, value]+ sequence for each color in the +colors+ map. Given that that's assigned to the +Symbol.iterator+ property, we'd be able to go over the list with minimal effort.
-
-[source,javascript]
-----
-const colors = {
-  green: '#0e0',
-  orange: '#f50',
-  pink: '#e07',
-  [Symbol.iterator] () {
-    const keys = Object.keys(colors)
-    return {
-      next () {
-        const done = keys.length === 0
-        const key = keys.shift()
-        return {
-          done,
-          value: [key, colors[key]]
-        }
-      }
-    }
-  }
-}
-----
-
-When we wanted to pull out all the key-value pairs, we could use the +...+ spread operator as shown in the following bit of code.
-
-[source,javascript]
-----
-console.log([...colors])
-// <- [['green', '#0e0'], ['orange', '#f50'], ['pink', '#e07']]
-----
-
-The fact that we're polluting our previously-tiny +colors+ map with a large iterable definition could represent a problem, as the iterable behavior has little to do with the concern of storing pairs of color names and codes. A good way of decoupling the two aspects of +colors+ would be to extract the logic that attaches a key-value pair iterator into a reusable function. This way, we could eventually move +keyValueIterable+ somewhere else in our codebase and leverage it for other use cases as well.
-
-[source,javascript]
-----
-function keyValueIterable (target) {
-  target[Symbol.iterator] = function () {
-    const keys = Object.keys(target)
-    return {
-      next () {
-        const done = keys.length === 0
-        const key = keys.shift()
-        return {
-          done,
-          value: [key, target[key]]
-        }
-      }
-    }
-  }
-  return target
-}
-----
-
-We could then call +keyValueIterable+ passing in the +colors+ object, turning +colors+ into an iterable object. You could in fact use +keyValueIterable+ on any objects where you want to iterate over key-value pairs, as the iteration behavior doesn't make assumptions about the object. Once we've attached a +Symbol.iterator+ behavior, we'll be able to treat the object as an iterable. In the next code snippet, we iterate over the key-value pairs and print only the color codes.
-
-[source,javascript]
-----
-const colors = keyValueIterable({
-  green: '#0e0',
-  orange: '#f50',
-  pink: '#e07'
-})
-for (let [, color] of colors) {
-  console.log(color)
-  // <- '#0e0'
-  // <- '#f50'
-  // <- '#e07'
-}
-----
-
-A song player might be another interesting use case.
-
-==== 5.2.4 Building Versatility Into Iterating a Playlist
-
-Imagine you were developing a song player where a playlist could be reproduced once and then stop or on "repeat" (indefinitely). Whenever you have a use case of looping through a list indefinitely, you could leverage the iterable protocol as well.
-
-Suppose a human adds a few songs to their library, and they are stored in an array as shown in the next bit of code.
-
-[source,javascript]
-----
-const songs = [
-  `Bad moon rising – Creedence`,
-  `Don't stop me now – Queen`,
-  `The Scientist – Coldplay`,
-  `Somewhere only we know – Keane`
-]
-----
-
-We could create a +playlist+ function that returns a sequence, representing all the songs that will be played by our application. This function would take the +songs+ provided by the human as well as the +repeat+ value, which indicates how many times they want the songs to be reproduced in a loop -- once, twice, or +Infinity+ times -- before coming to an end.
-
-The following piece of code shows how we could implement +playlist+. We could start with an empty playlist. In each turn of the loop we'll check if there are any songs left to play. If there aren't any songs left, and we have a +repeat+ value above zero, we'll create a +copy+ of the song list provided by the user. We use that +copy+ as state, to know where we are in their song list. We'll return the first song in the list by pulling it with +.shift+, until there aren't any songs left in our +copy+. The sequence ends when there aren't any songs left and +repeat+ is zero or less.
-
-[source,javascript]
-----
-function playlist (songs, repeat) {
-  return {
-    [Symbol.iterator] () {
-      let copy = []
-      return {
-        next () {
-          if (copy.length === 0) {
-            if (repeat < 1) {
-              return { done: true }
-            }
-            copy = songs.slice()
-            repeat--
-          }
-          return {
-            value: copy.shift(), done: false
-          }
-        }
-      }
-    }
-  }
-}
-----
-
-The following bit of code shows how the +playlist+ function can take an array and produce a sequence that goes over the provided array for the specified amount of times. If we specified +Infinity+, the resulting sequence would be infinite, and otherwise it'd be finite.
-
-[source,javascript]
-----
-console.log([...playlist(['a', 'b'], 3)])
-// <- ['a', 'b', 'a', 'b', 'a', 'b']
-----
-
-To iterate over the playlist we'd probably come up with a +player+ function. Assuming a +playSong+ function that reproduces a song and invokes a callback when the song ends, our +player+ implementation could look like the following function, where we asynchronously loop the iterator coming from a sequence, requesting new songs as previous ones finish playback. Given that there's always a considerable waiting period in between +g.next+ calls -- while the songs are actually played inside +playSong+ -- there's no risk of running into an infinite loop even when the sequence produced by +playlist+ is infinite.
-
-[source,javascript]
-----
-function player (sequence) {
-  const g = sequence()
-  more()
-  function more () {
-    const item = g.next()
-    if (item.done) {
-      return
-    }
-    playSong(item.value, more)
-  }
-}
-----
-
-Putting everything together, the music library would play a song list on repeat with a few lines of code, as presented in the next code snippet.
-
-[source,javascript]
-----
-const songs = [
-  `Bad moon rising – Creedence`,
-  `Don't stop me now – Queen`,
-  `The Scientist – Coldplay`,
-  `Somewhere only we know – Keane`
-]
-const sequence = playlist(songs, Infinity)
-player(sequence)
-----
-
-A change allowing the human to shuffle their playlist wouldn't be complicated to introduce. We'd have to tweak the +playlist+ function to include a +shuffle+ flag. That way, each step where we reproduce the list of user-provided songs could
-
-[source,javascript]
-----
-function playlist (songs, repeat, shuffle) {
-  return {
-    [Symbol.iterator] () {
-      let copy = []
-      return {
-        next () {
-          if (copy.length === 0) {
-            if (repeat < 1) {
-              return { done: true }
-            }
-            copy = songs.slice()
-            repeat--
-          }
-          const value = shuffle ? randomSong() : nextSong()
-          return { done: false, value }
-        }
-      }
-      function randomSong () {
-        const index = Math.floor(Math.random() * copy.length)
-        return copy.splice(index, 1)[0]
-      }
-      function nextSong () {
-        return copy.shift()
-      }
-    }
-  }
-}
-----
-
-Lastly, we'd have to pass in the +shuffle+ flag as +true+ if we wanted to shuffle songs in each repeat cycle. Otherwise, songs would be reproduced in the original order provided by the user. Here again we've abstracted away something that usually would involve many lines of code used to decide what song comes next into a neatly decoupled function that's only concerned with producing a sequence of songs to be reproduced by a song player.
-
-[source,javascript]
-----
-console.log([...playlist(['a', 'b'], 3, true)])
-// <- ['a', 'b', 'b', 'a', 'a', 'b']
-----
-
-Iterators are an important tool in ES6 that help us not only to decouple code but also to come up with constructs that were previously harder to implement, such as the ability of dealing with a sequence of songs indistinctly -- regardless of whether the sequence is finite or infinite. This indifference is, in part, what makes writing code leveraging the iterator protocol more elegant. It also makes it risky to cast an unknown iterable into an array (with, say, the +...+ spread operator), as you're risking crashing your program due to an infinite loop.
-
-Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a +Symbol.iterator+ method. They make it easier to implement functions, such as the +range+ or +take+ functions in section 5.2.2, while also allowing for a few more interesting use cases.
-
-=== 5.3 Generator Functions and Generator Objects
-
-Generators are a new feature in ES6. The way they work is that you declare a generator function that returns generator objects +g+. Those +g+ objects can then be iterated using any of +Array.from(g)+, +[...g]+, or +for..of+ loops. Generator functions allow you to declare a special kind of +iterator+. These iterators can suspend execution while retaining their context.
-
-==== 5.3.1 Generator Fundamentals
-
-We already examined iterators in the previous section, learning how their +.next()+ method is called once at a time to pull values from a sequence. Instead of a +next+ method whenever you return a value, generators use the +yield+ keyword to add values into the sequence.
-
-Here is an example generator function. Note the +*+ after +function+. That's not a typo, that's how you mark a generator function as a generator.
-
-[source,javascript]
-----
-function* abc () {
-  yield 'a'
-  yield 'b'
-  yield 'c'
-}
-----
-
-Generator objects conform to both the iterable protocol and the iterator protocol.
-
-- A generator object +chars+ is built using the +abc+ function
-- Object +chars+ is an iterable because it has a +Symbol.iterator+ method
-- Object +chars+ is also an iterator because it has a +.next+ method
-- The iterator for +chars+ is itself
-
-The same statements can also be demonstrated using JavaScript code.
-
-[source,javascript]
-----
-const chars = abc()
-typeof chars[Symbol.iterator] === 'function'
-typeof chars.next === 'function'
-chars[Symbol.iterator]() === chars
-console.log(Array.from(chars))
-// <- ['a', 'b', 'c']
-console.log([...chars])
-// <- ['a', 'b', 'c']
-----
-
-When you create a generator object, you'll get an iterator that uses the generator function to produce an iterable sequence. Whenever a +yield+ expression is reached, its value is emitted by the iterator and generator function execution becomes suspended.
-
-The following example shows how iteration can trigger side-effects within the generator function. The +console.log+ statements after each +yield+ statement will be executed when generator function execution becomes unsuspended and asked for the next element in the sequence.
-
-[source,javascript]
-----
-function* numbers () {
-  yield 1
-  console.log('a')
-  yield 2
-  console.log('b')
-  yield 3
-  console.log('c')
-}
-----
-
-Suppose you created a generator object for +numbers+, spread its contents onto an array, and printed it to the console. Taking into account the side-effects in +numbers+, can you guess what the console output would look like for the following piece of code? Given that the spread operator iterates over the sequence to completion in order to give you an array, all side-effects would be executed while constructing the array via destructuring, before the +console.log+ statement printing the array is ever reached.
-
-[source,javascript]
-----
-console.log([...numbers()])
-// <- 'a'
-// <- 'b'
-// <- 'c'
-// <- [1, 2, 3]
-----
-
-If we now used a +for..of+ loop instead, we'd be able to preserve the order declared in the +numbers+ generator function. In the next example, elements in the +numbers+ sequence are printed one at a time in a +for..of+ loop. The first time the generator function is asked for a +number+, it yields +1+ and execution becomes suspended. The second time, execution is unsuspended where the generator left off, +'a'+ is printed to the console as a side-effect, and +2+ is yielded. The third time, +'b'+ is the side-effect, and +3+ is yielded. The fourth time, +'c'+ is a side-effect and the generator signals that the sequence has ended.
-
-[source,javascript]
-----
-for (let number of numbers()) {
-  console.log(number)
-  // <- 1
-  // <- 'a'
-  // <- 2
-  // <- 'b'
-  // <- 3
-  // <- 'c'
-}
-----
-
-.Using +yield*+ to delegate sequence generation
-****
-Generator functions can use +yield*+ to delegate to a generator object or any other iterable object.
-
-Given that strings in ES6 adhere to the iterable protocol, you could write a piece of code like the following to split +hello+ into individual characters.
-
-[source,javascript]
-----
-function* salute () {
-  yield* 'hello'
-}
-console.log([...salute()])
-// <- ['h', 'e', 'l', 'l', 'o']
-----
-
-Naturally, you could use +[...'hello']+ as a simpler alternative. However, it's when combining multiple +yield+ statements that we'll start to see the value in delegating to another iterable. The next example shows a +salute+ generator modified into taking a +name+ parameter and producing array that contains the characters for the +'hello you'+ string.
-
-[source,javascript]
-----
-function* salute (name) {
-  yield* 'hello '
-  yield* name
-}
-console.log([...salute('you')])
-// <- ['h', 'e', 'l', 'l', 'o', ' ', 'y', 'o', 'u']
-----
-
-To reiterate, you can +yield*+ anything that adheres to the iterable protocol, not merely strings. That includes generator objects, arrays, +arguments+, +NodeList+ in the browser, and just about anything provided it implements +System.iterator+. The following example demonstrates how you could mix +yield+ and +yield*+ statements to describe a sequence of values using generator functions, an iterable object, and the spread operator. Can you deduce what the +console.log+ statement would print?
-
-[source,javascript]
-----
-const salute = {
-  [Symbol.iterator]() {
-    const items = ['h', 'e', 'l', 'l', 'o']
-    return {
-      next: () => ({
-        done: items.length === 0,
-        value: items.shift()
-      })
-    }
-  }
-}
-function* multiplied (base, multiplier) {
-  yield base + 1 * multiplier
-  yield base + 2 * multiplier
-}
-function* trailmix () {
-  yield* salute
-  yield 0
-  yield* [1, 2]
-  yield* [...multiplied(3, 2)]
-  yield [...multiplied(6, 3)]
-  yield* multiplied(15, 5)
-}
-console.log([...trailmix()])
-----
-
-Here's the sequence produced by the +trailmix+ generator function.
-
-[source,javascript]
-----
-['h', 'e', 'l', 'l', 'o', 0, 1, 2, 5, 7, [9, 12], 20, 25]
-----
-****
-
-Besides iterating over a generator object using spread, +for..of+, and +Array.from+, we could use the generator object directly, and iterate over that. Let's investigate how that'd work.
-
-==== 5.3.2 Iterating over Generators by Hand
-
-Generator iteration isn't limited to +for..of+, +Array.from+, or the spread operator. Just like with any iterable object, you can use its +Symbol.iterator+ to pull values on demand using +.next+, rather than in an strictly synchronous +for..of+ loop or all at once with +Array.from+ or spread. Given that a generator object is both iterable and iterator, you won't need to call +g[Symbol.iterator]()+ to get an iterator: you can use +g+ directly because it's the same object as the one returned by the +Symbol.iterator+ method.
-
-Assuming the +numbers+ iterator we created earlier, the following example shows how you could iterate it by hand using the generator object and a +while+ loop. Remember that any items returned by an iterator need a +done+ property that indicates whether the sequence has ended, and a +value+ property indicating the current value in the sequence.
-
-[source,javascript]
-----
-const g = numbers()
-while (true) {
-  let item = g.next()
-  if (item.done) {
-    break
-  }
-  console.log(item.value)
-}
-----
-
-Using iterators to loop over a generator might look like a complicated way of implementing a +for..of+ loop, but it also allows for some interesting use cases. Particularly: +for..of+ is always a synchronous loop, whereas with iterators we're in charge of deciding when to invoke +g.next+. In turn, that translates into additional opportunities such as running an asynchronous operation and then calling +g.next+ once we have a result.
-
-Whenever +.next()+ is called on a generator, there are four different kinds of "events" that can suspend execution in the generator while returning a result to the caller of +.next()+. We'll promptly explore each of these scenarios.
-
-- A +yield+ expression returning the next value in the sequence
-- A +return+ statement returning the last value in the sequence
-- A +throw+ statement halts execution in the generator entirely
-- Reaching the end of the generator function signals +{ done: true }+
-
-Once the +g+ generator ended iterating over a sequence, subsequent calls to +g.next()+ will have no effect and just return +{ done: true }+. The following code snippet demonstrates the idempotence we can observe when calling +g.next+ repeatedly once a sequence has ended.
-
-[source,javascript]
-----
-function* generator () {
-  yield 'only'
-}
-const g = generator()
-console.log(g.next())
-// <- { done: false, value: 'only' }
-console.log(g.next())
-// <- { done: true }
-console.log(g.next())
-// <- { done: true }
-----
-
-Moving onto a more practical example, let's write a magic 8-ball generator where we'll put that sort of message-passing into action.
-
-=== 5.3.3 Coding A Magic 8-ball Generator
-
-A magic 8-ball consists of an interface that, when asked a question, returns a vague, random answer, as a result. The following function returns an answer at random, out of a pool of ten possible values. Note how I used template literals to define every string: that way, I don't need to worry about escaping single or double quotes in my strings.
-
-[source,javascript]
-----
-const answers = [
-  `It is certain`,
-  `Yes definitely`,
-  `Most likely`,
-  `Yes`,
-  `Ask again later`,
-  `Better not tell you now`,
-  `Cannot predict now`,
-  `Don't count on it`,
-  `My sources say no`,
-  `Very doubtful`
-]
-function answer () {
-  return answers[Math.floor(Math.random() * answers.length)]
-}
-----
-
-Now that we're able to randomly generate vague answers, we can use a generator function to define an infinite sequence of answers. Here, again, I'm using a template literal to embed an arbitrary JavaScript expression, the +answer()+ function call, in the yielded string.
-
-[source,javascript]
-----
-function* ball () {
-  while (true) {
-    yield `[a] ${ answer() }`
-  }
-}
-----
-
-Each step of the sequence would contain one of the vague answers, generated at random.
-
-[source,javascript]
-----
-const g = ball()
-g.next()
-// <- { value: '[a] Better not tell you now', done: false }
-g.next()
-// <- { value: '[a] Most likely', done: false }
-----
-
-The generator is blindly producing answers even though we're not passing in any questions. We could make a couple of changes to the +ball+ generator so that it prints questions as you read values out of the sequence.
-
-Interestingly, +yield+ expressions are not just used to produce output from the generator when calling +g.next+, but can also be used when the generator needs input. Any value passed to the +g.next+ method will be passed into the generator as the result of the +yield+ expression.
-
-[source,javascript]
-----
-function* ball () {
-  let question
-  while (true) {
-    question = yield `[a] ${ answer() }`
-    console.log(`[q] ${ question }`)
-  }
-}
-----
-
-The next piece of code shows how we can use the +ball+ generator to ask questions, have them printed, and then print out the answers. Note how we discard the first result from +g.next()+. That's because the first call to +.next+ enters the generator and there's no +yield+ expression waiting to capture the +value+ from +g.next(value)+.
-
-[source,javascript]
-----
-const g = ball()
-g.next()
-console.log(g.next('Will JavaScript fall out of grace?').value)
-// <- '[q] Will JavaScript fall out of grace?'
-// <- '[a] My sources say no'
-console.log(g.next('How do you know that?').value)
-// <- '[q] How do you know that?'
-// <- '[a] Concentrate and ask again'
-----
-
-As a consumer of the +ball+ generator, the first call to +g.next+ doesn't seem something you should need to do. Similarly, using +g.next+ to pull sequence values out of a generator and pass input into the generator doesn't seem like a responsibility that should befall the consumer of your generator code. If we flipped responsibilities around, by writing the looping code and having the consumer of a piece of code create a generator function, the resulting code would be more pleasant to both read and write.
-
-=== 5.3.4 Consuming Generator Functions for Flexibility
-
-In the previous section our 8-ball was a generator function, while the user code using the 8-ball was in charge of looping over the generator's sequence. Now, we'll be writing the questions in a generator function that gets passed to a method, which loops over the generator we provide and answers each question at a time.
-
-At first, you might think that writing code like this is unconventional, but most libraries built around generators work in fact have their users write generators, while retaining control of their iteration. Starting with the API you wish you could use is an excellent way to come up with a great API. This is something we missed in the previous section and +ball+ turned out to be pretty cumbersome to use, having to manually call +g.next+, using +.value+ to pull out sequence items, not to mention the initial +g.next+ call.
-
-The following bit of code could be used as an example of how we'd like +ball+ to work. The consumer provides a generator function that yields questions. Answers are printed one at a time, alongside questions, to the console.
-
-[source,javascript]
-----
-ball(function* questions () {
-  yield 'Will JavaScript fall out of grace?'
-  yield 'How do you know that?'
-})
-// <- '[q] Will JavaScript fall out of grace?'
-// <- '[a] Yes'
-// <- '[q] How do you know that?'
-// <- '[a] It is certain'
-----
-
-Whenever a question is yielded by the user-provided generator, execution in the generator function is suspended until the iterator calls +g.next+ again, even allowing +g.next+ to be called asynchronously. The following iteration of the +ball+ function iterates over the +questions+ generator until its sequence is exhausted, using a synchronous +for..of+ loop that calls +g.next+ on your behalf at every turn of the loop. Our +ball+ implementation becomes even simpler than before, and the interface for consumers -- who now only need to provide a generator that yields questions -- is simplified as well.
-
-[source,javascript]
-----
-function ball (questions) {
-  for (let question of questions()) {
-    console.log(`[q] ${ question }`)
-    console.log(`[a] ${ answer() }`)
-  }
-}
-----
-
-One trade-off that you might've noticed is that +ball+ is no longer iterable and offers little control to the consumer: it has become very opinionated. The generator now only relays the questions, and the iterator prints everything to the console. A potential fix could be to turn +ball+ into a generator function as well, where we +yield+ question/answer tuples instead of printing them to the +console+ directly, as shown in the following piece of code.
-
-[source,javascript]
-----
-function* ball (questions) {
-  for (let question of questions()) {
-    yield [
-      `[q] ${ question }`,
-      `[a] ${ answer() }`
-    ]
-  }
-}
-----
-
-The consumer of +ball+ can now pass in a generator function with their questions, and get back an iterable generator object consisting of +[q,a]+ pairs. Destructuring allows you to effortlessly consume the tuples in that sequence which you can then print to the +console+, push onto an array, or further compose with other generator functions such as +take+ from section 5.2.2, which allowed us to lazily take only the first few items in an iterable sequence.
-
-[source,javascript]
-----
-function* questions () {
-  yield 'Will JavaScript fall out of grace?'
-  yield 'How do you know that?'
-}
-for (let [q,a] of ball(questions)) {
-  console.log(q)
-  console.log(a)
-}
-----
-
-When we compare the API in the previous section with the one we've just created, it becomes quite clear that the latter is superior in terms of usability, composability, extensibility, and even readability. Writing maintainable and usable components is a hard-to-master art, but the focus should always be in designing a pleasant API first and then working your way into the implementation from there.
-
-Yet another benefit of asking consumers to provide a generator function is that providing them with the +yield+ keyword opens up a world of possibilities where execution in their code may be suspended while your iterator performs an asynchronous operation in between +g.next+ calls. Let's explore asynchronous uses of generators in the next section.
-
-=== 5.3.5 Dealing with asynchronous flows
-
-Staying on the subject of our magic 8-ball, and going back to the example where we call +ball+ with a user-provided +questions+ generator, let's reminisce about what would change about our code if the answers were to be provided asynchronously. The beauty of generators is that if the way we iterate over the questions were to become asynchronous, the generator wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch the answers to the questions, and all it'd take would be to ask a service for the answer to the current question, return that value via an intermediary +yield+ statement or in some other way, and then call +g.next+ on the +questions+ generator object.
-
-Let's assume we're back at the following usage of +ball+.
-
-[source,javascript]
-----
-ball(function* questions () {
-  yield 'Will JavaScript fall out of grace?'
-  yield 'How do you know that?'
-})
-----
-
-We'll be using +fetch+ to make requests for each HTTP resource -- which, as you may recall, returns a +Promise+. Note that in an asynchronous scenario we can no longer use +for..of+, as we now need to rely on manually calling +g.next+ ourselves, while +for..of+ only supports synchronous loops.
-
-The next code snippet sends an HTTP request for each question and then prints the answer alongside them.
-
-[source,javascript]
-----
-function ball (questions) {
-  const g = questions()
-  ask()
-  function ask () {
-    const question = g.next()
-    if (question.done) {
-      return
-    }
-    fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
-      .then(response => response.text())
-      .then(answer => {
-        console.log(`[q] ${ question.value }`)
-        console.log(`[a] ${ answer }`)
-        ask()
-      })
-  }
-}
-----
-
-The problem when taking this approach is that we're back at the case where the consumer didn't have control over how answers are used. To solve that, we could use the +g.next(value)+ message-passing feature that we discussed in section 5.3.3 as a way of forwarding answers to the user-provided generator.
-
-[source,javascript]
-----
-function ball (questions) {
-  const g = questions()
-  let question = g.next()
-  ask()
-  function ask () {
-    if (question.done) {
-      return
-    }
-    fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
-      .then(response => response.text())
-      .then(answer => question = g.next(answer))
-      .then(ask)
-  }
-}
-----
-
-The user-provided generator would have to change, slightly. The answers would now be provided as the result when evaluating +yield+ expressions, and you could print those results to the +console+ as part of a template literal.
-
-[source,javascript]
-----
-ball(function* questions () {
-  console.log(`[a-1] ${ yield 'Will JavaScript fall out of grace?' }`)
-  console.log(`[a-2] ${ yield 'How do you know that?' }`)
-})
-----
-
-Always keep in mind that while a +yield+ expression is being evaluated, execution of the generator function is paused until the next item in the sequence -- the next question, in our example -- is requested to the iterator. In this sense, code in a generator function looks and feels as if it were synchronous, even though +yield+ pauses execution in the generator until +g.next+ resumes execution.
-
-While generators let us write asynchronous code that appears synchronous, this introduces an inconvenience. How do we handle errors that arise in the iteration? If an HTTP request fails, for instance, how do we notify the generator and then handle the error notification in the generator function?
-
-=== 5.3.6 Throwing Errors at a Generator
-
-Before shifting our thinking into user-provided generators, where they retain control of seemingly-synchronous functions thanks to +yield+ and suspension, we would've been hard pressed to find a user case for +g.throw+, a method found on generator objects that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between +yield+ expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to +throw+ that error into the generator.
-
-In the case of our magic 8-ball, the iterator may experience network issues -- or a malformed HTTP response -- and fail to answer a question. In the snippet of code below, I've modified the +fetch+ step by adding an error callback that will be executed if parsing fails in +response.text()+, in which case we'll throw the exception at the generator function.
-
-[source,javascript]
-----
-fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
-  .then(response => response.text())
-  .then(answer => question = g.next(answer), reason => g.throw(reason))
-  .then(ask)
-----
-
-When +g.next+ is called, execution in generator code is unsuspended. The +g.throw+ method also unsuspends the generator, but it causes an exception to be thrown at the location of the +yield+ expression. An unhandled exception in a generator would stop iteration by preventing other +yield+ expressions from being reachable. Generator code could wrap +yield+ expressions in +try+/+catch+ blocks to gracefully manage exceptions forwarded by iteration code -- as shown in the following code snippet. This would allow subsequent +yield+ expressions to be reached, suspending the generator and putting the iterator in charge once again.
-
-[source,javascript]
-----
-ball(function* questions () {
-  try {
-    console.log(`[a-1] ${ yield 'Will JavaScript fall out of grace?' }`)
-  } catch (e) {
-    console.error('[a-1] Oops!', e)
-  }
-  try {
-    console.log(`[a-2] ${ yield 'How do you know that?' }`)
-  } catch (e) {
-    console.error('[a-2] Oops!', e)
-  }
-})
-----
-
-Generator functions allow you to use error handling semantics -- +try+, +catch+, and +throw+ -- which were previously only useful in synchronous code paths. Having the ability to use +try+/+catch+ blocks in generator code lets us treat the code as if it were synchronous, even when there's HTTP requests sitting behind +yield+ expressions, in iterator code.
-
-=== 5.3.7 Returning on Behalf of a Generator
-
-Besides +g.next+ and +g.throw+, generator objects have one more method at their disposal to determine how a generator sequence is iterated: +g.return(value)+. This method unsuspends the generator function and executes +return value+ at the location of +yield+, typically ending the sequence being iterated by the generator object. This is no different to what would occur if the generator function actually had a +return+ statement in it.
-
-[source,javascript]
-----
-function* numbers () {
-  yield 1
-  yield 2
-  yield 3
-}
-const g = numbers()
-console.log(g.next())
-// <- { done: false, value: 1 }
-console.log(g.return())
-// <- { done: true }
-console.log(g.next())
-// <- { done: true }
-----
-
-Given that +g.return(value)+ performs +return value+ at the location of +yield+ where the generator function was last suspended, a +try+/+finally+ block could avoid immediate termination of the generated sequence, as statements in the +finally+ block would be executed right before exiting. As shown in the following piece of code, that means +yield+ expressions within the +finally+ block can continue producing items for the sequence.
-
-[source,javascript]
-----
-function* numbers () {
-  try {
-    yield 1
-  } finally {
-    yield 2
-    yield 3
-  }
-  yield 4
-  yield 5
-}
-const g = numbers()
-console.log(g.next())
-// <- { done: false, value: 1 }
-console.log(g.return(-1))
-// <- { done: false, value: 2 }
-console.log(g.next())
-// <- { done: false, value: 3 }
-console.log(g.next())
-// <- { done: true, value -1 }
-----
-
-Let's now look at a simple generator function, where a few values are yielded and then a +return+ statement is encountered.
-
-[source,javascript]
-----
-function* numbers () {
-  yield 1
-  yield 2
-  return 3
-  yield 4
-}
-----
-
-While you may place +return value+ statements anywhere in a generator function, the returned +value+ won't show up when itearting the generator using the spread operator or +Array.from+ to build an array, nor when using +for..of+, as shown next.
-
-[source,javascript]
-----
-console.log([...numbers()])
-// <- [1, 2]
-console.log(Array.from(numbers()))
-// <- [1, 2]
-for (let number of numbers()) {
-  console.log(number)
-  // <- 1
-  // <- 2
-}
-----
-
-This happens because the iterator result provided by executing +g.return+ or a +return+ statement contains the +done: true+ signal, indicating that the sequence has ended. Even though that same iterator result also contains a sequence +value+, none of the previously shown methods take it into account when pulling a sequence from the generator. In this sense, +return+ statements in generators should mostly be used as circuit-breakers and not as a way of providing the last value in a sequence.
-
-The only way of actually accessing the +value+ returned from a generator is to iterate over it using a generator object, and capturing the iterator result +value+ even though +done: true+ is present, as displayed in the following snippet.
-
-[source,javascript]
-----
-const g = numbers()
-console.log(g.next())
-// <- { done: false, value: 1 }
-console.log(g.next())
-// <- { done: false, value: 2 }
-console.log(g.next())
-// <- { done: true, value: 3 }
-console.log(g.next())
-// <- { done: true }
-----
-
-Due to the confusing nature of the differences between +yield+ expressions and +return+ statements, +return+ in generators would be best avoided except in cases where a specific method wants to treat +yield+ and +return+ differently, the end goal always being to provide an abstraction in exchange for a simplified development experience.
-
-In the following section, we'll build an iterator that leverages differences in +yield+ versus +return+ to perform both input and output based on the same generator function.
-
-=== 5.3.8 Asynchronous I/O Using Generators
-
-The following piece of code shows a self-describing generator function where we indicate input sources and an output destination. This hypothetical method could be used to pull product information from the yielded endpoints, which could then be saved to the returned endpoint. An interesting aspect of this interface is that as a user you don't have to spend any time figuring out how to read and write information. You merely determine the sources and destination, and the underlying implementation figures out the rest.
-
-[source,javascript]
-----
-saveProducts(function* () {
-  yield '/products/javascript-application-design'
-  yield '/products/modular-es6'
-  return '/wishlists/books'
-})
-----
-
-As a bonus, we'll have +saveProducts+ return a promise that's fulfilled after the order is pushed to the returned endpoint, meaning the consumer will be able to execute callbacks after the order is filed. The generator function should also receive product data via the +yield+ expressions, which can be passed into it by calling +g.next+ with the associated product data.
-
-[source,javascript]
-----
-saveProducts(function* () {
-  const p1 = yield '/products/javascript-application-design'
-  const p2 = yield '/products/modular-es6'
-  return '/wishlists/books'
-}).then(response => {
-  // continue after storing the product list
-})
-----
-
-Conditional logic could be used to allow +saveProducts+ to target a user's shopping cart instead of one of their wish lists.
-
-[source,javascript]
-----
-saveProducts(function* () {
-  yield '/products/javascript-application-design'
-  yield '/products/modular-es6'
-  if (addToCart) {
-    return '/cart'
-  }
-  return '/wishlists/books'
-})
-----
-
-One of the benefits of taking this blanket "inputs and output" approach is that the implementation could be changed in a variety of ways, while keeping the API largely unchanged. The input resources could be pulled via HTTP requests or from a temporary cache, they could be pulled one by one or concurrently, or there could be a mechanism that combines all yielded resources into a single HTTP request. Other than semantic differences of pulling one value at a time versus pulling them all at the same time to combine them into a single request, the API would barely change in the face of significant changes to the implementation.
-
-We'll go over an implementation of +saveProducts+ bit by bit. First off, the following piece of code shows how we could combine +fetch+ and it's promise-based API to make an HTTP request for a JSON document about the first yielded product.
-
-[source,javascript]
-----
-function saveProducts (productList) {
-  const g = productList()
-  const item = g.next()
-  fetch(item.value)
-    .then(res => res.json())
-    .then(product => {})
-}
-----
-
-In order to pull product data in a concurrent series -- asynchronously, but one at a time -- we'll wrap the +fetch+ call in a recursive function that gets invoked as we get responses about each product. Each step of the way we'll be fetching a product, calling +g.next+ to unsuspend the generator function asking for the next yielded item in the sequence, and then calling +more+ to fetch that item.
-
-[source,javascript]
-----
-function saveProducts (productList) {
-  const g = productList()
-  more(g.next())
-  function more (item) {
-    if (item.done) {
-      return
-    }
-    fetch(item.value)
-      .then(res => res.json())
-      .then(product => {
-        more(g.next(product))
-      })
-  }
-}
-----
-
-Thus far we're pulling all inputs and passing their details back to the generator via +g.next(product)+ -- an item at a time. In order to leverage the +return+ statement, we'll save the products in a temporary array and then +POST+ the list onto the output endpoint present on the iterator +item+ when the sequence is marked as having ended.
-
-[source,javascript]
-----
-function saveProducts (productList) {
-  const products = []
-  const g = productList()
-  more(g.next())
-  function more (item) {
-    if (item.done) {
-      save(item.value)
-    } else {
-      details(item.value)
-    }
-  }
-  function details (endpoint) {
-    fetch(endpoint)
-      .then(res => res.json())
-      .then(product => {
-        products.push(product)
-        more(g.next(product))
-      })
-  }
-  function save (endpoint) {
-    fetch(endpoint, {
-      method: 'POST',
-      body: JSON.stringify({ products })
-    })
-  }
-}
-----
-
-At this point product descriptions are being pulled down, cached in the +products+ array, forwarded to the generator body, and eventually saved in one fell swoop using the endpoint provided by the +return+ statement.
-
-In our original API design we suggested we'd return a promise from +saveProducts+ so that callbacks could be chained and executed after the +save+ operation. As we mentioned earlier, +fetch+ returns a promise. By adding +return+ statements all the way through our function calls, you can observe how +saveProducts+ returns the output of +more+, which returns the output of +save+ or +details+, both of which return the promise created by a +fetch+ call. In addition, each +details+ call returns the result of calling +more+ from inside the +details+ promise, meaning the original +fetch+ won't be fulfilled until the second +fetch+ is fulfilled, allowing us to chain these promises which will ultimately resolve when the +save+ call is executed and resolved.
-
-[source,javascript]
-----
-function saveProducts (productList) {
-  const products = []
-  const g = productList()
-  return more(g.next())
-  function more (item) {
-    if (item.done) {
-      return save(item.value)
-    }
-    return details(item.value)
-  }
-  function details (endpoint) {
-    return fetch(endpoint)
-      .then(res => res.json())
-      .then(product => {
-        products.push(product)
-        return more(g.next(product))
-      })
-  }
-  function save (endpoint) {
-    return fetch(endpoint, {
-        method: 'POST',
-        body: JSON.stringify({ products })
-      })
-      .then(res => res.json())
-  }
-}
-----
-
-As you may have noticed, the implementation doesn't hardcode any important aspects of the operation, which means you could use the inputs and output pattern in a generic way as long as you have zero or more inputs you want to pipe into one output. The consumer ends up with an elegant-looking method that's easy to understand -- they +yield+ input stores and +return+ an output store. Furthermore, our use of promises makes it easy to concatenate this operation with others. This way, we're keeping a potential tangle of conditional statements and flow control mechanisms in check, by abstracting away flow control into the iteration mechanism under the +saveProducts+ method.
-
-We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into +async+ / +await+, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this chapter.
-
-=== 5.4 Async Functions
-
-Languages like Python and C# have had +async+ / +await+ for a while. JavaScript is now also getting native syntax to describe asynchronous operations.
-
-Let's go over a quick recap comparing promises, callbacks and generators. Afterwards we'll look into Async Functions in JavaScript, and how this new feature can help make our code more readable.
-
-==== 5.4.1 Flavors of Async Code
-
-Let's suppose we had code like the following. Here I'm wrapping a +fetch+ request in a +getRandomArticle+ function. The promise fulfills with the JSON +body+ when successful, and follows standard +fetch+ rejection mechanics otherwise.
-
-[source,javascript]
-----
-function getRandomArticle () {
-  return fetch('/articles/random', {
-    headers: new Headers({
-      Accept: 'application/json'
-    })
-  })
-  .then(res => res.json())
-}
-----
-
-The next piece of code shows how typical usage for +getRandomArticle+ might look like. We build a promise chain that takes the JSON object for the article and passes it through an asynchronous +renderView+ view rendering function, which fulfills as an HTML page. We then replace the contents of our page with that HTML. In order to avoid silent errors, we'll also print any rejection reasons using +console.error+.
-
-[source,javascript]
-----
-getRandomArticle()
-  .then(model => renderView(model))
-  .then(html => setPageContents(html))
-  .then(() => console.log('Successfully changed page!'))
-  .catch(reason => console.error(reason));
-----
-
-Chaining promises can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
-
-If we were to use plain JavaScript callbacks, our code would become repetitive, as demonstrated in the next code listing. At the same time, we're running into callback hell: we're adding a level of indentation for each step in our asynchronous code flow, making our code increasingly harder to read with each step we add.
-
-[source,javascript]
-----
-getRandomArticle((err, model) => {
-  if (err) {
-    return console.error(reason)
-  }
-  renderView(model, (err, html) => {
-    if (err) {
-      return console.error(reason)
-    }
-    setPageContents(html, err => {
-      if (err) {
-        return console.error(reason)
-      }
-      console.log('Successfully changed page!')
-    })
-  })
-})
-----
-
-Libraries can, of course, help with callback hell and repetitive error handling. Libraries like +async+ take advantage of normalized callbacks where the first argument is reserved for errors. Using their +waterfall+ method, our code becomes terse again.
-
-[source,javascript]
-----
-async.waterfall([
-  getRandomArticle,
-  renderView,
-  setPageContents
-], (err, html) => {
-  if (err) {
-    return console.error(reason)
-  }
-  console.log('Successfully changed page!')
-})
-----
-
-Let's look at a similar example, but this time we'll be using generators. The following is a rewrite of +getRandomArticle+ where we consume a generator for the sole purpose of changing the way in which +getRandomArticle+ is consumed.
-
-[source,javascript]
-----
-function getRandomArticle (gen) {
-  const g = gen();
-  fetch('/articles/random', {
-    headers: new Headers({
-      Accept: 'application/json'
-    })
-  })
-  .then(res => res.json())
-  .then(json => g.next(json))
-  .catch(error => g.throw(error))
-}
-----
-
-The following piece of code shows how you can pull the +json+ from +getRandomArticle+ by way of a +yield+ expression. Even though that looks somewhat synchronous, there's now a generator function wrapper involved. As soon as we want to add more steps, we need to heavily modify +getRandomArticle+ so that it yields the results we want, and make the necessary changes to the generator function in order to consume the updated sequence of results.
-
-[source,javascript]
-----
-getRandomArticle(function* printRandomArticle () {
-  const json = yield;
-  // render view
-});
-----
-
-Generators may not be the most straightforward way of accomplishing the results that we want in this case: you're only moving the complexity somewhere else. We might as well stick with Promises.
-
-Besides involving an unintuitive syntax into the mix, your iterator code will be highly coupled to the generator function that's being consumed. That means you'll have to change it often as you add new +yield+ expressions to the generator code.
-
-A better alternative would be to use an Async Function.
-
-==== 5.4.2 Using +async+ / +await+
-
-Async Functions let us take a +Promise+-based implementation and take advantage of the synchronous-looking generator style. A huge benefit in this approach is that you won't have to change the original +getRandomArticle+ at all: as long as it returns a promise it can be awaited.
-
-Note that +await+ may only be used inside Async Functions, marked with the +async+ keyword. Async Functions work similarly to generators, by suspending execution in the local context until a promise settles. If the awaited expression isn't originally a promise, it gets casted into a promise.
-
-The following piece of code consumes our original +getRandomArticle+, which relied on promises. Then it runs that model through an asynchronous +renderView+ function, which returns a bit of HTML, and updates the page. Note how we can use +try+ / +catch+ to handle errors in awaited promises from within the +async+ function, treating completely asynchronous code as if it were synchronous.
-
-[source,javascript]
-----
-async function read () {
-  try {
-    const model = await getRandomArticle()
-    const html = await renderView(model)
-    await setPageContents(html)
-    console.log('Successfully changed page!')
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-read()
-----
-
-An Async Function always returns a +Promise+. In the case of uncaught exceptions, the returned promise settles in rejection. Otherwise, the returned promise resolves to the return value. This aspect of Async Functions allows us to mix them with regular promise-based continuation as well. The following example shows how the two may be combined.
-
-[source,javascript]
-----
-async function read () {
-  const model = await getRandomArticle()
-  const html = await renderView(model)
-  await setPageContents(html)
-  return 'Successfully changed page!'
-}
-
-read()
-  .then(message => console.log(message))
-  .catch(err => console.error(err))
-----
-
-Making the +read+ function a bit more reusable, we could return the resulting +html+, and allow consumers to do continuation using promises or yet another Async Function. That way, your +read+ function becomes only concerned with pulling down the HTML for a view.
-
-[source,javascript]
-----
-async function read () {
-  const model = await getRandomArticle()
-  const html = await renderView(model)
-  return html
-}
-----
-
-Following the example, we can use plain promises to prints the HTML.
-
-[source,javascript]
-----
-read().then(html => console.log(html))
-----
-
-Using Async Functions wouldn't be all that difficult for continuation, either. In the next snippet, we create a +write+ function used for continuation.
-
-[source,javascript]
-----
-async function write () {
-  const html = await read()
-  console.log(html)
-}
-----
-
-What about concurrent asynchronous flows?
-
-==== 5.4.3 Concurrent Async Flows
-
-In asynchronous code flows, it is commonplace to execute two or more tasks concurrently. While Async Functions make it easier to write asynchronous code, they also lend themselves to code that executes one asynchronous operation at a time. A function with multiple +await+ expressions in it will be suspended once at a time on each +await+ expression until that +Promise+ is settled, before unsuspending execution and moving onto the next +await+ expression -- this is a similar case to what we observe with generators and +yield+.
-
-[source,javascript]
-----
-async function concurrent () {
-  const p1 = new Promise(resolve => setTimeout(resolve, 500, 'fast'))
-  const p2 = new Promise(resolve => setTimeout(resolve, 200, 'faster'))
-  const p3 = new Promise(resolve => setTimeout(resolve, 100, 'fastest'))
-  const r1 = await p1 // execution is blocked until p1 settles
-  const r2 = await p2
-  const r3 = await p3
-}
-----
-
-We can use +Promise.all+ to work around that issue, creating a single promise that we can +await+ on. This way, our code blocks until every promise in a list is settled, and they can be resolved concurrently.
-
-The following example shows how you could +await+ on three different promises that could be resolved concurrently. Given that +await+ suspends your +async+ function and the +await Promise.all+ expression ultimately resolves into a +results+ array, we can take advantage of destructuring to pull individual results out of that array.
-
-[source,javascript]
-----
-async function concurrent () {
-  const p1 = new Promise(resolve => setTimeout(resolve, 500, 'fast'))
-  const p2 = new Promise(resolve => setTimeout(resolve, 200, 'faster'))
-  const p3 = new Promise(resolve => setTimeout(resolve, 100, 'fastest'))
-  const [r1, r2, r3] = await Promise.all([p1, p2, p3])
-  console.log(r1, r2, r3)
-  // 'fast', 'faster', 'fastest'
-}
-----
-
-Promises offer an alternative to +Promise.all+ in +Promise.race+. We can use +Promise.race+ to get the result from the promise that fulfills quicker.
-
-[source,javascript]
-----
-async function race () {
-  const p1 = new Promise(resolve => setTimeout(resolve, 500, 'fast'))
-  const p2 = new Promise(resolve => setTimeout(resolve, 200, 'faster'))
-  const p3 = new Promise(resolve => setTimeout(resolve, 100, 'fastest'))
-  const result = await Promise.race([p1, p2, p3])
-  console.log(result)
-  // 'fastest'
-}
-----
-
-==== 5.4.4 Error Handling
-
-Errors are swallowed silently within an +async+ function, just like inside normal Promises, due to Async Functions being wrapped in a +Promise+. Uncaught exceptions raised in the body of your Async Function or during suspended execution while evaluating an +await+ expresion will reject the promise returned by the +async+ function.
-
-That is, unless we add +try+ / +catch+ blocks around +await+ expressions. For the portion of the Async Function code that's wrapped, errors are treated under typical +try+ / +catch+ semantics.
-
-Naturally, this can be seen as a strength: you can leverage +try+ / +catch+ conventions, something you were unable to do with asynchronous callbacks, and somewhat able to when using promises. In this sense, Async Functions are akin to generators, where we can take advantage of +try+ / +catch+ thanks to function execution suspension turning asynchronous flows into seemingly synchronous code.
-
-Furthermore, you're able to catch these exceptions from outside the +async+ function, by adding a +.catch+ clause to the promise they return. While this is a flexible way of combining the +try+ / +catch+ error handling flavor with +.catch+ clauses in Promises, it can also lead to confusion and ultimately cause to errors going unhandled, unless everyone reading the code is comfortable with async function semantics in terms of the promise wrapper and how +try+ / +catch+ works under this context.
-
-[source,javascript]
-----
-read()
-  .then(html => console.log(html))
-  .catch(err => console.error(err))
-----
-
-As you can see, there's quite a few ways in which we can notice exceptions and then handle, log, or offload them.
-
-==== 5.4.6 Understanding Async Function Internals
-
-Async Functions leverage both generators and promises internally. Let's suppose we have the following Async Function.
-
-[source,javascript]
-----
-async function example (a, b, c) {
-  // example function body
-}
-----
-
-The next bit shows how the +example+ declaration could be converted into a plain old +function+ which returns the result of feeding a generator function to a +spawn+ helper.
-
-[source,javascript]
-----
-function example (a, b, c) {
-  return spawn(function* () {
-    // example function body
-  })
-}
-----
-
-Inside the generator function, we'll assume +yield+ to be the syntactic equivalent of +await+.
-
-In +spawn+, a promise is wrapped around code that will step through the generator function -- made out of user code -- in series, forwarding values to the generator code (the +async+ function's body).
-
-The following listing should aid you in understanding how the +async+ / +await+ algorithm iterates over a sequence of +await+ expressions using a generator. Each item in the sequence is wrapped in a promise and then gets chained with the next step in the sequence. The promise returned by the underlying generator function becomes settled when the sequence ends or one of the promises is rejected.
-
-[source,javascript]
-----
-function spawn (generator) {
-  // wrap everything in a promise
-  return new Promise((resolve, reject) => {
-    const g = generator()
-
-    // run the first step
-    step(() => g.next())
-
-    function step (nextFn) {
-      const next = runNext(nextFn)
-      if (next.done) {
-        // finished with success, resolve the promise
-        resolve(next.value)
-        return
-      }
-      // not finished, chain off the yielded promise and run next step
-      Promise
-        .resolve(next.value)
-        .then(
-          value => step(() => g.next(value)),
-          err => step(() => g.throw(err))
-        )
-    }
-
-    function runNext (nextFn) {
-      try {
-        // resume the generator
-        return nextFn()
-      } catch (err) {
-        // finished with failure, reject the promise
-        reject(err)
-      }
-    }
-  })
-}
-----
-
-Consider the following Async Function. In order to print the result, we're also using promise-based continuation. Let's follow the code as a thought exercise.
-
-[source,javascript]
-----
-async function exercise () {
-  const r1 = await new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
-  const r2 = await new Promise(resolve => setTimeout(resolve, 200, 'slow'))
-  return [r1, r2]
-}
-
-exercise().then(result => console.log(result))
-// <- ['slowest', 'slow']
-----
-
-First, we could translate the function to our +spawn+ based logic. We wrap the body of our Async Function in a generator passed to +spawn+, and replace any +await+ expressions with +yield+.
-
-[source,javascript]
-----
-function exercise () {
-  return spawn(function* () {
-    const r1 = yield new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
-    const r2 = yield new Promise(resolve => setTimeout(resolve, 200, 'slow'))
-    return [r1, r2]
-  })
-}
-
-exercise().then(result => console.log(result))
-// <- ['slowest', 'slow']
-----
-
-When +spawn+ is called with the generator function, it immediately creates a generator object and executes +step+ a first time, as seen in the next code snippet. The +step+ function will also be used whenever we reach a +yield+ expression, which are equivalent to the +await+ expressions in our Async Function.
-
-[source,javascript]
-----
-function spawn (generator) {
-  // wrap everything in a promise
-  return new Promise((resolve, reject) => {
-    const g = generator()
-
-    // run the first step
-    step(() => g.next())
-    // ...
-  })
-}
-----
-
-The first thing that happens in the +step+ function is calling the +nextFn+ function inside a +try+ / +catch+ block. This resumes execution in the generator function. If the generator function were to produce an error, we'd fall into the +catch+ clause, and the underlying promise for our Async Function would be rejected without any further steps, as shown next.
-
-[source,javascript]
-----
-function step (nextFn) {
-  const next = runNext(nextFx)
-  // ...
-}
-
-function runNext (nextFn) {
-  try {
-    // resume the generator
-    return nextFn()
-  } catch (err) {
-    // finished with failure, reject the promise
-    reject(err)
-  }
-}
-----
-
-Back to the Async Function, code up until the following expression is evaluated. No errors are incurred, and execution in the Async Function is suspended once again.
-
-[source,javascript]
-----
-yield new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
-----
-
-The yielded expression is received by +step+ as +next.value+, while +next.done+ indicates whether the generator sequence has ended. In this case, we receive the +Promise+ in the function controlling exactly how iteration should occur. At this time, +next.done+ is +false, meaning we won't be resolving the async function's wrapper Promise. We wrap +next.value+ in a fulfilled +Promise+, just in case we haven't received a +Promise+.
-
-We then wait on the +Promise+ to be fulfilled or rejected. If the promise is fulfilled, we push the fulfillment value to the generator function by advancing the generator sequence with +value+. If the promise is rejected, we would've used +g.throw+, which would've resulted in an error being raised in the generator function, causing the Async Function's wrapper promise to be rejected at +runNext+.
-
-[source,javascript]
-----
-function step (nextFn) {
-  const next = runNext(nextFn)
-  if (next.done) {
-    // finished with success, resolve the promise
-    resolve(next.value)
-    return
-  }
-  // not finished, chain off the yielded promise and run next step
-  Promise
-    .resolve(next.value)
-    .then(
-      value => step(() => g.next(value)),
-      err => step(() => g.throw(err))
-    )
-}
-----
-
-Using +g.next()+ on its own means that the generator function resumes execution. By passing a value to +g.next(value)+, we've made it so that the +yield+ expression evaluates to that +value+. The +value+ in question is, in this case, the fulfillment value of the originally yielded +Promise+, which is +'slowest'+.
-
-Back in the generator function, we assign +'slowest' to +r1+.
-
-[source,javascript]
-----
-const r1 = yield new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
-----
-
-Then, execution runs up until the second +yield+ statement. The +yield+ expression once again causes execution in the Async Function to be suspended, and sends the new +Promise+ to the +spawn+ iterator.
-
-[source,javascript]
-----
-yield new Promise(resolve => setTimeout(resolve, 200, 'slow'))
-----
-
-The same process is repeated this time: +next.done+ is +false+ because we haven't reached the end of the generator function. We wrap the Promise in another promise just in case, and once the promise settles with +'slow'+, we resume execution in the generator function.
-
-Then we reach the return statement in the generator function. Once again, execution is suspended in the generator function, and returned to the iterator.
-
-[source,javascript]
-----
-return [r1, r2]
-----
-
-At this point, +next+ evaluates to the following object.
-
-[source,javascript]
-----
-{
-  value: ['slowest', 'slow']
-  done: true
-}
-----
-
-Immediately, the iterator checks that +next.done+ is indeed +true+, and resolves the Async Function to +['slowest', 'slow']+.
-
-[source,javascript]
-----
-if (next.done) {
-  // finished with success, resolve the promise
-  resolve(next.value)
-  return
-}
-----
-
-Now that the promise returned by +exercise+ is settled in fulfillment, the log statement is finally printed.
-
-[source,javascript]
-----
-exercise().then(result => console.log(result))
-// <- ['slowest', 'slow']
-----
-
-Async Functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the +spawn+ function used to iterate over the sequence of yielded expressions, and +yield+ becomes +await+.
-
-Noting that Async Functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows together.
-
-=== 5.5 Asynchronous Iteration
-
-As explained in section 5.2, You may recall how iterators leverage +Symbol.iterator+ as an interface to define how an object is to be iterated.
-
-[source,javascript]
-----
-const sequence = {
-  [Symbol.iterator]() {
-    const items = ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
-    return {
-      next: () => ({
-        done: items.length === 0,
-        value: items.shift()
-      })
-    }
-  }
-}
-----
-
-You may also recall that the +sequence+ object can be iterated in a number of different ways such as the spread operator, +Array.from+ and +for..of+, among others.
-
-[source,javascript]
-----
-[...sequence]
-// <- ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
-Array.from(sequence)
-// <- ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
-
-for (const item of sequence) {
-  console.log(item)
-  // <- 'i'
-  // <- 't'
-  // <- 'e'
-  // <- 'r'
-  // <- 'a'
-  // <- 'b'
-  // <- 'l'
-  // <- 'e'
-}
-----
-
-The contract for an iterator mandates that the +next+ method of +Symbol.iterator+ instances returns an object with +value+ and +done+ properties. The +value+ property indicates the current value in the sequence, while +done+ is a boolean indicating whether the sequence has ended.
-
-=== 5.5.1 Async Iterators
-
-In *async iterators*, the contract has a subtle difference: +next+ is supposed to return a +Promise+ that resolves to an object containing +value+ and +done+ properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new +Symbol.asyncIterator+ is introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing +Symbol.iterator+.
-
-The +sequence+ iterable could be made compatible with the async iterator interface with two small changes: we replace +Symbol.iterator+ with +Symbol.asyncIterator+, and we wrap the return value for the +next+ method in +Promise.resolve+, thus returning a +Promise+.
-
-[source,javascript]
-----
-const sequence = {
-  [Symbol.asyncIterator]() {
-    const items = ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
-    return {
-      next: () => Promise.resolve({
-        done: items.length === 0,
-        value: items.shift()
-      })
-    }
-  }
-}
-----
-
-A case could be made for an infinite sequence that increases its value at a certain time interval. The following example has an +interval+ function which returns an infinite async sequence. Each step resolves to the next value in the sequence after +duration+.
-
-[source,javascript]
-----
-const interval = duration => ({
-  [Symbol.asyncIterator]: () => ({
-    i: 0,
     next () {
-      return new Promise(resolve =>
-        setTimeout(() => resolve({
-          value: this.i++,
-          done: false
-        }), duration)
-      )
+      const done = keys.length === 0
+      const key = keys.shift()
+      const value = [key, registry[key]]
+      return { done, value }
     }
-  })
-})
+  }
+}
+console.log([...registry])
 ----
 
-In order to consume an async iterator, we can leverage the new +for await..of+ construct introduced alongside Async Iterators. This is yet another way of writing code that behaves asynchronously yet looks synchronous. Note that +for await..of+ statements are only allowed inside Async Functions.
+When it comes to using non-string keys, though, we hit a hard limit in ES5 code. Luckily for us, though, ES6 collections provide us with an even better solution. ES6 collections don't have key-naming issues, and they facilitate collection behaviors, like the iterator we've implemented on our custom hash-map, out the box. At the same time, ES6 collections allow arbitrary keys, and aren't limited to string keys like regular JavaScript objects.
+
+Let's plunge into their practical usage and inner workings.
+
+=== 6.1 Using ES6 Maps
+
+ES6 introduces built-in collections, such as +Map+, meant to alleviate implementation of patterns such as those we outlined earlier when building our own hash-map from scratch. +Map+ is a key/value data structure in ES6 that more naturally and efficiently lends itself to creating maps in JavaScript without the need for object literals.
+
+==== 6.1.1 First Look into ES6 Maps
+
+Here's how what we had earlier would have looked like when using ES6 maps. As you can see, the implementation details we've had to come up for our custom ES5 hash-map are already built into +Map+, vastly simplifying our use case.
 
 [source,javascript]
 ----
-async function print () {
-  for await (const i of interval(1000)) {
-    console.log(`${i} seconds ellapsed.`)
-  }
-}
-print()
+const map = new Map()
+map.set('contra', { description: 'Asynchronous flow control' })
+map.set('dragula', { description: 'Drag and drop' })
+map.set('woofmark', { description: 'Markdown and WYSIWYG editor' })
+console.log([...map])
 ----
 
-==== 5.5.2 Async Generators
-
-Like with regular iterators, there's async generators to complement async iterators. An async generator function is like a generator function, except that it also supports +await+ and +for await..of+ declarations. The following example shows a +fetchInterval+ generator that fetches a resource periodically at an interval.
+Once you have a map, you can query whether it contains an entry by a +key+ provided via the +map.has+ method.
 
 [source,javascript]
 ----
-async function* fetchInterval(duration, ...params) {
-  for await (const i of interval(duration)) {
-    yield await fetch(...params)
-  }
-}
+map.has('contra')
+// <- true
+map.has('jquery')
+// <- false
 ----
 
-When stepped over, async generators return objects with a +{ next, return, throw }+ signature, whose methods return promises for +{ next, done }+. This is in contrast with regular generators which return +{ next, done }+ directly.
-
-You can consume the +interval+ async generator in exactly the same way you could consume the object-oriented async iterator. The following example consumes the +fetchInterval+ generator to poll an +/api/status+ HTTP resource and leverage its JSON response. After each step ends, we wait for a second and repeat the process.
+Earlier, we pointed out that maps don't cast keys the way traditional objects do. This is typically an advantage, but you need to keep in mind that they won't be treated the same when querying the map, either.
 
 [source,javascript]
 ----
-async function process () {
-  for await (const response of fetchInterval(1000, '/api/status')) {
-    const data = await response.json()
-    // use updated data
-  }
-}
-process()
+const map = new Map([[1, 'a']])
+map.has(1)
+// <- true
+map.has('1')
+// <- false
 ----
 
-As highlighted in section 5.2.2, it's important to break out of this kinds of sequences, in order to avoid infinite loops.
+The +map.get+ method takes a map entry +key+ and returns the +value+ if an entry by the provided key is found.
+
+[source,javascript]
+----
+map.get('contra')
+// <- { description: 'Asynchronous flow control' }
+----
+
+Deleting values from the map is possible through the +map.delete+ method, providing the +key+ for the entry you want to remove.
+
+[source,javascript]
+----
+map.delete('contra')
+map.get('contra')
+// <- undefined
+----
+
+You can clear the entries for a +Map+ entirely, without losing the reference to the map itself. This can be handy in cases where you want to reset state for an object.
+
+[source,javascript]
+----
+const map = new Map([[1, 2], [3, 4], [5, 6]])
+map.has(1)
+// <- true
+map.clear()
+map.has(1)
+// <- false
+[...map]
+// <- []
+----
+
+Maps come with a read-only +.size+ property that behaves similarly to +Array#length+ -- at any point in time it gives you the current amount of entries in the map.
+
+[source,javascript]
+----
+const map = new Map([[1, 2], [3, 4], [5, 6]])
+map.size
+// <- 3
+map.delete(3)
+map.size
+// <- 2
+map.clear()
+map.size
+// <- 0
+----
+
+You're able to use arbitrary objects when choosing map keys: you're not limited to using primitive values like symbols, numbers, or strings. Instead, you can use functions, objects, dates -- and even DOM elements, too. Keys won't be casted to strings as we observe with plain JavaScript objects, but instead their references are preserved.
+
+[source,javascript]
+----
+const map = new Map()
+map.set(new Date(), function today () {})
+map.set(() => 'key', { key: 'door' })
+map.set(Symbol('items'), [1, 2])
+----
+
+As an example, if we chose to use a symbol as the key for a map entry, we'd have to use a reference to that same symbol to get the item back, as demonstrated in the following snippet of code.
+
+[source,javascript]
+----
+const map = new Map()
+const key = Symbol('items')
+map.set(key, [1, 2])
+map.get(Symbol('items')); // not the same reference as "key"
+// <- undefined
+map.get(key)
+// <- [1, 2]
+----
+
+Assuming an array of key/value pair +items+ you want to include on a map, we could use a +for..of+ loop to iterate over those +items+ and add each pair to the map using +map.set+, as shown in the following code snippet. Note how we're using destructuring during the +for..of+ loop in order to effortlessly pull the +key+ and +value+ out of each two-dimensional item in +items+.
+
+[source,javascript]
+----
+const items = [
+  [new Date(), function today () {}],
+  [() => 'key', { key: 'door' }],
+  [Symbol('items'), [1, 2]]
+]
+const map = new Map()
+for (let [key, value] of items) {
+  map.set(key, value)
+}
+----
+
+Maps are iterable objects as well, because they implement a +Symbol.iterator+ method. Thus, a copy of the map can be created using a +for..of+ loop using similar code to what we've just used to create a map out of the +items+ array.
+
+[source,javascript]
+----
+const copy = new Map()
+for (let [key, value] of map) {
+  copy.set(key, value)
+}
+----
+
+In order to keep things simple, you can initialize maps directly using any object that follows the iterable protocol and produces a collection of +[key, value]+ items. The following code snippet uses an array to seed a newly created +Map+. In this case, iteration occurs entirely in the +Map+ constructor.
+
+[source,javascript]
+----
+const items = [
+  [new Date(), function today () {}],
+  [() => 'key', { key: 'door' }],
+  [Symbol('items'), [1, 2]]
+]
+const map = new Map(items)
+----
+
+Creating a copy of a map is even easier: you feed the map you want to copy into a new map's constructor, and get a copy back. There isn't a special +new Map(Map)+ overload. Instead, we take advantage that map implements the iterable protocol and also consumes iterables when constructing a new map. The following code snippet demonstrates how simple that is.
+
+[source,javascript]
+----
+const copy = new Map(map)
+----
+
+Just like maps are easily fed into other maps because they're iterable objects, they're also easy to consume. The following piece of code demonstrates how we can use the spread operator to this effect.
+
+[source,javascript]
+----
+const map = new Map()
+map.set(1, 'one')
+map.set(2, 'two')
+map.set(3, 'three')
+console.log([...map])
+// <- [[1, 'one'], [2, 'two'], [3, 'three']]
+----
+
+In the following piece of code we've combined several new features in ES6: +Map+, the +for..of+ loop, +let+ variables, and template literals.
+
+[source,javascript]
+----
+const map = new Map()
+map.set(1, 'one')
+map.set(2, 'two')
+map.set(3, 'three')
+for (let [key, value] of map) {
+  console.log(`${ key }: ${ value }`)
+  // <- '1: one'
+  // <- '2: two'
+  // <- '3: three'
+}
+----
+
+Even though map items are accessed through programmatic API, their keys are unique, just like with hash-maps. Setting a key over and over again will only overwrite its value. The following code snippet demonstrates how writing the +'a'+ item over and over again results in a map containing only a single item.
+
+[source,javascript]
+----
+const map = new Map()
+map.set('a', 1)
+map.set('a', 2)
+map.set('a', 3)
+console.log([...map])
+// <- [['a', 3]]
+----
+
+In ES6 maps, +NaN+ becomes a "corner-case" that gets treated as a value that's equal to itself, even though the +NaN === NaN+ expression evaluates to +false+. A number of ECMAScript features introduced in ES6 and later use a different comparison algorithm than that of ES5 and earlier where +NaN+ is equal to +NaN+, although +NaN !== NaN+; and ++0+ is different from +-0+, even though ++0 === -0+. The following piece of code shows how even though +NaN+ is typically evaluated to be different than itself, +Map+ considers +NaN+ to be a constant value that's always the same.
+
+[source,javascript]
+----
+console.log(NaN === NaN)
+// <- false
+const map = new Map()
+map.set(NaN, 'a')
+map.set(NaN, 'b')
+console.log([...map])
+// <- [[NaN, 'b']]
+----
+
+When you iterate over a +Map+, you are actually looping over its +.entries()+. That means that you don't need to explicitly iterate over +.entries()+. It'll be done on your behalf anyways: +map[Symbol.iterator]+ points to +map.entries+. The +.entries()+ method returns an iterator for the key/value pairs in the map.
+
+[source,javascript]
+----
+map[Symbol.iterator] === map.entries
+// <- true
+----
+
+There are has two other +Map+ iterators you can leverage: +.keys()+ and +.values()+. The first enumerates keys in a map while the second enumerates values, as opposed to +.entries()+ which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
+
+[source,javascript]
+----
+const map = new Map([[1, 2], [3, 4], [5, 6]])
+[...map.keys()]
+// <- [1, 3, 5]
+[...map.values()]
+// <- [2, 4, 6]
+[...map.entries()]
+// <- [[1, 2], [3, 4], [5, 6]]
+----
+
+Map entries are always iterated in insertion order. This contrasts with +Object.keys+, which is specified to follow an arbitrary order. Although, in practice, insertion order is typically preserved by JavaScript engines regardless of the specification.
+
+Maps have a +.forEach+ method that's identical in behavior to that in ES5 +Array+ objects. Once again, keys do not get casted into strings in the case of +Map+, as demonstrated below.
+
+[source,javascript]
+----
+const map = new Map([[NaN, 1], [Symbol(), 2], ['key', 'value']])
+map.forEach((value, key) => console.log(key, value))
+// <- NaN 1
+// <- Symbol() 2
+// <- 'key' 'value'
+----
+
+Earlier, we brought up the ability of providing arbitrary object references as the key to a +Map+ entry. Let's go into a concrete use case for that API.
+
+==== 6.1.2 Hash-Maps and the DOM
+
+In ES5, whenever we wanted to associate a DOM element with an API object connecting that element with some library, we had to implement a verbose and slow pattern such as the one in the following code listing. That code returns an API object with a few methods associated to a given DOM element, allowing us to put DOM elements on a map from which we can later retrieve the API object for a DOM element.
+
+[source,javascript]
+----
+const map = []
+function customThing (el) {
+  const mapped = findByElement(el)
+  if (mapped) {
+    return mapped
+  }
+  const api = {
+    // custom thing api methods
+  }
+  const entry = storeInMap(el, api)
+  api.destroy = destroy.bind(null, entry)
+  return api
+}
+function storeInMap (el, api) {
+  const entry = { el: el, api: api }
+  map.push(entry)
+  return entry
+}
+function findByElement (el) {
+  for (const i = 0; i < map.length; i++) {
+    if (map[i].el === el) {
+      return map[i].api
+    }
+  }
+}
+function destroy (entry) {
+  const i = map.indexOf(entry)
+  map.splice(i, 1)
+}
+----
+
+One of the most valuable aspects of +Map+ is the ability to index by DOM elements. That, combined with the fact that +Map+ also has collection manipulation abilities greatly simplifies things.
+
+[source,javascript]
+----
+const map = new Map()
+function customThing (el) {
+  const mapped = findByElement(el)
+  if (mapped) {
+    return mapped
+  }
+  const api = {
+    // custom thing api methods
+    destroy: destroy.bind(null, el)
+  }
+  storeInMap(el, api)
+  return api
+}
+function storeInMap (el, api) {
+  map.set(el, api)
+}
+function findByElement (el) {
+  return map.get(el)
+}
+function destroy (el) {
+  map.delete(el)
+}
+----
+
+The fact that mapping functions have become one liners thanks to native +Map+ methods means we could inline those functions instead, as readability is no longer an issue. The following piece of code is a vastly simplified alternative to the ES5 piece of code we started with. Here we're not concerned with implementation details anymore, but have instead boiled the DOM-to-API mapping to its bare essentials.
+
+[source,javascript]
+----
+const map = new Map()
+function customThing (el) {
+  const mapped = map.get(el)
+  if (mapped) {
+    return mapped
+  }
+  const api = {
+    // custom thing api methods
+    destroy: () => map.delete(el)
+  }
+  map.set(el, api)
+  return api
+}
+----
+
+Maps aren't the only kind of built-in collection in ES6, there's also +WeakMap+, +Set+, and +WeakSet+. Let's proceed by digging into +WeakMap+.
+
+=== 6.2 Understanding and Using WeakMap
+
+For the most part, you can think of +WeakMap+ as a subset of +Map+. The +WeakMap+ collection imposes a number of limitations that we didn't find in +Map+. The biggest limitation is that +WeakMap+ is not iterable like +Map+: there is no iterable protocol in +WeakMap+, no +WeakMap#entries+, no +WeakMap#keys+, no +WeakMap#values+, no +WeakMap#forEach+ and no +WeakMap#clear+ methods.
+
+Another distinction found in +WeakMap+ is that every +key+ must be an object. This is in contrast with +Map+ where, while object references were allowed as keys, they weren't enforced. Remember that +Symbol+ is a value type, and as such, they're not allowed either.
+
+[source,javascript]
+----
+const map = new WeakMap()
+map.set(Date.now, 'now')
+map.set(1, 1)
+// <- TypeError
+map.set(Symbol(), 2)
+// <- TypeError
+----
+
+In exchange for having a more limited feature set, +WeakMap+ key references are weakly held, meaning that the objects referenced by +WeakMap+ keys are subject to garbage collection if there are no other references to them. This kind of behavior is useful when you have metadata about a +person+, for example, but you want the +person+ to be garbage collected when and if the only reference back to +person+ is their metadata. You can now keep that metadata in a +WeakMap+ using +person+ as the key.
+
+With +WeakMap+, you are still able to provide an iterable for initialization.
+
+[source,javascript]
+----
+const map = new WeakMap([
+  [new Date(), 'foo'],
+  [() => 'bar', 'baz']
+])
+----
+
+While +WeakMap+ has a smaller API surface in order to effectively allow for weak references, it still carries +.has+, +.get+, and +.delete+ methods like +Map+ does. The brief snippet of code shown next demonstrates these methods.
+
+[source,javascript]
+----
+const date = new Date()
+const map = new WeakMap([[date, 'foo'], [() => 'bar', 'baz']])
+map.has(date)
+// <- true
+map.get(date)
+// <- 'foo'
+map.delete(date)
+map.has(date)
+// <- false
+----
+
+==== 6.2.1 Is +WeakMap+ Strictly Worse Than +Map+?
+
+The distinction that makes +WeakMap+ worth the trouble is in its name. Given that +WeakMap+ holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as +WeakMap+ keys. This is in contrast with +Map+ which holds strong object references, preventing +Map+ keys from being garbage collected.
+
+Correspondingly, use cases for +WeakMap+ revolve around the need to specify metadata or extend an object while still being able to garbage collect that object if there are no other references to it. A perfect example might be the underlying implementation for +process.on('unhandledRejection')+ in Node.js, which uses a +WeakMap+ to keep track of rejected promises that weren't dealt with. By using +WeakMap+, the implementation prevents memory leaks because the +WeakMap+ won't be grabbing onto those promises strongly. In this case, we have a simple map that weakly holds onto promises, but is flexible enough to handle entries being removed from the map when they're no longer referenced anywhere else.
+
+Keeping data about DOM elements that should be released from memory when they're no longer of interest is another important use case, and in this regard using +WeakMap+ is an even better solution to the DOM-related API caching solution we implemented earlier using +Map+.
+
+In so many words, then: no, +WeakMap+ is not strictly worse than +Map+ -- they just cater to different use cases.
+
+=== 6.3 Sets in ES6
+
+A set is a grouping of values. Sets are also a new collection type in ES6. Sets are similar to +Map+.
+
+- +Set+ is also iterable
+- +Set+ constructor also accepts an iterable
+- +Set+ also has a +.size+ property
+- Keys can be arbitrary values or object references
+- Keys must be unique
+- +NaN+ equals +NaN+ when it comes to +Set+ too
+- All of +.keys+, +.values+, +.entries+, +.forEach+, +.has+, +.delete+, and +.clear+
+
+At the same time, sets are different from +Map+ in a few key ways. Sets don't hold key value pairs, there's only one dimension. You can think of sets as being similar to arrays where every element is distinct from each other.
+
+There isn't a +.get+ method in +Set+. A +set.get(key)+ method would be redundant: if you already have the +key+ then there isn't anything else to get, as that's the only dimension. If we wanted to check for whether the +key+ is in the set, there's +set.has(key)+ to fulfill that role.
+
+Similarly, a +set.set(key)+ method wouldn't be aptly named, as you aren't setting a +value+ to a +key+, but merely adding a value to the set instead. Thus, the method to add values to a set is +set.add+, as demonstrated in the next snippet.
+
+[source,javascript]
+----
+const set = new Set()
+set.add({ an: 'example' })
+----
+
+Sets are iterable, but unlike maps you only iterate over keys, not key value pairs. The following example demonstrates how sets can be spread over an array using the spread operator and creating a single dimensional list.
+
+[source,javascript]
+----
+const set = new Set(['a', 'b', 'c'])
+console.log([...set])
+// <- ['a', 'b', 'c']
+----
+
+In the following example you can note how a set won't contain duplicate entries: every element in a +Set+ must be unique.
+
+[source,javascript]
+----
+const set = new Set(['a', 'b', 'b', 'c', 'c'])
+console.log([...set])
+// <- ['a', 'b', 'c']
+----
+
+The following piece of code creates a +Set+ with all of the +<div>+ elements on a page and then prints how many were found. Then, we query the DOM again and call +set.add+ again for every DOM element. Given that they're all already in the +set+, the +.size+ property won't change, meaning the +set+ remains the same.
+
+[source,javascript]
+----
+function divs () {
+  return [...document.querySelectorAll('div')]
+}
+const set = new Set(divs())
+console.log(set.size)
+// <- 56
+divs().forEach(div => set.add(div))
+console.log(set.size)
+// <- 56
+----
+
+=== 6.4 ES6 WeakSets
+
+In a similar fashion to +Map+ and +WeakMap+, +WeakSet+ is the weak version of +Set+ that can't be iterated over. You can't iterate over a +WeakSet+. The values in a +WeakSet+ must be unique object references. If nothing else is referencing a +value+ found in a +WeakSet+, it'll be subject to garbage collection.
+
+Much like in +WeakMap+, you can only +.add+, +.delete+, and check if +WeakSet#has+ a given +value+. Just like in +Set+, there's no +.get+ because sets are one-dimensional.
+
+We aren't allowed to add primitive values such as strings or symbols to a +WeakSet+.
+
+[source,javascript]
+----
+const set = new WeakSet()
+set.add('a')
+// <- TypeError
+set.add(Symbol())
+// <- TypeError
+----
+
+Passing iterators to the constructor is allowed, even though a +WeakSet+ instance is not iterable itself. That iterable will be iterated when the set is constructed, adding each entry in the iterable sequence to the set. The following snippet of code serves as an example.
+
+[source,javascript]
+----
+const set = new WeakSet([
+  new Date(),
+  {},
+  () => {},
+  [1]
+])
+----
+
+As a use case for +WeakSet+, you may consider the following piece of code where we have a +Car+ class that ensures its methods are only called upon car objects that are instances of the +Car+ class by using a +WeakSet+.
+
+[source,javascript]
+----
+const cars = new WeakSet()
+class Car {
+  constructor() {
+    cars.add(this)
+  }
+  fuelUp () {
+    if (!cars.has(this)) {
+      throw new TypeError('Car#fuelUp called on incompatible object!')
+    }
+  }
+}
+----
+
+When it comes to deciding whether to use +Map+, +WeakMap+, +Set+, or +WeakSet+, there's a series of questions you should ask yourself. For instance, if you are using the collection to extend objects using metadata, then you should know to look at the weak collections. If your only concern is whether something is present, then you probably need a +Set+. If you are looking to create a cache, you should probably use a +Map+.
+
+Collections in ES6 provide built-in solutions for common use cases that were previously cumbersome to implement by users, such as the case of +Map+, or hard to execute correctly, as in the case of +WeakMap+ where we allow references to be released if they're no longer interesting, avoiding memory leaks.

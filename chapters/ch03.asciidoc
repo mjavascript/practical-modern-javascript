@@ -1,1322 +1,784 @@
-[[ecmascript6-essentials]]
-== ES6 Essentials
+[[classes-symbols-and-symbols]]
+== Classes, Symbols, and Objects
 
-The sixth edition of the language comes with a plethora of non-breaking syntax improvements, most of which we'll tackle throughout this chapter. Many of these changes are syntactic sugar, that is: they could be represented in ES5, albeit using more complicated pieces of code. There are also changes that aren't merely syntactic sugar but a completely different way of declaring variables using +let+ and +const+, as we'll see towards the end of the chapter.
+Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes, and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript useful for defining protocols, and we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the +Object+ built-in in ES6.
 
-Object literals get a few syntax changes in ES6, and they're a good place to start.
+=== 4.1 Classes
 
-=== 3.1 Object Literals
+Many features in ES6 such as destructuring are in fact syntactic sugar, and classes are no exception to that. As we know, JavaScript is a prototype-based language, and classes are syntactic sugar on top of prototypical inheritance. In that sense, JavaScript classes don't introduce any fundamental changes to the language: they're merely a different way of declaring object prototypes.
 
-An object literal is any object declaration using the +{}+ shorthand syntax, such as the following example.
+The +class+ keyword acts, then, as a device that makes JavaScript more inviting to programmers coming from other paradigms, who might not be all that familiar with prototype chains.
 
-[source,javascript]
-----
-var book = {
-  title: 'Modular ES6',
-  author: 'Nicolas',
-  publisher: 'O´Reilly'
-}
-----
+==== 4.1.1 Class Fundamentals
 
-There's three improvements coming to object literal syntax in ES6: property value shorthands, computed property names, and method definitions. Let's go through them and describe their use cases as well.
+When learning about new language features, it's always a good idea to look at existing constructs first, and then see how the new feature improves those use cases. We'll start by looking at a simple prototype-based JavaScript constructor and then compare that with the newer classes syntax in ES6.
 
-==== 3.1.1 Property Value Shorthands
-
-Whenever you find yourself declaring a property whose value is a reference to a variable by the same name, you can omit the property value. It's implicit in ES6, as shown in the following example.
+The code snippet shown below represents a fruit using a constructor function and adding a couple of methods to the prototype. The constructor function takes a +name+ and the amount of +calories+ for a fruit, and defaults to the fruit being in a single piece. There's a +.chop+ method that will slice another piece of fruit, and then there's a +.bite+ method. The +person+ passed into +.bite+ will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
 
 [source,javascript]
 ----
-var listeners = []
-function listen () {}
-var api = { listeners, listen }
+function Fruit (name, calories) {
+  this.name = name
+  this.calories = calories
+  this.pieces = 1
+}
+Fruit.prototype.chop = function () {
+  this.pieces++
+}
+Fruit.prototype.bite = function (person) {
+  if (this.pieces < 1) {
+    return
+  }
+  const calories = this.calories / this.pieces
+  person.satiety += calories
+  this.calories -= calories
+  this.pieces--
+}
 ----
 
-As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without dilluting its meaning. In the following snippet I re-implemented part of +localStorage+, a browser API for persistent storage, as an in-memory polyfill. If it weren't for the shorthand syntax, the +api+ object would be more verbose to type out.
+While fairly simple, the piece of code we just put together should be enough to note a few things. We have a constructor function that takes a couple of parameters, a pair of methods, and a number of properties. The next snippet codifies how one should create a +Fruit+ and a +person+ that chops the fruit into four slices and then takes three bites.
 
 [source,javascript]
 ----
-var store = {}
-var api = { getItem,  setItem, clear }
-function getItem (key) {
-  return key in store ? store[key] : null
-}
-function setItem (key, value) {
-  store[key] = value
-}
-function clear () {
-  store = {}
-}
+const person = { satiety: 0 }
+const apple = new Fruit('apple', 140)
+apple.chop()
+apple.chop()
+apple.chop()
+apple.bite(person)
+apple.bite(person)
+apple.bite(person)
+console.log(person.satiety)
+// <- 105
+console.log(apple.pieces)
+// <- 1
+console.log(apple.calories)
+// <- 35
 ----
 
-That's the first of many ES6 features that are aimed towards reducing complexity in the code you have to maintain. Once you get used to the syntax, you'll notice that code readability and developer productivity get boosts as well.
-
-==== 3.1.2 Computed Property Names
-
-Sometimes you have to declare objects that contain properties with names based on variables or other JavaScript expressions, as shown in the following piece of code written in ES5. For this example, assume that +expertise+ is provided to you as a function parameter, and is not a value you know beforehand.
+When using +class+ syntax, as shown in the following code listing, the +constructor+ function is declared as an explicit member of the +Fruit+ class, and methods follow the object literal method definition syntax. When we compare the +class+ syntax with the prototype-based syntax, you'll notice we're reducing the amount of boilerplate code quite a bit by avoiding explicit references to +Fruit.prototype+ while declaring methods. The fact that the entire declaration is kept inside the +class+ block also helps the reader understand the scope of this piece of code, making our classes' intent clearer. Lastly, having the constructor explicitly as a method member of +Fruit+ makes the +class+ syntax easier to understand when compared with the prototype-based flavor of class syntax.
 
 [source,javascript]
 ----
-var expertise = 'journalism'
-var person = {
-  name: 'Sharon',
-  age: 27
-}
-person[expertise] = {
-  years: 5,
-  interests: ['international', 'politics', 'internet']
-}
-----
-
-Object literals in ES6 aren't constrained to declarations with static names. With computed property names, you can wrap any expression in square brackets, and use that as the property name. When the declaration is reached, your expression is evaluated and used as the property name. The following example shows how the piece of code we just saw could declare the person object in a single step, without having to resort to a second statement adding the person's +expertise+.
-
-[source,javascript]
-----
-var expertise = 'journalism'
-var person = {
-  name: 'Sharon',
-  age: 27,
-  [expertise]: {
-    years: 5,
-    interests: ['international', 'politics', 'internet']
+class Fruit {
+  constructor (name, calories) {
+    this.name = name
+    this.calories = calories
+    this.pieces = 1
+  }
+  chop () {
+    this.pieces++
+  }
+  bite (person) {
+    if (this.pieces < 1) {
+      return
+    }
+    const calories = this.calories / this.pieces
+    person.satiety += calories
+    this.calories -= calories
+    this.pieces--
   }
 }
 ----
 
-You can't combine the property value shorthands with computed property names. Value shorthands are simple compile-time syntactic sugar that helps avoid repetition, while computed name expressions are evaluated at runtime. Given that we're trying to mix these two incompatible features, the following example would throw a syntax error. In most cases this combination would lead to code that's hard to interpret for other humans, so it's probably a good thing that you can't combine the two.
+A not-so-minor detail you might have missed is that there aren't any commas in between method declarations of the +Fruit+ class. That's not a mistake our copious copy editors missed, but rather part of the +class+ syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as class-scoped private functions.
+
+The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest, the API for +Fruit+ remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces and ate most of it would work well with our +class+ flavored +Fruit+ as well.
+
+It's worth noting that class declarations aren't hoisted to the top of their scope, unlike function declarations. That means you won't be able to instantiate, or otherwise access, a class before its declaration is reached and executed.
 
 [source,javascript]
 ----
-var expertise = 'journalism'
-var journalism = {
-  years: 5,
-  interests: ['international', 'politics', 'internet']
-}
-var person = {
-  name: 'Sharon',
-  age: 27,
-  [expertise]
+new Person(); // <- ReferenceError: Person is not defined
+class Person {
 }
 ----
 
-A common scenario for computed property names is when we want to add an entity to an object map that uses the +entity.id+ field as its keys, as shown next. Instead of having to have a third statement where we add the +grocery+ to the +groceries+ map, we can inline that declaration in the +groceries+ object literal itself.
+Besides the class declaration syntax presented above, classes can also be declared as expressions, just like with function declarations and function expressions. You are allowed to omit the name for a +class+ expression, as shown in the following bit of code.
 
 [source,javascript]
 ----
-var grocery = {
-  id: 'bananas',
-  name: 'Bananas',
-  units: 6,
-  price: 10,
-  currency: 'USD'
-}
-var groceries = {
-  [grocery.id]: grocery
-}
-----
-
-Another case may be whenever a function receives a parameter that it should then use to build out an object. In ES5 code, you'd need to allocate a variable declaring an object literal, then add the dynamic property, and then return the object. The following example shows exactly that, when creating an envelope that could later be used for AJAX messages which follow a convention: they have an +error+ property with a description when something goes wrong, and a +success+ property when things turn out okay.
-
-[source,javascript]
-----
-function getEnvelope (type, description) {
-  var envelope = {
-    data: {}
-  }
-  envelope[type] = description
-  return envelope
-}
-----
-
-Computed property names help us write the same function more concisely, using a single statement.
-
-[source,javascript]
-----
-function getEnvelope (type, description) {
-  return {
-    data: {},
-    [type]: description
+const Person = class {
+  constructor (name) {
+    this.name = name
   }
 }
 ----
 
-The last enhancement coming to object literals is about functions.
-
-==== 3.1.3 Method Definitions
-
-Typically, you can declare methods on an object by adding properties to it, as shown in the next snippet.
+Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a +Jake+ class dynamically in arrow function which takes a name parameter and then feeds that to the parent +Person+ constructor via +super+.
 
 [source,javascript]
 ----
-var emitter = {
-  emit: function (eventName) {
+const createPersonClass = name => class extends Person {
+  constructor () {
+    super(name)
+  }
+}
+const Jake = createPersonClass('Jake')
+const jake = new Jake()
+----
+
+We'll dig deeper into class inheritance later. Let's take a more nuanced look at properties and methods first.
+
+==== 4.1.2 Properties and Methods in Classes
+
+It should be noted that the +constructor+ method declaration is an optional member of a +class+ declaration. The following bit of code is an entirely valid +class+ declaration that's comparable to an empty constructor function.
+
+[source,javascript]
+----
+class Fruit {
+}
+// the constructor function below is equivalent to the class above
+function Fruit () {
+}
+----
+
+Any arguments passed to +new Log()+ will be received as parameters to the +constructor+ method for +Log+, as depicted next. You can use those parameters to initialize instances of the class.
+
+[source,javascript]
+----
+class Log {
+  constructor (...args) {
+    console.log(args)
+  }
+}
+new Log('a', 'b', 'c')
+// <- ['a' 'b' 'c']
+----
+
+The following example shows a class where we create and initialize an instance property named +count+ upon construction of each instance. The +get next+ method declaration indicates instances of our +Counter+ class will have a +next+ property that will return the results of calling its method, whenever that property is accessed.
+
+[source,javascript]
+----
+class Counter {
+  constructor (start) {
+    this.count = start
+  }
+  get next () {
+    return this.count++
   }
 }
 ----
 
-Property getters and setters, in contrast, have a different syntax. In this case, there's no need for the +function+ keyword, and no colons are involved. Getters are prefixed by +get+ and setters are prefixed with +set+. Then there's the property name, a list of parameters, and the method body. The next example shows a simple object that defines a getter and a setter.
+In this case, you could consume the +Counter+ class as shown in the next snippet. Each time the +.next+ property is accessed, the count raises by one. While mildly useful, this sort of use case is usually better suited by methods than by magical +get+ property accessors, and we need to be careful not to abuse property accesors, as consuming an object that abuses of accessors may become very confusing.
 
 [source,javascript]
 ----
-var reserves = 4
-var spaceship = {
-  get fuel () {
-    return reserves
-  },
-  set fuel (value) {
-    reserves = value
-  }
-}
-----
-
-Starting in ES6, you can declare regular methods on an object literal using a similar syntax. The only difference is that you need to omit a prefix like +get+ and +set+. This syntax complements getters and setters while providing a terse alternative to traditional method declarations where you need to use the +function+ keyword. The following example shows a method definition using the ES6 syntax alongside the rest of our +spaceship+ object.
-
-[source,javascript]
-----
-var reserves = 4
-var spaceship = {
-  get fuel () {
-    return reserves
-  },
-  set fuel (value) {
-    reserves = value
-  },
-  deplete () {
-    reserves = 0
-  }
-}
-spaceship.fuel = 10
-spaceship.deplete()
-----
-
-One problem with this syntax is that it tightly couples a method to an object. While that's fine for getters and setters, it might not be okay for other methods. In terms of modular design, it would be cleaner to keep your code decoupled, and the syntax discourages it. By dropping the +function+ keyword and inferring the property name from the method, we are making it hard to extract +deplete+ from the object literal.
-
-Arrow functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave semantically.
-
-=== 3.2 Arrow Functions
-
-In JavaScript you typically declare functions using code like the following, where you have a name, a list of parameters, and a function body.
-
-[source,javascript]
-----
-function name (parameters) {
-  // function body
-}
-----
-
-You could also create anonymous functions, by omitting the name, when assigning the function to a variable, a property, or a function call.
-
-[source,javascript]
-----
-var example = function (parameters) {
-  // function body
-}
-----
-
-Starting with ES6, you can use arrow functions as another way of writing anonymous functions. Keep in mind, there's several slightly different ways of writing them. The following piece of code shows an arrow function that's very similar to the anonymous function we just saw. The only difference seems to be the missing +function+ keyword and the +=>+ arrow to the right of the parameter list.
-
-[source,javascript]
-----
-var example = (parameters) => {
-  // function body
-}
-----
-
-While arrow functions look very similar to your typical anonymous function, they are fundamentally different: arrow functions can't have a name, and they are bound to their lexical scope. Let's dig into their semantic differences with traditional functions, the many ways to declare an arrow function, and practical use cases.
-
-==== 3.2.1 Lexical Scoping
-
-In the body of an arrow function, +this+ and +arguments+ both point to the containing scope. Consider the following example. We have a +timer+ object with a +seconds+ counter and a +start+ method defined using the syntax we've learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of ellapsed +seconds+.
-
-[source,javascript]
-----
-var timer = {
-  seconds: 0,
-  start () {
-    setInterval(() => {
-      this.seconds++
-    }, 1000)
-  }
-}
-timer.start()
-setTimeout(function () {
-  console.log(timer.seconds)
-}, 3500)
+const counter = new Counter(2)
+console.log(counter.next)
+// <- 2
+console.log(counter.next)
 // <- 3
-----
-
-If we had defined the function passed to +setInterval+ as a regular anonymous function instead of using an arrow function, +this+ would've been bound to the context of the anonymous function, instead of the context of the +start+ method. We could have implemented +timer+ with a declaration like +var self = this+ at the beginning of the +start+ method, and then referencing +self+ instead of +this+. With arrow functions, the added complexity of keeping context references around fades away and we can focus on the functionality of our code.
-
-In a similar fashion, lexical binding in ES6 arrow functions also means that function calls won't be able to change the +this+ context when using +.call+, +.apply+, +.bind+, etc. Usually, that limitation is more of a feature than a bug.
-
-I've mentioned there's several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the others way to represent an arrow function?
-
-==== 3.2.2 Arrow Function Flavors
-
-Let's look one more time at the arrow function syntax we've learned so far.
-
-[source,javascript]
-----
-var example = (parameters) => {
-  // function body
-}
-----
-
-An arrow function with exactly one parameter can omit the parenthesis. This is optional. It's useful when passing the arrow function to another method, as it reduces the amount of parenthesis involved, making it easier for humans to parse the code.
-
-[source,javascript]
-----
-var double = value => {
-  return value * 2
-}
-----
-
-Arrow functions are heavily used for simple functions, such as the +double+ function we just saw. The following flavor of arrow functions does away with the function body. Instead, you provide an expression such as +value * 2+. When the function is called, the expression is evaluated and its result is returned. The +return+ statement is implicit, and there's no need for brackets denoting the function body anymore, as you can only use a single expression.
-
-[source,javascript]
-----
-var double = (value) => value * 2
-----
-
-Note that you can combine implicit parenthesis and implicit return, making for concise arrow functions.
-
-[source,javascript]
-----
-var double = value => value * 2
-----
-
-.Implicitly Returning Object Literals
-****
-When you need to implicitly return an object literal, you'll need to wrap that object literal expression in parenthesis. Otherwise, the compiler would interpret your brackets as the start and the end of the function block.
-
-[source,javascript]
-----
-var objectFactory = () => ({ modular: 'es6' })
-----
-
-In the following example, JavaScript interprets +number+ as a label and then figures out we have a +value+ expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be +undefined+.
-
-[source,javascript]
-----
-[1, 2, 3].map(value => { number: value })
-// <- [undefined, undefined, undefined]
-----
-
-If our attempt at implicitly returning an object literal had more than a single property, then the compiler wouldn't be able to make sense of the second property, and it'd throw a +SyntaxError+.
-
-[source,javascript]
-----
-[1, 2, 3].map(value => { number: value, verified: true })
-// <- SyntaxError
-----
-
-Wrapping the expression in parenthesis fixes these issues, because the compiler would no longer interpret it as a function block. Instead, the object declaration becomes an expression that evaluates to the object literal we want to return implicitly.
-
-[source,javascript]
-----
-[1, 2, 3].map(value => ({ number: value, verified: true }))
-/* <- [
-  { number: 1, verified: true },
-  { number: 2, verified: true },
-  { number: 3, verified: true }]
-*/
-----
-****
-
-Now that you understand arrow functions, let's ponder about their merits and where they might be a good fit.
-
-==== 3.2.3 Merits and Use Cases
-
-As a rule of thumb, you shouldn't blindly adopt ES6 features wherever you can. Instead, it's best to reason about each case individually and see whether adopting the new feature actually improves code readibility and maintainability. ES6 features are not strictly better than what we had all along, and it's a bad idea to treat them as such.
-
-There's a few situations where arrow functions may not be the best tool. For example, if you have a large function with several lines of code, replacing +function+ for +=>+ is hardly going to improve your code. Keep in mind that arrow functions are strictly anonymous: they can't have a name. Naming a function properly might add enough context to make it easier for humans to interpret.
-
-Arrow functions are neat when it comes to defining anonymous functions that should probably be lexically bound anyways, and they can definitely make your code more terse in some situations. They are particularly useful in most functional programming situations such as when using +.map+, +.filter+, or +.reduce+ on collections, as shown in the following example.
-
-[source,javascript]
-----
-[1, 2, 3, 4]
-  .map(value => value * 2)
-  .filter(value => value > 2)
-  .forEach(value => console.log(value))
+console.log(counter.next)
 // <- 4
-// <- 6
-// <- 8
 ----
 
-The next feature we'll analyze is destructuring in assignment. Let's see what that's all about.
-
-=== 3.3 Assignment Destructuring
-
-This is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in +function+ parameter lists. Let's go step by step, starting with objects.
-
-==== 3.3.1 Destructuring Objects
-
-Imagine you had a program with some comic book characters, Bruno Diaz being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman.
+When paired with setters, though, accessors may provide an interesting bridge between an object and its underlying data store. Consider the following example where we define a class that can be used to store and retrieve JSON data from +localStorage+ using the provided storage +key+.
 
 [source,javascript]
 ----
-var character = {
-  name: 'Bruno',
-  pseudonym: 'Batman',
-  metadata: {
-    age: 34,
-    gender: 'male'
-  },
-  batarang: ['gas pellet', 'bat-mobile control', 'bat-cuffs']
-}
-----
-
-If you wanted a +pseudonym+ variable referencing +character.pseudonym+, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing +pseudonym+ in several places in your codebase and you'd prefer to avoid typing out +character.pseudonym+ each time.
-
-[source,javascript]
-----
-var pseudonym = character.pseudonym
-----
-
-With destructuring in assignment, the syntax becomes a bit more clear. As you can see in the next example, you don't have to write +pseudonym+ twice, while still clearly conveying intent. The following statement is equivalent to the previous one written in ES5 code.
-
-[source,javascript]
-----
-var { pseudonym } = character
-----
-
-Just like you could declare multiple comma-separated variables with a single +var+ statement, you can also declare multiple variables within the brackets of a destructuring expression.
-
-[source,javascript]
-----
-var { pseudonym, name } = character
-----
-
-In a similar fashion, you could mix and match destructuring with regular variable declarations in the same +var+ statement. While this might look a bit confusing at first, it'll be up to any JavaScript coding style guides you follow to determine whether it's appropriate to declare several variables in a single statement. In any case, it goes to show the flexibility offered by destructuring syntax.
-
-[source,javascript]
-----
-var { pseudonym, name } = character, two = 2
-----
-
-If you want to extract a property named +pseudonym+ but would like to declare it as a variable named +alias+, you can use the following destructuring syntax known as aliasing. Note that you can use +alias+ or any other valid variable name.
-
-[source,javascript]
-----
-var { pseudonym: alias } = character
-console.log(alias)
-// <- 'Batman'
-----
-
-While aliases don't look any simpler than the ES5 flavor, +alias = character.pseudonym+, they start making sense when you consider the fact that destructuring supports deep structures as in the following example.
-
-[source,javascript]
-----
-var { metadata: { gender } } = character
-----
-
-In cases like the previous one, where you have deeply nested properties being destructured, you might be able to convey a property name more clearly if you choose an alias. Consider the next snippet, where a property named +code+ wouldn't have been as indicative of its contents as +colorCode+ could be.
-[source,javascript]
-----
-var palette = {
-  color: {
-    name: 'Red',
-    code: '#f00'
+class LocalStorage {
+  constructor (key) {
+    this.key = key
+  }
+  get data () {
+    return JSON.parse(localStorage.getItem(this.key))
+  }
+  set data (data) {
+    localStorage.setItem(this.key, JSON.stringify(data))
   }
 }
-var { color: { code: colorCode } } = palette
 ----
 
-The scenario we just saw repeats itself frequently, because properties are often named in the context of their host object. While +palette.color.code+ is perfectly descriptive, +code+ on its own could mean a wide variety of things, and aliases such as +colorCode+ can help you bring context back into the variable name while still using destructuring.
-
-Whenever you access an inexistent property in ES5 notation, you get a value of +undefined+.
+Then you could use the +LocalStorage+ class as shown in the next example. Any value that's assigned to +ls.data+ will be converted to its JSON object string representation and stored in +localStorage+. Then, when the property is read from, the same +key+ will be used to retrieve the previously stored contents, parse them as JSON into an object, and returned.
 
 [source,javascript]
 ----
-console.log(character.boots)
-// <- undefined
-console.log(character['boots'])
-// <- undefined
+const ls = new LocalStorage('groceries')
+ls.data = ['apples', 'bananas', 'grapes']
+console.log(ls.data)
+// <- ['apples', 'bananas', 'grapes']
 ----
 
-With destructuring, the same behavior prevails. When declaring a destructured variable for a property that's missing, you'll get back +undefined+ as well.
-
-[source,javascript]
-----
-var { boots } = character
-console.log(boots)
-// <- undefined
-----
-
-A destructured declaration accessing a nested property of a parent object that's +null+ or +undefined+ will throw an +Exception+, just like regular attempts to access properties of +null+ or +undefined+ would, in other cases.
+Besides getters and setters, you can also define regular instance methods, as we've explored earlier when creating the +Fruit+ class. The following code example creates a +Person+ class that's able to eat +Fruit+ instances as we had declared them earlier. We then instantiate a fruit and a person, and have the person eat the fruit. The person ends up with a satiety level equal to +40+, because they ate the whole fruit.
 
 [source,javascript]
 ----
-var { batmobile: { gear } } = character
-// <- Exception
-var { missing } = null
-// <- Exception
+class Person {
+  constructor () {
+    this.satiety = 0
+  }
+  eat (fruit) {
+    while (fruit.pieces > 0) {
+      fruit.bite(this)
+    }
+  }
+}
+const plum = new Fruit('plum', 40)
+const person = new Person()
+person.eat(plum)
+console.log(person.satiety)
+// <- 40
 ----
 
-When you think of that piece of code as the equivalent ES5 code shown next, it becomes evident why the expression must throw, given that destructuring is mostly syntactic sugar.
+Sometimes it's also important to have static methods at the class level, rather than at the instance level. JavaScript classes allow you to define such methods using the +static+ keyword, much like you would use +get+ or +set+ as a prefix to a method definition that's a getter or a setter.
+
+The following example defines a +MathHelper+ class with a static +sum+ method that's able to calculate the sum of all numbers passed to it in a function call, by taking advantage of the +Array.prototype.reduce+ method.
 
 [source,javascript]
 ----
-var nothing = null
-var missing = nothing.missing
-// <- Exception
+class MathHelper {
+  static sum (...numbers) {
+    return numbers.reduce((a, b) => a + b)
+  }
+}
+console.log(MathHelper.sum(1, 2, 3, 4, 5))
+// <- 15
 ----
 
-As part of destructuring, you can provide default values for those cases where the value is +undefined+. The default value can be anything you can think of: numbers, strings, functions, objects, a reference to another variable, etc.
+Finally, it's worth mentioning that you could also declare static property accessors, such as getters or setters (+static get+, +static set+). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, after all.
+
+==== 4.1.3 Extending JavaScript Clases
+
+You could use plain JavaScript to extend the +Fruit+ class, but as you will notice by reading the next code snippet, declaring a sub-class involves esoteric knowledge such as +Parent.call(this)+ in order to pass in parameters to the parent class so that we can properly initialize the sub-class, and setting the prototype of the sub-class to an instance of the parent class' prototype. We won't be delving into detailed minutia about these constructs, as you can readily find heaps of information about prototypal inheritance around the web, and our focus in in the newly introduced +class+ syntax anyways.
 
 [source,javascript]
 ----
-var { boots = true } = character
-console.log(boots)
+function Banana () {
+  Fruit.call(this, 'banana', 105)
+}
+Banana.prototype = Object.create(Fruit.prototype)
+Banana.prototype.slice = function () {
+  this.pieces = 12
+}
+----
+
+Given the ephemeral knowledge one has to remember, and the fact that +Object.create+ was only made available in ES5, JavaScript developers have historically turned to libraries to resolve their prototype inheritance issues. One such example is +util.inherits+ in Node.js, which is usually favored over +Object.create+ for legacy support reasons.
+
+[source,javascript]
+----
+const util = require('util')
+function Banana () {
+  Fruit.call(this, 'banana', 105)
+}
+util.inherits(Banana, Fruit)
+Banana.prototype.slice = function () {
+  this.pieces = 12
+}
+----
+
+Consuming the +Banana+ constructor is no different than how we used +Fruit+, except that the banana has a +name+ and calories already assigned to it, and they come with an extra +slice+ method we can use to promptly chop the banana instance into 12 pieces. The following piece of code shows the +Banana+ in action as we take a bite.
+
+[source,javascript]
+----
+const person = { satiety: 0 }
+const banana = new Banana()
+banana.slice()
+banana.bite(person)
+console.log(person.satiety)
+// <- 8.75
+console.log(banana.pieces)
+// <- 11
+console.log(banana.calories)
+// <- 96.25
+----
+
+Classes consolidate prototypal inheritance, which up until recently had been highly contested in user-space by several libraries trying to make it easier to deal with prototypal inheritance in JavaScript.
+
+The +Fruit+ class is ripe for inheritance. In the following code snippet we create the +Banana+ class as an extension of the +Fruit+ class. Here, the syntax clearly signals our intent and we don't have to worry about thoroughly understanding prototypal inheritance in order to get to the results that we want. When we want to forward parameters to the underlying +Fruit+ constructor, we can use +super+. The +super+ keyword can also be used to call functions in the parent class, such as +super.chop+, and it's not just limited to the constructor for the parent class.
+
+[source,javascript]
+----
+class Banana extends Fruit {
+  constructor () {
+    super('banana', 105)
+  }
+  slice () {
+    this.pieces = 12
+  }
+}
+----
+
+Even though the +class+ keyword is static we can still leverage JavaScript's flexible and functional properties when declaring classes. Any expression that returns a constructor function can be fed to +extends+. For example, we could have a constructor function factory and use that as the base class.
+
+The following piece of code has a +createJuicyFruit+ function where we forward the name and calories for a fruit to the +Fruit+ class using a +super+ call, and then all we have to do to create a +Plum+ is extend the intermediary +JuicyFruit+ class.
+
+[source,javascript]
+----
+const createJuicyFruit = (...params) => class JuicyFruit extends Fruit {
+  constructor () {
+    this.juice = 0
+    super(...params)
+  }
+  squeeze () {
+    if (this.calories <= 0) {
+      return
+    }
+    this.calories -= 10
+    this.juice += 3
+  }
+}
+class Plum extends createJuicyFruit('plum', 30) {
+}
+----
+
+Let's move onto +Symbol+. While not iteration or flow control mechanism, learning about +Symbol+ is crucial to shaping an understanding of iteration protocols, which are discussed at length later in the chapter.
+
+=== 4.2 Symbols
+
+Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as +'text'+ for strings, or +1+ for numbers. The purpose of symbols is primarily to implement protocols. As we'll learn in section 4.3, the iterable protocol uses a symbol to define how objects are iterated.
+
+There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the +Symbol+ built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
+
+We'll explore each of these, looking into possible use cases along the way. Let's begin with local symbols.
+
+==== 4.2.1 Local Symbols
+
+Symbols can be created using the +Symbol+ wrapper object. In the following piece of code, we create our +first+ symbol.
+
+[source,javascript]
+----
+const first = Symbol()
+----
+
+While you can use the `new` keyword with +Number+ and +String+, the `new` operator throws a `TypeError` when we try it on `Symbol`. This avoids mistakes and confusing behavior like +new Number(3) !== Number(3)+. The following snippet shows the error being thrown.
+
+[source,javascript]
+----
+const oops = new Symbol()
+// <- TypeError, Symbol is not a constructor
+----
+
+For debugging purposes, you can create symbols using a description.
+
+[source,javascript]
+----
+const mystery = Symbol('my symbol')
+----
+
+Like numbers or strings, symbols are immutable. Unlike other value types, however, symbols are unique. As shown in the next piece of code, descriptions don't affect that uniqueness. Symbols created using the same description are also unique and thus different from each other.
+
+[source,javascript]
+----
+console.log(Symbol() === Symbol())
+// <- false
+console.log(Symbol('my symbol') === Symbol('my symbol'))
+// <- false
+console.log(Number(3) === Number(3))
 // <- true
 ----
 
-Default values can also be provided in nested property destructuring.
+Symbols are of type +symbol+, new in ES6. The following snippet shows how +typeof+ returns the new type string for symbols.
 
 [source,javascript]
 ----
-var { metadata: { enemy = 'Satan' } } = character
-console.log(enemy)
-// <- 'Satan'
+console.log(typeof Symbol())
+// <- 'symbol'
+console.log(typeof Symbol('my symbol'))
+// <- 'symbol'
 ----
 
-For use in combination with aliases, you should place the alias first, and then the default value, as shown next.
+Symbols can be used as property keys on objects. Note how you can use a computed property name to avoid an extra statement just to add a +weapon+ symbol key to the +character+ object, as shown in the following example. Note also that, in order to access a symbol property, you'll need a reference to the symbol that was used to create said property.
 
 [source,javascript]
 ----
-var { boots: footwear = true } = character
+const weapon = Symbol('weapon')
+const character = {
+  name: 'Penguin',
+  [weapon]: 'umbrella'
+}
+console.log(character[weapon])
+// <- 'umbrella'
 ----
 
-It's possible to mix destructuring with computed property names. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler isn't always able to infer a variable name.
+Keep in mind that symbol keys are hidden from many of the traditional ways of pulling keys from an object. The next bit of code shows how +for..in+, +Object.keys+, and +Object.getOwnPropertyNames+ fail to report on symbol properties.
 
 [source,javascript]
 ----
-var person = { scientist: true }
-var type = 'scientist'
-var { [type]: value } = person
-console.log(value)
-// <- true
+for (key in character) {
+  console.log(key)
+  // <- 'name'
+}
+console.log(Object.keys(character))
+// <- ['name']
+console.log(Object.getOwnPropertyNames(character))
+// <- ['name']
 ----
 
-This flavor of destructuring is probably the least useful, as +value = person[type]+ is easier to read than +{ [type]: value } = person+. That being said, it could still be useful in a few deep destructuring scenarios.
-
-That's it, as far as objects go, in terms of destructuring. What about arrays?
-
-==== 3.3.2 Destructuring Arrays
-
-The syntax for destructuring arrays is similar to that of objects. The following example shows a +coordinates+ object that's destructured into two variables: +x+ and +y+. Note how the notation uses square brackets instead of curly braces, this denotes we're using array destructuring instead of object destructuring. Instead of having to sprinkle your code with implementation details like +x = coordinates[0]+, with destructuring you can convey your meaning clearly and without explicitly referencing the indices, naming the values instead.
+This aspect of symbols means that code that was written before ES6 and without symbols in mind won't unexpectedly start stumbling upon symbols. In a similar fashion, as shown next, symbol properties are discarded when representing an object as JSON.
 
 [source,javascript]
 ----
-var coordinates = [12, -7]
-var [x, y] = coordinates
-console.log(x)
-// <- 12
+console.log(JSON.stringify(character))
+// <- '{"name":"Penguin"}'
 ----
 
-When destructuring arrays, you can skip uninteresting properties or those that you otherwise don't need to reference.
+That being said, symbols are by no means a safe mechanism to conceal properties. Even though you won't stumble upon symbol properties when using reflection or serialization methods, symbols are revealed by a dedicated method as shown in the next snippet of code. In other words, symbols are not non-enumerable, but hidden in plain sight. Note that +Object.getOwnPropertySymbols+
 
 [source,javascript]
 ----
-var names = ['James', 'L.', 'Howlett']
-var [ firstName,, lastName ] = names
-console.log(lastName)
-// <- 'Howlett'
+console.log(Object.getOwnPropertySymbols(character))
+// <- [Symbol(weapon)]
 ----
 
-Array destructuring allows for default values just like object destructuring.
+Now that we've established how symbols work. What can we use them for?
+
+==== 4.2.2 Practical use cases for Symbols
+
+Symbols could be used by a library to map objects to DOM elements. For example, a library that needs to associate the API object for a calendar to the provided DOM element. Before ES6, there wasn't a clear way of mapping DOM elements to objects. You could add a property to a DOM element pointing to the API, but polluting DOM elements with custom properties is a bad practice. You have to be careful to use property keys that won't be used by other libraries, or worse, by the language itself in the future. That leaves you with using an array lookup table containing an entry for each DOM/API pair. That, however, might be slow in long-running applications where the array lookup table might grow in size, slowing down the lookup operation over time.
+
+Symbols, on the other hand, don't have these problem. They can be used as properties that don't have a risk of clashing with future language features, as they're unique. The following code snippet shows how a symbol could be used to map DOM elements into calendar API objects.
 
 [source,javascript]
 ----
-var names = ['James', 'L.']
-var [ firstName = 'John',, lastName = 'Doe' ] = names
-console.log(lastName)
-// <- 'Doe'
-----
-
-In ES5, when you have to swap the values of two variables, you typically resort to a third, temporary variable, as in the following snippet.
-
-[source,javascript]
-----
-var left = 5
-var right = 7
-var aux = left
-left = right
-right = aux
-----
-
-Destructuring helps you avoid the +aux+ declaration and focus on your intent. Once again, destructuring helps us convey intent more tersely and effectively for the use case.
-
-[source,javascript]
-----
-var left = 5
-var right = 7
-[left, right] = [right, left]
-----
-
-The last area of destructuring we'll be covering is function parameters.
-
-==== 3.3.3 Destructuring Function Paremeters
-
-Function parameters in ES6 enjoy the benefits of destructuring as well. One of the simplest cases is providing sensible default values. The following example defines a default +exponent+ with the most commonly used value.
-
-[source,javascript]
-----
-function powerOf (base, exponent = 2) {
-  return Math.pow(base, exponent)
+const cache = Symbol('calendar')
+function createCalendar (el) {
+  if (cache in el) { // check if the symbol exists in the element
+    return el[cache]; // use the cache to avoid re-instantiation
+  }
+  const api = el[cache] = {
+    // the calendar API goes here
+  }
+  return api
 }
 ----
 
-Destructuring can be applied to arrow functions as well, but in that case you must wrap the parameters in parenthesis, even when there's a single parameter.
+A +WeakMap+ is an ES6 built-in that can be used to efficiently map objects to other objects without using regular properties, symbol properties, or arrays. In contrast with array lookup tables, +WeakMap+ is O(1), just like using symbol properties. The +WeakMap+ couldn't be accessed from outside the library unless explicitly exposed, unlike with symbols which can be accessed through +Object.getOwnPropertySymbols+. We'll explore +WeakMap+ in chapter 5, alongside other ES6 collection built-ins.
+
+===== Defining Protocols through Symbols
+
+Earlier, we posited that a use case for symbols is to define protocols. A protocol is a communication contract or convention that defines behavior. In less abstract terms, a library could use a symbol that could then be used by objects that adhere to a convention from the library.
+
+Consider the following bit of code, where we use the special +toJSON+ method to determine the object serialized by +JSON.stringify+. As you can see, stringifying the +character+ object produces a serialized version of the object returned by +toJSON+.
 
 [source,javascript]
 ----
-var double = (input = 0) => input * 2
-----
-
-Given that this behaves like destructuring, default values aren't just limited to the rightmost parameters of a function. You could give default values to any parameter, in any position.
-
-[source,javascript]
-----
-function sumOf (a = 1, b = 2, c = 3) {
-  return a + b + c
-}
-console.log(sumOf(undefined, undefined, 4))
-// <- 1 + 2 + 4 = 7
-----
-
-In JavaScript it's not uncommon to provide a function with an +options+ object, containing several properties. You could determine a default +options+ object if one isn't provided, as shown in the next snippet.
-
-[source,javascript]
-----
-function carFactory (options = { brand: 'Volkswagen', year: 1999 }) {
-  console.log(options.brand)
-  console.log(options.year)
-}
-carFactory()
-// <- 'Volkswagen'
-// <- 1999
-----
-
-The problem with this approach is that as soon as the consumer of +carFactory+ provides an +options+ object, you lose all of your defaults.
-
-[source,javascript]
-----
-carFactory({ year: 2000 })
-// <- undefined
-// <- 2000
-----
-
-A better approach would be to destructure +options+ entirely, providing default values for each property individually. This approach also lets you reference each option without going through an +options+ object, but you lose the ability to reference +options+ directly, which might represent an issue in some situations.
-
-[source,javascript]
-----
-function carFactory ({ brand = 'Volkswagen', year = 1999 }) {
-  console.log(brand)
-  console.log(year)
-}
-carFactory({ year: 2000 })
-// <- 'Volkswagen'
-// <- 2000
-----
-
-In this case, however, we've once again lost the default value for the case where the consumer didn't provide any +options+. Meaning +carFactory()+ will now throw when the +options+ aren't defined. This can be remedied by using the syntax shown in the following snippet of code, which adds a default +options+ value of an empty object. The empty object is then filled, property by property, with the default values on the parameter list.
-
-[source,javascript]
-----
-function carFactory ({ brand = 'Volkswagen', year = 1999 } = {}) {
-  console.log(brand)
-  console.log(year)
-}
-carFactory()
-// <- 'Volkswagen'
-// <- 1999
-----
-
-Besides default values and filling an +options+ object, let's explore what else destructuring is good at.
-
-==== 3.3.4 Use Cases for Destructuring
-
-Whenever there's a function that returns an object or an array, destructuring makes it much terser to interact with. The following example shows a function that returns an object with some coordinates, where we grab only the ones we're interested in: +x+ and +y+. We're avoiding an intermediate +point+ variable declaration that often gets in the way without adding a lot of value to the readability of your code.
-
-[source,javascript]
-----
-function getCoordinates () {
-  return { x: 10, y: 22, z: -1, type: '3d' }
-}
-var { x, y } = getCoordinates()
-----
-
-The case for default option values bears repeating. Imagine you have a +random+ function which yields random integers between a +min+ and a +max+ value, and that it should default to values between 1 and 10. This is particularly interesting as an alternative to named parameters in other languages like Python and C#. This pattern, where you're able to define default values for options and then let consumers override them individually, offers great flexibility.
-
-[source,javascript]
-----
-function random ({ min = 1, max = 10 } = {}) {
-  return Math.floor(Math.random() * (max - min)) + min
-}
-console.log(random())
-// <- 7
-console.log(random({ max: 24 }))
-// <- 18
-----
-
-Regular expressions are another great fit for destructuring. Destructuring empowers you to name groups from a match without having to resort to index numbers. Here's an example +RegExp+ that could be used for parsing simple dates, and an example of destructuring those dates into each of its components. The first entry in the resulting array is reserved for the raw input string, and we can discard it.
-
-[source,javascript]
-----
-function splitDate (date) {
-  var rdate = /(\d+).(\d+).(\d+)/
-  return rdate.exec(date)
-}
-var [, year, month, day] = splitDate('2015-11-06')
-----
-
-Let's turn our attention to spread and rest operators next.
-
-=== 3.4 Rest Parameters and Spread Operator
-
-Before ES6, interacting with an arbitrary amount of function parameters was complicated. You had to use +arguments+, which isn't an array but has a +length+ property. Usually you'd end up casting the +arguments+ object into an actual array using +Array.prototype.slice.call+, and going from there, as shown in the following snippet.
-
-[source,javascript]
-----
-function print () {
-  var list = Array.prototype.slice.call(arguments)
-  console.log(list)
-}
-print('a', 'b', 'c')
-// <- ['a', 'b', 'c']
-----
-
-ES6 has a better solution to the problem, and that's rest parameters.
-
-==== 3.4.1 Rest Parameters
-
-You can now precede the last parameter in any JavaScript function with three dots, converting it into an special "rest parameter". When the rest parameter is the only parameter in a function, it gets all arguments passed to the function: it works just like the +.slice+ solution we saw earlier, but you avoid the need for a complicated construct like +arguments+, and it's specified in the parameter list.
-
-[source,javascript]
-----
-function print (...list) {
-  console.log(list)
-}
-print('a', 'b', 'c')
-// <- ['a', 'b', 'c']
-----
-
-Named parameters before the rest parameter won't be included in the +list+.
-
-[source,javascript]
-----
-function print (first, ...list) {
-  console.log(first)
-  console.log(list)
-}
-print('a', 'b', 'c')
-// <- 'a'
-// <- [b', 'c']
-----
-
-Note that arrow functions with a rest parameter must include parenthesis, even when it's the only parameter. Otherwise, a +SyntaxError+ would be thrown. The following piece of code is a beautiful example of how combining arrow functions and rest parameters can yield concise functional expressions.
-
-[source,javascript]
-----
-var sumAll = (...numbers) => numbers.reduce((total, next) => total + next)
-console.log(sumAll(1, 2, 5))
-// <- 8
-----
-
-Compare that with the ES5 version of the same function. Granted, it's all in the complexity. While terse, the +sumAll+ function can be confusing to readers unused to the +.reduce+ method, or because it uses two arrow functions. This is a complexity tradeoff that we'll cover in the second part of the book.
-
-[source,javascript]
-----
-function sumAll () {
-  var numbers = Array.prototype.slice.call(arguments)
-  return numbers.reduce(function (a, b) {
-    return a + b
+const character = {
+  name: 'Thor',
+  toJSON: () => ({
+    key: 'value'
   })
 }
-console.log(sumAll(1, 2, 5))
-// <- 8
+console.log(JSON.stringify(character))
+// <- '"{"key":"value"}"'
 ----
 
-Next up we have the spread operator. It's also denoted with three dots, but it serves a slightly different purpose.
-
-==== 3.4.2 Spread Operator
-
-The spread operator can be used to cast the an array-like object into a true array. Spreading effectively expands an expression onto a target such as an array literal or a function call. The following example uses +...arguments+ to cast function parameters into an array literal.
+In contrast, if +toJSON+ was anything other than a function, the original +character+ object would be serialized, including the +toJSON+ property, as shown next. This sort of inconsistency ensues from relying on regular properties to define behavior.
 
 [source,javascript]
 ----
-function cast () {
-  return [...arguments]
+const character = {
+  name: 'Thor',
+  toJSON: true
 }
-cast('a', 'b', 'c')
-// <- ['a', 'b', 'c']
+console.log(JSON.stringify(character))
+// <- '"{"name":"Thor","toJSON":true}"'
 ----
 
-You can place elements to the left and to the right of a spread operation and still get the result you would expect.
+The reason why it would be better to implement the +toJSON+ modifier as a symbol is that that way it wouldn't interfere with other object keys. Given that symbols are unique, never serialized, and never exposed unless explicitly requested through +Object.getOwnPropertySymbols+, they would represent a better choice when defining a contract between +JSON.stringify+ and how objects want to be serialized. Consider the following piece of code with an alternative implementation of +toJSON+ using a symbol to define serialization behavior for a +stringify+ function.
 
 [source,javascript]
 ----
-function cast () {
-  return ['left', ...arguments, 'right']
+const json = Symbol('alternative to toJSON')
+const character = {
+  name: 'Thor',
+  [json]: () => ({
+    key: 'value'
+  })
 }
-cast('a', 'b', 'c')
-// <- ['left', 'a', 'b', 'c', 'right']
-----
-
-Spread is an useful way of combining multiple arrays. The following example shows how you can spread arrays anywhere into an array literal, expanding their elements into place.
-
-[source,javascript]
-----
-var all = [1, ...[2, 3], 4, ...[5], 6, 7]
-console.log(all)
-// <- [1, 2, 3, 4, 5, 6, 7]
-----
-
-Note that the spread operator isn't limited to arrays and arraylikes such as +arguments+. The spread operator can be used with any iterable object. Iterable is a protocol in ES6 that allows you to turn any object into something that can be iterated over. We'll research the iterable protocol in chapter 4.
-
-.Shifting and Spreading
-****
-When you want to extract an element or two from the beginning of an array, the common approach is to use +.shift+. While functional, the snippet of code below can be hard to understand at a glance, because it uses +.shift+ twice to grab a different item from the beginning of the +list+ each time. The focus is, like in many other pre-ES6 situations, placed on getting the language to do what we want.
-
-[source,javascript]
-----
-var list = ['a', 'b', 'c', 'd', 'e']
-var first = list.shift()
-var second = list.shift()
-console.log(first)
-// <- 'a'
-----
-
-In ES6, you can combine spread with array destructuring. The following piece of code is similar to the one above, except we're using a single line of code, and that single line is more descriptive of what we're doing that repeateadly calling +list.shift()+ in the previous example.
-
-[source,javascript]
-----
-var [first, second, ...rest] = ['a', 'b', 'c', 'd', 'e']
-console.log(rest)
-// <- ['c', 'd', 'e']
-----
-
-Using the spread operator you can focus on implementing the functionality you need while the language stays out of the way. Improving expressiveness and decreasing time spent working around language limitations is a common pattern we can observe in ES6 features.
-****
-
-Before ES6, whenever you have a dynamic list of arguments that need to be applied to a function call, you'll use +.apply+. This feels awkward because +.apply+ also takes a context for +this+, which most of the time you don't need to change.
-
-[source,javascript]
-----
-func.apply(null, ['a', 'b', 'c'])
-----
-
-Besides spreading onto arrays, you can also spread items onto function calls. The following example shows how you could use the spread operator to pass an arbitrary number of arguments to the +multiply+ function.
-
-[source,javascript]
-----
-function multiply (left, right) {
-  return left * right
-}
-var result = multiply(...[2, 3])
-console.log(result)
-// <- 6
-----
-
-Spreading arguments onto a function call can be combined with regular arguments as much as necessary, just like with array literals. The next example calls +print+ with a coule of regular arguments and a couple of arrays being spread over the parameter list. Note how conveniently the rest +list+ parameter matches all the provided arguments. Spread and rest can help make code intent more clear without dilluting your codebase.
-
-[source,javascript]
-----
-function print (...list) {
-  console.log(list)
-}
-print(1, ...[2, 3], 4, ...[5])
-// <- ['1', '2', '3', '4', '5']
-----
-
-Another limitation of +.apply+ is that combining it with the +new+ keyword, when instantiating an object, becomes very verbose. Here's an example of combining +new+ and +.apply+ to create a +Date+ object. Ignore for a moment that months in JavaScript dates are zero-based, turning +11+ into December, and consider how much of the following line of code is spent bending the language in our favor, just to instantiate a +Date+ object.
-
-[source,javascript]
-----
-new (Date.bind.apply(Date, [null, 2015, 11, 31]))
-// <- Thu Dec 31 2015
-----
-
-As shown in the next snippet, the spread operator strips away all the complexity and we're only left with the important bits. It's a +new+ instance, it uses +...+ to spread a dynamic list of arguments over the function call, and it's a +Date+. That's it.
-
-[source,javascript]
-----
-new Date(...[2015, 11, 31])
-// <- Thu Dec 31 2015
-----
-
-The following table summarizes the use cases we've discussed for the spread operator.
-
-[options="header"]
-|=======
-|Use Case|ES5|ES6
-|Concatenation|+[1, 2].concat(more)+|+[1, 2, ...more]+
-|Push onto list|+list.push.apply(list, [3, 4])+|+list.push(...[3, 4])+
-|Destructuring|+a = list[0], rest = list.slice(1)+ | +[a, ...rest] = list+
-|+new+ and +apply+|+new (Date.bind.apply(Date, [null,2015,31,8]))+| +new Date(...[2015,31,8])+
-|=======
-
-=== 3.5 Template Literals
-
-Template literals are a vast improvement upon regular JavaScript strings. Instead of using single or double quotes, template literals are declared using backticks, as shown next.
-
-[source,javascript]
-----
-var text = `This is my first template literal`
-----
-
-Given that template literals are delimited by backticks, you're now able to declare strings with both +'+ and +"+ quotation marks in them without having to escape either, as shown below.
-
-[source,javascript]
-----
-var text = `I'm "amazed" at these opportunities!`
-----
-
-One of the most appealing features of template literals is their ability to interpolate JavaScript expressions.
-
-==== 3.5.1 String Interpolation
-
-With template literals, you're able to interpolate any JavaScript expressions inside your templates. When the template literal expression is reached, it's evaluated and you get back the compiled result. The following example interpolates a +name+ variable into a template literal.
-
-[source,javascript]
-----
-var name = 'Shannon'
-var text = `Hello, ${ name }!`
-console.log(text)
-// <- 'Hello, Shannon!'
-----
-
-We've already established that you can use any JavaScript expressions, and not just variables. You can think of the expressions in a template literal as defining a variable before the template runs, and then concatenating that value with the rest of the string, but in an easier to maintain format that doesn't involve you manually adding strings together with expressions. The variables you use in those expressions, the functions you call, and so on, should all be available to the current scope.
-
-It will be up to your coding style guides to decide how much logic you want to cram into the interpolation expressions. The following code snippet, for example, instantiates a +Date+ object and formats it into a human-readable date inside a template literal.
-
-[source,javascript]
-----
-`The time and date is ${ new Date().toLocaleString() }.`
-// <- 'the time and date is 8/26/2015, 3:15:20 PM'
-----
-
-You could interpolate mathematical operations.
-
-[source,javascript]
-----
-`The result of 2+3 equals ${ 2 + 3 }`
-// <- 'The result of 2+3 equals 5'
-----
-
-You could even nest template literals, as they are also valid JavaScript expressions.
-
-[source,javascript]
-----
-`This a template literal ${ `with another ${ 'one' } embedded inside it` }`
-// <- 'This a template literal with another one embedded inside it'
-----
-
-Another perk of template literals is their multiline string representation support.
-
-==== 3.5.2 Multiline Template Literals
-
-Before template literals, if you wanted to represent strings in multiple lines of JavaScript, you had to resort to escaping, concatenation, arrays, or even ellaborate hacks using comments. The following snippet summarizes some of the most common ways multiline string representations prior to ES6.
-
-[source,javascript]
-----
-var escaped =
-'The first line\n\
-A second line\n\
-Then a third line'
-
-var concatenated =
-'The first line\n' +
-'A second line\n' +
-'Then a third line'
-
-var joined = [
-'The first line',
-'A second line',
-'Then a third line'
-].join('\n')
-----
-
-Under ES6, you could use backticks instead. Template literals support multiline strings by default. Note how there's no +\n+ escapes, no concatenation, and no arrays involved.
-
-[source,javascript]
-----
-var multiline =
-`The first line
-A second line
-Then a third line`
-----
-
-Multiline strings really shine when you have, for instance, a chunk of HTML you want to interpolate some variables into. If you need to display a list within the template, you could iterate the list, mapping its items into the corresponding markup, and then return the joined result from an interpolated expression. This makes it a breeze to declare subcomponents within your templates, as shown in the following piece of code.
-
-[source,javascript]
-----
-var book = {
-  title: 'Modular ES6',
-  excerpt: 'Here goes some properly sanitized HTML',
-  tags: ['es6', 'template-literals', 'es6-in-depth']
-}
-var html = `<article>
-  <header>
-    <h1>${ book.title }</h1>
-  </header>
-  <section>${ book.excerpt }</section>
-  <footer>
-    <ul>
-      ${
-        book.tags
-          .map(tag => `<li>${ tag }</li>`)
-          .join('\n      ')
-      }
-    </ul>
-  </footer>
-</article>`
-----
-
-The template we've just prepared would produce output like what's shown in the following snippet of code. Note how spacing was preserved, and how +<li>+ tags are properly indented thanks for how we joined them together using a few spaces.
-
-[source,html]
-----
-<article>
-  <header>
-    <h1>Modular ES6</h1>
-  </header>
-  <section>Here goes some properly sanitized HTML</section>
-  <footer>
-    <ul>
-      <li>es6</li>
-      <li>template-literals</li>
-      <li>es6-in-depth</li>
-    </ul>
-  </footer>
-</article>
-----
-
-Sometimes, it might be a good idea to pre-process the results of expressions before inserting them into your templates. For these advanced kinds of use cases, it's possible to use another feature of template literals called tagged templates.
-
-==== 3.5.3 Tagged Templates
-
-By default, JavaScript interprets +\+ as an escape character with special meaning. For example, +\n+ is interpreted as a newline, +\u00f1+ is interpreted as +ñ+, etcetera. You could avoid these rules using the +String.raw+ tagged template. The next snippet shows a template literal using +String.raw+ which prevents +\n+ from being interpreted as a newline.
-
-[source,javascript]
-----
-var text = String.raw`The "\n" newline won't result in a new line.
-It'll be escaped.`
-console.log(text)
-// The "\n" newline won't result in a new line.
-// It'll be escaped.
-----
-
-The +String.raw+ prefix we've added to our template literal is a tagged template. It's used to parse the template. Tagged templates receive a parameter with an array containing the static parts of the template, as well as the result of evaluating each expression, each in its own parameter.
-
-A template literal like +`Hello, ${ name }. I am ${ emotion } to meet you!`+, for instance, will invoke a tagged template +tag+ using the following parameters.
-
-[source,javascript]
-----
-tag(['Hello, ', '. I am ', ' to meet you!'], 'Maurice', 'thrilled')
-----
-
-The template is built by taking each part of the template and placing one of the expressions next to it, until there's no more parts of the template left. It might be hard to interpret the argument list without looking at a potential implementation of the default template literal +tag+, so let's do that.
-
-The following snippet of code shows a possible implementation of the default +tag+. It provides the same functionality as a template literal does when a tagged template isn't explicitly provided. It reduces the +parts+ array into a single value, the result of evaluating the template literal. The result is initialized with the first +part+, and then each other +part+ of the template is preceded by one of the +values+. We've used the rest parameter syntax for +...values+ in order to make it easier to grab the result of evaluating each expression in the template. We're using an arrow function with an implicit +return+ statement, given that its expression is relatively simple.
-
-[source,javascript]
-----
-function tag (parts, ...values) {
-  return parts.reduce(
-    (all, part, i) => all + values[i - 1] + part
-  )
-}
-----
-
-You can try the +tag+ template using code like in the following snippet. You'll notice you get the same output as if you omitted +tag+, since we're copying the default behavior.
-
-[source,javascript]
-----
-var name = 'Maurice'
-var emotion = 'thrilled'
-var text = tag`Hello, ${ name }. I am ${ emotion } to meet you!`
-console.log(text)
-// <- 'Hello Maurice, I am thrilled to meet you!'
-----
-
-Multiple use cases apply to tagged templates. One possible use case might be to make user input uppercase, making the string sound satirical. That's what the following piece of code does. We've modified +tag+ slightly so that any interpolated strings are uppercased.
-
-[source,javascript]
-----
-function upper (parts, ...values) {
-  return parts.reduce(
-    (all, part, i) => all + values[i - 1].toUpperCase() + part
-  )
-}
-var name = 'Maurice'
-var emotion = 'thrilled'
-var text = upper`Hello, ${ name }. I am ${ emotion } to meet you!`
-console.log(text)
-// <- 'Hello MAURICE, I am THRILLED to meet you!'
-----
-
-A decidedly more useful use case would be to sanitize expressions interpolated into your templates, automatically, using a tagged template. Given a template where all expressions are considered user-input, we could use a hypothetical +sanitize+ library to remove HTML tags and similar hazards.
-
-[source,javascript]
-----
-function sanitized (parts, ...values) {
-  return parts.reduce(
-    (all, part, i) => all + sanitize(values[i - 1]) + part
-  )
-}
-var comment = 'A malicious comment<iframe src="http://evil.corp"></iframe>'
-var html = sanitized`<div>${ comment }</div>`
-console.log(html)
-// <- '<div>A malicious comment</div>'
-----
-
-Phew, that malicious +<iframe>+ almost got us. Rounding out ES6 syntax changes, we have the +let+ and +const statements.
-
-=== 3.6 Let and Const Statements
-
-The +let+ statement is one of the most well-known features in ES6. It works like a +var+ statement, but it has different scoping rules.
-
-JavaScript has always had a complicated ruleset when it comes to scoping, driving many programmers crazy when they were first trying to figure out how variables work in JavaScript. Eventually, you discover hoisting, and JavaScript starts making a bit more sense to you. Hoisting means that variables get pulled from anywhere they were declared in user code to the top of their scope. For example, see the code below.
-
-[source,javascript]
-----
-function isItTwo (value) {
-  if (value === 2) {
-    var two = true
+stringify(character)
+function stringify (target) {
+  if (json in target) {
+    return JSON.stringify(target[json]())
   }
-  return two
+  return JSON.stringify(target)
 }
-isItTwo(2)
+----
+
+Using a symbol means we need to use a computed property name to define the +json+ behavior directly on an object literal. It also means that the behavior won't clash with other user-defined properties or upcoming language features we couldn't foresee. Another difference is that the +json+ symbol should be available to consumers of the +stringify+ function, so that they can define their own behavior. We could easily add the following line of code to expose the +json+ symbol directly through +stringify+, as shown below. That'd also tie the +stringify+ function with the symbol that modifies its behavior.
+
+[source,javascript]
+----
+stringify.as = json
+----
+
+By exposing the +stringify+ function we'd be exposing the +stringify.as+ symbol as well, allowing consumers to tweak behavior by minimally modifying objects, using the custom symbol.
+
+When it comes to the merits of using a symbol to describe behavior, as opposed to an option passed as to the +stringify+ function, there's a few considerations to keep in mind. First, adding option parameters to a function changes its public API, whereas changing the internal implementation of the function to support another symbol wouldn't affect the public API. Using an +options+ object with different properties for each option mitigates this effect, but it's not always convenient to require an +options+ object in every function call.
+
+A benefit of defining behavior via symbols is that you could augment and customize the behavior of objects without changing anything other than the value assigned to a symbol property and perhaps the internal implementation of the piece of code that leverages that behavior. The benefit of using symbols over properties is that you're not subject to name clashes when new language features are introduced.
+
+Besides local symbols, there's also a global symbol registry, accessible from across code realms. Let's look into what that means.
+
+==== 4.2.3 Global Symbol Registry
+
+A code realm is any JavaScript execution context, such as the page your application is running in, an +<iframe>+ within that page, an script running through +eval+, or a worker of any kind -- such as web workers, service workers, or shared workers. Each of these execution contexts has its own global object. Global variables defined on the +window+ object of a page, for example, aren't available to a +ServiceWorker+. In contrast, the global symbol registry is shared across all code realms.
+
+There's two methods that interact with the runtime-wide global symbol registry: +Symbol.for+ and +Symbol.keyFor+. What do they do?
+
+===== Getting symbols with +Symbol.for(key)+
+
+The +Symbol.for(key)+ method looks up +key+ in the runtime-wide symbol registry. If a symbol with the provided +key+ exists in the global registry, that symbol is returned. If no symbol with that +key+ is found in the registry, one is created and added to the registry under the provided +key+. That's to say, +Symbol.for(key)+ is idempotent: it looks for a symbol under a +key+, creates one if it didn't already exist, and then returns the symbol.
+
+In the following code snippet, the first call to +Symbol.for+ creates a symbol identified as +'example'+, adds it to the registry, and returns it. The second call returns that same symbol because the +key+ is already in the registry -- and associated to the symbol returned by the first call.
+
+[source,javascript]
+----
+const example = Symbol.for('example')
+console.log(example === Symbol.for('example'))
 // <- true
-isItTwo('two')
+----
+
+That contrasts with what we knew about symbols being unique. The global symbol registry keeps track of symbols by their +key+. Note that the +key+ will also be used as a +description+ when the symbols that go into the registry are created. Considering these symbols are global on a runtime-wide level, you might want to prefix symbol keys in the global registry with a value that identifies your library or component, mitigating potential name clashes.
+
+===== Using +Symbol.keyFor(symbol)+ to retrieve symbol keys
+
+Given a symbol +symbol+, +Symbol.keyFor(symbol)+ returns the +key+ that was associated with +symbol+ when the symbol was added to the global registry. The next example shows how we can grab a the +key+ for a +symbol+ using +Symbol.keyFor+.
+
+[source,javascript]
+----
+const example = Symbol.for('example')
+console.log(Symbol.keyFor(example))
+// <- 'example'
+----
+
+Note that if the symbol isn't in the global runtime registry, then the method returns +undefined+.
+
+[source,javascript]
+----
+console.log(Symbol.keyFor(Symbol()))
 // <- undefined
 ----
 
-JavaScript code like this works, even though +two+ was declared in a code branch and then accessed outside of said branch. The reason why, as we know, is that +var+ is function-scoped. That, coupled with hoisting, means that what we're really expressing is equivalent to the piece of code below.
+Also keep in mind that it's not possible to match symbols in the global registry usign local symbols, even when they share the same description. The reason for that is that local symbols aren't part of the global registry, as shown in the following piece of code.
 
 [source,javascript]
 ----
-function isItTwo (value) {
-  var two
-  if (value === 2) {
-    two = true
-  }
-  return two
-}
-----
-
-Whether we like it or not, hoisting is more confusing than having block-scoped variables would be. Block scoping works on the bracket level, rather than the function level.
-
-==== 3.6.1 Block Scoping and Let Statements
-
-Instead of having to declare a new +function+ if we want a deeper scoping level, block scoping allows you to just leverage existing code branches like those in +if+, +for+, or +while+ statements; you could also create new +{}+ blocks arbitrarily. As you may or may not know, the JavaScript language allows us to create an indiscriminate number of blocks, just because we want to.
-
-[source,javascript]
-----
-{{{{{ var deep = 'This is available from outer scope.'; }}}}}
-console.log(deep)
-// <- 'This is available from outer scope.'
-----
-
-With +var+, because of lexical scoping, one could still access the +deep+ variable from outside those blocks, and not get an error. Sometimes it can be very useful to get errors in these situations. Particularly if one or more of the following is true.
-
-- Accessing the inner variable breaks some sort of encapsulation principle in our code
-- The inner variable doesn't belong in the outer scope at all
-- The block in question has many siblings that would also want to use the same variable name
-- One of the parent blocks already has a variable with the name we need, but the name is still appropriate to use in the inner block
-
-The +let+ statement is an alternative to +var+. It follows block scoping rules instead of the default lexical scoping rules. With +var+, the only way of getting a deeper scope is to create a nested function, but with +let+ you can just open another pair of brackets. This means you don't need entirely new functions to get a new scope: a simple +{}+ block will do.
-
-[source,javascript]
-----
-let topmost = {}
-{
-  let inner = {}
-  {
-    let innermost = {}
-  }
-  // attempts to access innermost here would throw
-}
-// attempts to access inner here would throw
-// attempts to access innermost here would throw
-----
-
-An useful aspect of +let+ statements is that you can use them when declaring a +for+ loop, and variables will be scoped to the contents of the loop, as shown below.
-
-[source,javascript]
-----
-for (let i = 0; i < 2; i++) {
-  console.log(i)
-  // <- 0
-  // <- 1
-}
-console.log(i)
-// <- i is not defined
-----
-
-
-One more thing of note about +let+ is a concept called the "Temporal Dead Zone".
-
-==== 3.6.2 Temporal Dead Zone
-
-In so many words: if you have code such as the following code snippet, it'll throw. Once execution enters a scope, and until a +let+ statement is reached, attempting to access the variable for said +let+ statement will throw. This is known as the Temporal Dead Zone (TDZ).
-
-[source,javascript]
-----
-{
-  name = 'Barbara Penner'
-  // <- ReferenceError: name is not defined
-  let name = 'Stephen Hawking'
-}
-----
-
-If your code tries to access +name+ in any way before the +let name+ statement is reached, the program will throw. Declaring a function that references +name+ before it's defined is okay, as long as the function doesn't get executed while +name+ is in the TDZ, and +name+ will be in the TDZ until the +let name+ statement is reached. This snippet won't throw because +return name+ isn't executed until after +name+ leaves the TDZ.
-
-[source,javascript]
-----
-function readName () {
-  return name
-}
-let name = 'Stephen Hawking'
-console.log(readName())
-// <- 'Stephen Hawking'
-----
-
-But the following snippet will, because access to +name+ occurs before leaving the TDZ for +name+.
-
-[source,javascript]
-----
-function readName () {
-  return name
-}
-console.log(readName())
-// ReferenceError: name is not defined
-let name = 'Stephen Hawking'
-----
-
-Note that the semantics for these examples doesn't change when +name+ isn't actually assigned a value when initially declared. The next snippet throws as well, as it still tries to access +name+ before leaving the TDZ.
-
-[source,javascript]
-----
-function readName () {
-  return name
-}
-console.log(readName())
-// ReferenceError: name is not defined
-let name
-----
-
-The following bit of code works because it leaves the TDZ before accessing +name+ in any way.
-
-[source,javascript]
-----
-function readName () {
-  return name
-}
-let name
-console.log(readName())
+const example = Symbol.for('example')
+console.log(Symbol.keyFor(Symbol('example')))
 // <- undefined
 ----
 
-The only tricky part to remember is that it's okay to declare functions that access a variable in the TDZ as long as the statements accessing TDZ variables aren't reached before the +let+ declaration is reached.
+Now that you've learned about the API for interacting with the global symbol registry, let's take some considerations into account.
 
-The whole point of the TDZ is to make it easier to catch errors where accessing a variable before it's declared in user code leads to unexpected behavior. This happened a lot before ES6 due both to hoisting and poor coding conventions. In ES6 it's easier to avoid. Keep in mind that hoisting still applies for +let+ as well. That means variables will be created when we enter the scope, and the TDZ will be born, but they will be inaccessible until code execution hits the place where the variable was actually declared, at which point we leave the TDZ and are allowed to access the variable.
+===== Best Practices and Considerations
 
-We made it through the temporal dead zone! It's now time to cover +const+, a similar statement to +let+ but with a few major differences.
-
-==== 3.6.3 Const Statements
-
-The +const+ statement is block scoped like +let+, and it follows TDZ semantics as well. In fact, TDZ semantics were implemented because of +const+, and then TDZ was also applied to +let+ for consistency. The reason why +const+ needed TDZ semantics is that it would otherwise have been possible to assign a value to a hoisted +const+ variable before reaching the +const+ declaration, meaning that the declaration itself would throw. The temporal dead zone defines a solution that solves the problem of making +const+ assignment possible only at declaration time, helps avoid potential issues when using +let+, and also makes it easy to eventually implement other features that benefit from TDZ semantics.
-
-The following snippet shows how +const+ follows block scoping rules exactly like +let+.
+A runtime-wide registry means the symbols are accessible across code realms. The global registry returns a reference to the same object in any realm the code runs in. In the following example, we demonstrate how the +Symbol.for+ API returns the same symbol in a page and within an +<iframe>+.
 
 [source,javascript]
 ----
-const pi = 3.1415
-{
-  const pi = 6
-  console.log(pi)
-  // <- 6
-}
-console.log(pi)
-// <- 3.1415
+const d = document
+const frame = d.body.appendChild(d.createElement('iframe'))
+const framed = frame.contentWindow
+const s1 = window.Symbol.for('example')
+const s2 = framed.Symbol.for('example')
+console.log(s1 === s2)
+// <- true
 ----
 
-We've mentioned major differences between +let+ and +const+. The first one is that +const+ variables must be declared using an initializer. A +const+ declaration must be accompanied by an initializer, as shown in the following snippet.
+There's tradeoffs in using widely available symbols. On the one hand, they make it easy for libraries to expose their own symbols, but on the other hand they could also expose their symbols on their own API, using local symbols. The symbol registry is obviously useful when symbols need to be shared across any two code realms, for example: +ServiceWorker+ and a web page. The API is also convenient when you don't want to bother storing references to the symbols, you could use the registry directly for that, since every call with a given +key+ is guaranteed to return the same +symbol+. You'll have to keep in mind, though, that these symbols are shared across the runtime and that might lead to unwanted consequences if you use generic symbol names like +each+ or +contains+.
+
+There's one more kind of symbols, the built-in well-known symbols.
+
+==== 4.2.4 Well-known Symbols
+
+So far we've covered symbols you can create using the +Symbol+ function and those you can create through +Symbol.for+. The third and last kind of symbols we're going to cover is the well-known symbols. These are built into the language instead of created by the user, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
+
+A great example of how symbols can add extensibility to the language without breaking existing code is the +Symbol.toPrimitive+ well-known symbol. It can be assigned a function to determine how an object is casted into a primitive value. The function receives a +hint+ parameter that can be +'string'+, +'number'+, or +'default'+, indicating what type of primitive value is expected.
 
 [source,javascript]
 ----
-const pi = 3.1415
-const e; // SyntaxError, missing initializer
-----
-
-Besides the assignment when initializing a +const+, variables declared using a +const+ statement can't be assigned to. Once a +const+ is initialized, you can't change its value. Under strict mode, attempts to change a +const+ variable will throw. Outside of strict mode, they'll fail silently as demonstrated by the following piece of code.
-
-[source,javascript]
-----
-const people = ['Tesla', 'Musk']
-people = []
-console.log(people)
-// <- ['Tesla', 'Musk']
-----
-
-Creating a +const+ variable doesn't mean that the assigned value becomes immutable, it only means that the variable will always have a reference to the same object or primitive value. The following example shows that even though the +people+ reference couldn't be changed, the array itself can indeed be modified.
-
-[source,javascript]
-----
-const people = ['Tesla', 'Musk']
-people.push('Berners-Lee')
-console.log(people)
-// <- ['Tesla', 'Musk', 'Berners-Lee']
-----
-
-A +const+ statement only prevents the variable being declared from changing its value. Another way of representing that difference is the following piece of code, where we create a +humans+ variable using +var+, assign the +people+ variable we created using +const+ earlier, and then assign something else to the +humans+ variable, because it wasn't declared using +const+.
-
-[source,javascript]
-----
-const people = ['Tesla', 'Musk']
-var humans = people
-humans = 'evil'
-console.log(humans)
-// <- 'evil'
-----
-
-Let's take a moment to discuss the merits of +const+ and +let+.
-
-==== 3.6.4 Merits of Const and Let
-
-New features should never be used for the sake of using new features. ES6 features should be used where they genuinely improve code readability and maintainability. The +let+ statement is able to, in many cases, simplify pieces of code where you'd otherwise declare +var+ statements at the top of a function just so that hoisting doesn't produce unexpected results. Using the +let+ statement you'd be able to place your declarations at the top of a code block, instead of the top of the whole function, reducing the latency in mental trips to the top of the scope.
-
-Using the +const+ statement is a great way to prevent accidents. The following piece of code is an plausably error prone scenario where we pass of a reference to an +items+ variable to a +checklist+ function which then returns a +todo+ API that in turn interacts with said +items+ reference. When the +items+ variable is changed to reference another list of items, we're in for a world of hurt: the +todo+ API still works with the value +items+ used to have, but +items+ is referencing something else now.
-
-[source,javascript]
-----
-var items = ['a', 'b', 'c']
-var todo = checklist(items)
-todo.check()
-console.log(items)
-// <- ['b', 'c']
-items = ['d', 'e']
-todo.check()
-console.log(items)
-// <- ['d', 'e'], would be ['c'] if items had been constant
-function checklist (items) {
-  return {
-    check: () => items.shift()
+const morphling = {
+  [Symbol.toPrimitive](hint) {
+    if (hint === 'number') {
+      return Infinity
+    }
+    if (hint === 'string') {
+      return 'a lot'
+    }
+    return '[object Morphling]'
   }
 }
+console.log(+morphling)
+// <- Infinity
+console.log(`That is ${ morphling }!`)
+// <- 'That is a lot!'
+console.log(morphling + ' is powerful')
+// <- '[object Morphling] is powerful'
 ----
 
-This type of problem is hard to debug because it might take a while until you figure out that the reference was modified. The +const+ statement helps prevent this scenario by producing a runtime error (under strict mode), which should help capture the bug soon after it's introduced.
+Another example of a well-known symbol is +Symbol.match+. A regular expression that sets +Symbol.match+ to +true+ will be treated as a string literal when passed to +.startsWith+, +.endsWith+, or +.includes+. These three functions are new string methods in ES6. First we have +.startsWith+, which can be used to determine if the string starts with another string. Then there's +.endsWith+, that finds out whether the string ends in another one. Lastly, the +.includes+ method returns +true+ if a string contains another one. The next snippet of code shows how +Symbol.match+ can be used to compare a string with the string representation of a regular expression.
 
-A similar benefit of using the +const+ statement is its ability to visually identify variables that aren't reassigned. The +const+ cue signals that a variable is read-only and thus we have one less thing to worry about when reading a piece of code.
+[source,javascript]
+----
+const text = '/an example string/'
+const regex = /an example string/
+regex[Symbol.match] = false
+console.log(text.startsWith(regex))
+// <- true
+----
 
-If we choose to default to using +const+ and use +let+ for variables that need to be reassigned, all variables will follow the same scoping rules, which makes code easier to reason about. The reason why +const+ is sometimes proposed as the "default" variable declaration type, is that it's the one that does the least: +const+ prevents reassignment, follows block scoping, and the declared binding can't be accessed before the declaration statement is executed. The +let+ statement allows reassignment, but behaves like +const+, so it naturally follows to choose +let+ when we're in need for a reassignable variable.
+If the regular expression wasn't modified through the symbol, it would've thrown because the +.startsWith+ method expects a string instead of a regular expression.
 
-On the counterside, +var+ is a more complex declaration because it is hard to use in code branches due to function scoping rules, it allows reassignment, and it can be accessed before the declaration statement is reached. The +var+ statement is inferior to +const+ and +let+, which do less, and is thus less prominent in modern JavaScript codebases.
+===== Shared across realms but not in the registry
 
-Throughout this book, we'll follow the practice of using +const+ by default and +let+ when reassignment is desirable.
+Well-known symbols are shared across realms. The following example shows how +Symbol.iterator+ is the same reference as that within the context of an +<iframe>+ window.
 
-In the following chapter we'll look at more features coming in ES6 and how they can be used to iterate over any JavaScript objects, as well as how to master flow control using promises and generators.
+[source,javascript]
+----
+const frame = document.createElement('iframe')
+document.body.appendChild(frame)
+console.log(Symbol.iterator === frame.contentWindow.Symbol.iterator)
+// <- true
+----
+
+Note that even though well-known symbols are shared across code realms, they're not in the global registry. The following bit of code shows that +Symbol.iterator+ produces +undefined+ when we ask for its +key+ in the registry. That means the symbol isn't listed in the global registry.
+
+[source,javascript]
+----
+console.log(Symbol.keyFor(Symbol.iterator))
+// <- undefined
+----
+
+One of the most useful well-known symbols is +Symbol.iterator+, used by a few different language constructs to iterate over a sequence, as defined by a function assigned to a property using that symbol on any object. In the next chapter we'll go over +Symbol.iterator+ in detail, using it extensively along with the iterator and iterable protocols.
+
+=== 4.3 Object Built-in Improvements
+
+While we've already addressed syntax enhancements coming to object literals in chapter 2, there's a few new static methods available to the +Object+ built-in which we haven't addressed yet. It's time to take a look at what these methods bring to the table.
+
+We've already looked at +Object.getOwnPropertySymbols+, but let's also take a look at +Object.assign+, +Object.is+, and +Object.setPrototypeOf+.
+
+==== 4.3.1 Extending objects with +Object.assign+
+
+The need to provide default values for a configuration object is not at all uncommon. Typically, libraries and well-designed component interfaces come with sensible defaults that cater to the most frequented use cases.
+
+A Markdown library, for example, might convert Markdown into HTML by providing only an +input+ parameter. That's its most common use case, simply parsing Markdown, and so the library doesn't demand that the consumer provides any options. The library might, however, support many different options that could be used to tweak its parsing behavior. It could have an option to allow +<script>+ or +<iframe>+ tags, or an option to highlight keywords in code snippets using CSS.
+
+Imagine, for example, that you want to provide a set of defaults like the one shown next.
+
+[source,javascript]
+----
+const defaults = {
+  scripts: false,
+  iframes: false,
+  highlightSyntax: true
+}
+----
+
+One possibility would be to use the +defaults+ object as the default value for the +options+ parameter, using destructuring. In this case, the user must provide values for every option whenever they decide to provide any options at all.
+
+[source,javascript]
+----
+function md (input, options=defaults) {
+}
+----
+
+The default values have to be merged with user-provided configuration, somehow. That's where +Object.assign+ comes in, as shown in the following example. Here, we start with an empty +{}+ object, copy our default values over to it, and then copy the options on top. The resulting +config+ object will have all of the default values plus the user-provided configuration.
+
+[source,javascript]
+----
+function md (input, options) {
+  const config = Object.assign({}, defaults, options)
+}
+----
+
+For any properties that had a default value where the user also provided a value, the user-provided value will prevail. Here's how +Object.assign+ works. First, it takes the first argument passed to it, let's call it +target+. It then iterates over all keys of each of the other arguments, let's call them +sources+. For each source in +sources+, all of its properties are iterated and assigned to +target+. The end result is that right-most sources -- in our case, the +options+ object -- overwrite any previously assigned values, as shown in the following bit of code.
+
+[source,javascript]
+----
+const defaults = {
+  first: 'first',
+  second: 'second'
+}
+function print (options) {
+  console.log(Object.assign({}, defaults, options))
+}
+print()
+// <- { first: 'first', second: 'second' }
+print({ third: 3 })
+// <- { first: 'first', second: 'second', third: 3 }
+print({ second: false })
+// <- { first: 'first', second: false }
+----
+
+Before +Object.assign+ made its way into the language, there were numerous similar implementations of this technique in user-land JavaScript, with names like assign, or extend. Adding +Object.assign+ to the language consolidates these options into a single method.
+
+Note, however, that +Object.assign+ doesn't cater to every need. While most user-land implementations have the ability to perform deep assignment, +Object.assign+ doesn't offer a recursive treatment of objects. Object values are assigned as properties on +target+ directly, instead of being recursively assigned key by key.
+
+In the following bit of code you might expect the +f+ property to be added to +target.a+ while keeping +b.c+ and +b.d+ intact, but the +b.c+ and +b.d+ properties are lost when using +Object.assign+.
+
+[source,javascript]
+----
+Object.assign({}, { a: { b: 'c', d: 'e' } }, { a: { f: 'g' } })
+// <- { a: { f: 'g' } }
+----
+
+In the same vein, arrays don't get any special treatment either. If you expected recursive behavior in +Object.assign+ the following snippet of code may also come as a surprise, where you may have expected the resulting object to have +'d'+ in the third position of the array.
+
+[source,javascript]
+----
+Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
+// <- { a: ['e', 'f'] }
+----
+
+You could also use a library like +assignment+ on npm, which always performs assignments recursively, the +.extend+ method in jQuery, or a custom version of +_.assignWith+ in Lodash.
+
+==== 4.3.2 Comparing objects with +Object.is+
+
+The +Object.is+ method is a slightly different version of the strict equality comparison operator, +===+. For the most part, +Object.is(a, b)+ is equal to +a === b+. There are two differences: the case of +NaN+ and the case of +-0+ and ++0+.
+
+When +NaN+ is compared to +NaN+, the strict equality comparison operator returns +false+ because +NaN+ is not equal to itself. The +Object.is+ method, however, returns +true+ in this special case.
+
+[source,javascript]
+----
+NaN === NaN
+// <- false
+Object.is(NaN, NaN)
+// <- true
+----
+
+Similarly, when +-0+ is compared to ++0+, the +===+ operator produces +true+ while +Object.is+ returns +false+.
+
+[source,javascript]
+----
+-0 === +0
+// <- true
+Object.is(-0, +0)
+// <- false
+----
+
+These differences may not seem like much, but dealing with +NaN+ has always been cumbersome because of its special quirks, such as +typeof NaN+ being +'number'+ and it not being equal to itself.
+
+==== 4.3.3 +Object.setPrototypeOf+
+
+The +Object.setPrototypeOf+ method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using +__proto__+ which is a legacy feature.
+
+Before ES6, we were introduced to +Object.create+ in ES5. Using that method, we could create an object based on any prototype passed into +Object.create+, as shown next.
+
+[source,javascript]
+----
+const baseCat = { type: 'cat', legs: 4 }
+const cat = Object.create(baseCat)
+cat.name = 'Milanesita'
+----
+
+The +Object.create+ method is, however, limited to newly created objects. In contrast, we could use +Object.setPrototypeOf+ to change the prototype of an object that already exists, as shown in the following code snippet.
+
+[source,javascript]
+----
+const baseCat = { type: 'cat', legs: 4 }
+const cat = Object.setPrototypeOf({ name: 'Milanesita' }, baseCat)
+----
+
+Note however that there are serious performance implications when using +Obect.setPrototypeOf+ as opposed to +Object.create+, and some careful consideration is in order before you decide to go ahead and sprinkle +Object.setPrototypeOf+ all over a codebase.
+
+.Performance issues
+[WARNING]
+====
+Using +Object.setPrototypeOf+ to change the prototype of an object is an expensive operation. Here is what the Mozilla Developer Network documentation has to say about the matter.
+
+[quote, Mozilla Developer Network]
+____
+Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a +obj.__proto__ = ...+ statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new object with the desired prototype using +Object.create()+.
+----
+====

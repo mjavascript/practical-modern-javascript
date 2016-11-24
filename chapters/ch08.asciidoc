@@ -1,1716 +1,519 @@
-[[built-in-improvements]]
-== Built-in Improvements in ES6
+[[javascript-modules]]
+== JavaScript Modules
 
-Thus far in the book, we've discussed entirely new language syntax, such as property value shorthands, arrow functions, destructuring, or generators; and entirely new built-ins, such as +WeakMap+, +Proxy+, or +Symbol+. This chapter, on the other hand, is mostly devoted to existing built-ins that were improved in ES6. Those improvements consist mostly of new instance methods, properties, and utility methods.
+Over the years, we've seen multiple different ways in which to split code into more manageable units. For the longest time we've had the module pattern where you simply wrapped pieces of code in self-invoking function expressions. You had to be careful to sort your scripts so that each script came after all of its dependencies.
 
-=== 8.1 Numbers
+A while later, the RequireJS library was born. It provided a way of defining the dependencies of each module programmatically, so that a dependency graph is created and you wouldn't have to worry about sorting your scripts anymore. RequireJS demands that you provide an array of strings used to identify your dependencies and also wrap modules in a function call, which would then receive those dependencies as parameters. Many other libraries provide similar functionality but offer a slightly different API.
 
-ES6 introduces numeric literal representations for binary and octal numbers.
+Other complexity management mechanisms exist, such as the dependency injection mechanism in AngularJS, where you define named components using functions where you can, in turn, specify other named component dependencies. AngularJS carries the load of dependency injection on your behalf, so you only have to name components and specify dependencies.
 
-==== 8.1.1 Binary and Octal Literals
+CommonJS (CJS) surfaced as an alternative to RequireJS, and it was swiftly popularized by Node.js soon afterwards. In this chapter we'll take a look at CommonJS, which is still heavily in use today. We'll then cover the module system introduced to native JavaScript in ES6, and lastly we'll explore interoperability between CommonJS and native JavaScript modules -- also known as ECMAScript modules (ESM).
 
-Before ES6, your best bet when it comes to binary representation of integers was to just pass them to +parseInt+ with a radix of +2+.
+=== 9.1 CommonJS
 
-[source,javascript]
-----
-parseInt(`101`, 2)
-// <- 5
-----
+Unlike other module formats where modules are declared programatically, in CommonJS every file is a module. CommonJS modules have an implicit local scope, while the +global+ scope needs to be accessed explicitly. CommonJS modules can dynamically export a public interface consumers can interact with. CommonJS modules import their dependencies dynamically as well, resolving dependencies through +require+ function calls. These +require+ function calls are synchronous and return the interface exposed by required modules.
 
-You can now use the new +0b+ prefix to represent binary integer literals. You could also use the +0B+ prefix, with a capital +B+. The two notations are equivalent.
+Interpreting the definition of a module format without looking at some code can be confusing. The following code snippet shows how a reusable CommonJS module file may look like. Both the +has+ and +union+ functions are local to our module's scope. Given that we've assigned +union+ to +module.exports+, that'll be the public API for our module.
 
 [source,javascript]
 ----
-console.log(0b000); // <- 0
-console.log(0b001); // <- 1
-console.log(0b010); // <- 2
-console.log(0b011); // <- 3
-console.log(0b100); // <- 4
-console.log(0b101); // <- 5
-console.log(0b110); // <- 6
-console.log(0b111); // <- 7
-----
-
-In ES3, +parseInt+ interpreted strings of digits starting with a +0+ as an octal value. That meant things got weird quickly when you forgot to specify a radix of +10+. As a result, specifying the radix of +10+ became a best practice, so that user input like +012+ wouldn't unexpectedly be parsed as the integer +10+.
-
-[source,javascript]
-----
-console.log(parseInt(`01`))
-// <- 1
-console.log(parseInt(`012`))
-// <- 10
-console.log(parseInt(`012`, 10))
-// <- 12
-----
-
-When ES5 came around, the default radix in +parseInt+ changed, from +8+ to +10+. It was still recommended you specified a +radix+ for backwards compatibility purposes. If you wanted to parse strings as octal values, you could explicitly pass in a radix of +8+ as the second argument.
-
-[source,javascript]
-----
-console.log(parseInt(`100`, `8`))
-// <- 64
-----
-
-You can now use the +0o+ prefix for octal literals, which are new in ES6. You could also use +0O+, which is equivalent. Having a +0+ followed by an uppercase +O+ may be hard to distinguish in some typefaces, which is why it is suggested that you stick with the lowercase +0o+ notation.
-
-[source,javascript]
-----
-console.log(0o001); // <- 1
-console.log(0o010); // <- 8
-console.log(0o100); // <- 64
-----
-
-You might be used to hexadecimal literals present in other languages, commonly prefixed with +0x+. Those were already introduced to the JavaScript language in ES5. The prefix for literal hexadecimal notation is either +0x+, or +0X+, as shown in the following code snippet.
-
-[source,javascript]
-----
-console.log(0x0ff); // <- 255
-console.log(0xf00); // <- 3840
-----
-
-Besides these minor syntax changes where octal and binary literals were introduced, a few methods were added to +Number+ in ES6. The first four +Number+ methods that we'll be discussing -- +Number.isNaN+, +Number.isFinite+, +Number.parseInt+, and +Number.parseFloat+ -- already existed as functions in the global namespace. In addition, the methods in +Number+ are slightly different in that they don't coerce non-numeric values into numbers before producing a result.
-
-==== 8.1.2 +Number.isNaN+
-
-This method is almost identical to the global +isNaN+ method. +Number.isNaN+ returns whether the provided +value+ is +NaN+, whereas +isNaN+ returns whether +value+ is not a number. These two questions have slightly different answers.
-
-The next snippet quickly shows that, when passed to +Number.isNaN+, anything that's not +NaN+ will return +false+, while +NaN+ will produce +true+. Note how in the last case we're already passing +NaN+ to +Number.isNaN+, as that's the result of dividing two strings.
-
-[source,javascript]
-----
-Number.isNaN(123)
-// <- false, integers are not NaN
-Number.isNaN(Infinity)
-// <- false, Infinity is not NaN
-Number.isNaN(`a hundred`)
-// <- false, `a hundred` is not NaN
-Number.isNaN(NaN)
-// <- true, NaN is NaN
-Number.isNaN(`a hundred` / `two`)
-// <- true, `a hundred` / `two` is NaN, NaN is NaN
-----
-
-The +isNaN+ method, in contrast, casts non-numeric values passed to it before evaluating them against +NaN+. This results in significantly different return values. In the following example, each alternative produces different results because +isNaN+, unlike +Number.isNaN+, casts the +value+ passed to it through +Number+ first.
-
-[source,javascript]
-----
-isNaN(`a hundred`)
-// <- true, because Number(`a hundred`) is NaN
-isNaN(new Date())
-// <- false, because Number(new Date()) uses Date#valueOf, which returns a unix timestamp
-----
-
-+Number.isNaN+ is more precise than its global counterpart, because it doesn't incur in casting. There's still a few reasons why +Number.isNaN+ can be a source of confusion.
-
-1. +isNaN+ casts input through +Number(value)+ before comparison
-2. +Number.isNaN+ doesn't
-3. Neither +Number.isNaN+ nor +isNaN+ answer the "is this not a number?" question
-4. They answer whether +value+ -- or +Number(value)+ -- is +NaN+
-
-In most cases, what you actually want to know is whether a value identifies as a number -- +typeof NaN === `number`+ -- and is a number. The +isNumber+ function in the following code snippet does just that. Note that it'd work with both +isNaN+ and +Number.isNaN+ due to type checking. Everything that reports a +typeof+ value of +`number`+ is a number, except for +NaN+, so we filter out those out as false positive results.
-
-[source,javascript]
-----
-function isNumber (value) {
-  return typeof value === `number` && !Number.isNaN(value)
+function has (list, item) {
+  return list.includes(item)
 }
-----
-
-You can use that method to figure out whether a +value+ is a number or not. In the next snippet there's a few examples of how +isNumber+ works.
-
-[source,javascript]
-----
-isNumber(1)
-// <- true
-isNumber(Infinity)
-// <- true
-isNumber(NaN)
-// <- false
-isNumber(`two`)
-// <- false
-isNumber(new Date())
-// <- false
-----
-
-There is a function, that was already in the language, that somewhat resembles our custom +isNumber+ function: +isFinite+.
-
-==== 8.1.3 +Number.isFinite+
-
-The rarely-promoted +isFinite+ method has been available since ES3. It returns a boolean value indicating whether the provided +value+ matches none of: +Infinity+, +-Infinity+, and +NaN+.
-
-The +isFinite+ method coerces values through +Number(value)+, while +Number.isFinite+ doesn't. This means that values that can be coerced into non-+NaN+ numbers will be considered finite numbers by +isNumber+ -- even though they aren't explicit numbers.
-
-Here are a few examples using the global +isFinite+ function.
-
-[source,javascript]
-----
-isFinite(NaN)
-// <- false
-isFinite(Infinity)
-// <- false
-isFinite(-Infinity)
-// <- false
-isFinite(null)
-// <- true, because Number(null) is 0
-isFinite(-13)
-// <- true, because Number(-13) is -13
-isFinite(`10`)
-// <- true, because Number(`10`) is 10
-----
-
-Using +Number.isFinite+ is a safer bet, as it doesn't incur in unexpected casting. You could always use +Number.isFinite(Number(value))+ if you did want the +value+ to be casted into its numeric representation. Separating the two aspects, casting versus computing, results in more explicit code.
-
-Here are a few examples using the +Number.isFinite+ method.
-
-[source,javascript]
-----
-Number.isFinite(NaN)
-// <- false
-Number.isFinite(Infinity)
-// <- false
-Number.isFinite(-Infinity)
-// <- false
-Number.isFinite(null)
-// <- false, because null is not a number
-Number.isFinite(-13)
-// <- true
-Number.isFinite(`10`)
-// <- false, because `10` is not a number
-----
-
-Creating a polyfill for +Number.isFinite+ would involve returning +false+ for non-numeric values, effectively turning off the type-casting feature, and then calling +isFinite+ on the input value.
-
-[source,javascript]
-----
-Number.isFinite = value => typeof value === `number` && isFinite(value)
-----
-
-==== 8.1.4 +Number.parseInt+
-
-The +Number.parseInt+ method works the same as +parseInt+. It is, in fact, the same.
-
-[source,javascript]
-----
-console.log(Number.parseInt === parseInt)
-// <- true
-----
-
-The +parseInt+ function has support for hexadecimal literal notation in strings. Specifying the +radix+ is not even necessary: based on the +0x+ prefix, +parseInt+ infers that the number must be base 16.
-
-[source,javascript]
-----
-parseInt(`0xf00`)
-// <- 3840
-parseInt(`0xf00`, 16)
-// <- 3840
-----
-
-If you provided another +radix+, +parseInt+ would bail after the first non-digit character.
-
-[source,javascript]
-----
-parseInt(`0xf00`, 10)
-// <- 0
-parseInt(`5xf00`, 10)
-// <- 5, illustrating there's no special treatment here
-----
-
-While +parseInt+ accepts input in hexadecimal literal notation strings, its interface hasn't changed in ES6. Therefore, binary and octal literal notation strings won't be interpreted as such. This introduces a new inconsistency in ES6, where +parseInt+ understands +0x+, but not +0b+ nor +0o+.
-
-[source,javascript]
-----
-parseInt(`0b011`)
-// <- 0
-parseInt(`0b011`, 2)
-// <- 0
-parseInt(`0o100`)
-// <- 0
-parseInt(`0o100`, 8)
-// <- 0
-----
-
-It's up to you to drop the prefix before +parseInt+, if you wanted to use +parseInt+ to read these literals. You'll also need to specify the corresponding +radix+ of 2 for binary numbers or 8 for octals.
-
-[source,javascript]
-----
-parseInt(`0b011`.slice(2), 2)
-// <- 3
-parseInt(`0o110`.slice(2), 8)
-// <- 72
-----
-
-To make matters even worse, the +Number+ function is perfectly able to cast these strings into the correct numbers.
-
-[source,javascript]
-----
-Number(`0b011`)
-// <- 3
-Number(`0o110`)
-// <- 72
-----
-
-==== 8.1.5 +Number.parseFloat+
-
-Like +parseInt+, +parseFloat+ was added to +Number+ without any modifications whatsoever.
-
-[source,javascript]
-----
-console.log(Number.parseFloat === parseFloat)
-// <- true
-----
-
-Luckily, +parseFloat+ didn't have any special behavior with regard to hexadecimal literal strings, meaning that +Number.parseFloat+ is unlikely to introduce any confusion.
-
-The +parseFloat+ function was added to +Number+ for completeness. In future versions of the language, there will be less global namespace pollution. When a function serves a specific purpose, it'll be added to the relevant built-in, rather than as a global.
-
-==== 8.1.6 +Number.isInteger+
-
-This is a new method coming in ES6, and it wasn't previously available as a global function. The +isInteger+ method returns +true+ if the provided +value+ is a finite number that doesn't have a decimal part.
-
-[source,javascript]
-----
-console.log(Number.isInteger(Infinity)); // <- false
-console.log(Number.isInteger(-Infinity)); // <- false
-console.log(Number.isInteger(NaN)); // <- false
-console.log(Number.isInteger(null)); // <- false
-console.log(Number.isInteger(0)); // <- true
-console.log(Number.isInteger(-10)); // <- true
-console.log(Number.isInteger(10.3)); // <- false
-----
-
-You might want to consider the following code snippet as a polyfill for +Number.isInteger+. The modulus operator returns the remainder of dividing the same operands. If we divide by one, we're effectively getting the decimal part. If that's +0+, then it means the number is an integer.
-
-[source,javascript]
-----
-Number.isInteger = value => Number.isFinite(value) && value % 1 === 0
-----
-
-Next up we'll dive into floating point arithmetic, which is well-documented as having interesting corner cases.
-
-==== 8.1.7 +Number.EPSILON+
-
-The +EPSILON+ property is a new constant value being added to the +Number+ built-in. The following snippet shows its value.
-
-[source,javascript]
-----
-Number.EPSILON
-// <- 2.220446049250313e-16
-Number.EPSILON.toFixed(20)
-// <- `0.00000000000000022204`
-----
-
-Let's take a look at the canonical example of floating point arithmetic.
-
-[source,javascript]
-----
-0.1 + 0.2
-// <- 0.30000000000000004
-0.1 + 0.2 === 0.3
-// <- false
-----
-
-What's the margin of error in this operation? Let's move the operands around and find out.
-
-[source,javascript]
-----
-0.1 + 0.2 - 0.3
-// <- 5.551115123125783e-17
-5.551115123125783e-17.toFixed(20)
-// <- `0.00000000000000005551`
-----
-
-We could use +Number.EPSILON+ to figure out whether the difference is small enough to be negligible, +Number.EPSILON+ denotes a safe margin of error for floating point arithmetic rounding operations.
-
-[source,javascript]
-----
-5.551115123125783e-17 < Number.EPSILON
-// <- true
-----
-
-The following piece of code can be used to figure out out whether the result of a floating point operation is within the expected margin of error. We use +Math.abs+, because that way the order of +left+ and +right+ won't matter. In other words, +withinMarginOfError(left, right)+ will produce the same result as +withinMarginOfError(right, left)+.
-
-[source,javascript]
-----
-function withinMarginOfError (left, right) {
-  return Math.abs(left - right) < Number.EPSILON
-}
-----
-
-The next snippet shows +withinMarginOfError+ in action.
-
-[source,javascript]
-----
-withinMarginOfError(0.1 + 0.2, 0.3)
-// <- true
-withinMarginOfError(0.2 + 0.2, 0.3)
-// <- false
-----
-
-Using floating point representation, not every integer can be represented precisely.
-
-==== 8.1.8 +Number.MAX_SAFE_INTEGER+ and +Number.MIN_SAFE_INTEGER+
-
-This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standardfootnote:[IEEE 754 is the Floating Point Standard. On Wikipedia: https://ponyfoo.com/s/pes-floating-point], for that matter. The next bit of code shows exactly how large +Number.MAX_SAFE_INTEGER+ is.
-
-[source,javascript]
-----
-Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1
-// <- true
-Number.MAX_SAFE_INTEGER === 9007199254740991
-// <- true
-----
-
-As you might expect, there's also the opposite constant: the minimum. It's the negative value of +Number.MAX_SAFE_INTEGER+.
-
-[source,javascript]
-----
-Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER
-// <- true
-Number.MIN_SAFE_INTEGER === -9007199254740991
-// <- true
-----
-
-Floating point arithmetic becomes unreliable beyond the +[MIN_SAFE_INTEGER, MAX_SAFE_INTEGER]+ range. The +1 === 2+ statement evaluates to +false+, because these are different values. If we add +Number.MAX_SAFE_INTEGER+ to each operand, however, it'd seem +1 === 2+ is indeed true.
-
-[source,javascript]
-----
-1 === 2
-// <- false
-Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2
-// <- true
-Number.MIN_SAFE_INTEGER - 1 === Number.MIN_SAFE_INTEGER - 2
-// <- true
-----
-
-When it comes to checking whether an integer is safe, a +Number.isSafeInteger+ function has been added to the language.
-
-==== 8.1.10 +Number.isSafeInteger+
-
-This method returns +true+ for any integer in the +[MIN_SAFE_INTEGER, MAX_SAFE_INTEGER]+ range. Like with other +Number+ methods introduced in ES6, there's no type coercion involved. The input must be numeric, an integer, and within the aforementioned bounds in order for the method to return +true+. The next snippet shows a comprehensive set of inputs and outputs.
-
-[source,javascript]
-----
-Number.isSafeInteger(`one`); // <- false
-Number.isSafeInteger(`0`); // <- false
-Number.isSafeInteger(null); // <- false
-Number.isSafeInteger(NaN); // <- false
-Number.isSafeInteger(Infinity); // <- false
-Number.isSafeInteger(-Infinity); // <- false
-Number.isSafeInteger(Number.MIN_SAFE_INTEGER - 1); // <- false
-Number.isSafeInteger(Number.MIN_SAFE_INTEGER); // <- true
-Number.isSafeInteger(1); // <- true
-Number.isSafeInteger(1.2); // <- false
-Number.isSafeInteger(Number.MAX_SAFE_INTEGER); // <- true
-Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1); // <- false
-----
-
-When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operandsfootnote:[Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://ponyfoo.com/s/pes-math-axel]. One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of +left+, +right+, and the result of +left op right+ is, thus, necessary to verify that we can indeed trust the result.
-
-In the following example both operands are within bounds, but the result is incorrect.
-
-[source,javascript]
-----
-Number.isSafeInteger(9007199254740000)
-// <- true
-Number.isSafeInteger(993)
-// <- true
-Number.isSafeInteger(9007199254740000 + 993)
-// <- false
-9007199254740000 + 993
-// <- 9007199254740992, should be 9007199254740993
-----
-
-Certain operations and numbers, such as the following code snippet, may return correct results even when operands are out of bounds. The fact that correct results can't be guaranteed, however, means that these operations can't be trusted.
-
-[source,javascript]
-----
-9007199254740000 + 994
-// <- 9007199254740994
-----
-
-In the next example, one of the operands is out of bounds, and thus we can't trust the result to be accurate.
-
-[source,javascript]
-----
-Number.isSafeInteger(9007199254740993)
-// <- false
-Number.isSafeInteger(990)
-// <- true
-Number.isSafeInteger(9007199254740993 + 990)
-// <- false
-9007199254740993 + 990
-// <-  9007199254741982, should be 9007199254741983
-----
-
-A subtraction in our last example would produce a result that is within bounds, but that result would also be inaccurate.
-
-[source,javascript]
-----
-Number.isSafeInteger(9007199254740993)
-// <- false
-Number.isSafeInteger(990)
-// <- true
-Number.isSafeInteger(9007199254740993 - 990)
-// <- true
-9007199254740993 - 990
-// <-  9007199254740002, should be 9007199254740003
-----
-
-If both operands are out of bounds, the output could end up in the safe space, even though the result is incorrect.
-
-[source,javascript]
-----
-Number.isSafeInteger(9007199254740995)
-// <- false
-Number.isSafeInteger(9007199254740993)
-// <- false
-Number.isSafeInteger(9007199254740995 - 9007199254740993)
-// <- true
-9007199254740995 - 9007199254740993
-// <- 4, should be 2
-----
-
-We can conclude that the only safe way to assert whether an operation produces correct output is with a utility function such as the one below. If we can't ascertain that the operation and both operands are within bounds, then the result may be inaccurate, and that's a problem. It's best to +throw+ in those situations and have a way to error-correct, but that's specific to your programs. The important part is to actually catch these kinds of difficult bugs to deal with.
-
-[source,javascript]
-----
-function safeOp (result, ...operands) {
-  const values = [result, ...operands]
-  if (!values.every(Number.isSafeInteger)) {
-    throw new RangeError('Operation cannot be trusted!')
+function union (list, item) {
+  if (has(list, item)) {
+    return list
   }
-  return result
+  return [...list, item]
+}
+module.exports = union
+----
+
+Suppose we take that snippet of code and save it as +union.js+. We can now consume +union.js+ in another CommonJS module. Let's call that one +app.js+. In order to consume +union.js+, we call +require+ passing in a relative path to the +union.js+ file. We can omit the file extension as long as it's +.js+ or +.json+.
+
+[source,javascript]
+----
+const union = require(`./union`)
+console.log(union([1, 2], 3))
+// <- [1, 2, 3]
+console.log(union([1, 2], 2))
+// <- [1, 2]
+----
+
+We could run +app.js+ in its current state by downloading Node.js and using its command-line tool. The +node+ CLI also allows us to omit the file extension.
+
+[source,shell]
+----
+node app
+# [1, 2, 3]
+# [1, 2]
+----
+
+The +require+ function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of +require+ is sometimes leveraged to dynamically +require+ different modules that conform to one interface. As an example, let's conjure up a +templates+ directory with a number of view template functions. Our templates will take a model and return an HTML string.
+
+The template found in the following code snippet renders an item of a grocery shopping list by reading its attributes from a +model+ object.
+
+[source,javascript]
+----
+// views/item.js
+module.exports = model => `<li>
+  <span>${ model.amount }</span>
+  <span>x </span>
+  <span>${ model.name }</span>
+</li>`
+----
+
+Our application could easily print a +<li>+ by leveraging the +item.js+ view template.
+
+[source,javascript]
+----
+// app.js
+const renderItem = require(`./views/item`)
+const html = renderItem({
+  name: `Banana bread`,
+  amount: 3
+})
+console.log(html)
+----
+
+The following screenshot shows our tiny application in action.
+
+image::../images/c09g01-grocery-item.png["Printing an item for our grocery shopping list"]
+
+The next template we'll make renders the grocery list itself. It receives an array of items, and renders each of them by reusing the +item.js+ template from the previous code snippet.
+
+[source,javascript]
+----
+// views/list.js
+const renderItem = require(`./item`)
+
+module.exports = model => `<ul>
+  ${ model.map(renderItem).join(`\n`) }
+</ul>`
+----
+
+We can consume the +list.js+ template in a very similar way than what we did before, but we'll need to adjust the model passed into the template so that we provide a collection of items instead of a single one.
+
+[source,javascript]
+----
+// app.js
+const renderList = require(`./views/list`)
+const html = renderList([{
+  name: `Banana bread`,
+  amount: 3
+}, {
+  name: `Chocolate chip muffin`,
+  amount: 2
+}])
+console.log(html)
+----
+
+The following screenshot shows our updated application in all its glory.
+
+image::../images/c09g02-grocery-list.png["Printing a grocery shopping list"]
+
+In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a +model+ object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the +item.js+ templating function, and joining their HTML representations with newlines.
+
+Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a +render+ function that could render any template, we could easily do that thanks to the dynamic nature of +require+. The next example shows how we can construct the path to a template module. An important distinction is how +require+ calls doesn't necessarily need to be on the top level of a module. Calls to +require+ can be anywhere, even embedded within other functions.
+
+[source,javascript]
+----
+// render.js
+module.exports = function render(template, model) {
+  return require(`./views/${ template }`)(model)
 }
 ----
 
-You could use +safeOp+ to ensure all operands, including the +result+ are safely within bounds.
+Once we had such an API, we wouldn't have to worry about carefully constructing +require+ statements that match the directory structure of our view templates, because the +render.js+ module could take care of that. Rendering any template becomes a matter of calling the +render+ function with the template's name and the model for that template.
 
 [source,javascript]
 ----
-safeOp(9007199254740000 + 993, 9007199254740000, 993)
-// <- RangeError: Operation cannot be trusted!
-safeOp(9007199254740993 + 990, 9007199254740993, 990)
-// <- RangeError: Operation cannot be trusted!
-safeOp(9007199254740993 - 990, 9007199254740993, 990)
-// <- RangeError: Operation cannot be trusted!
-safeOp(9007199254740993 - 9007199254740995, 9007199254740993, 9007199254740995)
-// <- RangeError: Operation cannot be trusted!
-safeOp(1 + 2, 1, 2)
-// <- 3
+// app.js
+const render = require(`./render`)
+console.log(render(`item`, {
+  name: `Banana bread`,
+  amount: 1
+}))
+console.log(render(`list`, [{
+  name: `Apple pie`,
+  amount: 2
+}, {
+  name: `Roasted almond`,
+  amount: 25
+}]))
 ----
 
-That's all there is when it comes to +Number+, but we're not done with arithmetics-related improvements quite yet. Let's turn our attention to the +Math+ built-in.
+image::../images/c09g03-dynamic-render.png["Printing different views through a normalized render function."]
 
-=== 8.2 Math
+Moving on, you'll notice that ES6 modules are heavily influenced by CommonJS. In the next few sections we'll look at +export+ and +import+ statements, and learn how ESM is compatible with CJS.
 
-ES6 introduces heaps of new static methods to the +Math+ built-in. Some of them were specifically engineered towards making it easier to compile C into JavaScript, and you'll seldom need them for day-to-day JavaScript application development. Others are complements to the existing rounding, exponentiation, and trigonometry API surface.
+=== 9.2 JavaScript Modules
 
-Let's get right to it.
+As we explored the CommonJS module system, you might've noticed how the API is simple but powerful and flexible. ES6 modules offer an even simpler API that's almost as powerful at the expense of some flexibility.
 
-==== 8.2.1 +Math.sign+
+==== 9.2.1 Strict Mode
 
-Many languages have a mathematical +sign+ method that returns a vector (+-1+, +0+, or +1+) representation for the sign of the provided input. JavaScript's +Math.sign+ method does exactly that. However, the JavaScript flavor of this method has two more possible return values: +-0+, and +NaN+. Check out the examples in the following code snippet.
+In the ES6 module system, strict mode is turned on by default. Strict mode is a featurefootnote:[Read a comprehensive article about strict mode on Mozilla's MDN: https://ponyfoo.com/s/pes-strict-mode] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can make optimizations making JavaScript runtime faster and safer.
+
+- Variables must be declared
+- Function parameters must have unique names
+- Using +with+ statements is forbidden
+- Assignment to read-only properties results in errors being thrown
+- Octal numbers like +00840+ are syntax errors
+- Attempts to +delete+ undeletable properties throw an error
+- +delete prop+ is a syntax error, instead of assuming +delete global[prop]+
+- +eval+ doesn't introduce new variables into its surrounding scope
+- +eval+ and +arguments+ can't be bound or assigned to
+- +arguments+ doesn't magically track changes to method parameters
+- +arguments.callee+ is no longer supported, throws a +TypeError+
+- +arguments.caller+ is no longer supported, throws a +TypeError+
+- Context passed as +this+ in method invocations is not "boxed" into an +Object+
+- No longer able to use +fn.caller+ and +fn.arguments+ to access the JavaScript stack
+- Reserved words (e.g +protected+, +static+, +interface+, etc) cannot be bound
+
+Let's now dive into the +export+ statement.
+
+==== 9.2.2 +export+ Statements
+
+In CommonJS modules, you export values by exposing them on +module.exports+. You can expose anything from a value type to an object, an array, or a function, as seen in the next few code snippets.
 
 [source,javascript]
 ----
-Math.sign(1); // <- 1
-Math.sign(0); // <- 0
-Math.sign(-0); // <- -0
-Math.sign(-30); // <- -1
-Math.sign(NaN); // <- NaN
-Math.sign(`one`); // <- NaN, because Number(`one`) is NaN
-Math.sign(`0`); // <- 0, because Number(`0`) is 0
-Math.sign(`7`); // <- 1, because Number(`7`) is 7
+module.exports = `hello`
 ----
-
-Note how +Math.sign+ casts its input into numeric values? While methods introduced to the +Number+ built-in don't cast their input via +Number(value)+, most of the methods added to +Math+ share this trait, as we shall see.
-
-==== 8.2.2 +Math.trunc+
-
-We already had +Math.floor+ and +Math.ceil+ in JavaScript, with which we can round a number down or up, respectively. Now we also have +Math.trunc+ as an alternative, which discards the decimal part without any rounding. Here, too, the input is coerced into a numeric value through +Number(value)+.
 
 [source,javascript]
 ----
-Math.trunc(12.34567); // <- 12
-Math.trunc(-13.58); // <- -13
-Math.trunc(-0.1234); // <- -0
-Math.trunc(NaN); // <- NaN
-Math.trunc(`one`); // <- NaN, because Number(`one`) is NaN
-Math.trunc(`123.456`); // <- 123, because Number(`123.456`) is 123.456
+module.exports = { hello: `world` }
 ----
-
-Creating a simple polyfill for +Math.trunc+ would involve checking whether the value is greater than zero and applying one of +Math.floor+ or +Math.ceil+, as shown in the following code snippet.
 
 [source,javascript]
 ----
-Math.trunc = value => value > 0 ? Math.floor(value) : Math.ceil(value)
+module.exports = [`hello`, 'world']
 ----
-
-==== 8.2.3 +Math.cbrt+
-
-The +Math.cbrt+ method is short for "cubic root", similarly to how +Math.sqrt+ is short for "square root". The following snippet has a few usage examples.
 
 [source,javascript]
 ----
-Math.cbrt(-1); // <- -1
-Math.cbrt(3); // <- 1.4422495703074083
-Math.cbrt(8); // <- 2
-Math.cbrt(27); // <- 3
+module.exports = function hello () {}
 ----
 
-Note that this method also coerces non-numerical values into numbers.
+ES6 modules are files that may expose an API through +export+ statements. Declarations in ESM are scoped to the local module, just like we observed about CommonJS. Any variables declared inside a module aren't available to other modules unless they're explicitly exported as part of that module's API and then imported in the module that wants to access them.
+
+===== Exporting a Default Binding
+
+You can mimic the CommonJS code we just saw by replacing +module.exports =+ with +export default+ statements.
 
 [source,javascript]
 ----
-Math.cbrt(`8`); // <- 2, because Number(`8`) is 8
-Math.cbrt(`one`); // <- NaN, because Number(`one`) is NaN
+export default `hello`
 ----
-
-Let's move on.
-
-==== 8.2.4 +Math.expm1+
-
-This operation is the result of computing +e+ to the +value+ minus +1+. In JavaScript, the +e+ constant is defined as +Math.E+. The function in the following snippet is a rough equivalent of +Math.expm1+.
 
 [source,javascript]
 ----
-function expm1 (value) {
-  return Math.pow(Math.E, value) - 1
+export default { hello: `world` }
+----
+
+[source,javascript]
+----
+export default [`hello`, `world`]
+----
+
+[source,javascript]
+----
+export default function hello () {}
+----
+
+In CommonJS, +module.exports+ can be assigned-to dynamically.
+
+[source,javascript]
+----
+function initialize () {
+  module.exports = `hello!`
 }
+initialize()
 ----
 
-The <code>e<sup>value</sup></code> operation can be expressed as +Math.exp(value)+ as well.
+In contrast with CJS, +export+ statements in ESM can only be placed at the top level. "Top-level only" +export+ statements is a good constraint to have, as there aren't many good reasons to dynamically define and expose an API based on method calls. This limitation also helps compilers and static analysis tools parse ES6 modules.
 
 [source,javascript]
 ----
-function expm1 (value) {
-  return Math.exp(value) - 1
+function initialize () {
+  export default `hello!` // SyntaxError
 }
+initialize()
 ----
 
-Note that +Math.expm1+ has higher precision than merely doing +Math.exp(value) - 1+, and should be the preferred alternative.
+There are a few other ways of exposing an API in ESM, besides +export default+ statements.
+
+===== Named Exports
+
+When you want to expose multiple values from CJS modules you don't necessarily need to explicitly export an object containing every one of those values. You could simply add properties onto the implicit +module.exports+ object. There's still a single binding being exported, containing all properties the +module.exports+ object ends up holding. While the following example exports two individual values, both are exposed as properties on the exported object.
 
 [source,javascript]
 ----
-expm1(1e-20)
+module.exports.counter = 0
+module.exports.count = () => counter++
+----
+
+We can replicate this behavior in ESM by using the named exports syntax. Instead of assigning properties to an implicit +module.exports+ object like with CommonJS, in ES6 you declare the bindings you want to +export+, as shown in the following code snippet.
+
+[source,javascript]
+----
+export let counter = 0
+export const count = () => counter++
+----
+
+Note that the last bit of code cannot be refactored to extract the variable declarations into standalone statements that are later passed to +export+ as a named export, as that'd be a syntax error.
+
+[source,javascript]
+----
+let counter = 0
+const count = () => counter++
+export counter // SyntaxError
+export count
+----
+
+By being rigid in how its declarative module syntax works, ESM favors static analysis, once again at the expense of flexibility. Flexibility inevitably comes at the cost of added complexity, which is a good reason not to offer flexible interfaces.
+
+===== Exporting Lists
+
+ES6 modules let you +export+ lists of named top-level members, as seen in the following snippet. The syntax for export lists is easy to parse, and presents a solution to the problem we observed in the last code snippet from the previous section.
+
+[source,javascript]
+----
+let counter = 0
+const count = () => counter++
+export { counter, count }
+----
+
+If you'd like to export a binding but give it a different name, you can use the aliasing syntax: +export { count as increment }+. In doing so, we're exposing the +count+ binding from the local scope as a public method under the +increment+ alias, as the following snippet shows.
+
+[source,javascript]
+----
+let counter = 0
+const count = () => counter++
+export { counter, count as increment }
+----
+
+Finally, we can specify a default export when using the named member list syntax. The next bit of code uses +as default+ to define a default export at the same time as we're enumerating named exports.
+
+[source,javascript]
+----
+let counter = 0
+const count = () => counter++
+export { counter as default, count as increment }
+----
+
+The following piece of code is equivalent to the previous one, albeit a tad more verbose.
+
+[source,javascript]
+----
+let counter = 0
+const count = () => counter++
+export default counter
+export { count as increment }
+----
+
+It's important to keep in mind that we are exporting bindings, and not merely values.
+
+===== Bindings, Not Values
+
+ES6 modules export bindings, not values nor references. This means that a +counter+ variable you export would be bound into the +counter+ variable on the module, and its value would be subject to changes made to +counter+. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
+
+In the next code snippet, our module's +counter+ export would be initially bound to +0+ and increase by +1+ every second. Modules consuming this API would see the +counter+ value changing every second.
+
+[source,javascript]
+----
+export let counter = 0
+setInterval(() => counter++, 1000)
+----
+
+Finally, the JavaScript module system offers an +export..from+ syntax, where you can expose another module's interface.
+
+===== Exporting from another module
+
+We can expose another module's named exports using by adding a +from+ clause to an +export+ statement. The bindings are not imported into the local scope: our module acts as a pass-through where we expose another module's bindings without getting direct access to them.
+
+[source,javascript]
+----
+export { increment } from './counter'
+increment()
+// ReferenceError: increment is not defined
+----
+
+You can give aliases to named exports, as they pass through your module. If the module in the following example were named +aliased+, then consumers could +import { add } from './aliased'+ to get a reference to the +increment+ binding from the +counter+ module.
+
+[source,javascript]
+----
+export { increment as add } from './counter'
+----
+
+An ESM module could also expose every single named export found in another module by using a wildcard, as shown in the next snippet. Note that this wouldn't include the default binding exported by the +counter+ module.
+
+[source,javascript]
+----
+export * from './counter'
+----
+
+When we want to expose another module's +default+ binding, we'll have to use the named export syntax adding an alias.
+
+[source,javascript]
+----
+export { default as counter } from './counter'
+----
+
+We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to +import+ statements, which can be used to consume other modules.
+
+==== 9.2.3 +import+ Statements
+
+We can load a module from another one using +import+ statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. No browsers have implemented module loading as of this writing. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
+
+Transpilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means +import+ statements in Babel mostly follow the same semantics as +require+ statements in CommonJS.
+
+Let's suppose we have the following code snippet in a +./counter.js+ module.
+
+[source,javascript]
+----
+let counter = 0
+const increment = () => counter++
+const decrement = () => counter--
+export { counter as default, increment, decrement }
+----
+
+The statement in the following code snippet could be used to load the +counter+ module into our +app+ module. It won't create any variables in the +app+ scope, though. It will execute any code in the top level of the +counter+ module, though, including that module's own +import+ statements.
+
+[source,javascript]
+----
+import './counter'
+----
+
+In the same fashion as +export+ statements, +import+ statements are only allowed in the top level of your module definitions. This limitation helps transpilers simplify their module loading capabilities, as well as help other static analysis tools parse your codebase.
+
+===== Importing Default Exports
+
+CommonJS modules let you import other modules using +require+ statements. When we need a reference to the default export, all we'd have to do is assign that to a variable.
+
+[source,javascript]
+----
+const counter = require(`./counter`)
+----
+
+To import the default binding exported from an ES6 module, we'll have to give it a name. The syntax and semantics are a bit different than what we use when declaring a variable, because we're importing a binding and not just assigning values to variables. This distinction also makes it easier for static analysis tools and compilers to parse our code.
+
+[source,javascript]
+----
+import counter from './counter'
+console.log(counter)
 // <- 0
-Math.expm1(1e-20)
-// <- 1e-20
-expm1(1e-10)
-// <- 1.000000082740371e-10
-Math.expm1(1e-10)
-// <- 1.00000000005e-10
 ----
 
-The inverse function of +Math.expm1+ is +Math.log1p+.
+Besides default exports, you could also import named exports and alias them.
 
-==== 8.2.5 +Math.log1p+
+===== Importing Named Exports
 
-This is the natural logarithm of +value+ plus +1+, -- <code><em>ln</em>(value + 1)</code> -- and the inverse function of +Math.expm1+. The base +e+ logarithm of a number can be expressed as +Math.log+ in JavaScript.
+The following bit of code shows how we can import the +increment+ method from our +counter+ module. Reminiscent of assignment destructuring, the syntax for importing named exports is wrapped in braces.
 
 [source,javascript]
 ----
-function log1p (value) {
-  return Math.log(value + 1)
-}
+import { increment } from './counter'
 ----
 
-Just like with +Math.expm1+, +Math.log1p+ method is more precise than executing the +Math.log(value + 1)+ operation by hand.
+To import multiple bindings, we separate them using commas.
 
 [source,javascript]
 ----
-log1p(1.00000000005e-10)
-// <- 1.000000082690371e-10
-Math.log1p(1.00000000005e-10)
-// <- 1e-10, exactly the inverse of Math.expm1(1e-10)
+import { increment, decrement } from './counter'
 ----
 
-==== 8.2.6 +Math.log10+
+The syntax and semantics are subtly different from destructuring. While destructuring relies on colons to create aliases, +import+ statements use an +as+ keyword, mirroring the syntax in +export+ statements. The following statement imports the +increment+ method as +add+.
 
-Base ten logarithm of a number -- <code><em>log</em><sub>10</sub>(value)</code>.
-
-[source,javascript]
-----
-Math.log10(1000)
-// <- 3
-----
-
-You could polyfill +Math.log10+ using the +Math.LN10+ constant.
-
-[source,javascript]
-----
-function log10 (value) {
-  return Math.log(x) / Math.LN10
-}
-----
-
-And then there's +Math.log2+.
-
-==== 8.2.7 +Math.log2+
-
-Base two logarithm of a number -- <code><em>log</em><sub>2</sub>(value)</code>.
-
-[source,javascript]
-----
-Math.log2(1024)
-// <- 10
-----
-
-You could polyfill +Math.log2+ using the +Math.LN2+ constant.
-
-[source,javascript]
-----
-function log2 (value) {
-  return Math.log(x) / Math.LN2
-}
-----
-
-Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example. Keep in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://ponyfoo.com/s/pes-bitwise-shift].
-
-[source,javascript]
-----
-log2(1 << 29)
-// <- 29.000000000000004
-Math.log2(1 << 29)
-// <- 29
-----
-
-==== 8.2.8 Trigonometric Functions
-
-The +Math+ object is getting trigonometric functions in ES6.
-
-- +Math.sinh(value)+ returns the hyperbolic sine of +value+
-- +Math.cosh(value)+ returns the hyperbolic cosine of +value+
-- +Math.tanh(value)+ returns the hyperbolic tangent of +value+
-- +Math.asinh(value)+ returns the hyperbolic arc-sine of +value+
-- +Math.acosh(value)+ returns the hyperbolic arc-cosine of +value+
-- +Math.atanh(value)+ returns the hyperbolic arc-tangent of +value+
-
-==== 8.2.9 +Math.hypot+
-
-Using +Math.hypot+ returns the square root of the sum of the squares of every provided argument.
-
-[source,javascript]
-----
-Math.hypot(1, 2, 3)
-// <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
-----
-
-We could polyfill +Math.hypot+ by performing these operations manually. We can use +Math.sqrt+ to compute the square root and +Array#reduce+footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://ponyfoo.com/s/pes-native-arrays], combined with the spread operator, to sum the squares.
-
-[source,javascript]
-----
-function hypot (...values) {
-  return Math.sqrt(values.reduce((sum, value) => sum + value * value, 0))
-}
-----
-
-Our handmade function is, surprisingly, more precise than the native one for this particular use case. In the next code sample, we see the hand-rolled +hypot+ function offers precision with one more decimal place.
-
-[source,javascript]
-----
-Math.hypot(1, 2, 3)
-// <- 3.741657386773941
-hypot(1, 2, 3)
-// <- 3.7416573867739413
-----
-
-==== 8.2.10 Bitwise Computation Helpers
-
-At the beginning of section 8.2, we talked about how some of the new +Math+ methods are specifically engineered towards making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
-
-===== +Math.clz32+
-
-The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number". Keeping into account that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://ponyfoo.com/s/pes-bitwise-shift], let's take a look at the next code snippet describing sample input and output for +Math.clz32+.
-
-[source,javascript]
-----
-Math.clz32(0); // <- 32
-Math.clz32(1); // <- 31
-Math.clz32(1 << 1); // <- 30
-Math.clz32(1 << 2); // <- 29
-Math.clz32(1 << 29); // <- 2
-Math.clz32(1 << 31); // <- 0
-----
-
-===== +Math.imul+
-
-Returns the result of a C-like 32-bit multiplication.
-
-===== +Math.fround+
-
-Rounds +value+ to the nearest 32-bit float representation of a number.
-
-=== 8.3 Strings and Unicode
-
-You may recall template literals from section 3.5, and how those can be used to mix strings and variables, or any valid JavaScript expression, to produce string output.
-
-[source,javascript]
-----
-function greet (name) {
-  return `Hello, ${ name }!`
-}
-greet(`Gandalf`)
-// <- `Hello, Gandalf!`
-----
-
-Strings are getting a number of new methods in ES6, besides the template literal syntax. These can be categorized as string manipulation methods and unicode related methods. Let's start with the former.
-
-==== 8.3.1 +String#startsWith+
-
-Prior to ES6, whenever we wanted to check if a string begins with a certain other string, we'd use the +String#indexOf+ method, as shown in the following code snippet. A result of +0+ means that the string starts with the provided value.
-
-[source,javascript]
-----
-`hello gary`.indexOf(`gary`)
-// <- 6
-`hello gary`.indexOf(`hello`)
-// <- 0
-`hello gary`.indexOf(`stephan`)
-// <- -1
-----
-
-If you wanted to check if a string started with another one, then, you'd compare them with +String#indexOf+ and check whether the lookup value is found at the beginning of the string: the +0+ index.
-
-[source,javascript]
-----
-`hello gary`.indexOf(`gary`) === 0
-// <- false
-`hello gary`.indexOf(`hello`) === 0
-// <- true
-`hello gary`.indexOf(`stephan`) === 0
-// <- false
-----
-
-You can now use the +String#startsWith+ method instead, avoiding the unnecessary complexity of checking whether an index matches +0+.
-
-[source,javascript]
-----
-`hello gary`.startsWith(`gary`)
-// <- false
-`hello gary`.startsWith(`hello`)
-// <- true
-`hello gary`.startsWith(`stephan`)
-// <- false
-----
-
-In order to figure out whether a string contains a value starting at an specific index, using +String#indexOf+, we would have to grab a slice of that string first.
-
-[source,javascript]
-----
-`hello gary`.slice(6).indexOf(`gary`) === 0
-// <- true
-----
-
-We can't simply check whether the index is +6+, because that this would give you false negatives when the queried value is found before reaching that index of +6+. The following example shows how, even when the query +`ell`+ string is indeed at index +6+, merely comparing the +String#indexOf+ result with +6+ is insufficient to attain a correct result.
-
-[source,javascript]
-----
-`hello ell`.indexOf(`ell`) === 6
-// <- false, because the result was 1
-----
-
-We could use the +startIndex+ parameter for +indexOf+ to get around this problem without relying on +String#slice+. Note that we're still comparing against +6+ in this case, because the string wasn't sliced up in a setup operation.
-
-[source,javascript]
-----
-`hello ell`.indexOf(`ell`, 6) === 6
-// <- true
-----
-
-Instead of keeping all of these string searching implementation details in your head and writing code that's most concerned with how to search, as opposed to what is being searched, we could use +String#startsWith+ passing in the optional +startIndex+ parameter as well.
-
-[source,javascript]
-----
-`hello ell`.startsWith(`ell`, 6)
-// <- true
-----
-
-==== 8.3.2 +String#endsWith+
-
-This method mirrors +String#startsWith+ in the same way that +String#lastIndexOf+ mirrors +String#indexOf+. It tells us whether a string ends with another string.
-
-[source,javascript]
-----
-`hello gary`.endsWith(`gary`)
-// <- true
-`hello gary`.endsWith(`hello`)
-// <- false
-----
-
-As the opposite of +String#startsWith+, there's a position index that indicates where the lookup should end, instead of where it should start. It defaults to the length of the string.
-
-[source,javascript]
-----
-`hello gary`.endsWith(`gary`, 10)
-// <- true
-`hello gary`.endsWith(`gary`, 9)
-// <- false, it ends with `gar` in this case
-`hello gary`.endsWith(`pony`, 4)
-// <- true
-----
-
-+String#includes+ is one last method that can simplify a specific use case for +String#indexOf+.
-
-==== 8.3.3 +String#includes+
-
-You can use +String#includes+ to figure out whether a string contains another one, as shown in the following piece of code.
-
-[source,javascript]
-----
-`hello gary`.includes(`hell`)
-// <- true
-`hello gary`.includes(`ga`)
-// <- true
-`hello gary`.includes(`rye`)
-// <- false
-----
-
-This is equivalent to the ES5 use case of +String#indexOf+ where we'd test the result against +-1+, checking to see whether the search string was anywhere to be found, as demonstrated in the next code snippet.
-
-[source,javascript]
-----
-`hello gary`.indexOf(`ga`) !== -1
-// <- true
-`hello gary`.indexOf(`rye`) !== -1
-// <- false
-----
-
-You can also provide +String#includes+ with a start index where searching should begin.
-
-[source,javascript]
-----
-`hello gary`.includes(`ga`, 4)
-// <- true
-`hello gary`.includes(`ga`, 7)
-// <- false
-----
-
-Let's move onto something that's not just an +String#indexOf+ alternative.
-
-==== 8.3.4 +String#repeat+
-
-This handy method allows you to repeat a string +count+ times.
-
-[source,javascript]
-----
-`ha`.repeat(1)
-// <- `ha`
-`ha`.repeat(2)
-// <- `haha`
-`ha`.repeat(5)
-// <- `hahahahaha`
-`ha`.repeat(0)
-// <- ``
-----
-
-The provided +count+ should be a positive and finite number.
-
-[source,javascript]
-----
-`ha`.repeat(Infinity)
-// <- RangeError
-`ha`.repeat(-1)
-// <- RangeError
-----
-
-Decimal values are floored to the nearest integer.
-
-[source,javascript]
-----
-`ha`.repeat(3.9)
-// <- `hahaha`, count was floored to 3
-----
-
-Using +NaN+ is interpreted as a +count+ of +0+.
-
-[source,javascript]
-----
-`ha`.repeat(NaN)
-// <- ``
-----
-
-Non-numeric values are coerced into numbers.
-
-[source,javascript]
-----
-`ha`.repeat(`ha`)
-// <- ``, because Number(`ha`) is NaN
-`ha`.repeat(`3`)
-// <- `hahaha`, because Number(`3`) is 3
-----
-
-Values in the +(-1, 0)+ range are rounded to +-0+ becase +count+ is passed through +ToInteger+], as documented by the specificationfootnote:[+String#repeat+ in ECMAScript 6 Specification, section 21.1.3.13: https://ponyfoo.com/s/pes-array-repeat]. That step in the specification dictates that +count+ be casted with a formula like the one in the next code snippet.
-
-[source,javascript]
-----
-function ToInteger (number) {
-  return Math.floor(Math.abs(number)) * Math.sign(number)
-}
-----
-
-The +ToInteger+ function translates any values in the +(-1, 0)+ range into +-0+. As a result, when passed to +String#repeat+, numbers in the +(-1, 0)+ range will be treated as zero, while numbers in the +[-1, -Infinity)+ range will result an exception, as we learned earlier.
-
-[source,javascript]
-----
-`na`.repeat(-0.1)
-// <- ``, because count was rounded to -0
-`na`.repeat(-0.9)
-// <- ``, because count was rounded to -0
-`na`.repeat(-0.9999)
-// <- ``, because count was rounded to -0
-`na`.repeat(-1)
-// <- Uncaught RangeError: Invalid count value
-----
-
-An example use case for +String#repeat+ may be the typical padding function. The +leftPad+ function shown below takes a multiline string and pads every line with as many +spaces+ as desired, using a default of two spaces.
-
-[source,javascript]
-----
-function leftPad (text, spaces = 2) {
-  return text
-    .split(`\n`)
-    .map(line => ` `.repeat(spaces) + line)
-    .join(`\n`)
-}
-
-leftPad(`a
-b
-c`, 2)
-// <- `  a\n  b\n  c`
-----
-
-Let's switch protocols and learn about Unicode.
-
-==== 8.3.5 Unicode
-
-JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://ponyfoo.com/s/pes-unicode-encodings]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
-
-For code points beyond +U+FFFF+, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji +`🐎`+ code point is represented with the +`\ud83d\udc0e`+ contiguous code units. In ES6 notation you can also represent code points using the +`\u{1f40e}`+ notation (that example is also the horse emoji).
-
-Note that the internal representation hasn't changed, so there's still two code units behind that single code point. In fact, +`\u{1f40e}`.length+ evaluates to +2+, one for each code unit.
-
-The +`\ud83d\udc0e\ud83d\udc71\u2764`+ string, found in the next code snippet, evaluates to a few emoji.
-
-[source,javascript]
-----
-`\ud83d\udc0e\ud83d\udc71\u2764`
-// <- `🐎👱❤`
-----
-
-While that string consists of 5 code units, we know that the length should really be 3 -- as there's only 3 emoji.
-
-[source,javascript]
-----
-`\ud83d\udc0e\ud83d\udc71\u2764`.length
-// <- 5
-`🐎👱❤`.length
-// <- 5, still
-----
-
-Counting code points before ES6 was tricky, as the language didn't make an effort to help in the Unicode department. Take for instance +Object.keys+, as seen in the following code snippet. It returns five keys for our 3-emoji string, because those 3 code points use 5 code units in total.
-
-[source,javascript]
-----
-Object.keys(`🐎👱❤`)
-// <- [`0`, `1`, `2`, `3`, `4`]
-----
-
-If we now consider a +for+ loop, we can observe more clearly how this is a problem. In the following example, we wanted to exfill each individual emoji from the +text+ string, but we get each code point instead.
-
-[source,javascript]
-----
-const text = '🐎👱❤'
-for (let i = 0; i < text.length; i++) {
-  console.log(text[i])
-  // <- '\ud83d'
-  // <- '\udc0e'
-  // <- '\ud83d'
-  // <- '\udc71'
-  // <- '\u2764'
-}
-----
-
-Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the string iterator to go over code points, even when those code points are made of surrogate pairs.
-
-==== 8.3.6 +String.prototype[Symbol.iterator]+
-
-Given the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
-
-[source,javascript]
-----
-for (let codePoint of `🐎👱❤`) {
-  console.log(codePoint)
-  // <- '🐎'
-  // <- '👱'
-  // <- '❤'
-}
-----
-
-Measuring the length of a string in terms of code points, as we saw earlier, is impossible with +String#length+, because it counts code units instead. We can, however, use an iterator to split the string into its code points, like we did in the +for..of+ example.
-
-We could use the spread operator, which relies on the iterator protocol, to split an string into an array made up of its conforming code points and then pull that array's +length+, getting the correct code point count, as seen next.
-
-[source,javascript]
-----
-[...`🐎👱❤`].length
-// <- 3
-----
-
-Keep in mind that splitting strings into code points isn't enough if you want to be 100% precise about string length. Take for instance the combining overline Unicode code unit, represented with +\u0305+. On its own, this code unit is just an overline, as shown below.
-
-[source,javascript]
-----
-`\u0305`
-// <- ` ̅`
-----
-
-When preceded by another code unit, however, they are combined together into a single glyph.
-
-[source,javascript]
-----
-function overlined (text) {
-  return `${ text }\u0305`
-}
-
-overlined(`o`)
-// <- `o̅`
-`hello world`.split(``).map(overlined).join(``)
-// <- `h̅e̅l̅l̅o̅ ̅w̅o̅r̅l̅d̅`
-----
-
-Attempts to näively figure out the actual length by counting code points prove insufficient, just like when using +String#length+ to count code points, as shown next.
-
-[source,javascript]
-----
-`o̅`.length
-// <- 2
-[...`o̅`].length
-// <- 2, should be 1
-[...`h̅e̅l̅l̅o̅ ̅w̅o̅r̅l̅d̅`].length
-// <- 22, should be 11
-[...`h̅e̅l̅l̅o̅ world`].length
-// <- 16, should be 11
-----
-
-As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iteratorfootnote:[See also "JavaScript has a Unicode problem", https://ponyfoo.com/s/pes-unicode-mathias]. In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length. Forunately, these kinds of glyphs are used infrequently.
-
-Let's look at more Unicode-related methods introduced in ES6.
-
-==== 8.3.7 +String#codePointAt+
-
-We can use +String#codePointAt+ to get the base-10 numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo +`🐎👱❤`+ string.
-
-[source,javascript]
-----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`
-text.codePointAt(0)
-// <- 128014
-text.codePointAt(2)
-// <- 128113
-text.codePointAt(4)
-// <- 10084
-----
-
-Identifying the indices that need to be provided to +String#codePointAt+ may prove cumbersome, which is why you should instead loop through a string iterator that can identify them on your behalf. You can then call +.codePointAt(0)+ for each code point in the sequence, and +0+ will always be the correct start index.
-
-[source,javascript]
-----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`
-for (let codePoint of text) {
-  console.log(codePoint.codePointAt(0))
-  // <- 128014
-  // <- 128113
-  // <- 10084
-}
-----
-
-We could also reduce our example to a single line of code by using a combination of the spread operator and +Array#map+.
-
-[source,javascript]
-----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`
-[...text].map(cp => cp.codePointAt(0))
-// <- [128014, 128113, 10084]
-----
-
-You can take the base-16 representation of those base-10 code points, and use them to create a string with the new unicode code point escape syntax of +\u{codePoint}+. This syntax allows you to represent unicode code points that are beyond the BMP (or basic multilingual plane). That is, code points outside the +[U+0000, U+FFFF]+ range that are typically represented using the +\u1234+ syntax.
-
-Let's start by updating our example to print the hexadecimal version of our code points.
-
-[source,javascript]
-----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`
-[...text].map(cp => cp.codePointAt(0).toString(16))
-// <- [`1f40e`, `1f471`, `2764`]
-----
-
-We could wrap those base-16 values in +`\u{codePoint}`+ and voilá: you'd get the emoji values once again.
-
-[source,javascript]
-----
-`\u{1f40e}`
-// <- `🐎`
-`\u{1f471}`
-// <- `👱`
-`\u{2764}`
-// <- `❤`
-----
-
-==== 8.3.8 +String.fromCodePoint+
-
-This method takes in a number and returns a code point. Note how I can use the +0x+ prefix with the terse base-16 code points we got from +String#codePointAt+ moments ago.
-
-[source,javascript]
-----
-String.fromCodePoint(0x1f40e)
-// <- `🐎`
-String.fromCodePoint(0x1f471)
-// <- `👱`
-String.fromCodePoint(0x2764)
-// <- `❤`
-----
-
-You can just as well use plain base-10 literals and achieve the same results.
-
-[source,javascript]
-----
-String.fromCodePoint(128014)
-// <- `🐎`
-String.fromCodePoint(128113)
-// <- `👱`
-String.fromCodePoint(10084)
-// <- `❤`
-----
-
-You can pass in as many code points as you'd like to +String.fromCodePoint+.
-
-[source,javascript]
-----
-String.fromCodePoint(128014, 128113, 10084)
-// <- '🐎👱❤'
-----
-
-As an exercise in futility, we could map a string to their numeric representation of code points, and back to the code points themselves.
-
-[source,javascript]
-----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`
-[...text]
-  .map(cp => cp.codePointAt(0))
-  .map(cp => String.fromCodePoint(cp))
-  .join(``)
-// <- `🐎👱❤`
-----
-
-Reversing an string has potential to cause issues as well.
-
-==== 8.3.9 Unicode-Aware String Reversal
-
-Consider the following piece of code.
-
-[source,javascript]
-----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`
-text.split(``).map(cp => cp.codePointAt(0))
-// <- [55357, 56334, 55357, 56433, 10084]
-text.split(``).reverse().map(cp => cp.codePointAt(0))
-// <- [10084, 56433, 128014, 55357]
-----
-
-The problem is that we're reversing individual code units, while we'd have to reverse code points for a correct solution. If, instead, we were to use the spread operator to split the string by its code points, and then reversed that, the code points would be preserved and the string would be properly reversed.
-
-[source,javascript]
-----
-const text = `\ud83d\udc0e\ud83d\udc71\u2764`
-[...text].reverse().join(``)
-// <- '❤👱🐎'
-----
-
-This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clustersfootnote:[See also "JavaScript has a Unicode problem", https://ponyfoo.com/s/pes-unicode-mathias].
-
-[source,javascript]
-----
-[...`hello\u0305`].reverse().join(``)
-// <- ` ̅olleh`
-----
-
-The last Unicode-related method we'll be addressing is +.normalize+.
-
-==== 8.3.10 +String#normalize+
-
-There's different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
-
-[source,javascript]
-----
-`mañana` === `mañana`
-// <- false
-----
-
-What's going on here? We have an +ñ+ on the left version, while the version on the right has a combining tilde character + ̃+ and an +n+. The two are visually identical, but if we take a look at the code points, we'll notice they're different.
-
-[source,javascript]
-----
-[...`mañana`].map(cp => cp.codePointAt(0).toString(16))
-// <- [`6d`, `61`, `f1`, `61`, `6e`, `61`]
-[...`mañana`].map(cp => cp.codePointAt(0).toString(16))
-// <- [`6d`, `61`, `6e`, `303`, `61`, `6e`, `61`]
-----
-
-Just like with the +`hello̅`+ examples, the second string has a length of +7+, even though visually it is also +6+ glyphs long.
-
-[source,javascript]
-----
-[...`mañana`].length
-// <- 6
-[...`mañana`].length
-// <- 7
-----
-
-If we normalize the second version, using +String#normalize+, we'll get back the same code points we had in the first version.
-
-[source,javascript]
-----
-const normalized = `mañana`.normalize()
-[...normalized].map(cp => cp.codePointAt(0).toString(16))
-// <- [`6d`, `61`, `f1`, `61`, `6e`, `61`]
-normalized.length
-// <- 6
-----
-
-Note that we should use +String#normalize+ on both strings when comparing them if we want to test for equality.
-
-[source,javascript]
-----
-function compare (left, right) {
-  return left.normalize() === right.normalize()
-}
-const normal = `mañana`
-const irregular = `mañana`
-normal === irregular
-// <- false
-compare(normal, irregular)
-// <- true
-----
-
-=== 8.4 Array
-
-Over the years, libraries like Underscore and Lodash spoke loudly of missing features when it comes to arrays. As a result, ES5 brought in heaps of functional methods to arrays: +Array#filter+, +Array#map+, +Array#reduce+, +Array#reduceRight+, +Array#forEach+, +Array#some+, and +Array#every+.
-
-ES6 brings a few more methods that will help manipulate, fill, and filter arrays.
-
-==== 8.4.1 +Array.from+
-
-
-Before ES6, JavaScript developers often needed to cast +arguments+ to a function into an array.
-
-[source,javascript]
-----
-function cast () {
-  return Array.prototype.slice.call(arguments)
-}
-cast(`a`, `b`)
-// <- [`a`, `b`]
-----
-
-We've already explored more terse ways of doing this in chapter 3, when we first learned about rest and spread. You could, for instance, use the spread operator. As you no doubt remember, the spread operator leverages the iterator protocol to produce a sequence of values in arbitrary objects. The downside is that the objects we want to cast with spread must adhere to the iterator protocol by having implemeted +Symbol.iterator+. Luckily for us, +arguments+ does implement the iterator protocol in ES6.
-
-[source,javascript]
-----
-function cast () {
-  return [...arguments]
-}
-cast(`a`, `b`)
-// <- [`a`, `b`]
-----
-
-Using the function rest parameter would be better for this particular case as it wouldn't involve the +arguments+ object, nor any added logic in the function body.
-
-[source,javascript]
-----
-function cast (...params) {
-  return params
-}
-cast(`a`, `b`)
-// <- [`a`, `b`]
-----
-
-You may also want to cast +NodeList+ DOM element collections, like those returned from +document.querySelectorAll+, through the spread operator. Once again, this is made possible thanks to ES6 adding conformance to the iterator protocol for +NodeList+.
-
-[source,javascript]
-----
-[...document.querySelectorAll(`div`)]
-// <- [<div>, <div>, <div>, ...]
-----
-
-What happens when we try to cast a jQuery collection through the spread operator? If you're on a modern version of jQuery that implements the iterator protocol, spreading a jQuery object will work, otherwise you may get an exception.
-
-[source,javascript]
-----
-[...$(`div`)]
-// <- [<div>, <div>, <div>, ...]
-----
-
-The new +Array.from+ method is a bit different. It doesn't only rely on the iterator protocol to figure out how to pull values from an object. It also has support for arraylikes out the box. The following code snippet will work with any version of jQuery.
-
-[source,javascript]
-----
-Array.from($(`div`))
-// <- [<div>, <div>, <div>, ...]
-----
-
-The one thing you cannot do with either +Array.from+ nor the spread operator is to pick a start index. Suppose you wanted to pull every +<div>+ after the first one. With +Array#slice+, you could do the following.
-
-[source,javascript]
-----
-[].slice.call(document.querySelectorAll(`div`), 1)
-----
-
-Of course, there's nothing stopping you from using +Array#slice+ after casting. This is a bit easier to read than the previous example, as it keeps the slice call closer to the index at which we want to slice the array.
-
-[source,javascript]
-----
-Array.from(document.querySelectorAll(`div`)).slice(1)
-----
-
-+Array.from+ has three arguments, although only the +input+ is required. To wit:
-
-- +input+ -- the arraylike or iterable object you want to cast
-- +map+ -- a mapping function that's executed on every item of +input+
-- +context+ -- the +this+ binding to use when calling +map+
-
-With +Array.from+ you cannot slice, but you can dice. The +map+ function will efficiently map the values into something else as they're being added to the array that results from calling +Array.from+.
-
-[source,javascript]
-----
-function typesOf () {
-  return Array.from(arguments, value => typeof value)
-}
-typesOf(null, [], NaN)
-// <- [`object`, `object`, `number`]
-----
-
-Do note that, for the specific case of dealing with +arguments+, you could also combine rest parameters and +Array#map+. In this case in particular, we may be better off just doing something like the snippet of code found next. It's not as verbose as the previous example. Like with the +Array#slice+ example we saw earlier, the mapping is more explicit in this case.
-
-[source,javascript]
-----
-function typesOf (...all) {
-  return all.map(value => typeof value)
-}
-typesOf(null, [], NaN)
-// <- [`object`, `object`, `number`]
-----
-
-When dealing with arraylike objects, it makes sense to use +Array.from+ if they don't implement +Symbol.iterator+.
-
-[source,javascript]
-----
-const things = {
-  0: {
-    type: `fruit`,
-    name: `Apple`,
-    amount: 3
-  },
-  1: {
-    type: `vegetable`,
-    name: `Onion`,
-    amount: 1
-  },
-  length: 2
-}
-Array.from(things)
-// <- [<div>, <div>, <div>, ...]
-Array.from(things, thing => thing.type)
-// <- [`fruit`, `vegetable`, ...]
-----
-
-==== 8.4.2 +Array.of+
-
-The +Array.of+ method is exactly like the +cast+ function we played around with earlier. Next is a code snippet that shows how +Array.of+ might be polyfilled.
-
-[source,javascript]
-----
-Array.of = (...params) => params
-----
-
-You can think about +Array.of+ as an alternative for +new Array+ that doesn't have the +new Array(length)+ overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${ count }+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
-
-[source,javascript]
-----
-new Array(); // <- []
-new Array(undefined); // <- [undefined]
-new Array(1); // <- [undefined x 1]
-new Array(3); // <- [undefined x 3]
-new Array(`3`); // <- [`3`]
-new Array(1, 2); // <- [1, 2]
-new Array(-1, -2); // <- [-1, -2]
-new Array(-1); // <- RangeError: Invalid array length
-----
-
-In contrast, +Array.of+ has more consistent behavior because it doesn't have the special +length+ case. This makes it a more desirable way of consistently creating new arrays programatically.
-
-[source,javascript]
-----
-console.log(Array.of()); // <- []
-console.log(Array.of(undefined)); // <- [undefined]
-console.log(Array.of(1)); // <- [1]
-console.log(Array.of(3)); // <- [3]
-console.log(Array.of(`3`)); // <- [`3`]
-console.log(Array.of(1, 2)); // <- [1, 2]
-console.log(Array.of(-1, -2)); // <- [-1, -2]
-console.log(Array.of(-1)); // <- [-1]
-----
-
-==== 8.4.3 +Array#copyWithin+
-
-Let's start with the signature of +Array#copyWithin+.
-
-[source,javascript]
-----
-Array.prototype.copyWithin(target, start = 0, end = this.length)
-----
-
-The +Array#copyWithin+ method copies a sequence of array elements within an array instance to the "paste position" starting at +target+. The elements to be copied are taken from the +[start, end)+ range. The +Array#copyWithin+ method returns the array instance itself.
-
-Let's lead with a simple example. Consider the +items+ array in the following code snippet.
-
-[source,javascript]
-----
-const items = [1, 2, 3, ,,,,,,,]
-// <- [1, 2, 3, undefined x 7]
-----
-
-The function call shown below takes the +items+ array and determines that it'll start "pasting" items in the sixth position. It further determines that the items to be copied will be taken starting in the second position (zero-based), until the third position (also zero-based).
-
-[source,javascript]
-----
-const items = [1, 2, 3, ,,,,,,,]
-items.copyWithin(6, 1, 3)
-// <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
-----
-
-Reasoning about +Array#copyWithin+ is hard. Let's break it down.
-
-If we consider that the items to be copied were taken from the +[start, end)+ range, then we could express that using an +Array#slice+ call. These are the items that were pasted at the +target+ position. We can use +.slice+ to grab the copy.
-
-[source,javascript]
-----
-const items = [1, 2, 3, ,,,,,,,]
-const copy = items.slice(1, 3)
-// <- [2, 3]
-----
-
-We could also consider the pasting part of the operation as an advanced usage of +Array#splice+. The next code snippet does just that, passing the paste position to splice, telling it to remove as many items as we want to copy, and inserting the pasted items. Note that we're using the spread operator so that elements are inserted individually, and not as an array, through +.splice+.
-
-[source,javascript]
-----
-const items = [1, 2, 3, ,,,,,,,]
-const copy = items.slice(1, 3)
-// <- [2, 3]
-items.splice(6, 3 - 1, ...copy)
-console.log(items)
-// <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
-----
-
-Now that we better understand the internals of +Array#copyWithin+, we can generalize the example in order to implement the custom +copyWithin+ function shown in the following code snippet.
-
-[source,javascript]
-----
-function copyWithin (items, target, start = 0, end = items.length) {
-  const copy = items.slice(start, end)
-  const removed = end - start
-  items.splice(target, removed, ...copy)
-  return items
-}
-----
-
-The example we've been trying so far would work just as well with our custom +copyWithin+ function.
-
-[source,javascript]
-----
-copyWithin([1, 2, 3, ,,,,,,,], 6, 1, 3)
-// <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
-----
-
-==== 8.4.4 +Array#fill+
-
-A convenient utility method to replace all items in an array with the provided +value+. Note that sparse arrays will be filled in their entirety, while existing items will be replaced by the fill value.
-
-[source,javascript]
-----
-[`a`, `b`, `c`].fill(`x`); // <- [`x`, `x`, `x`]
-new Array(3).fill(`x`); // <- [`x`, `x`, `x`]
-----
-
-You could also specify the starting index and end index. In this case, as shown next, only the items in those positions would be filled.
-
-[source,javascript]
-----
-[`a`, `b`, `c`,,,].fill(`x`, 2)
-// <- [`a`, `b`, `x`, `x`, `x`]
-new Array(5).fill(`x`, `x`, 3)
-// <- [`x`, `x`, `x`, undefined x 2]
-----
-
-The provided +value+ can be anything, and is not just limited to primitive values.
-
-[source,javascript]
-----
-new Array(3).fill({})
-// <- [{}, {}, {}]
-----
-
-You can't fill arrays using a mapping method that takes an +index+ parameter or anything like that.
-
-[source,javascript]
-----
-const map = i => i * 2
-new Array(3).fill(map)
-// <- [map, map, map]
-----
-
-==== 8.4.5 +Array#find+ and +Array#findIndex+
-
-The +Array#find+ method runs a +callback+ for each +item+ in an array until the first one that returns +true+, and then returns that +item+. The method follows the signature of +(callback(item, i, array), context)+ that's also present in +Array#map+, +Array#filter+, and others. You can think of +Array#find+ as a version of +Array#some+ that returns the matching element instead of just +true+.
-
-[source,javascript]
-----
-[`a`, `b`, `c`, `d`, `e`].find(item => item === `c`)
-// <- `c`
-[`a`, `b`, `c`, `d`, `e`].find((item, i) => i === 0)
-// <- `a`
-[`a`, `b`, `c`, `d`, `e`].find(item => item === `z`)
-// <- undefined
-----
-
-There's an +Array#findIndex+ method as well, and it leverages the same signature. Instead of returning a boolean value, or the element itself, +Array.findIndex+ returns the index of the matching element, or +-1+ if no matches occur. Here's a few examples
-
 [source,javascript]
 ----
-[`a`, `b`, `c`, `d`, `e`].findIndex(item => item === `c`)
-// <- 2
-[`a`, `b`, `c`, `d`, `e`].findIndex((item, i) => i === 0)
-// <- 0
-[`a`, `b`, `c`, `d`, `e`].findIndex(item => item === `z`)
-// <- -1
+import { increment as add } from './counter'
 ----
-
-==== 8.4.6 +Array#keys+
 
-Returns an iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with +for..of+, the spread operator, or by manually calling +.next()+.
+You can combine a default export with named exports by separating them with a comma.
 
 [source,javascript]
 ----
-[`a`, `b`, `c`, `d`].keys()
-// <- ArrayIterator {}
+import counter, { increment } from './counter'
 ----
 
-Here's an example using +for..of+.
+You can also explicitly name the +default+ binding, which needs an alias.
 
 [source,javascript]
 ----
-for (let key of [`a`, `b`, `c`, `d`].keys()) {
-  console.log(key)
-  // <- 0
-  // <- 1
-  // <- 2
-  // <- 3
-}
+import { default as counter, increment } from './counter'
 ----
 
-Unlike +Object.keys+, and most methods that iterate over arrays, this sequence doesn't ignore array holes.
+The following example demonstrates how ESM semantics differ from those of CJS. Remember: we're exporting and importing bindings, and not direct references. For practical purposes, you can think of the +counter+ binding found in the next example as a property getter that reaches into the +counter+ module and returns its local +counter+ variable.
 
 [source,javascript]
 ----
-Object.keys(new Array(4))
-// <- []
-[...new Array(4).keys()]
-// <- [0, 1, 2, 3]
+import counter, { increment } from './counter'
+console.log(counter) // <- 0
+increment()
+console.log(counter) // <- 1
+increment()
+console.log(counter) // <- 2
 ----
 
-Now onto values.
+Lastly, there are also namespace imports.
 
-==== 8.4.7 +Array#values+
+===== Wildcard +import+ statements
 
-Same thing as +Array#keys()+, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
+We can import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the +*+ must be followed by an alias where all the bindings will be placed. If there was a +default+ export, it'll be placed in the namespace binding as well.
 
 [source,javascript]
 ----
-[`a`, `b`, `c`, `d`].values()
-// <- ArrayIterator {}
+import * as counter from './counter'
+counter.increment()
+counter.increment()
+console.log(counter.default) // <- 2
 ----
 
-You can use +for..of+ or any other methods like a spread operator to pull out the iterable sequence. The example below uses the spread operator on an array's +.values()+ to create a copy of that array.
+=== 9.3 Practical Considerations for ES Modules
 
-[source,javascript]
-----
-[...[`a`, `b`, `c`, `d`].values()]
-// <- [`a`, `b`, `c`, `d`]
-----
-
-Note that omitting the +.values()+ method call would still produce a copy of the array: the sequence is iterated and spread over a new array.
+When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a +random+ module with a locally scoped +calc+ function, which computes a random number in the +[0, n)+ range; and a public API with the +range+ method, which computes a random number in the +[min, max]+ range.
 
-==== 8.4.8 +Array#entries+
-
-Similar to both preceding methods, except +Array#entries+ returns an iterator with a sequence of key-value pairs.
-
 [source,javascript]
 ----
-[`a`, `b`, `c`, `d`].entries()
-// <- ArrayIterator {}
+const random = (function() {
+  const calc = n => Math.floor(Math.random() * n)
+  const range = (max = 1, min = 0) => calc(max + 1 - min) + min
+  return { range }
+})()
 ----
 
-Each item in the sequence is a two dimensional array with the key and the value for an item in the array.
+Compare that to the following piece of code, used in an ESM module called +random+. The immediately-invoking function expression wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML +<script>+ tags.
 
 [source,javascript]
 ----
-[...[`a`, `b`, `c`, `d`].entries()]
-// <- [[0, `a`], [1, `b`], [2, `c`], [3, `d`]]
+const calc = n => Math.floor(Math.random() * n)
+const range = (max = 1, min = 0) => calc(max + 1 - min) + min
+export { range }
 ----
-
-Great, one last method left!
-
-==== 8.4.9 +Array.prototype[Symbol.iterator]+
 
-This is exactly the same as the +Array#values+ method.
+While we don't have the problem of having to wrap our modules in an IIFE anymore, we still have to be careful about how we define, test, document, and use each module.
 
-[source,javascript]
-----
-const list = [`a`, `b`, `c`, `d`]
-list[Symbol.iterator] === list.values
-// <- true
-[...list[Symbol.iterator]()]
-// <- [`a`, `b`, `c`, `d`]
-----
-
-The example below combines a spread operator, an array, and +Symbol.iterator+ to iterate over its values. Can you follow the code?
+Deciding what constitutes a module is difficult. A lot of factors come into play, some of which I've outlined in the form of questions below.
 
-[source,javascript]
-----
-[...[`a`, `b`, `c`, `d`][Symbol.iterator]()]
-// <- [`a`, `b`, `c`, `d`]
-----
+- Is it highly complex?
+- Is it too large?
+- How well-defined is its API?
+- Is said API properly documented?
+- Is it easy to write tests for the module?
+- How hard is it to add new features?
+- Is it difficult to remove existing functionality?
 
-Let's break it down. First, there's the array.
+Complexity is a more powerful metric to track than length. A module can be several thousand lines long but simple, such as a dictionary that maps identifiers to localized strings in a particular language; or it could be a couple dozen lines long but very hard to reason about, such as a data model that also includes domain validation and business logic rules. Complexity can be mitigated by splitting our code up into smaller modules that are only concerned with one aspect of the problem we're trying to solve. As long as they're not highly complex, large modules are not as much of an issue.
 
-[source,javascript]
-----
-[`a`, `b`, `c`, `d`]
-// <- [`a`, `b`, `c`, `d`]
-----
+Having a well-defined API that's also properly documented is a key aspect of effective modular application design. A module's API should be focused, and follow information hiding principles. That is: only reveal what is necessary for consumers to interact with it. By not exposing internal aspects of a module, which may be undocumented and prone to change, we keep a simple interface overall and avoid unintended usage patterns. By documenting the public API, even if its documented in code or self-documenting, we reduce the barrier of entry for humans looking to utilize the module.
 
-Then we get an iterator.
+Tests should only be written against the public interface to a module, while its internals must be treated as uninteresting implementation details. Tests need to cover the different aspects of a module's public interface, but changes to the internal implementation shouldn't break our test coverage as long as the API remains the same in terms of inputs and outputs.
 
-[source,javascript]
-----
-[`a`, `b`, `c`, `d`][Symbol.iterator]()
-// <- ArrayIterator {}
-----
+Ease of adding or removing functionality from a module is yet another useful metric. How hard would it be to add a new feature? Do you have to edit several different modules in order to implement something? Is this a repetitive process? Maybe you could abstract those edits behind a higher level module that hides that complexity. Or maybe doing so would mostly add indirection and make following the codebase harder to read, but with little added benefit or justification. From the other end of the spectrum, how deeply entrenched is the API? Would it be easy to remove a portion of the module, delete it entirely, or even replace it with something else? If modules become too co-dependant, then it can be hard to make edits as the codebase ages, mutates and grows in size.
 
-Last, we spread the iterator over a new array, creating a copy.
+We'll plunge deeper into proper module design, effective module interaction and module testing over the next three books in this series.
 
-[source,javascript]
-----
-[...[`a`, `b`, `c`, `d`][Symbol.iterator]()]
-// <- [`a`, `b`, `c`, `d`]
-----
+With that said, let's turn over to the last chapter, on leveraging all of these new language features and syntax effectively.
