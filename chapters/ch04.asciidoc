@@ -30,7 +30,7 @@ fetch('/items').then(response => {
 .An alternative to callbacks and events
 ****
 
-Traditionally JavaScript relied on callbacks instead of promises and chaining. If the +fetch+ function asked for a callback, you'd have to add a that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors -- that may or may not occur -- during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how +fetch+ would look like if it had a callback-based API.
+Traditionally JavaScript relied on callbacks instead of promises and chaining. If the +fetch+ function asked for a callback, you'd have to add one that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors -- that may or may not occur -- during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how +fetch+ would look like if it had a callback-based API.
 
 [source,javascript]
 ----
@@ -58,7 +58,7 @@ fetch('/items')
   })
 ----
 
-Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize concerns in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in.
+Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in.
 ****
 
 The following bit of code displays the promise-based API with which +fetch+ is actually implemented in browsers. Calls to +fetch+ return a +Promise+ object. Much like with events, you can bind as many reactions as you'd like, using the +.then+ and +.catch+ methods.
