@@ -1,4 +1,40 @@
 [[practical-considerations]]
 == Practical Considerations
 
-...
+JavaScript is an ever evolved language. It has evolved at different paces throughout the years, entering a fast evolution phase with the introduction of ES5. Thus far, this book has taught you about dozens of language features and syntax changes introduced in ES6.
+
+Reconciling all of these new features with our existing ES5 knowledge may seem like a daunting task: what features should we take advantage of, and how? This chapter aims to rationalize the choices we have to make when considering whether to use specific ES6 features.
+
+=== 9.1 ES6 Essentials in Practice
+
+We'll take a look at each feature, the use cases where they shine, and the situations where we might be better off using features that were already available in the language. Let's go case by case.
+
+==== 9.1.1 Variable Declarations
+
+When developing software, most of our time is spent reading code. ES6 offers +let+ and +const+ as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
+
+A +let+ statement indicates that a variable can't be used before its declaration, due to the Temporal Dead Zone rule. This isn't a convention, it is a fact: if we tried accessing the variable before its declaration statement was reached, the program would fail. These statements are block-scoped and not function-scoped; this means we need to read less code in order to fully grasp how a +let+ variable is used.
+
+The +const+ statement is also block-scoped, and follows TDZ semantics just like +let+ does. Another upside is that +const+ bindings can only be assigned during declaration. This means that the variable binding can't change, but it doesn't mean that the value is immutable or constant in any way.
+
+In addition to the signals offered by +let+, +const+ indicates that these variable bindings can't be reassigned. This is a strong signal. You know what the value is going to be, because +const+ bindings must be assigned at declaration time; you know that the binding won't change, due to the fact that +const+ bindings can't be reassigned; you know that the binding can't be accessed outside of its immediately containing block, due to block scoping; and you know that the binding isn't accessed before declaration, because of TDZ semantics.
+
+Constraints such as those offered by +let+ and +const+ are a powerful way of making code easier to understand. Try to accrue as many of these constraints as possible in the code you write. The more declarative constraints that limit what a piece of code could mean, the easier and faster it is for humans to read, parse, and understand a piece of code in the future.
+
+Granted, there's more rules to a +const+ declaration than to a +var+ declaration: block-scoped, TDZ, assign at declaration, no reassignment. Whereas +var+ statements only signal function scoping. Rule-counting, however, doesn't offer a lot of insight. It is better to weigh these rules in terms of complexity: does the rule add or subtract complexity? In the case of +const+, block scoping means a narrower scope than function scoping, TDZ means that we don't need to scan the scope backwards from the declaration in order to spot usage before declaration, and assignment rules mean that the binding will always preserve the same reference.
+
+The more constrained statements are, the simpler a piece of code becomes. As we add constraints to what a statement might mean, code becomes less unpredictable. This is one of the biggest reasons why statically typed programs are generally easier to read than dynamically typed ones. Static typing places a big constraint on the program writer, but it also places a big constraint on how the program can be interpreted, making its code easier to understand.
+
+With these arguments in mind, it is recommended that you use +const+ where possible, as it's the statement that gives us the least possibilities to think about.
+
+[source,javascript]
+----
+if (condition) {
+  // can't access `isReady` before declaration is reached
+  const isReady = true
+  // `isReady` binding can't be reassigned
+}
+// can't access `isReady` outside of its containing block scope
+----
+
+When +const+ isn't an option, because the variable has to be reassigned, we resort to a +let+ statement. Using +let+ carries all the benefits of +const+, except that the variable can be reassigned. This is necessary when we need to keep a count, store a flag, or ...

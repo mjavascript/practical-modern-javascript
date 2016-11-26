@@ -1166,7 +1166,7 @@ In so many words: if you have code such as the following code snippet, it'll thr
 [source,javascript]
 ----
 {
-  name = 'Barbara Penner'
+  console.log(name)
   // <- ReferenceError: name is not defined
   let name = 'Stephen Hawking'
 }
