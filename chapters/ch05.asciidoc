@@ -88,7 +88,7 @@ ES6 introduces built-in collections, such as +Map+, meant to alleviate implement
 
 ==== 5.1.1 First Look into ES6 Maps
 
-Here's how what we had earlier would have looked like when using ES6 maps. As you can see, the implementation details we've had to come up for our custom ES5 hash-map are already built into +Map+, vastly simplifying our use case.
+Here's how what we had earlier would have looked like when using ES6 maps. As you can see, the implementation details we've had to come up with for our custom ES5 hash-map are already built into +Map+, vastly simplifying our use case.
 
 [source,javascript]
 ----
