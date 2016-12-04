@@ -368,7 +368,7 @@ We've now covered every way in which we can expose an API in ES6 modules. Let's 
 
 We can load a module from another one using +import+ statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. No browsers have implemented module loading as of this writing. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
-Transpilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means +import+ statements in Babel mostly follow the same semantics as +require+ statements in CommonJS.
+Compilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means +import+ statements in Babel mostly follow the same semantics as +require+ statements in CommonJS.
 
 Let's suppose we have the following code snippet in a +./counter.js+ module.
 
@@ -387,7 +387,7 @@ The statement in the following code snippet could be used to load the +counter+ 
 import './counter'
 ----
 
-In the same fashion as +export+ statements, +import+ statements are only allowed in the top level of your module definitions. This limitation helps transpilers simplify their module loading capabilities, as well as help other static analysis tools parse your codebase.
+In the same fashion as +export+ statements, +import+ statements are only allowed in the top level of your module definitions. This limitation helps compilers simplify their module loading capabilities, as well as help other static analysis tools parse your codebase.
 
 ===== Importing Default Exports
 

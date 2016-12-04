@@ -1317,6 +1317,4 @@ If we choose to default to using +const+ and use +let+ for variables that need t
 
 On the counterside, +var+ is a more complex declaration because it is hard to use in code branches due to function scoping rules, it allows reassignment, and it can be accessed before the declaration statement is reached. The +var+ statement is inferior to +const+ and +let+, which do less, and is thus less prominent in modern JavaScript codebases.
 
-Throughout this book, we'll follow the practice of using +const+ by default and +let+ when reassignment is desirable.
-
-In the following chapter we'll look at more features coming in ES6 and how they can be used to iterate over any JavaScript objects, as well as how to master flow control using promises and generators.
+Throughout this book, we'll follow the practice of using +const+ by default and +let+ when reassignment is desirable. You can learn more about the rationale behind this choice in chapter 9.

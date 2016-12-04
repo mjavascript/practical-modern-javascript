@@ -5,11 +5,9 @@ JavaScript is an ever evolved language. It has evolved at different paces throug
 
 Reconciling all of these new features with our existing ES5 knowledge may seem like a daunting task: what features should we take advantage of, and how? This chapter aims to rationalize the choices we have to make when considering whether to use specific ES6 features.
 
-=== 9.1 ES6 Essentials in Practice
+We'll take a look at a few different features, the use cases where they shine, and the situations where we might be better off using features that were already available in the language. Let's go case by case.
 
-We'll take a look at each feature, the use cases where they shine, and the situations where we might be better off using features that were already available in the language. Let's go case by case.
-
-==== 9.1.1 Variable Declarations
+==== 9.1 Variable Declarations
 
 When developing software, most of our time is spent reading code. ES6 offers +let+ and +const+ as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
 
@@ -37,4 +35,378 @@ if (condition) {
 // can't access `isReady` outside of its containing block scope
 ----
 
-When +const+ isn't an option, because the variable has to be reassigned, we resort to a +let+ statement. Using +let+ carries all the benefits of +const+, except that the variable can be reassigned. This is necessary when we need to keep a count, store a flag, or ...
+When +const+ isn't an option, because the variable needs to be reassigned later, we may resort to a +let+ statement. Using +let+ carries all the benefits of +const+, except that the variable can be reassigned. This may be necessary in order to increment a counter, flip a boolean flag, or to defer initialization.
+
+Consider the following example, where we take a number of megabytes and return a string such as +1.2 GB+. We're using +let+, as the values need to change if a condition is met.
+
+[source,javascript]
+----
+function prettySize (input) {
+  let value = input
+  let unit = `MB`
+  if (value >= 1024) {
+    value /= 1024
+    unit = `GB`
+  }
+  if (value >= 1024) {
+    value /= 1024
+    unit = `TB`
+  }
+  return `${ value.toFixed(1) } ${ unit }`
+}
+----
+
+Adding support for petabytes would involve a new +if+ branch before the +return+ statement.
+
+[source,javascript]
+----
+if (value >= 1024) {
+  value /= 1024
+  unit = `PB`
+}
+----
+
+If we were looking to make +prettySize+ easier to extend with new units, we could consider implementing a +toLargestUnit+ function that computes the +unit+ and +value+ for any given +input+ and its current unit. We could then consume +toLargestUnit+ in +prettySize+ to return the formatted string.
+
+The following code snippet implements such a function. It relies on a list of supported +units+ instead of using a new branch for each unit. When the input +value+ is at least +1024+ and there's larger units, we divide the input by +1024+ and move to the next unit. Then we call +toLargestUnit+ with the updated values, which will continue recursively reducing the +value+ until it's small enough or we reach the largest unit.
+
+[source,javascript]
+----
+function toLargestUnit (value, unit = `MB`) {
+  const units = [`MB`, `GB`, `TB`]
+  const i = units.indexOf(unit)
+  const nextUnit = units[i + 1]
+  if (value >= 1024 && nextUnit) {
+    return toLargestUnit(value / 1024, nextUnit)
+  }
+  return { value, unit }
+}
+----
+
+Introducing petabyte support used to involve a new +if+ branch and repeating logic, but now it's only a matter of adding the +`PB`+ string at the end of the +units+ array.
+
+The +prettySize+ function becomes concerned only with how to display the string, as it can offload its calculations to the +toLargestUnit+ function. This separation of concerns is also instrumental in producing more readable code.
+
+[source,javascript]
+----
+function prettySize (input) {
+  const { value, unit } = toLargestUnit(input)
+  return `${ value.toFixed(1) } ${ unit }`
+}
+----
+
+Whenever a piece of code has variables that need to be reassigned, we should spend a few minutes thinking about whether there's a better pattern that could resolve the same problem without reassignment. This is not always possible, but it can be accomplished most of the time.
+
+Once you've arrived at a different solution, compare it to what you used to have. Make sure that code readability has actually improved and that the implementation is still correct. Unit tests can be instrumental in this regard, as they'll ensure you don't run into the same shortcomings twice. If the refactored piece of code seems worse in terms of readability or extensibility, carefully consider going back to the previous solution.
+
+Consider the following contrived example, where we use array concatenation to generate the +result+ array. Here, too, we could change from +let+ to +const+ by making a simple adjustment.
+
+[source,javascript]
+----
+function makeCollection (size) {
+  let result = []
+  if (size > 0) {
+    result = result.concat([1, 2])
+  }
+  if (size > 1) {
+    result = result.concat([3, 4])
+  }
+  if (size > 2) {
+    result = result.concat([5, 6])
+  }
+  return result
+}
+makeCollection(0) // <- []
+makeCollection(1) // <- [1, 2]
+makeCollection(2) // <- [1, 2, 3, 4]
+makeCollection(3) // <- [1, 2, 3, 4, 5, 6]
+----
+
+We can replace the reassignment operations with +Array#push+, which accepts multiple values. If we had a dynamic list, we could use the spread operator to push as many +...items+ as necessary.
+
+[source,javascript]
+----
+function makeCollection (size) {
+  const result = []
+  if (size > 0) {
+    result.push(1, 2)
+  }
+  if (size > 1) {
+    result.push(3, 4)
+  }
+  if (size > 2) {
+    result.push(5, 6)
+  }
+  return result
+}
+makeCollection(0) // <- []
+makeCollection(1) // <- [1, 2]
+makeCollection(2) // <- [1, 2, 3, 4]
+makeCollection(3) // <- [1, 2, 3, 4, 5, 6]
+----
+
+When you do need to use +Array#concat+, you should probably use `[...result, 1, 2]` instead, to keep it simpler.
+
+The last case we'll cover is one of refactoring. Sometimes, we write code like the next snippet, usually in the context of a larger function.
+
+[source,javascript]
+----
+let completionText = `in progress`
+if (completionPercent >= 85) {
+  completionText = `almost done`
+} else if (completionPercent >= 70) {
+  completionText = `reticulating splines`
+}
+----
+
+In these cases, it makes sense to extract the logic into a pure function. This way we avoid the initialization complexity near the top of the larger function, while clustering all the logic about computing the completion text in one place.
+
+The following piece of code shows how we could extract the completion text logic into its own function. We can then move +getCompletionText+ out of the way, making the code more linear in terms of readability.
+
+[source,javascript]
+----
+const completionText = getCompletionText(completionPercent)
+// ...
+function getCompletionText(progress) {
+  if (progress >= 85) {
+    return `almost done`
+  }
+  if (progress >= 70) {
+    return `reticulating splines`
+  }
+  return `in progress`
+}
+----
+
+
+==== 9.2 Template Literals
+
+For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multi-line string was also a hassle, as was escaping single or double quotes -- depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
+
+With a template literal, you can use expression interpolation, which enables you to inline variables, function calls or any other arbitrary JavaScript expressions in a string without relying on concatenation.
+
+[source,javascript]
+----
+'Hello, ' + name + '!' // before
+`Hello, ${ name }!` // after
+----
+
+Multi-line strings as the one shown in the following snippet involve one or more of array concatenation, string concatenation, explicit +\n+ line feeds. The code is a typical example for writing an HTML string in the pre-ES6 era.
+
+[source,javascript]
+----
+'<div>' +
+  '<p>' +
+    '<span>Hello</span>' +
+    '<span>' + name + '</span>' +
+    '<span>!</span>' +
+  '</p>' +
+'</div>'
+----
+
+Using template literals, we can avoid all of the extra quotes and concatenation, focusing on the content. The interpolation certainly helps in these kinds of templates, making multi-line strings one of the most useful aspects of template literals.
+
+[source,javascript]
+----
+`<div>
+  <p>
+    <span>Hello</span>
+    <span>${ name }</span>
+    <span>!</span>
+  </p>
+</div>`
+----
+
+When it comes to quotes, +'+ and +"+ are more likely to be necessary to write a string than +`+ is. For the average English phrase, you're less likely to require backticks than single or double quotes. This means that backticks lead to less escaping.
+
+[source,javascript]
+----
+'Alfred\'s cat suit is "slick".'
+"Alfred's cat suit is \"slick\"."
+`Alfred's cat suit is "slick".`
+----
+
+As we've discovered in chapter 2, there's also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions.
+
+While useful, tagged templates are not as pervasively beneficial as multi-line support, expression interpolation, or reduced escaping.
+
+The combination of all of these features, warrants considering template literals as the default string flavor over single or double quoted strings.
+
+There's a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
+
+Before we begin, let's set a starting point everyone agrees on: using template literals when an expression has to be interpolated in a string is better than using quoted string concatenation.
+
+Performance is often one of the cited concerns: is using template literals everywhere going to harm my application's performance? When using a compiler like Babel, template literals are transformed into quoted strings and interpolated expressions are concatenated amid those strings.
+
+Consider the following example using template literals.
+
+[source,javascript]
+----
+const suitKind = `cat`
+`Alfred's {suitKind} suit is "slick".`
+// <- Alfred's cat suit is "slick".
+----
+
+A compiler such as Babel would transform our example into code similar to this, relying on quoted strings.
+
+[source,javascript]
+----
+const suitKind = 'cat'
+'Alfred\'s ' + suitKind + ' suit is "slick".'
+// <- Alfred's cat suit is "slick".
+----
+
+We've already settled that interpolated expressions are better than quoted string concatenation, in terms of readability, and the compiler turns those into quoted string concatenation, maximizing browser support.
+
+When it comes to the +suitKind+ variable, a template literal with no interpolation, no newlines, and no tags, the compiler simply turns it into a plain quoted string.
+
+Once we stop compiling template literals down to quoted strings, we can expect optimizing compilers to be able to interpet them as such with negligible slowdown.
+
+Another often-cited concern is syntax: as of this writing, we can't use backtick strings in JSON, object keys, +import+ declarations, or strict mode statements.
+
+The first statement in the following snippet of code demonstrates that a serialized JSON object couldn't represent strings using backticks. As shown on the second line, we can certainly declare an object using template literals and then serialize that object as JSON. By the time +JSON.stringify+ is invoked, the template literal has evaluated to a quoted string.
+
+[source,javascript]
+----
+JSON.parse('{ "payload": `message` }')
+JSON.stringify({ payload: `message` })
+// <- '{"payload":"message"}'
+----
+
+When it comes to object keys, we're out of luck. Attempting to use a template literal would result in a syntax error.
+
+[source,javascript]
+----
+const alfred = { `suit kind`: `cat` };
+----
+
+Object property keys accept value types which are then casted into plain strings, but template literals aren't value types, and thus it's not possible to use them as property keys.
+
+As you might recall from chapter 2, ES6 introduces computed property names, as seen in the following code snippet. In a computed property key we can use any expression we want to produce the desired property key, including template literals.
+
+[source,javascript]
+----
+const alfred = { [`suit kind`]: `cat` }
+----
+
+The above is far from ideal due to its verbosity, though, and in these cases it's best to use regular quoted strings.
+
+As always, the rule is to never take rules such as "template literals are the best option" too literally, and be open to use your best judgement as necessary and break the rules a little bit, if they don't quite fit your use cases, conventions, or view of how an application is best structured. Rules are often presented as such, but what may be a rule to someone need not be a rule to everyone. This is the main reason why modern linters make every rule optional: the rules we use should be enforced, but not every rule may fit every project.
+
+Perhaps some day we might get a flavor of computed property keys that doesn't rely on square brackets for template literals, saving us a couple of characters when we need to interpolate a string. For the foreseeable future, the following code snippet will result in a syntax error.
+
+[source,javascript]
+----
+const brand = `Porsche`
+const car = {
+  `wheels`: 4,
+  `has fuel`: true,
+  `is ${brand}`: `you wish`
+}
+----
+
+Attempts to import a module using template literals will also result in a syntax error. This is one of those cases where we might expect to be able to use template literals, if we were to adopt them extensively throughout our codebase, but can't.
+
+[source,javascript]
+----
+import { SayHello } from `./World`
+----
+
+Strict mode directives have to be single or double quoted strings. As of this writing, there's no plan to allow template literals for +'use strict'+ statements. The following piece of code does not result in a syntax error, but it also does not enable strict mode. This is the biggest caveat when heavily using template literals.
+
+[source,javascript]
+----
+`use strict`
+----
+
+Lastly, it could be argued that turning an existing codebase from single quoted strings to template literals would be error prone and a waste of time that could be otherwise used to develop features or fix bugs.
+
+Fortunately, we have +eslint+ at our disposal, as discussed in chapter 1. To switch our codebase to backticks by default, we can set up an +.eslintrc.json+ configuration similar to the one in the following piece of code. Note how we turn the +quotes+ rule into an error unless the code uses backticks.
+
+[source,javascript]
+----
+{
+  "env": {
+    "es6": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "quotes": ["error", "backtick"]
+  }
+}
+----
+
+Once that's in place, we can add a +lint+ script to our +package.json+, like the one in the next snippet. The +--fix+ flag ensures that any style errors found by the linter, such as using single quotes over backticks, are autocorrected.
+
+[source,javascript]
+----
+{
+  "scripts": {
+    "lint": "eslint --fix ."
+  }
+}
+----
+
+Once we run the following command, we're ready to start experimenting with a codebase that uses backticks by default!
+
+[source,javascript]
+----
+npm run lint
+----
+
+In conclusion, there are trade-offs to consider when using template literals. You're invited to experiment with the backtick-first approach and gauge its merits. Always prefer convenience, over convention, over configuration.
+
+==== 9.3 Object Destructuring and Shorthand Notation
+
+.. shorthand notation, destructuring, rest/spread
+
+
+
+
+
+
+
+
+
+
+
+==== 9.4 Arrow Functions, Rest and Spread
+
+- Classic Functions and Arrow Functions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==== 9.5 Classes in ES6
+
+- classes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==== 9.6 Asynchronous Code Flows
+
+- promises,asyncawait,generators,etc
