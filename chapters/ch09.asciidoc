@@ -338,7 +338,7 @@ Fortunately, we have +eslint+ at our disposal, as discussed in chapter 1. To swi
 
 Once that's in place, we can add a +lint+ script to our +package.json+, like the one in the next snippet. The +--fix+ flag ensures that any style errors found by the linter, such as using single quotes over backticks, are autocorrected.
 
-[source,javascript]
+[source,json]
 ----
 {
   "scripts": {
@@ -349,7 +349,7 @@ Once that's in place, we can add a +lint+ script to our +package.json+, like the
 
 Once we run the following command, we're ready to start experimenting with a codebase that uses backticks by default!
 
-[source,javascript]
+[source,shell]
 ----
 npm run lint
 ----
