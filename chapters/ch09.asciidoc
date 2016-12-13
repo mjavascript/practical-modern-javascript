@@ -526,18 +526,13 @@ const { prop1, prop2, prop3 } = model
 // <- destructuring_coefficient: 1
 ----
 
-
-
-
-...
-
-
+Destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not many host references being removed.
 
 ==== 9.4 Rest, Spread and Arrow Functions
 
-- Classic Functions and Arrow Functions
+- Rest/Spread, Classic Functions and Arrow Functions
 
-
+...
 
 
 

@@ -742,7 +742,7 @@ Next up we have the spread operator. It's also denoted with three dots, but it s
 
 ==== 2.4.2 Spread Operator
 
-The spread operator can be used to cast the an array-like object into a true array. Spreading effectively expands an expression onto a target such as an array literal or a function call. The following example uses +...arguments+ to cast function parameters into an array literal.
+The spread operator can be used to cast an array-like or any iterable object into a true array. Spreading effectively expands an expression onto a target such as an array literal or a function call. The following example uses +...arguments+ to cast function parameters into an array literal.
 
 [source,javascript]
 ----

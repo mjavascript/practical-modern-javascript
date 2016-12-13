@@ -721,7 +721,21 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 // <- { a: ['e', 'f'] }
 ----
 
-You could also use a library like +assignment+ on npm, which always performs assignments recursively, the +.extend+ method in jQuery, or a custom version of +_.assignWith+ in Lodash.
+At the time of this writing, there's an ECMAScript stage 3 proposal to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an +Object.assign+ function call.
+
+The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and the +Object.assign+ counterpart. As you can see, using object destructuring is more succint and should be preferred where possible.
+
+[source,javascript]
+----
+const grocery = { ...details }
+// Object.assign({}, details)
+const grocery = { type: 'fruit', ...details }
+// Object.assign({ type: 'fruit' }, details)
+const grocery = { type: 'fruit', ...details, ...fruit }
+// Object.assign({ type: 'fruit' }, details, fruit)
+const grocery = { type: 'fruit', ...details, color: 'red' }
+// Object.assign({ type: 'fruit' }, details, { color: 'red' })
+----
 
 ==== 3.3.2 Comparing objects with +Object.is+
 
