@@ -316,14 +316,16 @@ Strict mode directives have to be single or double quoted strings. As of this wr
 
 [source,javascript]
 ----
-`use strict`
+'use strict' // enables strict mode
+"use strict" // enables strict mode
+`use strict` // nothing happens
 ----
 
 Lastly, it could be argued that turning an existing codebase from single quoted strings to template literals would be error prone and a waste of time that could be otherwise used to develop features or fix bugs.
 
 Fortunately, we have +eslint+ at our disposal, as discussed in chapter 1. To switch our codebase to backticks by default, we can set up an +.eslintrc.json+ configuration similar to the one in the following piece of code. Note how we turn the +quotes+ rule into an error unless the code uses backticks.
 
-[source,javascript]
+[source,json]
 ----
 {
   "env": {
@@ -336,7 +338,7 @@ Fortunately, we have +eslint+ at our disposal, as discussed in chapter 1. To swi
 }
 ----
 
-Once that's in place, we can add a +lint+ script to our +package.json+, like the one in the next snippet. The +--fix+ flag ensures that any style errors found by the linter, such as using single quotes over backticks, are autocorrected.
+With that in place, we can add a +lint+ script to our +package.json+, like the one in the next snippet. The +--fix+ flag ensures that any style errors found by the linter, such as using single quotes over backticks, are autocorrected.
 
 [source,json]
 ----
@@ -356,21 +358,182 @@ npm run lint
 
 In conclusion, there are trade-offs to consider when using template literals. You're invited to experiment with the backtick-first approach and gauge its merits. Always prefer convenience, over convention, over configuration.
 
-==== 9.3 Object Destructuring and Shorthand Notation
+==== 9.3 Shorthand Notation and Object Destructuring
 
-.. shorthand notation, destructuring, rest/spread
+Chapter 2 introduced us to the concept of shorthand notation. Whenever we want to introduce a property and there's a binding by the same name in scope, we can avoid repetition.
+
+[source,javascript]
+----
+const unitPrice = 1.25
+const tomato = {
+  name: `Tomato`,
+  color: `red`,
+  unitPrice
+}
+----
+
+This feature becomes particularly useful in the context of functions and information hiding. In the following example we leverage object destructuring for a few pieces of information from a grocery and return a model that also includes the total price for the items.
+
+[source,javascript]
+----
+function getGroceryModel ({ name, unitPrice }, units) {
+  return {
+    name,
+    unitPrice,
+    units,
+    totalPrice: unitPrice * units
+  }
+}
+getGroceryModel(tomato, 4)
+/*
+{
+  name: `Tomato`,
+  unitPrice: 1.25,
+  units: 4,
+  totalPrice: 5
+}
+*/
+----
+
+Note how well shorthand notation works in tandem with destructuring. If you think of destructuring as a way of pulling properties out of an object, then you can think of shorthand notation as the analog for placing properties onto an object. The following example shows how we can leverage the +getGroceryModel+ function to pull the +totalPrice+ of a grocery item when we know how many the customer is buying.
+
+[source,javascript]
+----
+const { totalPrice } = getGroceryModel(tomato, 4)
+----
+
+While counterintuitive at first, usage of destructuring in function parameters results in a convenient and implicitly contract-based solution, where we know that the first parameter to +getGroceryModel+ is expected to be an object containing +name+ and +unitPrice+ properties.
+
+[source,javascript]
+----
+function getGroceryModel ({ name, unitPrice }, units) {
+  return {
+    name,
+    unitPrice,
+    units,
+    totalPrice: unitPrice * units
+  }
+}
+----
+
+Conversely, destructuring a function's output gives the reader an immediate feel for what aspect of that output a particular piece of code is interested in. In the next snippet, we'll use only the product name and total price so that's what we destructure out of the output.
+
+[source,javascript]
+----
+const { name, totalPrice } = getGroceryModel(tomato, 4)
+----
+
+Compare the last snippet with the following line of code, where we don't use destructuring. Instead, we pull the output into a +model+ binding. While subtle, the key difference is that this piece communicates less information explicitly: we need to dig deeper into the code to find out which parts of the model are being used.
+
+[source,javascript]
+----
+const model = getGroceryModel(tomato, 4)
+----
+
+Destructuring can also help avoid repeating references to the host object when it comes to using several properties from the same object.
+
+[source,javascript]
+----
+const summary = `${model.units}x ${model.name} ($${model.unitPrice}) = $${model.totalPrice}`
+// <- `4x Tomato ($1.25) = $5`
+----
+
+However, there's a trade-off here: we avoid repeating the host object when referencing properties, but at the expense of repeating property names in our destructuring declaration statement.
+
+[source,javascript]
+----
+const { name, units, unitPrice, totalPrice } = model
+const summary = `${units}x ${name} ($${unitPrice}) = $${totalPrice}`
+----
+
+Whenever there's several references to the same property, it becomes clear that we should avoid repeating references to the host object, by destructuring it.
+
+When there's a single reference to a single property, it's clear we should avoid destructuring, as it mostly generates noise.
+
+[source,javascript]
+----
+const { name } = model
+const summary = `This is a ${name} summary`
+----
+
+Having a reference to +model.name+ directly in the +summary+ code is less noisy.
+
+[source,javascript]
+----
+const summary = `This is a ${model.name} summary`
+----
+
+When we have two properties to destructure (or two references to one property), things change a bit.
+
+[source,javascript]
+----
+const summary = `This is a summary for ${model.units}x  ${model.name}`
+----
+
+Destructuring does help in this case. It reduces the character count in the +summary+ declaration statement, and it explicitly announces the +model+ properties we're going to be using.
+
+[source,javascript]
+----
+const { name, units } = model
+const summary = `This is a summary for ${units}x  ${name}`
+----
+
+If we have two references to the same property, similar conditions apply. In the next example, we have one less reference to +model+ and one more reference to +name+ than we'd have without destructuring. This case could go either way, although the value in explicitly declaring the future usage of +name+ could be incentive enough to warrant destructuring.
+
+[source,javascript]
+----
+const { name } = model
+const summary = `This is a ${name} summary`
+const description = `${name} is a grocery item`
+----
+
+Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dillute value, because of increased repetition in the destructuring statement. The following formula describes that relationship.
+
+[source,javascript]
+----
+destructuring_coefficient = host_references / property_count - 1
+----
+
+The formula shows how beneficial using destructuring would be in each case. A negative coefficient means the destructured alternative is worse, while a positive coefficient indicates destructuring is the way to go. A value of 0 is neutral as to whether destructuring should be used, it depends on the use case.
+
+In the next snippet, we use the formula to analyze the merits of destructuring in a few different scenarios.
+
+[source,javascript]
+----
+model.prop
+const { prop } = model
+// <- destructuring_coefficient: 0
+
+model.prop1
+const { prop1, prop2 } = model
+// <- destructuring_coefficient: -0.5
+
+model.prop1, model.prop1, model.prop1
+const { prop1 } = model
+// <- destructuring_coefficient: 2
+
+model.prop1, model.prop2, model.prop3
+const { prop1, prop2, prop3 } = model
+// <- destructuring_coefficient: 0
+
+model.prop1, model.prop2, model.prop2
+const { prop1, prop2 } = model
+// <- destructuring_coefficient: 0.5
+
+model.prop1, model.prop2, model.prop3
+model.prop1, model.prop2, model.prop3
+const { prop1, prop2, prop3 } = model
+// <- destructuring_coefficient: 1
+----
 
 
 
 
+...
 
 
 
-
-
-
-
-==== 9.4 Arrow Functions, Rest and Spread
+==== 9.4 Rest, Spread and Arrow Functions
 
 - Classic Functions and Arrow Functions
 
