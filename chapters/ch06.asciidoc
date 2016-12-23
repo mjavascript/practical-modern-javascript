@@ -159,17 +159,17 @@ A general purpose approach would be to offer a proxying function that takes an +
 function concealWithPrefix (original, prefix='_') {
   const handler = {
     get (original, key) {
-      invariant(key, 'get')
+      invariant(key, 'get', prefix)
       return Reflect.get(original, key)
     },
     set (original, key, value) {
-      invariant(key, 'set')
+      invariant(key, 'set', prefix)
       return Reflect.set(original, key, value)
     }
   }
   return new Proxy(original, handler)
 }
-function invariant (key, action) {
+function invariant (key, action, prefix) {
   if (key.startsWith(prefix)) {
     throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
   }
