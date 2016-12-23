@@ -168,10 +168,10 @@ function concealWithPrefix (original, prefix='_') {
     }
   }
   return new Proxy(original, handler)
-}
-function invariant (key, action) {
-  if (key.startsWith(prefix)) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+  function invariant (key, action) {
+    if (key.startsWith(prefix)) {
+      throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+    }
   }
 }
 const target = {
