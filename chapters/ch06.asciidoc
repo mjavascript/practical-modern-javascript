@@ -167,12 +167,12 @@ function concealWithPrefix (original, prefix='_') {
       return Reflect.set(original, key, value)
     }
   }
+  return new Proxy(original, handler)
   function invariant (key, action) {
     if (key.startsWith(prefix)) {
       throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
     }
   }
-  return new Proxy(original, handler)
 }
 const target = {
   _secret: 'secret',
