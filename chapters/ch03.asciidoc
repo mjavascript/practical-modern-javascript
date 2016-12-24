@@ -723,7 +723,7 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 
 At the time of this writing, there's an ECMAScript stage 3 proposal to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an +Object.assign+ function call.
 
-The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and the +Object.assign+ counterpart. As you can see, using object destructuring is more succint and should be preferred where possible.
+The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and the +Object.assign+ counterpart. As you can see, using object spread is more succint and should be preferred where possible.
 
 [source,javascript]
 ----
@@ -736,6 +736,37 @@ const grocery = { type: 'fruit', ...details, ...fruit }
 const grocery = { type: 'fruit', ...details, color: 'red' }
 // Object.assign({ type: 'fruit' }, details, { color: 'red' })
 ----
+
+As a counterpart to object spread, the proposal includes object rest properties, which is similar to the array rest pattern. We can use object rest whenever we're destructuring an object.
+
+The following example shows how we could leverage object rest to get an object containing only properties that we haven't explicitly named in the parameter list. Note that the object rest property must be in the last position of destructuring, just like the array rest pattern.
+
+[source,javascript]
+----
+const getUnknownProperties = ({ name, type, ...unknown }) => unknown
+getUnknownProperties({
+  name: 'Carrot',
+  type: 'vegetable',
+  color: 'orange'
+})
+// <- { color: 'orange' }
+----
+
+We could take a similar approach when destructuring an object in a variable declaration statement. In the next example, every property that's not explicitly destructured is placed in a +meta+ object.
+
+[source,javascript]
+----
+const { name, type, ...meta } = {
+  name: 'Carrot',
+  type: 'vegetable',
+  color: 'orange'
+}
+// <- name = 'Carrot'
+// <- type = 'vegetable'
+// <- meta = { color: 'orange' }
+----
+
+We dive deeper into object rest and spread in chapter 9.
 
 ==== 3.3.2 Comparing objects with +Object.is+
 

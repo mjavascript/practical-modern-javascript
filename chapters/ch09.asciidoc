@@ -530,7 +530,127 @@ Destructuring is a great feature but it doesn't necessarily lead to more readabl
 
 ==== 9.4 Rest, Spread and Arrow Functions
 
-- Rest/Spread, Classic Functions and Arrow Functions
+Matches for regular expressions are represented as an array. The matched portion of the input is placed in the first position, while each captured group is placed in subsequent elements in the array. Often, we are interested in specific captures such as the first one.
+
+In the following example, array destructuring helps us omit the whole match and place the +integer+ and +fractional+ parts of a number into corresponding variables. This way, we avoid resorting to magic numbers pointing at the indices where captured groups will reside at in the match result.
+
+[source,javascript]
+----
+const rnumber = /(\d+)\.(\d+)/
+const [, integer, fractional] = `1234.56`.match(rnumber)
+// <- integer: `1234`, fractional: `56`
+----
+
+The spread operator could be used to pick up every captured group, as part of destructuring the result of +.match+.
+
+[source,javascript]
+----
+const rnumber = /(\d+)\.(\d+)/
+const [, ...captures] = `1234.56`.match(rnumber)
+// <- [`1234`, `56`]
+----
+
+When we need to concatenate lists, we use +.concat+ to create a new array. The spread operator improves code readability by making it immediately obvious that we want to create a new collection comprised of each list of inputs, while preserving the ease of adding new elements declaratively in array literals.
+
+[source,javascript]
+----
+administrators.concat(moderators)
+[...administrators, ...moderators]
+[...administrators, ...moderators, bob]
+----
+
+Similarly, the object spread feature introduced in section +3.3.1+ allows us to merge objects onto a new object. Consider the following snippet where we programatically create a new object comprised of base +defaults+, user-provided +options+, and some important override property that prevails over previous properties.
+
+[source,javascript]
+----
+Object.assign({}, defaults, options, { important: true })
+----
+
+Compare that to the equivalent snippet using object spread declaratively. We have the object literal, the +defaults+ and +options+ being spread, and the +important+ property. Not using the +Object.assign+ function has greatly improved our code's readability, even letting us inline the +important+ property in the object literal declaration.
+
+[source,javascript]
+----
+{
+  ...defaults,
+  ...options,
+  important: true
+}
+----
+
+Being able to visualize object spread as an +Object.assign+ helps internalize how the feature works. In the following example we've replaced the +defaults+ and +options+ variables with object literals. Since object spread relies on the same operation as +Object.assign+ for every property, we can observe how the +options+ literal overrides +speed+, with the number +3+; and why +important+ remains +true+ even when the +options+ literal attempts to override it, due to precedence.
+
+[source,javascript]
+----
+{
+  ...{ // defaults
+    speed: 1,
+    type: `sports`
+  },
+  ...{ // options
+    speed: 3,
+    important: false
+  },
+  important: true
+}
+----
+
+Object spread comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a +player+ object and a function call that casts a healing spell and returns a new, healthier, player object.
+
+[source,javascript]
+----
+const player = {
+  strength: 4,
+  luck: 2,
+  mana: 80,
+  health: 10
+}
+castHealingSpell(player) // consumes 40 mana, gains 110 health
+----
+
+The following snippet shows an implementation of +castHealingSpell+ where we create a new +player+ object without mutating the original +player+ parameter. Every property in the original +player+ object is copied over, and we can update individual properties as needed.
+
+[source,javascript]
+----
+const castHealingSpell = player => ({
+  ...player,
+  mana: player.mana - 40,
+  health: player.health + 110
+})
+----
+
+As we explained in chapter 3, we can use object rest properties while destructuring objects. Among other uses, such as listing unknown properties, object rest can be used to create a shallow copy of an object.
+
+In the next snippet, we'll look at three of the simplest ways in which we can create a shallow copy of an object in JavaScript. The first one uses +Object.assign+, assigning every property of +source+ to an empty object that's then returned; the second example uses object spread and is equivalent to using +Object.assign+, but a bit more gentle on the eyes; the last example relies on destructuring the rest parameter.
+
+[source,javascript]
+----
+const copy = Object.assign({}, source)
+const copy = { ...source }
+const { ...copy } = source
+----
+
+Sometimes we need to create a copy of an object, but omit some properties in the resulting copy. For instance, we may want to create a copy of +person+ while omitting their +name+, so that we only keep their metadata.
+
+One way to achieve that with plain JavaScript would be to destructure the +name+ property while placing other properties in a +metadata+ object, using the rest parameter. Even though we don't need the +name+, we've effectively "removed" that property from the +metadata+ object, which contains the rest of the properties in +person+.
+
+[source,javascript]
+----
+const { name, ...metadata } = person
+----
+
+In the following bit of code, we map a list of persons to a list of person models, excluding personally identifiable information such as their name and social security number, while placing everything else in the +person+ rest parameter.
+
+[source,javascript]
+----
+persons.map(({ name, ssn, ...person }) => person)
+----
+
+
+
+
+
+
+- Classic Functions and Arrow Functions
 
 ...
 
