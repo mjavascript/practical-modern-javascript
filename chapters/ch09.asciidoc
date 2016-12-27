@@ -178,7 +178,6 @@ function getCompletionText(progress) {
 }
 ----
 
-
 ==== 9.2 Template Literals
 
 For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multi-line string was also a hassle, as was escaping single or double quotes -- depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
@@ -528,7 +527,7 @@ const { prop1, prop2, prop3 } = model
 
 Destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not many host references being removed.
 
-==== 9.4 Rest, Spread and Arrow Functions
+==== 9.4 Rest and Spread
 
 Matches for regular expressions are represented as an array. The matched portion of the input is placed in the first position, while each captured group is placed in subsequent elements in the array. Often, we are interested in specific captures such as the first one.
 
@@ -645,29 +644,160 @@ In the following bit of code, we map a list of persons to a list of person model
 persons.map(({ name, ssn, ...person }) => person)
 ----
 
+==== 9.5 Savoring Function Flavors
 
+JavaScript already offered a number of ways in which we can declare functions before ES6.
 
+Function declarations are the most prominent kind of JavaScript function. The fact that declarations aren't hoisted means we we can sort them based on how to improve code readability, instead of worrying about sorting them in the exact order they are used.
 
+The following snippet displays three function declarations arranged in such a way that the code is more linear to read.
 
+[source,javascript]
+----
+printSum(2, 3)
+function printSum (x, y) {
+  return print(sum(x, y))
+}
+function sum (x, y) {
+  return x + y
+}
+function print (message) {
+  console.log(`printing: ${ message }`)
+}
+----
 
-- Classic Functions and Arrow Functions
+Function expressions, in contrast, must be assigned to a variable before we can execute them. Keeping with the preceding example, this means we would necessarily need to have all function expressions declared before any code can use them.
 
-...
+The next snippet uses function expressions. Note that if we were to place the +printSum+ function call anywhere other than after all three expression assignments, our code would fail because of a variable that hasn't been initialized yet.
 
+[source,javascript]
+----
+var printSum = function (x, y) {
+  return print(sum(x, y))
+}
+var sum = function (x, y) {
+  return x + y
+}
+// a `printSum()` statement would fail here: print is not defined
+var print = function (message) {
+  console.log(`printing: ${ message }`)
+}
+printSum(2, 3)
+----
 
+For this reason, it may be better to sort function expressions as a LIFO (last-in-first-out) stack: placing the last function to be called first, the second to last function to be called second, and so on. The rearranged code is shown in the next snippet.
 
+[source,javascript]
+----
+var sum = function (x, y) {
+  return x + y
+}
+var print = function (message) {
+  console.log(`printing: ${ message }`)
+}
+var printSum = function (x, y) {
+  return print(sum(x, y))
+}
+printSum(2, 3)
+----
 
+While this code is a bit harder to follow, it becomes immediately obvious that we can't call +printSum+ before the function expression is assigned to that variable. In the previous piece of code this wasn't obvious because we weren't following the LIFO rule. This is reason enough to prefer function declarations for the vast majority of our code.
 
+Function expressions can have a name that can be used for recursion, but that name is not accessible in the outer scope. The following example shows a function expression that's named +sum+ and assigned to a +sumMany+ variable. The +sum+ reference is used for recursion in the inner scope, but we get an error when trying to use it from the outer scope.
 
+[source,javascript]
+----
+var sumMany = function sum (accumulator = 0, ...values) {
+  if (values.length === 0) {
+    return accumulator
+  }
+  const [value, ...rest] = values
+  return sum(accumulator + value, ...rest)
+}
+console.log(sumMany(0, 1, 2, 3, 4))
+// <- 10
+console.log(sum())
+// <- ReferenceError: sum is not defined
+----
 
+Arrow functions, introduced in ES6, are similar to function expressions. The syntax is made shorter by dropping the +function+ keyword. In arrow functions, parenthesis around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
 
+The following snippet shows an arrow function explicitly returning an expression in a block statement, one that implicitly returns the expression, one that drops the parenthesis around its only parameter, and one that uses a block statement but doesn't return a value.
 
+[source,javascript]
+----
+const sum = (x, y) => { return x + y }
+const multiply = (x, y) => x * y
+const double = x => x * 2
+const print = x => { console.log(x) }
+----
 
+Arrow functions can return arrays using tiny expressions. The first example in the next snippet implicitly returns an array comprised of two elements, while the second example discards the first parameter and returns all other parameters held in the rest operator's bag.
 
+[source,javascript]
+----
+const makeArray = (first, second) => [first, second]
+const makeSlice = (discarded, ...items) => items
+----
 
+Implicitly returning an object literal is a bit tricky because they're hard to tell apart from block statements, which are also wrapped in brackets. We'll have to add parenthesis around our object literal, turning it into an expression that evaluates into the object. This bit of indirection is just enough to help us disambiguate and tell JavaScript parsers that they're dealing with an object literal.
 
+Consider the following example, where we implicitly return an object expression. Without the parenthesis, the parser would interpret our code as a block statement containing a label and the literal expression +'Nico'+.
 
-==== 9.5 Classes in ES6
+[source,javascript]
+----
+const getPerson = name => ({
+  name: 'Nico'
+})
+----
+
+Explicitly naming arrow functions isn't possible, due to their syntax. However, if an arrow function expression is declared in the right hand side of a variable or property declaration, then its name becomes the name for the arrow function.
+
+Arrow function expressions need to be assigned before use, and thus suffer from the same ordering ailments as regular function expressions. In addition, since they can't be named, they must be bound to a variable for us to reference them in recursion scenarios.
+
+Using function declarations by default should be preferred. They are less limited in terms of how they can be ordered, referenced, and executed, leading to better code readability and maintainability. In future refactors, we won't have to worry about keeping function declarations in the same order in fear of breaking dependency chains or LIFO representations.
+
+That said, arrow functions are a terse and powerful way of declaring functions in short form. The smaller the function, the more valuable using arrow syntax becomes, as it helps avoid a situation where we spend more code on form than we spend on function. As a function grows larger, writing it in arrow form loses its appeal due to the aforementioned ordering and naming issues.
+
+Arrow functions are invaluable in cases where we would've otherwise declared an anonymous function expression, such as in test cases, functions passed to +new Promise()+ and +setTimeout+, or array mapping functions.
+
+Consider the following example, where we use a non-blocking +wait+ promise to print a statement after five seconds. The +wait+ function takes a +delay+ in milliseconds and returns a +Promise+ which resolves after waiting for the specified time with +setTimeout+.
+
+[source,javascript]
+----
+wait(5000).then(function () {
+  console.log('waited 5 seconds!')
+})
+
+function wait (delay) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve()
+    }, delay)
+  })
+}
+----
+
+When switching to arrow functions, we should stick with the top level +wait+ function declaration so that we don't need to hoist it to the top of our scope. We can turn every other function into arrows to improve readability, thus removing many +function+ keywords which got in the way of interpreting what those functions do.
+
+The next snippet shows how that code would look like using arrow functions. With all the keywords out of the way after refactoring, it's easier to understand the relationship between the +delay+ parameter of +wait+ and the second argument to +setTimeout+.
+
+[source,javascript]
+----
+wait(5000).then(
+  () => console.log('waited 5 seconds!')
+)
+
+function wait (delay) {
+  return new Promise(resolve =>
+    setTimeout(() => resolve(), delay)
+  )
+}
+----
+
+As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, require several lines of code nor involve recursion, then consider an arrow function.
+
+==== 9.6 Classes in ES6
 
 - classes
 
@@ -685,6 +815,6 @@ persons.map(({ name, ssn, ...person }) => person)
 
 
 
-==== 9.6 Asynchronous Code Flows
+==== 9.7 Asynchronous Code Flows
 
 - promises,asyncawait,generators,etc
