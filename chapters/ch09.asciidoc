@@ -799,7 +799,7 @@ As a general rule of thumb, think of every function as a function declaration by
 
 ==== 9.6 Classes in ES6
 
-- classes
+classes
 
 
 
@@ -817,4 +817,4 @@ As a general rule of thumb, think of every function as a function declaration by
 
 ==== 9.7 Asynchronous Code Flows
 
-- promises,asyncawait,generators,etc
+promises,asyncawait,generators,etc
