@@ -1405,23 +1405,20 @@ When dealing with arraylike objects, it makes sense to use +Array.from+ if they 
 
 [source,javascript]
 ----
-const things = {
-  0: {
-    type: `fruit`,
-    name: `Apple`,
-    amount: 3
-  },
-  1: {
-    type: `vegetable`,
-    name: `Onion`,
-    amount: 1
-  },
-  length: 2
+const apple = {
+  type: `fruit`,
+  name: `Apple`,
+  amount: 3
 }
-Array.from(things)
-// <- [Object, Object]
-Array.from(things, thing => thing.type)
-// <- [`fruit`, `vegetable`]
+const onion = {
+  type: `vegetable`,
+  name: `Onion`,
+  amount: 1
+}
+Array.from(groceries)
+// <- [apple, onion]
+Array.from(groceries, grocery => grocery.name)
+// <- [`Apple`, `Onion`]
 ----
 
 ==== 7.4.2 +Array.of+
@@ -1480,7 +1477,7 @@ const items = [1, 2, 3, ,,,,,,,]
 // <- [1, 2, 3, undefined x 7]
 ----
 
-The function call shown below takes the +items+ array and determines that it'll start "pasting" items in the sixth position (zero-based). It further determines that the items to be copied will be taken starting in the second position (zero-based), until the third position (also zero-based, but excluded).
+The function call shown below takes the +items+ array and determines that it'll start "pasting" items in the sixth position (zero-based). It further determines that the items to be copied will be taken starting in the second position, until the third position (not inclusive).
 
 [source,javascript]
 ----
