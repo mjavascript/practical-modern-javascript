@@ -799,12 +799,61 @@ As a general rule of thumb, think of every function as a function declaration by
 
 ==== 9.6 Classes in ES6
 
-classes
+Most modern programming languages have classes in one form or another. JavaScript classes are syntactic sugar on top of prototypal inheritance. Using classes turns prototypes more idiomatic and easier for tools to statically analyze.
 
+When writing prototype-based solutions the constructor code is the function itself, while declaring instance methods involves quite a bit of boilerplate code, as shown in the following code snippet.
 
+[source,javascript]
+----
+function Player () {
+  this.health = 5
+}
+Player.prototype.damage = function () {
+  this.health--
+}
+Player.prototype.attack = function (player) {
+  player.damage()
+}
+----
 
+In contrast, classes normalize the +constructor+ as an instance method, thus making it clear that the constructor is executed for every instance. At the same time, methods are built into the +class+ literal and rely on a syntax that's consistent with methods in object literals.
 
+[source,javascript]
+----
+class Player {
+  constructor() {
+    this.health = 5
+  }
+  damage() {
+    this.health--
+  }
+  attack(player) {
+    player.damage()
+  }
+}
+----
 
+Grouping instance methods under an object literal ensures class declarations aren't spread over several files, but rather unified in a single location describing their whole API.
+
+Declaring any +static+ methods as part of a +class+ literal, as opposed to dynamically injecting them onto the class, also helps centralize API knowledge. Keeping this knowledge in a central location helps code readability because developers need to go through less code to learn the +Player+ API. At the same time, when we define a convention of declaring instance and static methods on the +class+ literal, coders know not to waste time looking elsewhere for methods defined dynamically.
+
+[source,javascript]
+----
+class Player {
+  constructor() {
+    Player.heal(this)
+  }
+  damage() {
+    this.health--
+  }
+  attack(player) {
+    player.damage()
+  }
+  static heal(player) {
+    player.health = 5
+  }
+}
+----
 
 
 
