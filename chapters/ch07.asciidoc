@@ -846,7 +846,7 @@ As the opposite of +String#startsWith+, there's a position index that indicates 
 // <- true
 `hello gary`.endsWith(`gary`, 9)
 // <- false, it ends with `gar` in this case
-`hello gary`.endsWith(`pony`, 4)
+`hello gary`.endsWith(`hell`, 4)
 // <- true
 ----
 
