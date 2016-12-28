@@ -100,7 +100,7 @@ isNaN(new Date())
 // <- false, because Number(new Date()) uses Date#valueOf, which returns a unix timestamp
 ----
 
-+Number.isNaN+ is more precise than its global counterpart, because it doesn't incur in casting. There's still a few reasons why +Number.isNaN+ can be a source of confusion.
++Number.isNaN+ is more precise than its global counterpart, because it doesn't involve casting. There's still a few reasons why +Number.isNaN+ can be a source of confusion.
 
 1. +isNaN+ casts input through +Number(value)+ before comparison
 2. +Number.isNaN+ doesn't
@@ -158,7 +158,7 @@ isFinite(`10`)
 // <- true, because Number(`10`) is 10
 ----
 
-Using +Number.isFinite+ is a safer bet, as it doesn't incur in unexpected casting. You could always use +Number.isFinite(Number(value))+ if you did want the +value+ to be casted into its numeric representation. Separating the two aspects, casting versus computing, results in more explicit code.
+Using +Number.isFinite+ is a safer bet, as it doesn't incur in unexpected casting. You could always use +Number.isFinite(Number(value))+ if you did want the +value+ to be cast into its numeric representation. Separating the two aspects, casting versus computing, results in more explicit code.
 
 Here are a few examples using the +Number.isFinite+ method.
 
@@ -717,11 +717,11 @@ hypot(1, 2, 3)
 
 ==== 7.2.10 Bitwise Computation Helpers
 
-At the beginning of section 7.2, we talked about how some of the new +Math+ methods are specifically engineered towards making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
+At the beginning of section 7.2, we talked about how some of the new +Math+ methods are specifically engineered for making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
 
 ===== +Math.clz32+
 
-The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number". Keeping into account that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://ponyfoo.com/s/pes-bitwise-shift], let's take a look at the next code snippet describing sample input and output for +Math.clz32+.
+The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number". Keeping in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://ponyfoo.com/s/pes-bitwise-shift], let's take a look at the next code snippet describing sample input and output for +Math.clz32+.
 
 [source,javascript]
 ----
