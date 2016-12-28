@@ -717,7 +717,7 @@ hypot(1, 2, 3)
 
 ==== 7.2.10 Bitwise Computation Helpers
 
-At the beginning of section 7.2, we talked about how some of the new +Math+ methods are specifically engineered for making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
+At the beginning of section 7.2, we talked about how some of the new +Math+ methods are specifically engineered towards making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
 
 ===== +Math.clz32+
 
@@ -1239,7 +1239,7 @@ The last Unicode-related method we'll be addressing is +.normalize+.
 
 ==== 7.3.10 +String#normalize+
 
-There's different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
+There are different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
 
 [source,javascript]
 ----
