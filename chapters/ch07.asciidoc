@@ -1295,7 +1295,7 @@ compare(normal, irregular)
 
 === 7.4 Array
 
-Over the years, libraries like Underscore and Lodash spoke loudly of missing features when it comes to arrays. As a result, ES5 brought in heaps of functional methods to arrays: +Array#filter+, +Array#map+, +Array#reduce+, +Array#reduceRight+, +Array#forEach+, +Array#some+, and +Array#every+.
+Over the years, libraries like Underscore and Lodash spoke loudly of missing features when it came to arrays. As a result, ES5 brought in heaps of functional methods to arrays: +Array#filter+, +Array#map+, +Array#reduce+, +Array#reduceRight+, +Array#forEach+, +Array#some+, and +Array#every+.
 
 ES6 brings a few more methods that will help manipulate, fill, and filter arrays.
 
@@ -1405,23 +1405,25 @@ When dealing with arraylike objects, it makes sense to use +Array.from+ if they 
 
 [source,javascript]
 ----
-const things = {
-  0: {
-    type: `fruit`,
-    name: `Apple`,
-    amount: 3
-  },
-  1: {
-    type: `vegetable`,
-    name: `Onion`,
-    amount: 1
-  },
+const apple = {
+  type: `fruit`,
+  name: `Apple`,
+  amount: 3
+}
+const onion = {
+  type: `vegetable`,
+  name: `Onion`,
+  amount: 1
+}
+const groceries = {
+  0: apple,
+  1: onion,
   length: 2
 }
-Array.from(things)
-// <- [<div>, <div>, <div>, ...]
-Array.from(things, thing => thing.type)
-// <- [`fruit`, `vegetable`, ...]
+Array.from(groceries)
+// <- [apple, onion]
+Array.from(groceries, grocery => grocery.type)
+// <- [`fruit`, `vegetable`]
 ----
 
 ==== 7.4.2 +Array.of+
@@ -1480,7 +1482,7 @@ const items = [1, 2, 3, ,,,,,,,]
 // <- [1, 2, 3, undefined x 7]
 ----
 
-The function call shown below takes the +items+ array and determines that it'll start "pasting" items in the sixth position. It further determines that the items to be copied will be taken starting in the second position (zero-based), until the third position (also zero-based).
+The function call shown below takes the +items+ array and determines that it'll start "pasting" items in the sixth position (zero-based). It further determines that the items to be copied will be taken starting in the second position, until the third position (not inclusive).
 
 [source,javascript]
 ----
