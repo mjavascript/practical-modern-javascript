@@ -1415,10 +1415,15 @@ const onion = {
   name: `Onion`,
   amount: 1
 }
+const groceries = {
+  0: apple,
+  1: onion,
+  length: 2
+}
 Array.from(groceries)
 // <- [apple, onion]
-Array.from(groceries, grocery => grocery.name)
-// <- [`Apple`, `Onion`]
+Array.from(groceries, grocery => grocery.type)
+// <- [`fruit`, `vegetable`]
 ----
 
 ==== 7.4.2 +Array.of+
