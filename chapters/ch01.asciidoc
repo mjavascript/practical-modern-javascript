@@ -1,4 +1,4 @@
 [[overview-of-ecmascript6]]
 == Overview of ECMAScript 6
 
-...
+(work in progress)
