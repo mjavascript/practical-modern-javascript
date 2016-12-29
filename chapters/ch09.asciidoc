@@ -145,7 +145,7 @@ makeCollection(2) // <- [1, 2, 3, 4]
 makeCollection(3) // <- [1, 2, 3, 4, 5, 6]
 ----
 
-When you do need to use +Array#concat+, you should probably use `[...result, 1, 2]` instead, to keep it simpler.
+When you do need to use +Array#concat+, you should probably use +[...result, 1, 2]+ instead, to keep it simpler.
 
 The last case we'll cover is one of refactoring. Sometimes, we write code like the next snippet, usually in the context of a larger function.
 
@@ -797,7 +797,7 @@ function wait (delay) {
 
 As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, require several lines of code nor involve recursion, then consider an arrow function.
 
-==== 9.6 Classes in ES6
+==== 9.6 Classes and Proxies
 
 Most modern programming languages have classes in one form or another. JavaScript classes are syntactic sugar on top of prototypal inheritance. Using classes turns prototypes more idiomatic and easier for tools to statically analyze.
 
@@ -835,7 +835,7 @@ class Player {
 
 Grouping instance methods under an object literal ensures class declarations aren't spread over several files, but rather unified in a single location describing their whole API.
 
-Declaring any +static+ methods as part of a +class+ literal, as opposed to dynamically injecting them onto the class, also helps centralize API knowledge. Keeping this knowledge in a central location helps code readability because developers need to go through less code to learn the +Player+ API. At the same time, when we define a convention of declaring instance and static methods on the +class+ literal, coders know not to waste time looking elsewhere for methods defined dynamically.
+Declaring any +static+ methods as part of a +class+ literal, as opposed to dynamically injecting them onto the class, also helps centralize API knowledge. Keeping this knowledge in a central location helps code readability because developers need to go through less code to learn the +Player+ API. At the same time, when we define a convention of declaring instance and static methods on the +class+ literal, coders know not to waste time looking elsewhere for methods defined dynamically. The same applies to getters and setters, which we can also define on the +class+ literal.
 
 [source,javascript]
 ----
@@ -849,21 +849,76 @@ class Player {
   attack(player) {
     player.damage()
   }
+  get alive() {
+    return this.health > 0
+  }
   static heal(player) {
     player.health = 5
   }
 }
 ----
 
+Classes also offer +extends+, simple syntactic sugar on top of prototypal inheritance. This, again, is more convenient than prototype-based solutions. With +extends+, we don't have to worry about choosing a library or otherwise dynamic method of inheriting from another class.
 
+[source,javascript]
+----
+class GameMaster extends Player {
+  constructor(...rest) {
+    super(...rest)
+    this.health = Infinity
+  }
+  kill(player) {
+    while (player.alive) {
+      player.damage()
+    }
+  }
+}
+----
 
+Using that same syntax, classes can extend native built-ins such as +Array+ or +Date+ without relying on an +<iframe>+ or shallow copying. Consider the +List+ class in the following code snippet, which skips the default +Array+ constructor in order to avoid the often-confusing single number parameter overload. It also illustrates how we could implement our own methods on top of the native +Array+ prototype.
 
+[source,javascript]
+----
+class List extends Array {
+  constructor(...items) {
+    super()
+    this.push(...items)
+  }
+  get first() {
+    return this[0]
+  }
+  get last() {
+    return this[this.length - 1]
+  }
+}
+const number = new List(2)
+console.log(number.first)
+// <- 2
+const items = new List(`a`, `few`, `examples`)
+console.log(items.last)
+// <- `examples`
+----
 
+JavaScript classes are less verbose than their prototype-based equivalents. Class sugar is thus a most welcome improvement over raw prototypal inheritance. As for the merits of using JavaScript classes, it depends. Even though classes may be compelling to use due to their improved syntax, sugar alone doesn't inherently promote classes to a wider variety of use cases.
 
+In most situations when dealing with statically typed languages, you would have to use classes. In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
 
+Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and +Object.create+.
 
+In terms of practicality, proxies fall in a similar category as classes. Proxies empower many previously unavailable use cases. Solutions which involve a +Proxy+ object, however, may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
 
+There may indeed be cases where using a +Proxy+ is warranted, particularly when it comes to developer tooling meant for development environments, where a high degree of code introspection is desirable and complexity is hidden away in the developer tool's codebase. Using +Proxy+ in application-level code bases is easily avoided, and leads to less enigmatic code.
+
+Readability hinges on code that has a clear purpose. Declarative code is readable: upon reading a piece of code, it becomes clear what it is intended to do. In contrast, using layers of indirection such as a +Proxy+ on top of an object can result in highly complex access rules that may be hard to infer when reading a piece of code. It's not that a solution involving a +Proxy+ is impossible to understand, but the fact that more code needs to be read and carefully considered before we fully understand the nuances of how the proxy layer behaves.
+
+If we're considering proxies, then maybe objects aren't the tool for what we're trying to accomplish. Instead of going straight to a +Proxy+ indirection layer, consider whether a simple function offers just enough indirection without causing an object to behave in a manner that's inconsistent with how plain objects typically behave in JavaScript.
+
+As such, always prefer boring, static, and declarative code over smart and elegant abstractions. Boring code might be a little more repetitive than using an abstraction, but it will also be simpler, easier to understand, and decidedly a safer bet in the short-term.
+
+Abstractions are costly. Once an abstraction is in place, it is often hard to go back and eliminate it. If an abstraction is created too early, it might not cover all common use cases, and we may end up having to handle special cases separately.
+
+When we prefer boring code, patterns flourish gradually and naturally. Once a pattern emerges, then we can decide whether an abstraction is warranted and refactor our code fittingly. A time-honed well-placed abstraction is likely to cover more use cases than it might have covered if we had gone for an abstraction as soon as we had two or three functionally comparable pieces of code.
 
 ==== 9.7 Asynchronous Code Flows
 
-promises,asyncawait,generators,etc
+callbacks,promises,events,async/await,generators,etc
