@@ -7,7 +7,7 @@ Reconciling all of these new features with our existing ES5 knowledge may seem l
 
 We'll take a look at a few different features, the use cases where they shine, and the situations where we might be better off using features that were already available in the language. Let's go case by case.
 
-==== 9.1 Variable Declarations
+=== 9.1 Variable Declarations
 
 When developing software, most of our time is spent reading code. ES6 offers +let+ and +const+ as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
 
@@ -182,7 +182,7 @@ function getCompletionText(progress) {
 }
 ----
 
-==== 9.2 Template Literals
+=== 9.2 Template Literals
 
 For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multi-line string was also a hassle, as was escaping single or double quotes -- depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
 
@@ -361,7 +361,7 @@ npm run lint
 
 In conclusion, there are trade-offs to consider when using template literals. You're invited to experiment with the backtick-first approach and gauge its merits. Always prefer convenience, over convention, over configuration.
 
-==== 9.3 Shorthand Notation and Object Destructuring
+=== 9.3 Shorthand Notation and Object Destructuring
 
 Chapter 2 introduced us to the concept of shorthand notation. Whenever we want to introduce a property and there's a binding by the same name in scope, we can avoid repetition.
 
@@ -531,7 +531,7 @@ const { prop1, prop2, prop3 } = model
 
 Destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not many host references being removed.
 
-==== 9.4 Rest and Spread
+=== 9.4 Rest and Spread
 
 Matches for regular expressions are represented as an array. The matched portion of the input is placed in the first position, while each captured group is placed in subsequent elements in the array. Often, we are interested in specific captures such as the first one.
 
@@ -648,7 +648,7 @@ In the following bit of code, we map a list of persons to a list of person model
 persons.map(({ name, ssn, ...person }) => person)
 ----
 
-==== 9.5 Savoring Function Flavors
+=== 9.5 Savoring Function Flavors
 
 JavaScript already offered a number of ways in which we can declare functions before ES6.
 
@@ -801,7 +801,7 @@ function wait (delay) {
 
 As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, require several lines of code nor involve recursion, then consider an arrow function.
 
-==== 9.6 Classes and Proxies
+=== 9.6 Classes and Proxies
 
 Most modern programming languages have classes in one form or another. JavaScript classes are syntactic sugar on top of prototypal inheritance. Using classes turns prototypes more idiomatic and easier for tools to statically analyze.
 
@@ -923,6 +923,47 @@ Abstractions are costly. Once an abstraction is in place, it is often hard to go
 
 When we prefer boring code, patterns flourish gradually and naturally. Once a pattern emerges, then we can decide whether an abstraction is warranted and refactor our code fittingly. A time-honed well-placed abstraction is likely to cover more use cases than it might have covered if we had gone for an abstraction as soon as we had two or three functionally comparable pieces of code.
 
-==== 9.7 Asynchronous Code Flows
+=== 9.7 Asynchronous Code Flows
 
-callbacks, promises, events, async/await, generators, etc.
+In chapter 4 we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, Promises, generators, async functions, and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
+
+Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
+
+When it comes to callbacks, libraries like +async+footnote:[You can find the +async+ flow control library on GitHub: https://ponyfoo.com/s/pes-async-library.] can help reduce complexity when we have three or more related tasks that need to be executed asynchronously. Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
+
+Events are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Event don't lend themselves well to managing the complexity of asynchronous tasks, however.
+
+The following example shows how convoluted our code could become if we wanted to handle asynchronous tasks using events. Half of the lines of code are spent on defining the code flow, and even then the flow is quite hard to understand. This means we probably chose the wrong tool for the job.
+
+[source,javascript]
+----
+const tracker = emitter()
+tracker.on(`started`, multiply)
+tracker.on(`multiplied`, print)
+start(256, 512, 1024)
+function start (...input) {
+  const sum = input.reduce((a, b) => a + b, 0)
+  tracker.emit(`started`, { sum, input })
+}
+function multiply ({ sum, input }) {
+  const message = `The sum of ${ input.join(`+`) } is ${ sum }`
+  tracker.emit(`multiplied`, message)
+}
+function print (message) {
+  console.log(message)
+}
+----
+
+Promises were around for a long time, in user libraries, before TC39 decided to bring them into the core JavaScript language. They serve a similar purpose as callback libraries, offering an alternative way of writing asynchronous code flows.
+
+Promises are a bit more expensive than callbacks in terms of commitment, because promise chains involve more promises, so they are hard to interleave with plain callbacks. At the same time, you don't want to interleave promises with callback-based code, because that leads to complex applications. For any given portion of code, it's important to pick one paradigm and stick with it.
+
+Committing to promises isn't inherently bad, though, but rather a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
+
+Generators...
+
+Async Functions...
+
+Async Iterators and Async Generators...
+
+Consistency is an important theme when it comes to maintainable code..
