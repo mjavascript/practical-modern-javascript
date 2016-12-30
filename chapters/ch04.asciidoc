@@ -1137,7 +1137,7 @@ console.log(g.next())
 
 Moving onto a more practical example, let's write a magic 8-ball generator where we'll put that sort of message-passing into action.
 
-=== 4.3.3 Coding A Magic 8-ball Generator
+==== 4.3.3 Coding A Magic 8-ball Generator
 
 A magic 8-ball consists of an interface that, when asked a question, returns a vague, random answer, as a result. The following function returns an answer at random, out of a pool of ten possible values. Note how I used template literals to define every string: that way, I don't need to worry about escaping single or double quotes in my strings.
 
@@ -1213,7 +1213,7 @@ console.log(g.next('How do you know that?').value)
 
 As a consumer of the +ball+ generator, the first call to +g.next+ doesn't seem something you should need to do. Similarly, using +g.next+ to pull sequence values out of a generator and pass input into the generator doesn't seem like a responsibility that should befall the consumer of your generator code. If we flipped responsibilities around, by writing the looping code and having the consumer of a piece of code create a generator function, the resulting code would be more pleasant to both read and write.
 
-=== 4.3.4 Consuming Generator Functions for Flexibility
+==== 4.3.4 Consuming Generator Functions for Flexibility
 
 In the previous section our 8-ball was a generator function, while the user code using the 8-ball was in charge of looping over the generator's sequence. Now, we'll be writing the questions in a generator function that gets passed to a method, which loops over the generator we provide and answers each question at a time.
 
@@ -1277,7 +1277,7 @@ When we compare the API in the previous section with the one we've just created,
 
 Yet another benefit of asking consumers to provide a generator function is that providing them with the +yield+ keyword opens up a world of possibilities where execution in their code may be suspended while your iterator performs an asynchronous operation in between +g.next+ calls. Let's explore asynchronous uses of generators in the next section.
 
-=== 4.3.5 Dealing with asynchronous flows
+==== 4.3.5 Dealing with asynchronous flows
 
 Staying on the subject of our magic 8-ball, and going back to the example where we call +ball+ with a user-provided +questions+ generator, let's reminisce about what would change about our code if the answers were to be provided asynchronously. The beauty of generators is that if the way we iterate over the questions were to become asynchronous, the generator wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch the answers to the questions, and all it'd take would be to ask a service for the answer to the current question, return that value via an intermediary +yield+ statement or in some other way, and then call +g.next+ on the +questions+ generator object.
 
@@ -1350,7 +1350,7 @@ Always keep in mind that while a +yield+ expression is being evaluated, executio
 
 While generators let us write asynchronous code that appears synchronous, this introduces an inconvenience. How do we handle errors that arise in the iteration? If an HTTP request fails, for instance, how do we notify the generator and then handle the error notification in the generator function?
 
-=== 4.3.6 Throwing Errors at a Generator
+==== 4.3.6 Throwing Errors at a Generator
 
 Before shifting our thinking into user-provided generators, where they retain control of seemingly-synchronous functions thanks to +yield+ and suspension, we would've been hard pressed to find a user case for +g.throw+, a method found on generator objects that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between +yield+ expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to +throw+ that error into the generator.
 
@@ -1384,7 +1384,7 @@ ball(function* questions () {
 
 Generator functions allow you to use error handling semantics -- +try+, +catch+, and +throw+ -- which were previously only useful in synchronous code paths. Having the ability to use +try+/+catch+ blocks in generator code lets us treat the code as if it were synchronous, even when there's HTTP requests sitting behind +yield+ expressions, in iterator code.
 
-=== 4.3.7 Returning on Behalf of a Generator
+==== 4.3.7 Returning on Behalf of a Generator
 
 Besides +g.next+ and +g.throw+, generator objects have one more method at their disposal to determine how a generator sequence is iterated: +g.return(value)+. This method unsuspends the generator function and executes +return value+ at the location of +yield+, typically ending the sequence being iterated by the generator object. This is no different to what would occur if the generator function actually had a +return+ statement in it.
 
@@ -1477,7 +1477,7 @@ Due to the confusing nature of the differences between +yield+ expressions and +
 
 In the following section, we'll build an iterator that leverages differences in +yield+ versus +return+ to perform both input and output based on the same generator function.
 
-=== 4.3.8 Asynchronous I/O Using Generators
+==== 4.3.8 Asynchronous I/O Using Generators
 
 The following piece of code shows a self-describing generator function where we indicate input sources and an output destination. This hypothetical method could be used to pull product information from the yielded endpoints, which could then be saved to the returned endpoint. An interesting aspect of this interface is that as a user you don't have to spend any time figuring out how to read and write information. You merely determine the sources and destination, and the underlying implementation figures out the rest.
 
@@ -2127,7 +2127,7 @@ for (const item of sequence) {
 
 The contract for an iterator mandates that the +next+ method of +Symbol.iterator+ instances returns an object with +value+ and +done+ properties. The +value+ property indicates the current value in the sequence, while +done+ is a boolean indicating whether the sequence has ended.
 
-=== 4.5.1 Async Iterators
+==== 4.5.1 Async Iterators
 
 In *async iterators*, the contract has a subtle difference: +next+ is supposed to return a +Promise+ that resolves to an object containing +value+ and +done+ properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new +Symbol.asyncIterator+ is introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing +Symbol.iterator+.
 
