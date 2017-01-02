@@ -556,7 +556,7 @@ var right = 7
 
 The last area of destructuring we'll be covering is function parameters.
 
-==== 2.3.3 Destructuring Function Paremeters
+==== 2.3.3 Destructuring Function Parameters
 
 Function parameters in ES6 enjoy the benefits of destructuring as well. One of the simplest cases is providing sensible default values. The following example defines a default +exponent+ with the most commonly used value.
 
