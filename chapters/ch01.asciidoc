@@ -2,3 +2,7 @@
 == Overview of ECMAScript 6
 
 (work in progress)
+
+- history
+- tooling (babel, eslint)
+- mention a few features in passing, or maybe feature areas of improvement

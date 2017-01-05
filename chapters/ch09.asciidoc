@@ -956,14 +956,61 @@ function print (message) {
 
 Promises were around for a long time, in user libraries, before TC39 decided to bring them into the core JavaScript language. They serve a similar purpose as callback libraries, offering an alternative way of writing asynchronous code flows.
 
-Promises are a bit more expensive than callbacks in terms of commitment, because promise chains involve more promises, so they are hard to interleave with plain callbacks. At the same time, you don't want to interleave promises with callback-based code, because that leads to complex applications. For any given portion of code, it's important to pick one paradigm and stick with it.
+Promises are a bit more expensive than callbacks in terms of commitment, because promise chains involve more promises, so they are hard to interleave with plain callbacks. At the same time, you don't want to interleave promises with callback-based code, because that leads to complex applications. For any given portion of code, it's important to pick one paradigm and stick with it. Relying on a single paradigm produces code that doesn't focus as much on the mechanics as it does on task processing.
 
-Committing to promises isn't inherently bad, though, but rather a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
+Committing to promises isn't inherently bad, however, but merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
 
-Generators...
+Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the language.
+
+We could use iterators to lazily describe sequences that don't necessarily need to be finite. Futher, their asynchronous counterpart could be used to describe sequences that require out-of-band processing, such as +GET+ requests, to produce elements. Those sequences can be consumed by using a +for await..of+ loop, hiding away the complexity of their asynchronous nature.
+
+An iterator is a useful way of describing how an object is iterated to produce a sequence. When there isn't an object to describe, generators offer a way of describing standalone sequences. Implementing an iterator is the ideal way of describing how a +Movie+ object should be iterated, perhaps using +Symbol.asyncIterator+ and fetching information about each actor and their roles for every credited actor in a movie. Without the context of a +Movie+ object, however, such an iterator would make more sense as a generator.
+
+Another case where generators are useful are infinite sequences, consider the following iterator, where we produce an infinite stream of integer numbers.
+
+[source,javascript]
+----
+const integers = value => ({
+  value,
+  [Symbol.iterator]() {
+    return {
+      next: () => ({
+        value: this.value++
+      })
+    }
+  }
+})
+----
+
+You probably remember generators are inherently iterable, meaning they follow the iterator protocol without the need for us to supply an iterator. Now compare the iterable +integers+ object to the equivalent generator function found in the next piece of code.
+
+[source,javascript]
+----
+function* integers (value = 0) {
+  while (true) {
+    yield value++
+  }
+}
+----
+
+Not only is the generator code shorter, but it's also far more readable. The fact that it produces an infinite sequence becomes immediately obvious due to the +while+ loop. The iterable requires us to understand that the sequence is infinite because the code never returns an element with the +done: true+ flag. Setting the seed +value+ is more natural and doesn't involve wrapping the object in a function that receives the initial parameters.
+
+
 
 Async Functions...
 
-Async Iterators and Async Generators...
 
-Consistency is an important theme when it comes to maintainable code..
+
+
+
+=== 9.8 Complexity Creep, Abstractions and Conventions
+
+Picking the right abstractions is hard: we want to reduce complexity in our code flows by introducing complexity that's hidden away behind the constructs we use. Async functions are implemented using generators. Generators are implemented using iterators and promises. Iterators are implemented using symbols. Promises are implemented using callbacks.
+
+Consistency is an important theme when it comes to maintainable code. An application might mostly use callbacks, or mostly use Promises. Individually, both callbacks and promises can be used to reduce complexity in code flows. When mixing them together, however, we need to make sure we don't introduce context switching where developers reading different pieces of a codebase need to enter different mindsets to understand them.
+
+This is why conventions exist. A strong convention such as "use promises where possible" goes a long way towards augmenting consistency across a codebase. Conventions, more than anything are what drive readability and maintainability in a codebase. Code is, after all, a communication device used to convey a message. This message is not only relevant to the computers executing the code, but most importantly to developers reading the code, maintaining and improving the application over time.
+
+Without strong conventions, communication breaks down and developers have a hard time understanding how a program works, ultimately leading to reduced productivity.
+
+The vast majority of the time spent working as a software developer is spent reading code. It's only logical, then, that we pay careful attention to how to write code in such a way that's optimized for readability.
