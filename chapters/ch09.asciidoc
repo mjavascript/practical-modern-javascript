@@ -1005,7 +1005,7 @@ Async Functions...
 
 === 9.8 Complexity Creep, Abstractions and Conventions
 
-Picking the right abstractions is hard: we want to reduce complexity in our code flows by introducing complexity that's hidden away behind the constructs we use. Async functions are implemented using generators. Generators are implemented using iterators and promises. Iterators are implemented using symbols. Promises are implemented using callbacks.
+Picking the right abstractions is hard: we want to reduce complexity in our code flows by introducing complexity that's hidden away behind the constructs we use. Async functions borrow their foundation from generators. Generator objects are iterable. Async iterators use promises. Iterators are implemented using symbols. Promises use callbacks.
 
 Consistency is an important theme when it comes to maintainable code. An application might mostly use callbacks, or mostly use Promises. Individually, both callbacks and promises can be used to reduce complexity in code flows. When mixing them together, however, we need to make sure we don't introduce context switching where developers reading different pieces of a codebase need to enter different mindsets to understand them.
 
