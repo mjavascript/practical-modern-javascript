@@ -350,7 +350,7 @@ Using floating point representation, not every integer can be represented precis
 
 ==== 7.1.8 +Number.MAX_SAFE_INTEGER+ and +Number.MIN_SAFE_INTEGER+
 
-This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standardfootnote:[IEEE 754 is the Floating Point Standard. On Wikipedia: https://mjavascript.com/pe/floating-point.], for that matter. The next bit of code shows exactly how large +Number.MAX_SAFE_INTEGER+ is.
+This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standardfootnote:[IEEE 754 is the Floating Point Standard. On Wikipedia: https://mjavascript.com/out/floating-point.], for that matter. The next bit of code shows exactly how large +Number.MAX_SAFE_INTEGER+ is.
 
 [source,javascript]
 ----
@@ -404,7 +404,7 @@ Number.isSafeInteger(Number.MAX_SAFE_INTEGER); // <- true
 Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1); // <- false
 ----
 
-When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operandsfootnote:[Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://mjavascript.com/pe/math-axel.]. One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of +left+, +right+, and the result of +left op right+ is, thus, necessary to verify that we can indeed trust the result.
+When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operandsfootnote:[Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://mjavascript.com/out/math-axel.]. One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of +left+, +right+, and the result of +left op right+ is, thus, necessary to verify that we can indeed trust the result.
 
 In the following example both operands are within bounds, but the result is incorrect.
 
@@ -665,7 +665,7 @@ function log2 (value) {
 }
 ----
 
-Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example. Keep in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://mjavascript.com/pe/bitwise-shift.].
+Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example. Keep in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://mjavascript.com/out/bitwise-shift.].
 
 [source,javascript]
 ----
@@ -696,7 +696,7 @@ Math.hypot(1, 2, 3)
 // <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
 ----
 
-We could polyfill +Math.hypot+ by performing these operations manually. We can use +Math.sqrt+ to compute the square root and +Array#reduce+footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://mjavascript.com/pe/native-arrays.], combined with the spread operator, to sum the squares.
+We could polyfill +Math.hypot+ by performing these operations manually. We can use +Math.sqrt+ to compute the square root and +Array#reduce+footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.], combined with the spread operator, to sum the squares.
 
 [source,javascript]
 ----
@@ -721,7 +721,7 @@ At the beginning of section 7.2, we talked about how some of the new +Math+ meth
 
 ===== +Math.clz32+
 
-The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number". Keeping in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://mjavascript.com/pe/bitwise-shift.], let's take a look at the next code snippet describing sample input and output for +Math.clz32+.
+The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number". Keeping in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://mjavascript.com/out/bitwise-shift.], let's take a look at the next code snippet describing sample input and output for +Math.clz32+.
 
 [source,javascript]
 ----
@@ -940,7 +940,7 @@ Non-numeric values are coerced into numbers.
 // <- `hahaha`, because Number(`3`) is 3
 ----
 
-Values in the +(-1, 0)+ range are rounded to +-0+ becase +count+ is passed through +ToInteger+], as documented by the specificationfootnote:[+String#repeat+ in ECMAScript 6 Specification, section 21.1.3.13: https://mjavascript.com/pe/array-repeat.]. That step in the specification dictates that +count+ be casted with a formula like the one in the next code snippet.
+Values in the +(-1, 0)+ range are rounded to +-0+ becase +count+ is passed through +ToInteger+], as documented by the specificationfootnote:[+String#repeat+ in ECMAScript 6 Specification, section 21.1.3.13: https://mjavascript.com/out/array-repeat.]. That step in the specification dictates that +count+ be casted with a formula like the one in the next code snippet.
 
 [source,javascript]
 ----
@@ -984,7 +984,7 @@ Let's switch protocols and learn about Unicode.
 
 ==== 7.3.5 Unicode
 
-JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/pe/unicode-encodings.]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
+JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
 
 For code points beyond +U+FFFF+, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji +`🐎`+ code point is represented with the +`\ud83d\udc0e`+ contiguous code units. In ES6 notation you can also represent code points using the +`\u{1f40e}`+ notation (that example is also the horse emoji).
 
@@ -1093,7 +1093,7 @@ Attempts to näively figure out the actual length by counting code points prove 
 // <- 16, should be 11
 ----
 
-As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iteratorfootnote:[See also "JavaScript has a Unicode problem", https://mjavascript.com/pe/unicode-mathias.]. In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length. Forunately, these kinds of glyphs are used infrequently.
+As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iteratorfootnote:[See also "JavaScript has a Unicode problem", https://mjavascript.com/out/unicode-mathias.]. In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length. Forunately, these kinds of glyphs are used infrequently.
 
 Let's look at more Unicode-related methods introduced in ES6.
 
@@ -1227,7 +1227,7 @@ const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 // <- '❤👱🐎'
 ----
 
-This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clustersfootnote:[See also "JavaScript has a Unicode problem", https://mjavascript.com/pe/unicode-mathias.].
+This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clustersfootnote:[See also "JavaScript has a Unicode problem", https://mjavascript.com/out/unicode-mathias.].
 
 [source,javascript]
 ----
