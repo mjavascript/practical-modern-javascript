@@ -995,13 +995,39 @@ function* integers (value = 0) {
 
 Not only is the generator code shorter, but it's also far more readable. The fact that it produces an infinite sequence becomes immediately obvious due to the +while+ loop. The iterable requires us to understand that the sequence is infinite because the code never returns an element with the +done: true+ flag. Setting the seed +value+ is more natural and doesn't involve wrapping the object in a function that receives the initial parameters.
 
+Promises were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows be hard. Async functions present an elegant solution to this problem, where we can describe the same promise based code using +await+ expressions.
 
+Consider the following piece of code.
 
-Async Functions...
+[source,javascript]
+----
+Promise
+  .resolve(2)
+  .then(x => x * 2)
+  .then(x => x * 2)
+  .then(x => x * 2)
+----
 
+When we use an +await+ expression, the expression on its right-hand side is coerced into a promise. When an +await+ expression is reached, the async function will pause execution until the promise -- coerced or otherwise -- has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a +catch+ handler.
 
+[source,javascript]
+----
+async function calculate () {
+  let x = 2
+  x = await x * 2
+  x = await x * 2
+  x = await x * 2
+  return x
+}
+----
 
+The beauty of +async+/+await+ lies in the fact that it fixes the biggest problem with promises, where you can't easily mix synchronous code into your flows. At the same time, async functions let you use +try+/+catch+, a construct we are unable to leverage when using callbacks. Meanwhile, +async+/+await+ manages to stay synergistic with promises by using them under the hood, always returning a +Promise+ from every async function and coercing awaited expressions into promises. Moreover, async functions accomplish all of the above while turning asynchronous code into synchronous-looking code.
 
+While using +await+ expressions are optimized towards reducing complexity in serial asynchronous code, it becomes hard to reason about concurrent asynchronous code flows when replacing promises with +async+/+await+. This can be mitigated by using +await Promise.all(tasks)+ and firing those tasks concurrently before the +await+ expression is reached. Given, however, that async functions don't optimize for this use case, reading this kind of code can be confusing, so this is something to look out for. If our code is highly concurrent, we might want to consider a callback based approach.
+
+Once again, this leads us to critical thinking. New language features aren't always necessarily better, for all use cases. While sticking to conventions is important so that our code remains consistent and we don't spend most of our time deciding on how to better represent a small portion of a program, it is also important to have a fine balance.
+
+When we don't spend at least some of our time on figuring out what feature or flow style is the most appropriate for the code we're writing, we risk treating every problem as a nail because all we have is a hammer. Picking the right tool for the problem at hand is even more important than being a stickler for conventions and hard rules.
 
 === 9.8 Complexity Creep, Abstractions and Conventions
 
