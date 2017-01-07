@@ -929,7 +929,7 @@ In chapter 4 we discussed how many of the different ways in which we can manage 
 
 Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
 
-When it comes to callbacks, libraries like +async+ can help reduce complexity when we have three or more related tasks that need to be executed asynchronouslyfootnote:[A popular flow control library. You can find async on GitHub: https://ponyfoo.com/s/pes-async-library.]. Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
+When it comes to callbacks, libraries like +async+ can help reduce complexity when we have three or more related tasks that need to be executed asynchronouslyfootnote:[A popular flow control library. You can find async on GitHub: https://mjavascript.com/pe/async-library.]. Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
 
 Events are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Event don't lend themselves well to managing the complexity of asynchronous tasks, however.
 

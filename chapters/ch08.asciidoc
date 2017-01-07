@@ -153,7 +153,7 @@ As we explored the CommonJS module system, you might've noticed how the API is s
 
 ==== 8.2.1 Strict Mode
 
-In the ES6 module system, strict mode is turned on by default. Strict mode is a featurefootnote:[Read a comprehensive article about strict mode on Mozilla's MDN: https://ponyfoo.com/s/pes-strict-mode.] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can make optimizations making JavaScript runtime faster and safer.
+In the ES6 module system, strict mode is turned on by default. Strict mode is a featurefootnote:[Read a comprehensive article about strict mode on Mozilla's MDN: https://mjavascript.com/pe/strict-mode.] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can make optimizations making JavaScript runtime faster and safer.
 
 - Variables must be declared
 - Function parameters must have unique names
