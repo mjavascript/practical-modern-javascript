@@ -940,7 +940,7 @@ Non-numeric values are coerced into numbers.
 // <- `hahaha`, because Number(`3`) is 3
 ----
 
-Values in the +(-1, 0)+ range are rounded to +-0+ becase +count+ is passed through +ToInteger+], as documented by the specificationfootnote:[+String#repeat+ in ECMAScript 6 Specification, section 21.1.3.13: https://mjavascript.com/out/array-repeat.]. That step in the specification dictates that +count+ be casted with a formula like the one in the next code snippet.
+Values in the +(-1, 0)+ range are rounded to +-0+ becase +count+ is passed through +ToInteger+, as documented by the specificationfootnote:[+String#repeat+ in ECMAScript 6 Specification, section 21.1.3.13: https://mjavascript.com/out/array-repeat.]. That step in the specification dictates that +count+ be casted with a formula like the one in the next code snippet.
 
 [source,javascript]
 ----

@@ -1,8 +1,40 @@
 [[overview-of-ecmascript6]]
 == Overview of ECMAScript 6
 
-(work in progress)
+JavaScript has went from a 1995 marketing ploy to gain a tactical advantage, to the core programming experience in the world's most widely used application runtime platform in 2017.
 
-- history
-- tooling (babel, eslint)
-- mention a few features in passing, or maybe feature areas of improvement
+JavaScript no longer runs merely in browsers, but is also used in create desktop and mobile applications, hardware devices, and even the vacuum of space.
+
+How did JavaScript get here, and where is it going next?
+
+=== 1.1 A Brief History of JavaScript
+
+Back in 1995, Netscape envisioned a dynamic web beyond what HTML could offer. Brendan Eich was brought into Netscape where he created the first JavaScript prototype in ten days. The initial version of JavaScript didn't have array nor object literals, and every error resulted in an alert.
+
+The language started being standardized under the ECMAScript name (ES) into the ECMA-262 specification in 1996. The dispute by competing implementations, JavaScript by Mozilla and JScript by Microsoft, dominated the standards commitee meetings at the time and "ECMAScript" was a compromise between the two.
+
+The first edition of ECMA-262 was released June, 1997. A year later, in June 1998, the specification was tuned to adhere to the ISO/IEC 16262 international standard and formalized as the second edition. By December 1999 the third edition was published, introducing regular expressions, +try+/+catch+, among a few minor changes.
+
+Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. Politics took over and a fourth edition never materialized. The commitee was split in two: ES3.1, which hailed an incremental approach to ES3; and ES4, a far more ambitious project introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features.
+
+It wouldn't be until August 2008footnote:[Brendan Eich sent an email to the es-discuss mailing list in 2008 where he summarized the situation, almost ten years after ES3 had been released: https://mjavascript.com/out/harmony.] when ES3.1 was agreed upon as the way forward, but later rebranded as ES5. Although ES4 would be abandoned, many of its features eventually made its way into ES6, and some of them still remain under consideration.
+
+In December 2009, on the ten-year anniversary since the publication of ES3, the fifth edition of ECMAScript was published. This edition codified de facto interpretations of the language specification that have become common among browser implementations, adding get and set accessors, reflection and introspection, functional improvements to the +Array+ prototype, native support for JSON parsing, and strict mode.
+
+A couple of years later, in June 2011, the specification was once again aligned with the third edition of the international standard ISO/IEC 16262:2011, and formalized under ECMAScript 5.1.
+
+It took TC39, the technical committee that steers ECMAScript standard efforts, another four years to formalize ECMAScript 6. This edition is the largest update to the language that made its way into publication, implementing many of the proposals that were abandoned after the ES4 debacle. We'll be exploring ECMAScript 6 (ES6) in depth throughout this book.
+
+- explain the naming challenges post ES5: ES6/ES2015, ES7/ES2016, colloquial use, etc, lead into LS ..
+
+=== 1.2 ECMAScript as a Living Standard
+
+..
+
+=== 1.3 Feature Themes in ES6
+
+..
+
+=== 1.4 Tooling
+
+..
