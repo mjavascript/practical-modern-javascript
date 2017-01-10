@@ -11,7 +11,7 @@ Back in 1995, Netscape envisioned a dynamic web beyond what HTML could offer. Br
 
 The language started being standardized under the ECMAScript name (ES) into the ECMA-262 specification in 1996. The dispute by competing implementations, JavaScript by Mozilla and JScript by Microsoft, dominated the standards commitee meetings at the time and "ECMAScript" was a compromise between the two.
 
-The first edition of ECMA-262 was released June, 1997. A year later, in June 1998, the specification was tuned to adhere to the ISO/IEC 16262 international standard and formalized as the second edition. By December 1999 the third edition was published, introducing regular expressions, +try+/+catch+, among a few minor changes.
+The first edition of ECMA-262 was released June, 1997. A year later, in June 1998, the specification was tuned to adhere to the ISO/IEC 16262 international standard and formalized as the second edition. By December 1999 the third edition was published, introducing regular expressions and +try+/+catch+, among a few minor changes.
 
 Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. Politics took over and a fourth edition never materialized. The commitee was split in two: ES3.1, which hailed an incremental approach to ES3; and ES4, a far more ambitious project introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features.
 
