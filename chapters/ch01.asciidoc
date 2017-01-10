@@ -1,9 +1,7 @@
 [[overview-of-ecmascript6]]
 == Overview of ECMAScript 6
 
-JavaScript has went from a 1995 marketing ploy to gain a tactical advantage, to the core programming experience in the world's most widely used application runtime platform in 2017.
-
-JavaScript no longer runs merely in browsers, but is also used in create desktop and mobile applications, hardware devices, and even the vacuum of space.
+JavaScript has gone from being a 1995 marketing ploy to gain a tactical advantage, to becoming the core programming experience in the world's most widely used application runtime platform in 2017. The language doesn't merely run in browsers anymore, but is also used to create desktop and mobile applications, in hardware devices, and even in the vacuum of space.
 
 How did JavaScript get here, and where is it going next?
 
