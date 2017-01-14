@@ -356,7 +356,7 @@ Once we run the following command, we're ready to start experimenting with a cod
 
 [source,shell]
 ----
-npm run lint
+» npm run lint
 ----
 
 In conclusion, there are trade-offs to consider when using template literals. You're invited to experiment with the backtick-first approach and gauge its merits. Always prefer convenience, over convention, over configuration.

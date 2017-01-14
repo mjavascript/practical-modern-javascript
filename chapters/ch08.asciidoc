@@ -40,14 +40,21 @@ console.log(union([1, 2], 2))
 // <- [1, 2]
 ----
 
-We could run +app.js+ in its current state by downloading Node.js and using its command-line tool. The +node+ CLI also allows us to omit the file extension.
+We could run +app.js+ in its current state through the CLI for Node.js, +node+, as seen in the next snippet.
 
 [source,shell]
 ----
-node app
+» node app
 # [1, 2, 3]
 # [1, 2]
 ----
+
+[NOTE]
+====
+You can download Node.js from their website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the +node+ program in your terminal.
+
+Note the +.js+ file extension is optional when executing programs through +node+.
+====
 
 The +require+ function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of +require+ is sometimes leveraged to dynamically +require+ different modules that conform to one interface. As an example, let's conjure up a +templates+ directory with a number of view template functions. Our templates will take a model and return an HTML string.
 

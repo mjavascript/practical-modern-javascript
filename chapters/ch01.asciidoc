@@ -1,38 +1,214 @@
-[[overview-of-ecmascript6]]
-== Overview of ECMAScript 6
+[[ecmascript-and-the-future-of-javascript]]
+== ECMAScript and the Future of JavaScript
 
 JavaScript has gone from being a 1995 marketing ploy to gain a tactical advantage, to becoming the core programming experience in the world's most widely used application runtime platform in 2017. The language doesn't merely run in browsers anymore, but is also used to create desktop and mobile applications, in hardware devices, and even in the vacuum of space.
 
 How did JavaScript get here, and where is it going next?
 
-=== 1.1 A Brief History of JavaScript
+=== 1.1 A Brief History of JavaScript Standards
 
-Back in 1995, Netscape envisioned a dynamic web beyond what HTML could offer. Brendan Eich was brought into Netscape where he created the first JavaScript prototype in ten days. The initial version of JavaScript didn't have array nor object literals, and every error resulted in an alert.
+Back in 1995, Netscape envisioned a dynamic web beyond what HTML could offer. Brendan Eich was initially brought into Netscape to develop a language that was functionally akin to Scheme, but for the browser, and upper management also wanted it to look like Java.
 
-The language started being standardized under the ECMAScript name (ES) into the ECMA-262 specification in 1996. The dispute by competing implementations, JavaScript by Mozilla and JScript by Microsoft, dominated the standards commitee meetings at the time and "ECMAScript" was a compromise between the two.
+Brendan created the first JavaScript prototype in ten days, taking Scheme's first-class functions and Self's prototypes as its main ingredients. The initial version of JavaScript was code-named Mocha. It didn't have array or object literals, and every error resulted in an alert. Brendan's work on DOM level 0 and the first edition of JavaScript set the stage for standards work.
 
-The first edition of ECMA-262 was released June, 1997. A year later, in June 1998, the specification was tuned to adhere to the ISO/IEC 16262 international standard and formalized as the second edition. By December 1999 the third edition was published, introducing regular expressions and +try+/+catch+, among a few minor changes.
+This revision of JavaScript was marketed as LiveScript when it started shipping with a beta release of Netscape Navigator 2.0, in September 1995. It was rebranded as JavaScript when Navigator 2.0 beta 3 was released in December 1995. Soon after this release, Netscape introduced a server-side JavaScript implementation for scripting in Netscape Enterprise Server, and named it LiveWirefootnote:[A booklet from 1998 explains the intricacies of Server-Side JavaScript with LiveWire: https://mjavascript.com/out/serverside.]. JScript, Microsoft's reverse-engineered implementation of JavaScript, was bundled with IE3 in 1996. JScript was available for Internet Information Server (IIS) in the server-side.
 
-Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. Politics took over and a fourth edition never materialized. The commitee was split in two: ES3.1, which hailed an incremental approach to ES3; and ES4, a far more ambitious project introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features.
+The language started being standardized under the ECMAScript name (ES) into the ECMA-262 specification in 1996, under a technical commitee at ECMA known as TC39. The dispute by competing implementations, JavaScript by Netscape and JScript by Microsoft, dominated the TC39 standards commitee meetings at the time and "ECMAScript" was a compromise between both their names.
 
-It wouldn't be until August 2008footnote:[Brendan Eich sent an email to the es-discuss mailing list in 2008 where he summarized the situation, almost ten years after ES3 had been released: https://mjavascript.com/out/harmony.] when ES3.1 was agreed upon as the way forward, but later rebranded as ES5. Although ES4 would be abandoned, many of its features eventually made its way into ES6, and some of them still remain under consideration.
+The first edition of ECMA-262 was released June, 1997. A year later, in June 1998, the specification was tuned to adhere to the ISO/IEC 16262 international standard and formalized as the second edition.
 
-In December 2009, on the ten-year anniversary since the publication of ES3, the fifth edition of ECMAScript was published. This edition codified de facto interpretations of the language specification that have become common among browser implementations, adding get and set accessors, reflection and introspection, functional improvements to the +Array+ prototype, native support for JSON parsing, and strict mode.
+By December 1999 the third edition was published, introducing regular expressions, the +switch+ statement, +do+/+while+, +try+/+catch+ and +Object#hasOwnProperty+, among a few other changes.
+
+Drafts for an ES4 specification were soon afterwards published by TC39. This early work on ES4 led to JScript in mid 2000 and, eventually, to ActionScript 3 for Flash in 2006footnote:[Listen to Brendan Eich in the JavaScript Jabber podcast, talking about the origin of JavaScript: https://mjavascript.com/out/brendan-devchat.].
+
+Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. This was a delicate time for web standards: Microsoft had all but monopolized the web and they had little interest in standards development.
+
+As AOL laid off 50 Netscape employees in 2003footnote:[You can read a news report from July 2003 at: https://mjavascript.com/out/aol-netscape.], the Mozilla Foundation was formed. With over 95% of web browsing market share now in the hands of Microsoft, TC39 was disbanded.
+
+It took two years until Brendan, now at Mozilla, had ECMA resume work on TC39 by using Firefox's growing market share as leverage to get Microsoft back in the fold. By mid 2005, TC39 started meeting regularly once again.
+
+There were plans for introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features. Due to how ambitious the project was, work on ES4 was repeatedly delayed.
+
+By 2007 the commitee was split in two: ES3.1, which hailed a more incremental approach to ES3; and ES4, which was overdesigned and underspecified. It wouldn't be until August 2008footnote:[Brendan Eich sent an email to the es-discuss mailing list in 2008 where he summarized the situation, almost ten years after ES3 had been released: https://mjavascript.com/out/harmony.] when ES3.1 was agreed upon as the way forward, but later rebranded as ES5. Although ES4 would be abandoned, many of its features eventually made its way into ES6, and some of them still remain under consideration. The ES3.1 update served as the foundation on top of which the ES4 specification could be laid upon in bits and pieces.
+
+In December 2009, on the ten-year anniversary since the publication of ES3, the fifth edition of ECMAScript was published. This edition codified de facto interpretations of the language specification that had become common among browser implementations, adding get and set accessors, reflection and introspection, functional improvements to the +Array+ prototype, native support for JSON parsing, and strict mode.
 
 A couple of years later, in June 2011, the specification was once again aligned with the third edition of the international standard ISO/IEC 16262:2011, and formalized under ECMAScript 5.1.
 
-It took TC39, the technical committee that steers ECMAScript standard efforts, another four years to formalize ECMAScript 6. This edition is the largest update to the language that made its way into publication, implementing many of the proposals that were abandoned after the ES4 debacle. We'll be exploring ECMAScript 6 (ES6) in depth throughout this book.
+It took TC39 another four years to formalize ECMAScript 6, in June 2015. Starting with ES6, revisions are also known by their release year: ES6 is also known as ES2015, ES7 is also referred to as ES2016, and so on. The sixth edition is the largest update to the language that made its way into publication, implementing many of the proposals that were abandoned after the power struggle between ES3.1 and ES4. Throughout this book, we'll be exploring ES6 in depth.
 
-- explain the naming challenges post ES5: ES6/ES2015, ES7/ES2016, colloquial use, etc, lead into LS ..
+The sixth edition is a significant milestone in the history of JavaScript. Besides the dozens of new features, ES6 marks a key inflection point where ECMAScript would become a Living Standard.
 
 === 1.2 ECMAScript as a Living Standard
 
+Having spent ten years without observing significant change to the language specification after ES3, and four years for ES6 to materialize, it was clear the TC39 process needed to improve. The revision process used to be date-driven. Any delay in arriving at consensus would cause long wait periods between revisions, which lead to feature creep, causing more delays. Minor revisions were delayed by large additions to the specification, and large additions faced pressure to finalize so that the revision would be pushed through avoiding further delays.
+
+Since ES6 came out, TC39 has streamlinedfootnote:[You can find the September 2013 presentation which lead to the streamlined proposal revisioning process here: https://mjavascript.com/out/tc39-improvement.] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using Ecmarkup and GitHub Pull Requests, greatly increasing the number of proposalsfootnote:[You can find all proposals being considered by TC39 at https://mjavascript.com/out/tc39-proposals.] being created as well as external participation by non-members.
+
+Firefox, Chrome, Edge, Safari and Node.js all offer over 95% compliancy of the ES6 specification,footnote:[For a detailed ES6 compatibility report across browsers, check out the following table: https://mjavascript.com/out/es6-compat.] but we’ve been able to use the features as they came out in each of these browsers rather than having to wait until the flip of a switch when their implementation of ES6 was 100% finalized.
+
+The new process involves four different maturity stagesfootnote:[The TC39 proposal process documentation can be found at https://mjavascript.com/out/tc39-process.]. The more mature a proposal is, the more likely it is to eventually make it into the specification.
+
+Any discussion, idea or proposal for a change or addition which has not been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0) and has no acceptance requirements. At the time of this writing, there's over a dozen active stage 0 proposalsfootnote:[You can track stage 0 proposals here: https://mjavascript.com/out/tc39-stage0.].
+
+At stage 1 a proposal is formalized and expected to address cross-cutting concerns, interactions with other proposals, and implementation concerns. Proposals at this stage should identify a discrete problem and offer a concrete solution to the problem. A stage 1 proposal often includes a high level API description, illustrative usage examples and a discussion of internal semantics and algorithms. Stage 1 proposals are likely to change significantly as they make their way through the process.
+
+Proposals in stage 2 offer an initial draft of the specification. At this point, it's reasonable to begin experimenting with actual implementations in runtimes. The implementation could come in the form of a polyfill, user code that mangles the runtime into adhering to the proposal; an engine implementation, natively providing support for the proposal; or compiled into something existing engines can execute, using build-time tools to transform source code.
+
+Proposals in stage 3 are candidate recommendations. At this point, implementors have expressed interest in the proposal. In practice, proposals move to this level with at least one browser implementation, a high-fidelity polyfill or when supported by a build-time compiler like Babel. At this stage, a proposal is unlikely to change beyond fixes to issues identified in the wild.
+
+In order for a proposal to attain stage 4 status, two independent implementations need to pass conformance tests. Proposals that make their way through to stage four will be included in the next revision of ECMAScript.
+
+Starting with ES6, new releases of the specification are expected to be published every year from now on. To accomodate the yearly release schedule, versions will now be referred to by their publication year. Thus ES6 becomes ES2015, ES7 is ES2016, and so on. Colloquially, ES2015 hasn't taken and is still largely regarded as ES6. ES7 had been announced before the naming convention changed, thus it is only sometimes referred to as ES2016.
+
+It may be expected that, going forward, ES2017 and beyond aren't referenced by the old naming convention anymore. The streamlined proposal process combined with the yearly cut into standardization translates into a more consistent publication process, and it also means specification revision numbers are becoming less important. The focus is now on proposal stagesfootnote:[For a full list of currently active proposals in the multi-staged TC39 process, see https://mjavascript.com/out/tc39-proposals.], and we can expect references to specific revisions of the ECMAScript standard to become more uncommon.
+
+=== 1.3 Browser Support and Complementary Tooling
+
+A stage 3 candidate recommendation proposal is most likely to make it into the specification in the next cut, provided two independent implementations land in JavaScript engines. Effectively, stage 3 proposals are considered safe to use in real-world applications, be it through an experimental engine implementation, a polyfill, or using a compiler. Stage 2 and earlier proposals are also used in the wild by JavaScript developers, tightening the feedback loop between implementors and consumers.
+
+Babel and similar compilers that take code as input and produce output native to the web platform (HTML, CSS or JavaScript) are often referred to as transpilers, which are considered to be a subset of compilers. When we want to leverage a proposal that's not widely implemented in JavaScript engines in our code, compilers like Babel can transform the portions of code using that new proposal into something that's more widely supported by existing JavaScript implementations.
+
+This transformation can be done at build-time, so that consumers receive code that's well supported by their JavaScript runtime of choice. This mechanism improves the runtime support baseline, giving JavaScript developers the ability to take advantage of new language features and syntax sooner. It is also significantly benefitial to specification writers and implementors, as it allows them to collect feedback regarding viability, desirability, and possible bugs or corner cases.
+
+A transpiler can take the ES6 source code we write and produce ES5 code that browsers can interpret more consistently. This is the most reliable way of running ES6 code in production today: using a build step to produce ES5 code that any modern browser can execute.
+
+The same applies to ES7 and beyond. As new versions of the language specification are released every year, we can expect compilers to support ES2017 input, ES2018 input and beyond. Similarly, as browser support becomes better, we can also expect compilers to reduce complexity in favor of ES6 output, then ES7 output, and so on. In this sense, we can think of JavaScript-to-JavaScript transpilers as a moving window that takes code written using the latest available language semantics and produces the most modern code they can output without compromising browser support.
+
+Let's talk about how you can use Babel in your programs.
+
+==== 1.3.1 Introduction to the Babel transpiler
+
+Babel can compile modern JavaScript code using ES6 features into ES5. It produces human-readable code, making it more welcoming when we don't have a firm grasp on all of the new features we're using. Babel is a Node.js package, and you can install it through +npm+, the package manager for Node.
+
+[NOTE]
+====
+You can download Node.js from their website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the +npm+ command-line tool in your terminal.
+====
+
+Before getting started we'll create a project directory and a +package.json+ file, which is a manifest used to describe Node.js applications. We'll create a +package.json+ file through the +npm+ CLI as well.
+
+[source,shell]
+----
+mkdir babel-setup
+cd babel-setup
+npm init --yes
+----
+
+[NOTE]
+====
+Passing the +--yes+ flag to the +init+ command configures +package.json+ using the default values provided by +npm+, instead of asking us any questions.
+====
+
+Let's also create a file named +example.js+, containing the following bits of ES6 code. Save it to the +babel-setup+ directory you've just created, under a +src+ sub-directory.
+
+[source,javascript]
+----
+var double = value => value * 2
+console.log(double(3))
+// <- 6
+----
+
+To install Babel, enter the following couple of commands into your favorite terminal.
+
+[source,shell]
+----
+npm install babel-cli@6 --save-dev
+npm install babel-preset-es2015@6 --save-dev
+----
+
+[NOTE]
+====
+Packages installed by +npm+ will be placed in a +node_modules+ directory at the project root. We can then access these packages by creating npm scripts or by using +require+ statements in our application.
+
+Using the +--save-dev+ flag will add these packages to our +package.json+ manifest as development dependencies, so that when copying our project to new environments we can reinstall every dependency just by running +npm install+.
+
+The +@+ notation indicates we want to install a specific version of a package. Using +@6+ we're telling +npm+ to install the latest version of +babel-cli+ in the +6.x+ branch. This preference is handy to future-proof our applications, as it would never install version, which might contain breaking changes that could not have been foreseen at the time of this writing.
+====
+
+For the next step, we'll replace the value of the +scripts+ property in +package.json+ with the following. The +babel+ command-line utility provided by +babel-cli+ can take the entire contents of our +src+ directory, compile them into the desired output format, and save the results to a +dist+ directory, while preserving the original directory structure under a different root.
+
+[source,json]
+----
+{
+  "build": "babel src --out-dir dist"
+}
+----
+
+[NOTE]
+====
+Scripts enumerated in this object can be executed through +npm run <name>+, which modifies the +$PATH+ environment variable so that we can run the command-line executables found in +babel-cli+ without installing +babel-cli+ globally on our system.
+====
+
+If you run +npm run build+ now, you'll notice that a +dist/example.js+ file is created. The output file will be identical to our original file, because Babel doesn't make assumptions, and we have to configure it first. Create a +.babelrc+ file next to +package.json+, and write the following JSON in it.
+
+[source,json]
+----
+{
+  "presets": ["es2015"]
+}
+----
+
+Alternatively, you can add that configuration inline in +package.json+, under a +babel+ property.
+
+[source,json]
+----
+"babel": {
+  "presets": ["es2015"]
+}
+----
+
+The +es2015+ preset, which we had installed earlier via +npm+, adds a series of plugins to Babel which transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our +example.js+ file into ES5 code.
+
+Once we run our build script again, we'll observe that the output is now valid ES5 code.
+
+[source,shell]
+----
+» npm run build
+» cat dist/example.js
+"use strict";
+
+var double = function double(value) {
+  return value * 2;
+};
+console.log(double(3));
+// <- 6
+----
+
+
+
 ..
 
-=== 1.3 Feature Themes in ES6
 
-..
 
-=== 1.4 Tooling
 
-..
+
+- more babel
+
+
+
+
+
+
+==== 1.3.3 Code Quality and Consistency with ESLint
+
+
+
+
+
+
+- eslint
+
+
+
+=== 1.4 Feature Themes in ES6
+
+- better syntax, etc
+
+
+
+=== 1.5 Future of JavaScript
+
+- conclusions, concrete proposals in pipeline, etc
+
+- proposals https://mjavascript.com/out/tc39-proposals and the future, challenges of describing ever-evolving language
