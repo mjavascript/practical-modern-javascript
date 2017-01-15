@@ -607,7 +607,7 @@ console.log(morphling + ' is powerful')
 // <- '[object Morphling] is powerful'
 ----
 
-Another example of a well-known symbol is +Symbol.match+. A regular expression that sets +Symbol.match+ to +true+ will be treated as a string literal when passed to +.startsWith+, +.endsWith+, or +.includes+. These three functions are new string methods in ES6. First we have +.startsWith+, which can be used to determine if the string starts with another string. Then there's +.endsWith+, that finds out whether the string ends in another one. Lastly, the +.includes+ method returns +true+ if a string contains another one. The next snippet of code shows how +Symbol.match+ can be used to compare a string with the string representation of a regular expression.
+Another example of a well-known symbol is +Symbol.match+. A regular expression that sets +Symbol.match+ to +false+ will be treated as a string literal when passed to +.startsWith+, +.endsWith+, or +.includes+. These three functions are new string methods in ES6. First we have +.startsWith+, which can be used to determine if the string starts with another string. Then there's +.endsWith+, that finds out whether the string ends in another one. Lastly, the +.includes+ method returns +true+ if a string contains another one. The next snippet of code shows how +Symbol.match+ can be used to compare a string with the string representation of a regular expression.
 
 [source,javascript]
 ----
