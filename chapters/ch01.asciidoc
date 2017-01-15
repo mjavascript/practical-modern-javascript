@@ -113,8 +113,8 @@ To install Babel, enter the following couple of commands into your favorite term
 
 [source,shell]
 ----
-npm install babel-cli@6 --save-dev
-npm install babel-preset-es2015@6 --save-dev
+npm install babel-cli​@6 --save-dev
+npm install babel-preset-es2015​@6 --save-dev
 ----
 
 [NOTE]
@@ -175,36 +175,12 @@ console.log(double(3));
 // <- 6
 ----
 
-
-
 ..
-
-
-
-
-
-- more babel
-
-
-
-
-
-
-==== 1.3.3 Code Quality and Consistency with ESLint
-
-
-
-
-
-
-- eslint
-
-
 
 === 1.4 Feature Themes in ES6
 
 - better syntax, etc
-
+..
 
 
 === 1.5 Future of JavaScript
