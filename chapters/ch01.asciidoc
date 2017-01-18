@@ -175,7 +175,110 @@ console.log(double(3));
 // <- 6
 ----
 
-..
+As an alternative to the command-line tool, we can use with the Babel online REPL (Read-Evaluate-Print Loop). This REPL is an excellent way of jumping right into learning ES6, without any of the hassle of installing Node.js, the +babel+ CLI, and manually compiling source code. You can find the REPL at: https://mjavascript.com/out/babel-repl.
+
+The REPL provides us with a source code input area that gets automatically compiled in real-time. We can see the compiled code to the right of our source code.
+
+image::../images/c01g01-babel-repl.png["Babel REPL"]
+
+The Babel REPL is an effective companion as a way of trying out some of the features introduced in this book. However, note that Babel doesn't transpile built-ins, such as +Symbol+, +Proxy+ and +WeakMap+, hoping that the runtime executing its output code provides those built-ins.
+
+In older versions of JavaScript, semantically correct implementations of these features are hard to accomplish or downright impossible. Polyfills exist and may mitigate the problem, but they often can't cover all use cases and thus some compromises need to be made. We need to be careful and test our assumptions before we release transpiled code that relies on built-ins into the wild.
+
+Given the situation, it might be best to wait until browsers support new built-ins holistically before we start using them. It is suggested that you consider alternative solutions that don't rely on built-ins. At the same time, it's important to learn about these features, as to not fall behind in our understanding of the JavaScript language.
+
+Modern browsers like Chrome, Firefox and Edge now support a large portion of ES2015 and beyond, making their developer tools useful when we want to take the semantics of a particular feature for a spin, provided it's supported by the browser. When it comes to production-grade applications that rely on modern JavaScript features, a transpilation build-step is advisable so that your application supports a wider array of JavaScript runtimes.
+
+Let's jump into a different kind of tool, the +eslint+ code linter, which can help us establish a code quality baseline for our applications.
+
+==== 1.3.3 Code Quality and Consistency with ESLint
+
+As we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
+
+A lint tool can be used to identify syntax errors. Modern linters are often customizable, helping establish a coding style convention that works for everyone on the team. By adhering to a consistent set of style rules and a quality baseline, we bring the team closer together in terms of coding style. Every team member has different opinions about coding styles, but those opinions can be condensed into style rules once we put a linter in place and agree upon a configuration.
+
+Beyond ensuring a program can be parsed, we might want to prevent +throw+ statements throwing string literals as exceptions, or disallow +console.log+ and +debugger+ statements in production code. However, a rule demanding that every function call must have exactly one argument is probably too harsh.
+
+While linters are effective at defining and enforcing a coding style, we should be careful when devising a set of rules. If the lint step is too stringent, developers may become frustrated to the point where productivity is affected. If the lint step is too lenient, it may not yield a consistent coding style across our codebase.
+
+In order to strike the right balance, we may consider avoiding style rules that don't improve our programs in the majority of cases when they're applied. Whenever we're considering a new rule, we should ask ourselves whether it would noticeably improve our existing codebase, as well as new code going forward.
+
+ESLint is a modern linter we could use. It comes with several plugins sporting different rules, and we can pick and choose which ones we want to enforce. We decide whether failing to stick by these rules should result in an error or just a warning displayed in the output. To install +eslint+, we'll use +npm+ just like we did with +babel+ in the previous section.
+
+[source,shell]
+----
+npm install eslint@3 --save-dev
+----
+
+Next, we need to configure ESLint. Since we installed +eslint+ as a local dependency, we'll find its command-line tool in +node_modules/.bin+. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standard, then pick JSON format for the configuration file.
+
+[source,shell]
+----
+./node_modules/.bin/eslint --init
+? How would you like to configure ESLint? Use a popular style guide
+? Which style guide do you want to follow? Standard
+? What format do you want your config file to be in? JSON
+----
+
+Besides individual rules, +eslint+ allows us to extend a named configuration, containing a predefined set of rules. This is useful when sharing configuration across multiple projects, and even across a community. After picking Standard, we'll notice that ESLint creates a configuration file named +.eslintrc.json+ with the following contents.
+
+[source,json]
+----
+{
+  "extends": "standard",
+  "plugins": [
+    "standard",
+    "promise"
+  ]
+}
+----
+
+We don't want to reference the +node_modules+ directory when we lint our codebase. To solve this problem, we'll add the +lint+ script in the next code snippet to our +package.json+.
+
+[source,json]
+----
+"lint": "eslint ."
+----
+
+As you might recall from the Babel example, +npm+ add +node_modules+ to the +PATH+ when executing scripts. To lint our codebase, we can now simply execute +npm run lint+.
+
+Consider the following +example.js+ file, which is purposely ridden with style issues.
+
+[source,json]
+----
+var goodbye='Goodbye!';
+
+function hello(){
+  return goodbye}
+
+if(false){}
+----
+
+When we run the +lint+ script, ESLint describes everything that's wrong with the file.
+
+image::../images/c01g02-eslint-cli.png["Validating a piece of source code through ESLint."]
+
+ESLint is able to fix most style problems automatically when we pass in a +--fix+ flag. Add the following script to your +package.json+.
+
+[source,json]
+----
+"lint-fix": "eslint . --fix"
+----
+
+When we run +lint-fix+ we'll only get a pair of errors: +hello+ is never used and +false+ is a constant condition. Every other error has been fixed, resulting in the bit of source code found below. The remaining errors weren't fixed because ESLint avoids making semantic changes. In doing so, +--fix+ becomes a useful tool to resolve code style wrinkles without risking a broken program as a result.
+
+[source,json]
+----
+var goodbye = 'Goodbye!'
+
+function hello () {
+  return goodbye
+}
+
+if (false) {}
+----
+
+Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint your code, let's jump into ES6 feature themes and the future of JavaScript.
 
 === 1.4 Feature Themes in ES6
 
