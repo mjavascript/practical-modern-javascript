@@ -140,7 +140,7 @@ For the next step, we'll replace the value of the +scripts+ property in +package
 Scripts enumerated in this object can be executed through +npm run <name>+, which modifies the +$PATH+ environment variable so that we can run the command-line executables found in +babel-cli+ without installing +babel-cli+ globally on our system.
 ====
 
-If you run +npm run build+ now, you'll notice that a +dist/example.js+ file is created. The output file will be identical to our original file, because Babel doesn't make assumptions, and we have to configure it first. Create a +.babelrc+ file next to +package.json+, and write the following JSON in it.
+If you execute +npm run build+ in your terminal now, you'll note that a +dist/example.js+ file is created. The output file will be identical to our original file, because Babel doesn't make assumptions, and we have to configure it first. Create a +.babelrc+ file next to +package.json+, and write the following JSON in it.
 
 [source,json]
 ----
@@ -203,7 +203,7 @@ While linters are effective at defining and enforcing a coding style, we should 
 
 In order to strike the right balance, we may consider avoiding style rules that don't improve our programs in the majority of cases when they're applied. Whenever we're considering a new rule, we should ask ourselves whether it would noticeably improve our existing codebase, as well as new code going forward.
 
-ESLint is a modern linter we could use. It comes with several plugins sporting different rules, and we can pick and choose which ones we want to enforce. We decide whether failing to stick by these rules should result in an error or just a warning displayed in the output. To install +eslint+, we'll use +npm+ just like we did with +babel+ in the previous section.
+ESLint is a modern linter that packs several plugins, sporting different rules, allowing us to pick and choose which ones we want to enforce. We decide whether failing to stick by these rules should result in a warning being printed as part of the output, or a halting error. To install +eslint+, we'll use +npm+ just like we did with +babel+ in the previous section.
 
 [source,shell]
 ----
@@ -220,7 +220,7 @@ Next, we need to configure ESLint. Since we installed +eslint+ as a local depend
 ? What format do you want your config file to be in? JSON
 ----
 
-Besides individual rules, +eslint+ allows us to extend a named configuration, containing a predefined set of rules. This is useful when sharing configuration across multiple projects, and even across a community. After picking Standard, we'll notice that ESLint creates a configuration file named +.eslintrc.json+ with the following contents.
+Besides individual rules, +eslint+ allows us to extend predefined sets of rules, which are packaged up as Node.js modules. This is useful when sharing configuration across multiple projects, and even across a community. After picking Standard, we'll notice that ESLint adds a few dependencies to +package.json+, namely the packages that define the predefined Standard ruleset; and then creates a configuration file, named +.eslintrc.json+, with the following contents.
 
 [source,json]
 ----
@@ -233,16 +233,16 @@ Besides individual rules, +eslint+ allows us to extend a named configuration, co
 }
 ----
 
-We don't want to reference the +node_modules+ directory when we lint our codebase. To solve this problem, we'll add the +lint+ script in the next code snippet to our +package.json+.
+Referencing the +node_modules/.bin+ directory, an implementation detail of how npm works, is far from ideal. While we used it when initializing our ESLint configuration, we shouldn't keep this reference around nor type it out whenever we lint our codebase. To solve this problem, we'll add the +lint+ script in the next code snippet to our +package.json+.
 
 [source,json]
 ----
 "lint": "eslint ."
 ----
 
-As you might recall from the Babel example, +npm+ add +node_modules+ to the +PATH+ when executing scripts. To lint our codebase, we can now simply execute +npm run lint+.
+As you might recall from the Babel example, +npm+ add +node_modules+ to the +PATH+ when executing scripts. To lint our codebase, we can execute +npm run lint+ and npm will find the ESLint CLI embedded deep in the +node_modules+ directory.
 
-Consider the following +example.js+ file, which is purposely ridden with style issues.
+Let's consider the following +example.js+ file, which is purposely ridden with style issues, to demonstrate what ESLint does.
 
 [source,json]
 ----
@@ -258,14 +258,14 @@ When we run the +lint+ script, ESLint describes everything that's wrong with the
 
 image::../images/c01g02-eslint-cli.png["Validating a piece of source code through ESLint."]
 
-ESLint is able to fix most style problems automatically when we pass in a +--fix+ flag. Add the following script to your +package.json+.
+ESLint is able to fix most style problems automatically if we pass in a +--fix+ flag. Add the following script to your +package.json+.
 
 [source,json]
 ----
 "lint-fix": "eslint . --fix"
 ----
 
-When we run +lint-fix+ we'll only get a pair of errors: +hello+ is never used and +false+ is a constant condition. Every other error has been fixed, resulting in the bit of source code found below. The remaining errors weren't fixed because ESLint avoids making semantic changes. In doing so, +--fix+ becomes a useful tool to resolve code style wrinkles without risking a broken program as a result.
+When we run +lint-fix+ we'll only get a pair of errors: +hello+ is never used and +false+ is a constant condition. Every other error has been fixed in place, resulting in the bit of source code found below. The remaining errors weren't fixed because ESLint avoids making assumptions about our code, and prefers not to incur in semantic changes. In doing so, +--fix+ becomes a useful tool to resolve code style wrinkles without risking a broken program as a result.
 
 [source,json]
 ----
