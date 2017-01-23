@@ -25,9 +25,7 @@ Conflicting opinions on how JavaScript was to move forward brought work on the s
 
 As AOL laid off 50 Netscape employees in 2003footnote:[You can read a news report from July 2003 at: https://mjavascript.com/out/aol-netscape.], the Mozilla Foundation was formed. With over 95% of web browsing market share now in the hands of Microsoft, TC39 was disbanded.
 
-It took two years until Brendan, now at Mozilla, had ECMA resume work on TC39 by using Firefox's growing market share as leverage to get Microsoft back in the fold. By mid 2005, TC39 started meeting regularly once again.
-
-There were plans for introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features. Due to how ambitious the project was, work on ES4 was repeatedly delayed.
+It took two years until Brendan, now at Mozilla, had ECMA resurrect work on TC39 by using Firefox's growing market share as leverage to get Microsoft back in the fold. By mid 2005, TC39 started meeting regularly once again. As for ES4, there were plans for introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features. Due to how ambitious the project was, work on ES4 was repeatedly delayed.
 
 By 2007 the commitee was split in two: ES3.1, which hailed a more incremental approach to ES3; and ES4, which was overdesigned and underspecified. It wouldn't be until August 2008footnote:[Brendan Eich sent an email to the es-discuss mailing list in 2008 where he summarized the situation, almost ten years after ES3 had been released: https://mjavascript.com/out/harmony.] when ES3.1 was agreed upon as the way forward, but later rebranded as ES5. Although ES4 would be abandoned, many of its features eventually made its way into ES6, and some of them still remain under consideration. The ES3.1 update served as the foundation on top of which the ES4 specification could be laid upon in bits and pieces.
 
@@ -37,9 +35,9 @@ A couple of years later, in June 2011, the specification was once again aligned 
 
 It took TC39 another four years to formalize ECMAScript 6, in June 2015. Starting with ES6, revisions are also known by their release year: ES6 is also known as ES2015, ES7 is also referred to as ES2016, and so on. The sixth edition is the largest update to the language that made its way into publication, implementing many of the proposals that were abandoned after the power struggle between ES3.1 and ES4. Throughout this book, we'll be exploring ES6 in depth.
 
-The sixth edition is a significant milestone in the history of JavaScript. Besides the dozens of new features, ES6 marks a key inflection point where ECMAScript would become a Living Standard.
+The sixth edition is a significant milestone in the history of JavaScript. Besides the dozens of new features, ES6 marks a key inflection point where ECMAScript would become a rolling standard.
 
-=== 1.2 ECMAScript as a Living Standard
+=== 1.2 ECMAScript as a Rolling Standard
 
 Having spent ten years without observing significant change to the language specification after ES3, and four years for ES6 to materialize, it was clear the TC39 process needed to improve. The revision process used to be date-driven. Any delay in arriving at consensus would cause long wait periods between revisions, which lead to feature creep, causing more delays. Minor revisions were delayed by large additions to the specification, and large additions faced pressure to finalize so that the revision would be pushed through avoiding further delays.
 
@@ -191,7 +189,7 @@ Modern browsers like Chrome, Firefox and Edge now support a large portion of ES2
 
 Let's jump into a different kind of tool, the +eslint+ code linter, which can help us establish a code quality baseline for our applications.
 
-==== 1.3.3 Code Quality and Consistency with ESLint
+==== 1.3.2 Code Quality and Consistency with ESLint
 
 As we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
 
@@ -282,12 +280,36 @@ Now that you know how to compile modern JavaScript into something every browser 
 
 === 1.4 Feature Themes in ES6
 
-- better syntax, etc
-..
+ES6 is big: the language specification went from 258 pages in ES5.1 to over double that amount in ES6, at 566 pages. Each change to the specification falls in some of a few different categories:
 
+- Syntactic sugar
+- New mechanics
+- Better semantics
+- More built-ins and methods
+- Non-breaking solutions to existing limitations
+
+Syntactic sugar is one of the most significant drivers in ES6. The new version offers a shorter ways of expressing object inheritance, using the new class syntax; functions, using a shorthand syntax known as arrow functions; and properties, using property value shorthands. Several other features we'll explore, such as destructuring, rest and spread, also offer semantically sound ways of writing programs. Chapters 2 and 3 attack these aspects of ES6.
+
+We get several new mechanics to describe asynchronous code flows in ES6: promises, which represent the eventual result of an operation; iterators, which represent a sequence of values; and generators, a special kind of iterator which can produce a sequence of values. In ES2017, +async+/+await+ builds on top of these new concepts and constructs, letting us write asynchronous routines that appear synchronous. We'll evaluate all of these iteration and flow control mechanisms in chapter 4.
+
+There's a common practice in JavaScript where developers use plain objects to create hash maps with arbitrary string keys. This can lead to vulnerabilities if we're not careful and let user input end up defining those keys. ES6 introduces a few different native built-ins to manage sets and maps, which don't have the limitation of using string keys exclusively. These collections are explored in chapter 5.
+
+Proxy objects redefine what can be done through JavaScript reflection. Proxy objects are similar to proxies in other contexts, such as web traffic routing. They can intercept any interaction with a JavaScript object such as defining, deleting, or accessing a property. Given the mechanics of how proxies work, they are impossible to implement holistically as a polyfill. We'll devote chapter 6 to understanding proxies.
+
+Besides new built-ins, ES6 comes with several updates to +Number+, +Math+, +Array+, and strings. In chapter 7 we'll go over a plethora of new instance and static methods added to these built-ins.
+
+We are getting a new module system that's native to JavaScript. After going over the CommonJS module format that's used in Node.js, chapter 8 explains the semantics we can expect from native JavaScript modules.
+
+Due to the sheer amount of changes introduced by ES6, it's hard to reconcile its new features with our pre-existing knowledge of JavaScript. We'll spend all of chapter 9 analyzing the merits and importance of different individual features in ES6, so that you have a practical grounding upon which you can start experimenting with ES6 right away.
 
 === 1.5 Future of JavaScript
 
-- conclusions, concrete proposals in pipeline, etc
+The JavaScript language has evolved from its humble beginnings in 1995, to the formidable language it is today. While ES6 is a great step forward, it's not the finish line. Given we can expect new specification updates every year, it's important to learn how to stay up to date with the specification.
 
-- proposals https://mjavascript.com/out/tc39-proposals and the future, challenges of describing ever-evolving language
+Having gone over the rolling standard specification development process in section 1.2, one of the best ways to keep up with the standard is by periodically visiting the TC39 proposals repositoryfootnote:[You can find TC39 proposals at: https://mjavascript.com/out/tc39-proposals.]. Keep an eye on candidate recommendations (stage 3), which are likely to make their way into the specification.
+
+Describing an ever-evolving language in a book can be challenging, given the rolling nature of the standards process. An effective way of keeping up to date with the latest JavaScript updates is by watching the TC39 proposals repository, subscribing to weekly email newslettersfootnote:[Consider Pony Foo Weekly (https://mjavascript.com/out/pfw) and JavaScript Weekly (https://mjavascript.com/out/jsw). There's many other newsletters you can follow.] and reading JavaScript blogsfootnote:[Many of the articles on Pony Foo (https://mjavascript.com/out/pf) and by Axel Rauschmayer (https://mjavascript.com/out/ar) focus on ECMAScript development].
+
+At the time of this writing, the long awaited Async Functions proposal has made it into the specification and is slated for publication in ES2017. There are several candidates at the moment, such as an +import()+ function that enables dynamic loading of native JavaScript modules, and a proposal to describe object property enumerations using the new rest and spread syntax that was first introduced for parameter lists and arrays in ES6.
+
+While the primary focus in this book is on ES6, we'll also learn about important candidate recommendations such as the aforementioned async functions, dynamic +import()+ calls, or object rest/spread.
