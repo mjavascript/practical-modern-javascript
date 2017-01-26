@@ -15,7 +15,7 @@ This revision of JavaScript was marketed as LiveScript when it started shipping 
 
 The language started being standardized under the ECMAScript name (ES) into the ECMA-262 specification in 1996, under a technical commitee at ECMA known as TC39. Sun wouldn't transfer ownership of the JavaScript trademark to ECMA, and while Microsoft offered JScript, other member companies didn't want to use that name, so ECMAScript stuck.
 
-Disputes by competing implementations, JavaScript by Netscape and JScript by Microsoft, dominated most of the TC39 standards commitee meetings at the time. Even so, the committee was already bearing fruit: backward compatibility was established as a golden rule, bringing about strict equality operators (+===+ and +!==+) instead of breaking existing programs that relied on the loose equality compasion algorithm.
+Disputes by competing implementations, JavaScript by Netscape and JScript by Microsoft, dominated most of the TC39 standards commitee meetings at the time. Even so, the committee was already bearing fruit: backward compatibility was established as a golden rule, bringing about strict equality operators (+===+ and +!==+) instead of breaking existing programs that relied on the loose equality comparision algorithm.
 
 The first edition of ECMA-262 was released June, 1997. A year later, in June 1998, the specification was refined under the ISO/IEC 16262 international standard, after much scrutiny from national ISO bodies, and formalized as the second edition.
 
