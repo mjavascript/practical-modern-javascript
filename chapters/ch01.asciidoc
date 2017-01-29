@@ -59,7 +59,7 @@ Proposals in stage 2 offer an initial draft of the specification. At this point,
 
 Proposals in stage 3 are candidate recommendations. At this point, implementors have expressed interest in the proposal. In practice, proposals move to this level with at least one browser implementation, a high-fidelity polyfill or when supported by a build-time compiler like Babel. At this stage, a proposal is unlikely to change beyond fixes to issues identified in the wild.
 
-In order for a proposal to attain stage 4 status, two independent implementations need to pass conformance tests. Proposals that make their way through to stage four will be included in the next revision of ECMAScript.
+In order for a proposal to attain stage 4 status, two independent implementations need to pass acceptance tests. Proposals that make their way through to stage four will be included in the next revision of ECMAScript.
 
 Starting with ES6, new releases of the specification are expected to be published every year from now on. To accommodate the yearly release schedule, versions will now be referred to by their publication year. Thus ES6 becomes ES2015, ES7 is ES2016, and so on. Colloquially, ES2015 hasn't taken and is still largely regarded as ES6. ES7 had been announced before the naming convention changed, thus it is only sometimes referred to as ES2016.
 

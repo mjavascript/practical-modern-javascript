@@ -980,9 +980,76 @@ c`, 2)
 // <- `  a\n  b\n  c`
 ----
 
+==== 7.3.5 String Padding and Trimming
+
+At the time of this writing, there's two new string padding methods slated for publication in ES2017: +String#padStart+ and +String#padEnd+. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
+
+Using +padStart+, we will specify the desired length for the target string and the padding string, which defaults to a single space character. If the original string is at least as long as the specified length, +padStart+ will result in a null operation, returning the original string unchanged.
+
+In the following example, the desired length of a properly padded string is 5, and the original string already has a length of at least 5, so it's returned unchanged.
+
+[source,javascript]
+----
+'01.23'.padStart(5)
+// <- '01.23'
+----
+
+In the next example, the original string has a length of 4, thus +padStart+ adds a single space at the beginning of the string, bringing the length to the desired value of 5.
+
+[source,javascript]
+----
+'1.23'.padStart(5)
+// <- ' 1.23'
+----
+
+The next example is just like the previous one, except it uses +'0'+ for padding instead of the default +' '+ value.
+
+[source,javascript]
+----
+'1.23'.padStart(5, '0')
+// <- '01.23'
+----
+
+Note that +padStart+ will keep padding the string until the maximum length is reached.
+
+[source,javascript]
+----
+'1.23'.padStart(7, '0')
+// <- '0001.23'
+----
+
+However, if the padding string is too long, it may be truncated. The provided length is the maximum length of the padded string, except in the case where the original string is already larger than that.
+
+[source,javascript]
+----
+'1.23'.padStart(7, 'abcdef')
+// <- 'abc1.23'
+----
+
+The +padEnd+ method has a similar API, but it adds the padding at the end of the original string, instead of at the beginning. The following snippet illustrates the difference.
+
+[source,javascript]
+----
+'01.23'.padEnd(5) // <- '01.23'
+'1.23'.padEnd(5) // <- '1.23 '
+'1.23'.padEnd(5, '0') // <- '1.230'
+'1.23'.padEnd(7, '0') // <- '1.23000'
+'1.23'.padEnd(7, 'abcdef') // <- '1.23abc'
+----
+
+At the time of this writing, there's a proposal for string trimming in stage 2, containing the +String#trimStart+ and +String#trimEnd+ methods. Using +trimStart+ removes any whitespace from the beginning of a string, while using +trimEnd+ removes any whitespace from the end of a string.
+
+[source,javascript]
+----
+'   this should be left-aligned   '.trimStart()
+// <- 'this should be left-aligned   '
+'   this should be right-aligned   '.trimEnd()
+// <- '   this should be right-aligned'
+----
+
 Let's switch protocols and learn about Unicode.
 
-==== 7.3.5 Unicode
+==== 7.3.6 Unicode
 
 JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
 
@@ -1033,7 +1100,7 @@ for (let i = 0; i < text.length; i++) {
 
 Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the string iterator to go over code points, even when those code points are made of surrogate pairs.
 
-==== 7.3.6 +String.prototype[Symbol.iterator]+
+==== 7.3.7 +String.prototype[Symbol.iterator]+
 
 Given the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
 
@@ -1097,7 +1164,7 @@ As Unicode expert Mathias Bynens points out, splitting by code points isn't enou
 
 Let's look at more Unicode-related methods introduced in ES6.
 
-==== 7.3.7 +String#codePointAt+
+==== 7.3.8 +String#codePointAt+
 
 We can use +String#codePointAt+ to get the base-10 numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo +`🐎👱❤`+ string.
 
@@ -1157,7 +1224,7 @@ We could wrap those base-16 values in +`\u{codePoint}`+ and voilá: you'd get th
 // <- `❤`
 ----
 
-==== 7.3.8 +String.fromCodePoint+
+==== 7.3.9 +String.fromCodePoint+
 
 This method takes in a number and returns a code point. Note how I can use the +0x+ prefix with the terse base-16 code points we got from +String#codePointAt+ moments ago.
 
@@ -1205,7 +1272,7 @@ const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 
 Reversing an string has potential to cause issues as well.
 
-==== 7.3.9 Unicode-Aware String Reversal
+==== 7.3.10 Unicode-Aware String Reversal
 
 Consider the following piece of code.
 
@@ -1237,7 +1304,7 @@ This way we avoid breaking up code points. Once again, keep in mind that this wo
 
 The last Unicode-related method we'll be addressing is +.normalize+.
 
-==== 7.3.10 +String#normalize+
+==== 7.3.11 +String#normalize+
 
 There are different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
 
