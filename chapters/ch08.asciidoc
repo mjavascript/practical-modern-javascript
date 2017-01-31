@@ -479,6 +479,75 @@ counter.increment()
 console.log(counter.default) // <- 2
 ----
 
+==== 8.2.4 Dynamic +import()+ Statements
+
+At the time of this writing, a proposal for dynamic +import()+footnote:[You can find the proposal specification draft here: https://mjavascript.com/out/dynamic-import.] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike +import+ statements, which are statically analyzed and linked, +import()+ loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
+
+The module specifier can be any string, like with +import+ statements. Keep in mind +import+ statements only allow statically defined plain string literals as module specifiers. In contrast, we're able to use template literals or any valid JavaScript expression to produce the module specifier string for +import()+ function calls.
+
+Imagine you're looking to internationalize an application based on the language provided by user agents. You might statically import a +localizationService+, and then dynamically import the localized data for a given language using +import()+ and a module specifier built using a template literal which interpolates +navigator.language+, as shown in the following example.
+
+[source,javascript]
+----
+import localizationService from './localizationService'
+import(`./localizations/${ navigator.language }.json`)
+  .then(module => localizationService.use(module))
+----
+
+Just like with +import+ statements, the mechanism for retrieving the module is unspecified and left up to the host environment.
+
+The proposal does specify that once the module is resolved, the promise should fulfill with its namespace object. It also specifies that whenever an error results in the module failing to load, the promise should be rejected.
+
+This allows for loading non-critical modules asynchronously, without blocking page load, and being able to gracefully handle failure scenarios when such module fails to load, as demonstrated next.
+
+[source,javascript]
+----
+import(`./vendor/jquery.js`)
+  .then($ => {
+    // use jquery
+  })
+  .catch(() => {
+    // failed to load jquery
+  })
+----
+
+We could load multiple modules asynchronously using +Promise.all+. The following example imports three modules and then leverages destructuring to reference them directly in the +.then+ clause.
+
+[source,javascript]
+----
+const specifiers = [
+  `./vendor/jquery.js`,
+  `./vendor/backbone.js`,
+  `./lib/util.js`
+]
+Promise
+  .all(specifiers
+    .map(specifier => import(specifier))
+  )
+  .then(([$, backbone, util]) => {
+    // use modules
+  })
+----
+
+In a similar fashion, you could load modules using synchonous loops or even +async+/+await+, as demonstrated next.
+
+[source,javascript]
+----
+async function load () {
+  const { map } = await import(`./vendor/jquery.js`)
+  const $ = await import(`./vendor/jquery.js`)
+  const response = await fetch(`/cats`)
+  const cats = await response.json()
+  $(`<div>`)
+    .addClass(`container cats`)
+    .html(map(cats, cat => cat.htmlSnippet))
+    .appendTo(document.body)
+}
+load()
+----
+
+Using +await import+ makes dynamic module loading look and feel like static +import+ statements. We need to watch out and remind ourselves that the modules are asynchronously loaded one by one, though.
+
 === 8.3 Practical Considerations for ES Modules
 
 When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a +random+ module with a locally scoped +calc+ function, which computes a random number in the +[0, n)+ range; and a public API with the +range+ method, which computes a random number in the +[min, max]+ range.
