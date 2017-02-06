@@ -1624,7 +1624,7 @@ We've looked into flow control mechanisms such as callbacks, events, promises, i
 
 === 4.4 Async Functions
 
-Languages like Python and C# have had +async+ / +await+ for a while. JavaScript is now also getting native syntax to describe asynchronous operations.
+Languages like Python and C# have had +async+ / +await+ for a while. In ES2017, JavaScript gained native syntax that can be used to describe asynchronous operations.
 
 Let's go over a quick recap comparing promises, callbacks and generators. Afterwards we'll look into Async Functions in JavaScript, and how this new feature can help make our code more readable.
 
