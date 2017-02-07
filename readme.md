@@ -78,7 +78,7 @@ _Check out [the contributing guidelines][contrib]! 👏_
 
 # License
 
-Nicolás Bevacqua © 2016. Creative Commons. Details at [ponyfoo.com/license][license].
+Nicolás Bevacqua © 2016-2017. Creative Commons. Details at [ponyfoo.com/license][license].
 
 [hire]: mailto:nico@elastic.co "Get in touch with a cover letter and your resume!"
 [married]: https://ponyfoo.com/articles/just-married "Just Married! announcement on Pony Foo"
