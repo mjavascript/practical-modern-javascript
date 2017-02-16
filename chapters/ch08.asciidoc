@@ -479,7 +479,7 @@ counter.increment()
 console.log(counter.default) // <- 2
 ----
 
-==== 8.2.4 Dynamic +import()+ Statements
+==== 8.2.4 Dynamic +import()+
 
 At the time of this writing, a proposal for dynamic +import()+footnote:[You can find the proposal specification draft here: https://mjavascript.com/out/dynamic-import.] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike +import+ statements, which are statically analyzed and linked, +import()+ loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
 
@@ -521,9 +521,7 @@ const specifiers = [
   `./lib/util.js`
 ]
 Promise
-  .all(specifiers
-    .map(specifier => import(specifier))
-  )
+  .all(specifiers.map(specifier => import(specifier)))
   .then(([$, backbone, util]) => {
     // use modules
   })
@@ -546,7 +544,9 @@ async function load () {
 load()
 ----
 
-Using +await import+ makes dynamic module loading look and feel like static +import+ statements. We need to watch out and remind ourselves that the modules are asynchronously loaded one by one, though.
+Using +await import()+ makes dynamic module loading look and feel like static +import+ statements. We need to watch out and remind ourselves that the modules are asynchronously loaded one by one, though.
+
+Keep in mind that +import()+ is function-like, but it has different semantics from regular functions: +import()+ is not a function definition, it can't be extended, it can't be assigned properties, and it can't be destructured. In this sense, +import()+ falls in a similar category as the +super()+ call that's available in class constructors.
 
 === 8.3 Practical Considerations for ES Modules
 
