@@ -137,9 +137,24 @@ For the next step, we'll replace the value of the +scripts+ property in +package
 }
 ----
 
+Together with the packages we've installed in the previous step, a minimal +package.json+ file could look like the code in the following snippet.
+
+[source,json]
+----
+{
+  "scripts": {
+    "build": "babel src --out-dir dist"
+  },
+  "devDependencies": {
+    "babel-cli": "6.18.0",
+    "babel-preset-es2015": "6.18.0"
+  }
+}
+----
+
 [NOTE]
 ====
-Scripts enumerated in this object can be executed through +npm run <name>+, which modifies the +$PATH+ environment variable so that we can run the command-line executables found in +babel-cli+ without installing +babel-cli+ globally on our system.
+Any commands enumerated in the +scripts+ object can be executed through +npm run <name>+, which modifies the +$PATH+ environment variable so that we can run the command-line executables found in +babel-cli+ without installing +babel-cli+ globally on our system.
 ====
 
 If you execute +npm run build+ in your terminal now, you'll note that a +dist/example.js+ file is created. The output file will be identical to our original file, because Babel doesn't make assumptions, and we have to configure it first. Create a +.babelrc+ file next to +package.json+, and write the following JSON in it.
@@ -147,15 +162,6 @@ If you execute +npm run build+ in your terminal now, you'll note that a +dist/ex
 [source,json]
 ----
 {
-  "presets": ["es2015"]
-}
-----
-
-Alternatively, you can add that configuration inline in +package.json+, under a +babel+ property.
-
-[source,json]
-----
-"babel": {
   "presets": ["es2015"]
 }
 ----
