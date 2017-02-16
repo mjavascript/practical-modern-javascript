@@ -22,7 +22,19 @@ There's a few improvements coming to object literal syntax in ES6: property valu
 
 ==== 2.1.1 Property Value Shorthands
 
-Whenever you find yourself declaring a property whose value is a reference to a variable by the same name, you can omit the property value. It's implicit in ES6, as shown in the following example.
+Sometimes we declare objects with one or more properties whose values are references to variables by the same name. For example we might have a +listeners+ collection, and in order to assign it to a property called +listeners+ of an object literal, we have to repeat its name. The following snippet has a typical example where we have an object literal declaration with a couple of these repetitive properties.
+
+[source,javascript]
+----
+var listeners = []
+function listen () {}
+var api = {
+  listeners: listeners,
+  listen: listen
+}
+----
+
+Whenever you find yourself in this situation, you can omit the property value and the colon by taking advantage of the new property value shorthand syntax in ES6. As shown in the following example, the new ES6 syntax makes the assignment implicit.
 
 [source,javascript]
 ----
