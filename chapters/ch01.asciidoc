@@ -125,7 +125,7 @@ Packages installed by +npm+ will be placed in a +node_modules+ directory at the 
 
 Using the +--save-dev+ flag will add these packages to our +package.json+ manifest as development dependencies, so that when copying our project to new environments we can reinstall every dependency just by running +npm install+.
 
-The +@+ notation indicates we want to install a specific version of a package. Using +@6+ we're telling +npm+ to install the latest version of +babel-cli+ in the +6.x+ branch. This preference is handy to future-proof our applications, as it would never install version, which might contain breaking changes that could not have been foreseen at the time of this writing.
+The +@+ notation indicates we want to install a specific version of a package. Using +@6+ we're telling +npm+ to install the latest version of +babel-cli+ in the +6.x+ range. This preference is handy to future-proof our applications, as it would never install version, which might contain breaking changes that could not have been foreseen at the time of this writing.
 ====
 
 For the next step, we'll replace the value of the +scripts+ property in +package.json+ with the following. The +babel+ command-line utility provided by +babel-cli+ can take the entire contents of our +src+ directory, compile them into the desired output format, and save the results to a +dist+ directory, while preserving the original directory structure under a different root.
