@@ -18,7 +18,7 @@ var book = {
 }
 ----
 
-There's three improvements coming to object literal syntax in ES6: property value shorthands, computed property names, and method definitions. Let's go through them and describe their use cases as well.
+There's a few improvements coming to object literal syntax in ES6: property value shorthands, computed property names, and method definitions. Let's go through them and describe their use cases as well.
 
 ==== 2.1.1 Property Value Shorthands
 
