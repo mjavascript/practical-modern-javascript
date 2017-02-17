@@ -1172,7 +1172,7 @@ function isItTwo (value) {
 }
 ----
 
-Whether we like it or not, hoisting is more confusing than having block-scoped variables would be. Block scoping works on the bracket level, rather than the function level.
+Whether we like it or not, hoisting is more confusing than having block-scoped variables would be. Block scoping works on the curly-braces level, rather than the function level.
 
 ==== 2.6.1 Block Scoping and Let Statements
 
@@ -1208,7 +1208,7 @@ let topmost = {}
 // attempts to access innermost here would throw
 ----
 
-An useful aspect of +let+ statements is that you can use them when declaring a +for+ loop, and variables will be scoped to the contents of the loop, as shown below.
+One useful aspect of +let+ statements is that you can use them when declaring a +for+ loop, and variables will be scoped to the contents of the loop, as shown below.
 
 [source,javascript]
 ----
