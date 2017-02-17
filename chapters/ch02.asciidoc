@@ -94,7 +94,7 @@ var person = {
 }
 ----
 
-You can't combine the property value shorthands with computed property names. Value shorthands are simple compile-time syntactic sugar that helps avoid repetition, while computed name expressions are evaluated at runtime. Given that we're trying to mix these two incompatible features, the following example would throw a syntax error. In most cases this combination would lead to code that's hard to interpret for other humans, so it's probably a good thing that you can't combine the two.
+You can't combine the property value shorthands with computed property names. Value shorthands are simple compile-time syntactic sugar that helps avoid repetition, while computed property names are evaluated at runtime. Given that we're trying to mix these two incompatible features, the following example would throw a syntax error. In most cases this combination would lead to code that's hard to interpret for other humans, so it's probably a good thing that you can't combine the two.
 
 [source,javascript]
 ----
@@ -106,7 +106,7 @@ var journalism = {
 var person = {
   name: 'Sharon',
   age: 27,
-  [expertise]
+  [expertise] // this is a syntax error!
 }
 ----
 
