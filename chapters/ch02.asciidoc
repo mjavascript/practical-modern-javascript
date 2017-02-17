@@ -738,12 +738,12 @@ Before ES6, interacting with an arbitrary amount of function parameters was comp
 
 [source,javascript]
 ----
-function print () {
+function join () {
   var list = Array.prototype.slice.call(arguments)
-  console.log(list)
+  return list.join(', ')
 }
-print('a', 'b', 'c')
-// <- ['a', 'b', 'c']
+join('first', 'second', 'third')
+// <- 'first, second, third'
 ----
 
 ES6 has a better solution to the problem, and that's rest parameters.
@@ -754,24 +754,22 @@ You can now precede the last parameter in any JavaScript function with three dot
 
 [source,javascript]
 ----
-function print (...list) {
-  console.log(list)
+function join (...list) {
+  return list.join(', ')
 }
-print('a', 'b', 'c')
-// <- ['a', 'b', 'c']
+join('first', 'second', 'third')
+// <- 'first, second, third'
 ----
 
 Named parameters before the rest parameter won't be included in the +list+.
 
 [source,javascript]
 ----
-function print (first, ...list) {
-  console.log(first)
-  console.log(list)
+function join (separator, ...list) {
+  return list.join(separator)
 }
-print('a', 'b', 'c')
-// <- 'a'
-// <- [b', 'c']
+join('; ', 'first', 'second', 'third')
+// <- 'first; second; third'
 ----
 
 Note that arrow functions with a rest parameter must include parenthesis, even when it's the only parameter. Otherwise, a +SyntaxError+ would be thrown. The following piece of code is a beautiful example of how combining arrow functions and rest parameters can yield concise functional expressions.
@@ -789,8 +787,8 @@ Compare that with the ES5 version of the same function. Granted, it's all in the
 ----
 function sumAll () {
   var numbers = Array.prototype.slice.call(arguments)
-  return numbers.reduce(function (a, b) {
-    return a + b
+  return numbers.reduce(function (total, next) {
+    return total + next
   })
 }
 console.log(sumAll(1, 2, 5))
