@@ -265,7 +265,7 @@ As you might recall from the Babel example, +npm+ add +node_modules+ to the +PAT
 
 Let's consider the following +example.js+ file, which is purposely ridden with style issues, to demonstrate what ESLint does.
 
-[source,json]
+[source,javascript]
 ----
 var goodbye='Goodbye!';
 
@@ -288,7 +288,7 @@ ESLint is able to fix most style problems automatically if we pass in a +--fix+ 
 
 When we run +lint-fix+ we'll only get a pair of errors: +hello+ is never used and +false+ is a constant condition. Every other error has been fixed in place, resulting in the bit of source code found below. The remaining errors weren't fixed because ESLint avoids making assumptions about our code, and prefers not to incur in semantic changes. In doing so, +--fix+ becomes a useful tool to resolve code style wrinkles without risking a broken program as a result.
 
-[source,json]
+[source,javascript]
 ----
 var goodbye = 'Goodbye!'
 
