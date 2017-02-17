@@ -341,7 +341,19 @@ Now that you understand arrow functions, let's ponder about their merits and whe
 
 As a rule of thumb, you shouldn't blindly adopt ES6 features wherever you can. Instead, it's best to reason about each case individually and see whether adopting the new feature actually improves code readibility and maintainability. ES6 features are not strictly better than what we had all along, and it's a bad idea to treat them as such.
 
-There's a few situations where arrow functions may not be the best tool. For example, if you have a large function with several lines of code, replacing +function+ for +=>+ is hardly going to improve your code. Keep in mind that arrow functions are strictly anonymous: they can't have a name. Naming a function properly might add enough context to make it easier for humans to interpret.
+There's a few situations where arrow functions may not be the best tool. For example, if you have a large function with several lines of code, replacing +function+ for +=>+ is hardly going to improve your code. Arrow functions are often most effective for short routines, where the +function+ keyword and syntax boilerplate make up a significant portion of the function expression.
+
+Properly naming a function adds context to make it easier for humans to interpret them. Arrow functions can't be explicitly named, but they can be named implicitly by assigning them to a variable. In the following example, we assign an arrow function to the +throwError+ variable. When calling this function results in an error, the stack trace properly identifies the arrow function as +throwError+.
+
+[source,javascript]
+----
+var throwError = message => {
+  throw new Error(message)
+}
+throwError('this is a warning')
+<- Uncaught Error: this is a warning
+  at throwError
+----
 
 Arrow functions are neat when it comes to defining anonymous functions that should probably be lexically bound anyways, and they can definitely make your code more terse in some situations. They are particularly useful in most functional programming situations such as when using +.map+, +.filter+, or +.reduce+ on collections, as shown in the following example.
 
