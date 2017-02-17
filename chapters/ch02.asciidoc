@@ -512,18 +512,17 @@ For use in combination with aliases, you should place the alias first, and then 
 var { boots: footwear = true } = character
 ----
 
-It's possible to mix destructuring with computed property names. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler isn't always able to infer a variable name.
+It's possible to use the computed property names syntax in destructuring patterns. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler isn't always able to infer a variable name. In the following example we use the +value+ alias, and a computed property name to extract the +scientist+ property from the +person+ object.
 
 [source,javascript]
 ----
 var person = { scientist: true }
-var type = 'scientist'
-var { [type]: value } = person
+var { ['scient' + 'ist']: value } = person
 console.log(value)
 // <- true
 ----
 
-This flavor of destructuring is probably the least useful, as +value = person[type]+ is easier to read than +{ [type]: value } = person+. That being said, it could still be useful in a few deep destructuring scenarios.
+This flavor of destructuring is probably the least useful, as +value = person[type]+ is easier to read than +{ [type]: value } = person+, as it's a more sequential statement. That being said, the feature could still be useful in some deep destructuring scenarios.
 
 That's it, as far as objects go, in terms of destructuring. What about arrays?
 
