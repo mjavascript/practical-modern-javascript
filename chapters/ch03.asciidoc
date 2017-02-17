@@ -105,7 +105,7 @@ const Person = class {
 }
 ----
 
-Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a +Jake+ class dynamically in arrow function which takes a name parameter and then feeds that to the parent +Person+ constructor via +super+.
+Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a +Jake+ class dynamically in arrow function which takes a name parameter and then feeds that to the parent +Person+ constructor via +super()+.
 
 [source,javascript]
 ----
