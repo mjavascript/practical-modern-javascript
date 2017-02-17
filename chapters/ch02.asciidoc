@@ -952,7 +952,7 @@ console.log(text)
 // <- 'Hello, Shannon!'
 ----
 
-We've already established that you can use any JavaScript expressions, and not just variables. You can think of the expressions in a template literal as defining a variable before the template runs, and then concatenating that value with the rest of the string, but in an easier to maintain format that doesn't involve you manually adding strings together with expressions. The variables you use in those expressions, the functions you call, and so on, should all be available to the current scope.
+We've already established that you can use any JavaScript expressions, and not just variables. You can think of each expression in a template literal as defining a variable before the template runs, and then concatenating those value with the rest of the string. However, the code becomes easier to maintain because it doesn't involve manually concatenating strings and JavaScript expressions. The variables you use in those expressions, the functions you call, and so on, should all be available to the current scope.
 
 It will be up to your coding style guides to decide how much logic you want to cram into the interpolation expressions. The following code snippet, for example, instantiates a +Date+ object and formats it into a human-readable date inside a template literal.
 
