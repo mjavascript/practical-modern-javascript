@@ -306,7 +306,7 @@ When you need to implicitly return an object literal, you'll need to wrap that o
 var objectFactory = () => ({ modular: 'es6' })
 ----
 
-In the following example, JavaScript interprets +number+ as a label and then figures out we have a +value+ expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be +undefined+.
+In the following example, JavaScript interprets the brackets as the body of our arrow function. Furthermore, +number+ is interpreted as a labelfootnote:[Labels are used as a way of identifying instructions. Labels can be used by +goto+ statements, to indicate what instruction we should jump to; +break+ statements, to indicate the sequence we want to break out of; and +continue+ statements, to indicate the sequence we want to advance.] and then figures out we have a +value+ expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be +undefined+.
 
 [source,javascript]
 ----

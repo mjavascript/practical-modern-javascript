@@ -665,7 +665,7 @@ function log2 (value) {
 }
 ----
 
-Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example. Keep in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://mjavascript.com/out/bitwise-shift.].
+Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example. Keep in mind that the +<<+ operator performs a "bitwise left shift"footnoteref:[bitwise-shift,Definition on MDN: https://mjavascript.com/out/bitwise-shift.].
 
 [source,javascript]
 ----
@@ -721,7 +721,7 @@ At the beginning of section 7.2, we talked about how some of the new +Math+ meth
 
 ===== +Math.clz32+
 
-The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number". Keeping in mind that the +<<+ operator performs a "bitwise left shift"footnote:[Definition on MDN: https://mjavascript.com/out/bitwise-shift.], let's take a look at the next code snippet describing sample input and output for +Math.clz32+.
+The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number". Keeping in mind that the +<<+ operator performs a "bitwise left shift"footnoteref:[bitwise-shift], let's take a look at the next code snippet describing sample input and output for +Math.clz32+.
 
 [source,javascript]
 ----
@@ -1160,7 +1160,7 @@ Attempts to näively figure out the actual length by counting code points prove 
 // <- 16, should be 11
 ----
 
-As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iteratorfootnote:[See also "JavaScript has a Unicode problem", https://mjavascript.com/out/unicode-mathias.]. In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length. Forunately, these kinds of glyphs are used infrequently.
+As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iteratorfootnoteref:[unicode-problem,See also "JavaScript has a Unicode problem", https://mjavascript.com/out/unicode-mathias.]. In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length. Forunately, these kinds of glyphs are used infrequently.
 
 Let's look at more Unicode-related methods introduced in ES6.
 
@@ -1294,7 +1294,7 @@ const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 // <- '❤👱🐎'
 ----
 
-This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clustersfootnote:[See also "JavaScript has a Unicode problem", https://mjavascript.com/out/unicode-mathias.].
+This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clustersfootnoteref:[unicode-problem].
 
 [source,javascript]
 ----
