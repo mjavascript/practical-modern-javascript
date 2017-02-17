@@ -1327,7 +1327,14 @@ console.log(people)
 // <- ['Tesla', 'Musk']
 ----
 
-Creating a +const+ variable doesn't mean that the assigned value becomes immutable, it only means that the variable will always have a reference to the same object or primitive value. The following example shows that even though the +people+ reference couldn't be changed, the array itself can indeed be modified.
+Note that creating a +const+ variable doesn't mean that the assigned value becomes immutable. This is a common source of confusion, and it is strongly recommended that you pay attention when reading the following warning.
+
+.Variables declared using +const+ are not immutable.
+[WARNING]
+====
+Using +const+ only means that the variable will always have a reference to the same object or primitive value, because that reference can't change. The reference itself is immutable, but the value held by the variable does not become immutable.
+
+The following example shows that even though the +people+ reference couldn't be changed, the array itself can indeed be modified. If the array were immutable, this wouldn't be possible.
 
 [source,javascript]
 ----
@@ -1337,7 +1344,7 @@ console.log(people)
 // <- ['Tesla', 'Musk', 'Berners-Lee']
 ----
 
-A +const+ statement only prevents the variable being declared from changing its value. Another way of representing that difference is the following piece of code, where we create a +humans+ variable using +var+, assign the +people+ variable we created using +const+ earlier, and then assign something else to the +humans+ variable, because it wasn't declared using +const+.
+A +const+ statement only prevents the variable binding from referencing a different value. Another way of representing that difference is the following piece of code, where we create a +people+ variable using +const+, and later assign that variable to a plain +var humans+ binding. We can reassign the +humans+ variable to reference something else, because it wasn't declared using +const+. However, we can't reassign +people+ to reference something else, because it was created using +const+.
 
 [source,javascript]
 ----
@@ -1347,6 +1354,16 @@ humans = 'evil'
 console.log(humans)
 // <- 'evil'
 ----
+
+If our goal was to make the value immutable, then we'd have to use a function such as +Object.freeze+. Using +Object.freeze+ prevents extensions to the provided object, as represented in the following code snippet.
+
+[source,javascript]
+----
+const frozen = Object.freeze(['Ice', 'Icicle', 'Ice cube'])
+frozen.push('Water')
+// Uncaught TypeError: Can't add property 3, object is not extensible
+----
+====
 
 Let's take a moment to discuss the merits of +const+ and +let+.
 
