@@ -865,11 +865,11 @@ console.log(rest)
 Using the spread operator you can focus on implementing the functionality you need while the language stays out of the way. Improving expressiveness and decreasing time spent working around language limitations is a common pattern we can observe in ES6 features.
 ****
 
-Before ES6, whenever you have a dynamic list of arguments that need to be applied to a function call, you'll use +.apply+. This feels awkward because +.apply+ also takes a context for +this+, which most of the time you don't need to change.
+Before ES6, whenever you had a dynamic list of arguments that need to be applied to a function call, you'd use +.apply+. This is inelegant because +.apply+ also takes a context for +this+ which, in this scenario, you don't want to concern yourself with.
 
 [source,javascript]
 ----
-func.apply(null, ['a', 'b', 'c'])
+fn.apply(null, ['a', 'b', 'c'])
 ----
 
 Besides spreading onto arrays, you can also spread items onto function calls. The following example shows how you could use the spread operator to pass an arbitrary number of arguments to the +multiply+ function.
