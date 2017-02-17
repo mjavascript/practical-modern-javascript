@@ -580,9 +580,9 @@ var right = 7
 
 The last area of destructuring we'll be covering is function parameters.
 
-==== 2.3.3 Destructuring Function Parameters
+==== 2.3.3 Function Parameter Defaults and Destructuring
 
-Function parameters in ES6 enjoy the benefits of destructuring as well. One of the simplest cases is providing sensible default values. The following example defines a default +exponent+ with the most commonly used value.
+Function parameters in ES6 enjoy the ability of specifying default values as well. The following example defines a default +exponent+ with the most commonly used value.
 
 [source,javascript]
 ----
@@ -591,14 +591,14 @@ function powerOf (base, exponent = 2) {
 }
 ----
 
-Destructuring can be applied to arrow functions as well, but in that case you must wrap the parameters in parenthesis, even when there's a single parameter.
+Defaults can be applied to arrow function parameters as well. When we have default values in an arrow function we must wrap the parameter list in parenthesis, even when there's a single parameter.
 
 [source,javascript]
 ----
 var double = (input = 0) => input * 2
 ----
 
-Given that this behaves like destructuring, default values aren't just limited to the rightmost parameters of a function. You could give default values to any parameter, in any position.
+Default values aren't limited to the rightmost parameters of a function, as is commonplace in other programming languages. You could provide default values for any parameter, in any position.
 
 [source,javascript]
 ----
@@ -613,9 +613,9 @@ In JavaScript it's not uncommon to provide a function with an +options+ object, 
 
 [source,javascript]
 ----
-function carFactory (options = { brand: 'Volkswagen', year: 1999 }) {
+function carFactory (options = { brand: 'Volkswagen', make: 1999 }) {
   console.log(options.brand)
-  console.log(options.year)
+  console.log(options.make)
 }
 carFactory()
 // <- 'Volkswagen'
@@ -626,35 +626,70 @@ The problem with this approach is that as soon as the consumer of +carFactory+ p
 
 [source,javascript]
 ----
-carFactory({ year: 2000 })
+carFactory({ make: 2000 })
 // <- undefined
 // <- 2000
 ----
 
-A better approach would be to destructure +options+ entirely, providing default values for each property individually. This approach also lets you reference each option without going through an +options+ object, but you lose the ability to reference +options+ directly, which might represent an issue in some situations.
+A better approach would be to destructure +options+ entirely, providing default values for each property, individually, within the destructuring pattern. This approach also lets you reference each option without going through an +options+ object, but you lose the ability to reference +options+ directly, which might represent an issue in some situations.
 
 [source,javascript]
 ----
-function carFactory ({ brand = 'Volkswagen', year = 1999 }) {
+function carFactory ({ brand = 'Volkswagen', make = 1999 }) {
   console.log(brand)
-  console.log(year)
+  console.log(make)
 }
-carFactory({ year: 2000 })
+carFactory({ make: 2000 })
 // <- 'Volkswagen'
 // <- 2000
 ----
 
-In this case, however, we've once again lost the default value for the case where the consumer didn't provide any +options+. Meaning +carFactory()+ will now throw when the +options+ aren't defined. This can be remedied by using the syntax shown in the following snippet of code, which adds a default +options+ value of an empty object. The empty object is then filled, property by property, with the default values on the parameter list.
+In this case, however, we've once again lost the default value for the case where the consumer doesn't provide any +options+. Meaning +carFactory()+ will now throw when an +options+ object isn't provided. This can be remedied by using the syntax shown in the following snippet of code, which adds a default +options+ value of an empty object. The empty object is then filled, property by property, with the default values on the destructuring pattern.
 
 [source,javascript]
 ----
-function carFactory ({ brand = 'Volkswagen', year = 1999 } = {}) {
+function carFactory ({ brand = 'Volkswagen', make = 1999 } = {}) {
   console.log(brand)
-  console.log(year)
+  console.log(make)
 }
 carFactory()
 // <- 'Volkswagen'
 // <- 1999
+----
+
+Besides default values, you can use destructuring in function parameters to describe the shape of objects your function can handle. Consider the following code snippet, where we have a +car+ object with several properties. The +car+ object describes its owner, what kind of car it is, who manufactured it, when, and the owner's preferences when he purchased the car.
+
+[source,javascript]
+----
+const car = {
+  owner: {
+    id: 'e2c3503a4181968c',
+    name: 'Donald Draper'
+  },
+  brand: 'Peugeot',
+  make: 2015,
+  model: '208',
+  preferences: {
+    airbags: true,
+    airconditioning: false,
+    color: 'red'
+  }
+}
+----
+
+If we wanted to implement a function that only takes into account certain properties of a parameter, it might be a good idea to reference those properties explicitly by destructuring up front. The upside is that we become aware of every required property upon reading the function's signature.
+
+When we destructure everything up front, it's easy to spot when input doesn't adhere to the contract of a function. The following example shows how every property we need could be specified in the parameter list, laying bare the shape of the objects we can handle in the +getCarProductModel+ API.
+
+[source,javascript]
+----
+const getCarProductModel = ({ brand, make, model }) => ({
+  sku: brand + ':' make + ':' + model,
+  brand,
+  make,
+  model
+})
+getCarProductModel(car)
 ----
 
 Besides default values and filling an +options+ object, let's explore what else destructuring is good at.
