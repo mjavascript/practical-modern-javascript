@@ -171,7 +171,9 @@ var emitter = {
     if (this.events[type] === undefined) {
       return
     }
-    this.events[type].forEach(fn => fn(event))
+    this.events[type].forEach(function (fn) {
+      fn(event)
+    })
   }
 }
 ----
@@ -192,7 +194,9 @@ var emitter = {
     if (this.events[type] === undefined) {
       return
     }
-    this.events[type].forEach(fn => fn(event))
+    this.events[type].forEach(function (fn) {
+      fn(event)
+    })
   }
 }
 ----
