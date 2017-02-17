@@ -1393,7 +1393,7 @@ function checklist (items) {
 
 This type of problem is hard to debug because it might take a while until you figure out that the reference was modified. The +const+ statement helps prevent this scenario by producing a runtime error (under strict mode), which should help capture the bug soon after it's introduced.
 
-A similar benefit of using the +const+ statement is its ability to visually identify variables that aren't reassigned. The +const+ cue signals that a variable is read-only and thus we have one less thing to worry about when reading a piece of code.
+A similar benefit of using the +const+ statement is its ability to visually identify variables that aren't reassigned. The +const+ cue signals that the variable binding is read-only and thus we have one less thing to worry about when reading a piece of code.
 
 If we choose to default to using +const+ and use +let+ for variables that need to be reassigned, all variables will follow the same scoping rules, which makes code easier to reason about. The reason why +const+ is sometimes proposed as the "default" variable declaration type, is that it's the one that does the least: +const+ prevents reassignment, follows block scoping, and the declared binding can't be accessed before the declaration statement is executed. The +let+ statement allows reassignment, but behaves like +const+, so it naturally follows to choose +let+ when we're in need for a reassignable variable.
 
