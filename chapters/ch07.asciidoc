@@ -1418,7 +1418,7 @@ What happens when we try to cast a jQuery collection through the spread operator
 // <- [<div>, <div>, <div>, ...]
 ----
 
-The new +Array.from+ method is a bit different. It doesn't only rely on the iterator protocol to figure out how to pull values from an object. It also has support for arraylikes out the box. The following code snippet will work with any version of jQuery.
+The new +Array.from+ method is a bit different. It doesn't only rely on the iterator protocol to figure out how to pull values from an object. It has support for array-likes out the box, unlike the spread operator. The following code snippet will work with any version of jQuery.
 
 [source,javascript]
 ----
@@ -1442,7 +1442,7 @@ Array.from(document.querySelectorAll(`div`)).slice(1)
 
 +Array.from+ has three arguments, although only the +input+ is required. To wit:
 
-- +input+ -- the arraylike or iterable object you want to cast
+- +input+ -- the array-like or iterable object you want to cast
 - +map+ -- a mapping function that's executed on every item of +input+
 - +context+ -- the +this+ binding to use when calling +map+
 
@@ -1468,7 +1468,7 @@ typesOf(null, [], NaN)
 // <- [`object`, `object`, `number`]
 ----
 
-When dealing with arraylike objects, it makes sense to use +Array.from+ if they don't implement +Symbol.iterator+.
+When dealing with array-like objects, it makes sense to use +Array.from+ if they don't implement +Symbol.iterator+.
 
 [source,javascript]
 ----

@@ -799,7 +799,7 @@ Next up we have the spread operator. It's also denoted with three dots, but it s
 
 ==== 2.4.2 Spread Operator
 
-The spread operator can be used to cast an array-like or any iterable object into a true array. Spreading effectively expands an expression onto a target such as an array literal or a function call. The following example uses +...arguments+ to cast function parameters into an array literal.
+The spread operator can be used to cast any iterable object into an array. Spreading effectively expands an expression onto a target such as an array literal or a function call. The following example uses +...arguments+ to cast function parameters into an array literal.
 
 [source,javascript]
 ----
@@ -810,7 +810,15 @@ cast('a', 'b', 'c')
 // <- ['a', 'b', 'c']
 ----
 
-You can place elements to the left and to the right of a spread operation and still get the result you would expect.
+We could use the spread operator to split a string into an array with each code point that makes up the string.
+
+[source,javascript]
+----
+[...'show me']
+// <- ['s', 'h', 'o', 'w', ' ', 'm', 'e']
+----
+
+You can place additional elements to the left and to the right of a spread operation and still get the result you would expect.
 
 [source,javascript]
 ----
@@ -830,7 +838,7 @@ console.log(all)
 // <- [1, 2, 3, 4, 5, 6, 7]
 ----
 
-Note that the spread operator isn't limited to arrays and arraylikes such as +arguments+. The spread operator can be used with any iterable object. Iterable is a protocol in ES6 that allows you to turn any object into something that can be iterated over. We'll research the iterable protocol in chapter 4.
+Note that the spread operator isn't limited to arrays and +arguments+. The spread operator can be used with any iterable object. Iterable is a protocol in ES6 that allows you to turn any object into something that can be iterated over. We'll research the iterable protocol in chapter 4.
 
 .Shifting and Spreading
 ****
