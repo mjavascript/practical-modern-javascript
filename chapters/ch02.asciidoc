@@ -155,52 +155,49 @@ The last enhancement coming to object literals is about functions.
 
 ==== 2.1.3 Method Definitions
 
-Typically, you can declare methods on an object by adding properties to it, as shown in the next snippet.
+Typically, you can declare methods on an object by adding properties to it. In the next snippet we're creating an small event emitter which supports multiple kinds of events. It comes with an +emitter#on+ method that can be used to register event listeners, and an +emitter#emit+ method that can be used to raise events.
 
 [source,javascript]
 ----
 var emitter = {
-  emit: function (eventName) {
+  events: {},
+  on: function (type, fn) {
+    if (this.events[type] === undefined) {
+      this.events[type] = []
+    }
+    this.events[type].push(fn)
+  },
+  emit: function (type, event) {
+    if (this.events[type] === undefined) {
+      return
+    }
+    this.events[type].forEach(fn => fn(event))
   }
 }
 ----
 
-Property getters and setters, in contrast, have a different syntax. In this case, there's no need for the +function+ keyword, and no colons are involved. Getters are prefixed by +get+ and setters are prefixed with +set+. Then there's the property name, a list of parameters, and the method body. The next example shows a simple object that defines a getter and a setter.
+Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the +function+ keyword. This is meant as a terse alternative to traditional method declarations where you need to use the +function+ keyword. The following example shows how our +emitter+ object would look like when using method definitions.
 
 [source,javascript]
 ----
-var reserves = 4
-var spaceship = {
-  get fuel () {
-    return reserves
+var emitter = {
+  events: {},
+  on (type, fn) {
+    if (this.events[type] === undefined) {
+      this.events[type] = []
+    }
+    this.events[type].push(fn)
   },
-  set fuel (value) {
-    reserves = value
+  emit (type, event) {
+    if (this.events[type] === undefined) {
+      return
+    }
+    this.events[type].forEach(fn => fn(event))
   }
 }
 ----
 
-Starting in ES6, you can declare regular methods on an object literal using a similar syntax. The only difference is that you need to omit a prefix like +get+ and +set+. This syntax complements getters and setters while providing a terse alternative to traditional method declarations where you need to use the +function+ keyword. The following example shows a method definition using the ES6 syntax alongside the rest of our +spaceship+ object.
-
-[source,javascript]
-----
-var reserves = 4
-var spaceship = {
-  get fuel () {
-    return reserves
-  },
-  set fuel (value) {
-    reserves = value
-  },
-  deplete () {
-    reserves = 0
-  }
-}
-spaceship.fuel = 10
-spaceship.deplete()
-----
-
-One problem with this syntax is that it tightly couples a method to an object. While that's fine for getters and setters, it might not be okay for other methods. In terms of modular design, it would be cleaner to keep your code decoupled, and the syntax discourages it. By dropping the +function+ keyword and inferring the property name from the method, we are making it hard to extract +deplete+ from the object literal.
+One problem with this syntax is that it tightly couples a method to an object. In terms of modular design, it would be cleaner to keep your code decoupled, and the syntax discourages it. By dropping the +function+ keyword and inferring the property name from the method, we are making it hard to extract +deplete+ from the object literal.
 
 Arrow functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave semantically.
 
