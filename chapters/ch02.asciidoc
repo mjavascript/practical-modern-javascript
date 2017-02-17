@@ -1159,7 +1159,7 @@ isItTwo('two')
 // <- undefined
 ----
 
-JavaScript code like this works, even though +two+ was declared in a code branch and then accessed outside of said branch. The reason why, as we know, is that +var+ is function-scoped. That, coupled with hoisting, means that what we're really expressing is equivalent to the piece of code below.
+JavaScript code like this works, even though +two+ was declared in a code branch and then accessed outside of said branch. The reason why, as we know, is that +var+ bindings are bound to the enclosing scope, be it a function or the global scope. That, coupled with hoisting, means that what the code we've written earlier will be interpreted as if it were written in a similar way to the next piece of code.
 
 [source,javascript]
 ----
