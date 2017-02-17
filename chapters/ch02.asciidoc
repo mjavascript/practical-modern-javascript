@@ -259,7 +259,7 @@ setTimeout(function () {
 
 If we had defined the function passed to +setInterval+ as a regular anonymous function instead of using an arrow function, +this+ would've been bound to the context of the anonymous function, instead of the context of the +start+ method. We could have implemented +timer+ with a declaration like +var self = this+ at the beginning of the +start+ method, and then referencing +self+ instead of +this+. With arrow functions, the added complexity of keeping context references around fades away and we can focus on the functionality of our code.
 
-In a similar fashion, lexical binding in ES6 arrow functions also means that function calls won't be able to change the +this+ context when using +.call+, +.apply+, +.bind+, etc. Usually, that limitation is more of a feature than a bug.
+In a similar fashion, lexical binding in ES6 arrow functions also means that function calls won't be able to change the +this+ context when using +.call+, +.apply+, +.bind+, etc. That limitation is usually more useful than not, as it ensures that the context will always be preserved and constant.
 
 I've mentioned there's several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the others way to represent an arrow function?
 
