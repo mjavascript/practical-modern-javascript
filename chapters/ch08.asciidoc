@@ -546,7 +546,7 @@ load()
 
 Using +await import()+ makes dynamic module loading look and feel like static +import+ statements. We need to watch out and remind ourselves that the modules are asynchronously loaded one by one, though.
 
-Keep in mind that +import()+ is function-like, but it has different semantics from regular functions: +import()+ is not a function definition, it can't be extended, it can't be assigned properties, and it can't be destructured. In this sense, +import()+ falls in a similar category as the +super()+ call that's available in class constructors.
+Keep in mind that +import+ is function-like, but it has different semantics from regular functions: +import+ is not a function definition, it can't be extended, it can't be assigned properties, and it can't be destructured. In this sense, +import()+ falls in a similar category as the +super()+ call that's available in class constructors.
 
 === 8.3 Practical Considerations for ES Modules
 
