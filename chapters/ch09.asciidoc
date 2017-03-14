@@ -652,7 +652,7 @@ persons.map(({ name, ssn, ...person }) => person)
 
 JavaScript already offered a number of ways in which we can declare functions before ES6.
 
-Function declarations are the most prominent kind of JavaScript function. The fact that declarations aren't hoisted means we we can sort them based on how to improve code readability, instead of worrying about sorting them in the exact order they are used.
+Function declarations are the most prominent kind of JavaScript function. The fact that declarations aren't hoisted means we can sort them based on how to improve code readability, instead of worrying about sorting them in the exact order they are used.
 
 The following snippet displays three function declarations arranged in such a way that the code is more linear to read.
 
