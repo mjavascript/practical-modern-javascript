@@ -19,7 +19,7 @@ add('woofmark', { description: 'Markdown and WYSIWYG editor' })
 
 There's several problems with this approach, outlined below.
 
-- Security issues where user-provided keys like +__proto__+, +toString+, or anything in +Object.prototype+ break expectations and make interaction with this kind of hash-map data structures more cumbersome
+- Security issues where user-provided keys like `__proto__`, +toString+, or anything in +Object.prototype+ break expectations and make interaction with this kind of hash-map data structures more cumbersome
 - Iteration over list items is verbose with +Object.keys(registry).forEach+
 - Keys are limited to strings, making it hard to create hash-maps where you'd like to index values by DOM elements or other non-string references
 
@@ -36,7 +36,7 @@ function get (name) {
 }
 ----
 
-An alternative could also be using +Object.create(null)+ instead of an empty object literal. In this case, the created object won't inherit from +Object.prototype+, meaning it won't be harmed by +__proto__+ and friends.
+An alternative could also be using +Object.create(null)+ instead of an empty object literal. In this case, the created object won't inherit from +Object.prototype+, meaning it won't be harmed by `__proto__` and friends.
 
 [source,javascript]
 ----

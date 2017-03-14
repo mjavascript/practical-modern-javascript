@@ -872,11 +872,11 @@ Let's move onto the next few traps.
 
 We can use the +handler.getPrototypeOf+ method as a trap for all of the following operations.
 
-- +Object.prototype.__proto__+ property
-- +Object.prototype.isPrototypeOf+ method
-- +Object.getPrototypeOf+ method
-- +Reflect.getPrototypeOf+ method
-- +instanceof+ operator
+- `Object.prototype.__proto__` property
+- `Object.prototype.isPrototypeOf` method
+- `Object.getPrototypeOf` method
+- `Reflect.getPrototypeOf` method
+- `instanceof` operator
 
 This traps is quite powerful, as it allows us to dynamically determine the reported underlying prototype for an object.
 
@@ -933,9 +933,9 @@ Conversely to the +getPrototypeOf+ trap, there's +setPrototypeOf+.
 
 ==== 6.4.5 +setPrototypeOf+ Trap
 
-There is an +Object.setPrototypeOf+ method in ES6 that can be used to change the prototype of an object into a reference to another object. It's considered the proper way of setting the prototype, as opposed to setting the special +__proto__+ property, which is a feature that's supported in most browsers but was deprecated in ES6.
+There is an +Object.setPrototypeOf+ method in ES6 that can be used to change the prototype of an object into a reference to another object. It's considered the proper way of setting the prototype, as opposed to setting the special `__proto__` property, which is a feature that's supported in most browsers but was deprecated in ES6.
 
-Deprecation means that browser vendors are discouraging the use of +__proto__+. In other contexts, deprecation also means that the feature might be removed in the future. The web platform, however, doesn't break backwards compatibility, and +__proto__+ is unlikely to ever be removed. That being said, deprecation also means you're discouraged from using the feature. Thus, using +Object.setPrototypeOf+ method is preferrable than changing +__proto__+ when we want to modify the underlying prototype for an object.
+Deprecation means that browser vendors are discouraging the use of `__proto__`. In other contexts, deprecation also means that the feature might be removed in the future. The web platform, however, doesn't break backwards compatibility, and `__proto__` is unlikely to ever be removed. That being said, deprecation also means you're discouraged from using the feature. Thus, using +Object.setPrototypeOf+ method is preferrable than changing `__proto__` when we want to modify the underlying prototype for an object.
 
 You can use +handler.setPrototypeOf+ to set up a trap for +Object.setPrototypeOf+. The snippet of code shown below doesn't alter the default behavior of changing a prototype into +base+. Note that, for completeness, there is a +Reflect.setPrototypeOf+ method that's equivalent to +Object.setPrototypeOf+.
 
