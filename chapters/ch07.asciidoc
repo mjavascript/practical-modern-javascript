@@ -102,10 +102,7 @@ isNaN(new Date())
 
 +Number.isNaN+ is more precise than its global counterpart, because it doesn't involve casting. There's still a few reasons why +Number.isNaN+ can be a source of confusion.
 
-1. +isNaN+ casts input through +Number(value)+ before comparison
-2. +Number.isNaN+ doesn't
-3. Neither +Number.isNaN+ nor +isNaN+ answer the "is this not a number?" question
-4. They answer whether +value+ -- or +Number(value)+ -- is +NaN+
+First off, +isNaN+ casts input through +Number(value)+ before comparison, while +Number.isNaN+ doesn't. Neither +Number.isNaN+ nor +isNaN+ answer the "is this not a number?" question, but instead they answer whether +value+ -- or +Number(value)+ -- is +NaN+.
 
 In most cases, what you actually want to know is whether a value identifies as a number -- +typeof NaN === `number`+ -- and is a number. The +isNumber+ function in the following code snippet does just that. Note that it'd work with both +isNaN+ and +Number.isNaN+ due to type checking. Everything that reports a +typeof+ value of +`number`+ is a number, except for +NaN+, so we filter out those out as false positive results.
 
@@ -963,7 +960,7 @@ The +ToInteger+ function translates any values in the +(-1, 0)+ range into +-0+.
 // <- Uncaught RangeError: Invalid count value
 ----
 
-An example use case for +String#repeat+ may be the typical padding function. The +leftPad+ function shown below takes a multiline string and pads every line with as many +spaces+ as desired, using a default of two spaces.
+An example use case for +String#repeat+ may be the typical padding function. The +leftPad+ function in the next code snippet takes a multiline string and pads every line with as many +spaces+ as desired, using a default of two spaces.
 
 [source,javascript]
 ----
@@ -982,7 +979,7 @@ c`, 2)
 
 ==== 7.3.5 String Padding and Trimming
 
-At the time of this writing, there's two new string padding methods slated for publication in ES2017: +String#padStart+ and +String#padEnd+. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
+At the time of this writing, there's two new string padding methods slated for publication in ES2017: +String#padStart+ and +String#padEnd+. Using these methods, we wouldn't have to implement something like +leftPad+ in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
 
 Using +padStart+, we will specify the desired length for the target string and the padding string, which defaults to a single space character. If the original string is at least as long as the specified length, +padStart+ will result in a null operation, returning the original string unchanged.
 
@@ -1106,7 +1103,7 @@ Given the problems with looping by code units, the iterables produced by the str
 
 [source,javascript]
 ----
-for (let codePoint of `🐎👱❤`) {
+for (const codePoint of `🐎👱❤`) {
   console.log(codePoint)
   // <- '🐎'
   // <- '👱'
@@ -1184,7 +1181,7 @@ Identifying the indices that need to be provided to +String#codePointAt+ may pro
 [source,javascript]
 ----
 const text = `\ud83d\udc0e\ud83d\udc71\u2764`
-for (let codePoint of text) {
+for (const codePoint of text) {
   console.log(codePoint.codePointAt(0))
   // <- 128014
   // <- 128113
@@ -1499,10 +1496,10 @@ The +Array.of+ method is exactly like the +cast+ function we played around with 
 
 [source,javascript]
 ----
-Array.of = (...params) => params
+Array.of = (...items) => items
 ----
 
-You can think about +Array.of+ as an alternative for +new Array+ that doesn't have the +new Array(length)+ overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${ count }+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
+The +Array+ constructor has two overloads: `...items`, where you provide the items for the new array; and `length`, where you provide its numeric length. You can think about +Array.of+ as a flavor of +new Array+ that doesn't support a `length` overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${ count }+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
 
 [source,javascript]
 ----
@@ -1617,8 +1614,8 @@ You could also specify the starting index and end index. In this case, as shown 
 ----
 [`a`, `b`, `c`,,,].fill(`x`, 2)
 // <- [`a`, `b`, `x`, `x`, `x`]
-new Array(5).fill(`x`, `x`, 3)
-// <- [`x`, `x`, `x`, undefined x 2]
+new Array(5).fill(`x`, 0, 1)
+// <- [`x`, undefined x 4]
 ----
 
 The provided +value+ can be anything, and is not just limited to primitive values.
@@ -1678,7 +1675,7 @@ Here's an example using +for..of+.
 
 [source,javascript]
 ----
-for (let key of [`a`, `b`, `c`, `d`].keys()) {
+for (const key of [`a`, `b`, `c`, `d`].keys()) {
   console.log(key)
   // <- 0
   // <- 1

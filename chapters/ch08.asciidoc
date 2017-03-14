@@ -588,7 +588,14 @@ Having a well-defined API that's also properly documented is a key aspect of eff
 
 Tests should only be written against the public interface to a module, while its internals must be treated as uninteresting implementation details. Tests need to cover the different aspects of a module's public interface, but changes to the internal implementation shouldn't break our test coverage as long as the API remains the same in terms of inputs and outputs.
 
-Ease of adding or removing functionality from a module is yet another useful metric. How hard would it be to add a new feature? Do you have to edit several different modules in order to implement something? Is this a repetitive process? Maybe you could abstract those edits behind a higher level module that hides that complexity. Or maybe doing so would mostly add indirection and make following the codebase harder to read, but with little added benefit or justification. From the other end of the spectrum, how deeply entrenched is the API? Would it be easy to remove a portion of the module, delete it entirely, or even replace it with something else? If modules become too co-dependant, then it can be hard to make edits as the codebase ages, mutates and grows in size.
+Ease of adding or removing functionality from a module is yet another useful metric.
+
+- How hard would it be to add a new feature?
+- Do you have to edit several different modules in order to implement something?
+- Is this a repetitive process? Maybe you could abstract those changes behind a higher level module that hides that complexity, or maybe doing so would mostly add indirection and make following the codebase harder to read, but with little added benefit or justification.
+- From the other end of the spectrum, how deeply entrenched is the API?
+- Would it be easy to remove a portion of the module, delete it entirely, or even replace it with something else?
+- If modules become too co-dependant, then it can be hard to make edits as the codebase ages, mutates and grows in size.
 
 We'll plunge deeper into proper module design, effective module interaction and module testing over the next three books in this series.
 

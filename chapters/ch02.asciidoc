@@ -1137,7 +1137,7 @@ console.log(html)
 // <- '<div>A malicious comment</div>'
 ----
 
-Phew, that malicious +<iframe>+ almost got us. Rounding out ES6 syntax changes, we have the +let+ and +const statements.
+Phew, that malicious +<iframe>+ almost got us. Rounding out ES6 syntax changes, we have the +let+ and +const+ statements.
 
 === 2.6 Let and Const Statements
 

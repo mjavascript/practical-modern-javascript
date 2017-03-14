@@ -19,7 +19,7 @@ add('woofmark', { description: 'Markdown and WYSIWYG editor' })
 
 There's several problems with this approach, outlined below.
 
-- Security issues where user-provided keys like +__proto__+, +toString+, or anything in +Object.prototype+ break expectations and make interaction with this kind of hash-map data structures more cumbersome
+- Security issues where user-provided keys like `__proto__`, +toString+, or anything in +Object.prototype+ break expectations and make interaction with this kind of hash-map data structures more cumbersome
 - Iteration over list items is verbose with +Object.keys(registry).forEach+
 - Keys are limited to strings, making it hard to create hash-maps where you'd like to index values by DOM elements or other non-string references
 
@@ -36,7 +36,7 @@ function get (name) {
 }
 ----
 
-An alternative could also be using +Object.create(null)+ instead of an empty object literal. In this case, the created object won't inherit from +Object.prototype+, meaning it won't be harmed by +__proto__+ and friends.
+An alternative could also be using +Object.create(null)+ instead of an empty object literal. In this case, the created object won't inherit from +Object.prototype+, meaning it won't be harmed by `__proto__` and friends.
 
 [source,javascript]
 ----
@@ -199,7 +199,7 @@ const items = [
   [Symbol('items'), [1, 2]]
 ]
 const map = new Map()
-for (let [key, value] of items) {
+for (const [key, value] of items) {
   map.set(key, value)
 }
 ----
@@ -209,7 +209,7 @@ Maps are iterable objects as well, because they implement a +Symbol.iterator+ me
 [source,javascript]
 ----
 const copy = new Map()
-for (let [key, value] of map) {
+for (const [key, value] of map) {
   copy.set(key, value)
 }
 ----
@@ -253,7 +253,7 @@ const map = new Map()
 map.set(1, 'one')
 map.set(2, 'two')
 map.set(3, 'three')
-for (let [key, value] of map) {
+for (const [key, value] of map) {
   console.log(`${ key }: ${ value }`)
   // <- '1: one'
   // <- '2: two'
@@ -290,20 +290,20 @@ When you iterate over a +Map+, you are actually looping over its +.entries()+. T
 
 [source,javascript]
 ----
-map[Symbol.iterator] === map.entries
+console.log(map[Symbol.iterator] === map.entries)
 // <- true
 ----
 
-There are has two other +Map+ iterators you can leverage: +.keys()+ and +.values()+. The first enumerates keys in a map while the second enumerates values, as opposed to +.entries()+ which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
+There are two other +Map+ iterators you can leverage: +.keys()+ and +.values()+. The first enumerates keys in a map while the second enumerates values, as opposed to +.entries()+ which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
 
 [source,javascript]
 ----
 const map = new Map([[1, 2], [3, 4], [5, 6]])
-[...map.keys()]
+console.log([...map.keys()])
 // <- [1, 3, 5]
-[...map.values()]
+console.log([...map.values()])
 // <- [2, 4, 6]
-[...map.entries()]
+console.log([...map.entries()])
 // <- [[1, 2], [3, 4], [5, 6]]
 ----
 
@@ -313,11 +313,17 @@ Maps have a +.forEach+ method that's identical in behavior to that in ES5 +Array
 
 [source,javascript]
 ----
-const map = new Map([[NaN, 1], [Symbol(), 2], ['key', 'value']])
+const map = new Map([
+  [NaN, 1],
+  [Symbol(), 2],
+  ['key', 'value'],
+  [{ name: 'Kent' }, 'is a person']
+])
 map.forEach((value, key) => console.log(key, value))
 // <- NaN 1
 // <- Symbol() 2
 // <- 'key' 'value'
+// <- { name: 'Kent' } 'is a person'
 ----
 
 Earlier, we brought up the ability of providing arbitrary object references as the key to a +Map+ entry. Let's go into a concrete use case for that API.
@@ -359,7 +365,7 @@ function destroy (entry) {
 }
 ----
 
-One of the most valuable aspects of +Map+ is the ability to index by DOM elements. That, combined with the fact that +Map+ also has collection manipulation abilities greatly simplifies things.
+One of the most valuable aspects of +Map+ is the ability to index by any object, such as DOM elements. That, combined with the fact that +Map+ also has collection manipulation abilities greatly simplifies things.
 
 [source,javascript]
 ----
@@ -453,7 +459,7 @@ map.has(date)
 
 ==== 5.2.1 Is +WeakMap+ Strictly Worse Than +Map+?
 
-The distinction that makes +WeakMap+ worth the trouble is in its name. Given that +WeakMap+ holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as +WeakMap+ keys. This is in contrast with +Map+ which holds strong object references, preventing +Map+ keys from being garbage collected.
+The distinction that makes +WeakMap+ worth the trouble is in its name. Given that +WeakMap+ holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as +WeakMap+ keys. This is in contrast with +Map+ which holds strong object references, preventing +Map+ keys and values from being garbage collected.
 
 Correspondingly, use cases for +WeakMap+ revolve around the need to specify metadata or extend an object while still being able to garbage collect that object if there are no other references to it. A perfect example might be the underlying implementation for +process.on('unhandledRejection')+ in Node.js, which uses a +WeakMap+ to keep track of rejected promises that weren't dealt with. By using +WeakMap+, the implementation prevents memory leaks because the +WeakMap+ won't be grabbing onto those promises strongly. In this case, we have a simple map that weakly holds onto promises, but is flexible enough to handle entries being removed from the map when they're no longer referenced anywhere else.
 

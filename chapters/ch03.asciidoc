@@ -1,7 +1,7 @@
 [[classes-symbols-and-symbols]]
 == Classes, Symbols, and Objects
 
-Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes, and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript useful for defining protocols, and we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the +Object+ built-in in ES6.
+Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes, and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript, like strings, booleans, and numbers. They can be used for defining protocols, and in this chapter we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the +Object+ built-in in ES6.
 
 === 3.1 Classes
 
@@ -81,7 +81,7 @@ class Fruit {
 }
 ----
 
-A not-so-minor detail you might have missed is that there aren't any commas in between method declarations of the +Fruit+ class. That's not a mistake our copious copy editors missed, but rather part of the +class+ syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as class-scoped private functions.
+A not-so-minor detail you might have missed is that there aren't any commas in between method declarations of the +Fruit+ class. That's not a mistake our copious copy editors missed, but rather part of the +class+ syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as public and private class fields.
 
 The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest, the API for +Fruit+ remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces and ate most of it would work well with our +class+ flavored +Fruit+ as well.
 
@@ -94,7 +94,7 @@ class Person {
 }
 ----
 
-Besides the class declaration syntax presented above, classes can also be declared as expressions, just like with function declarations and function expressions. You are allowed to omit the name for a +class+ expression, as shown in the following bit of code.
+Besides the class declaration syntax presented above, classes can also be declared as expressions, just like with function declarations and function expressions. You may omit the name for a +class+ expression, as shown in the following bit of code.
 
 [source,javascript]
 ----
@@ -105,7 +105,7 @@ const Person = class {
 }
 ----
 
-Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a +Jake+ class dynamically in arrow function which takes a name parameter and then feeds that to the parent +Person+ constructor via +super()+.
+Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a +JakePerson+ class dynamically in arrow function which takes a name parameter and then feeds that to the parent +Person+ constructor via +super()+.
 
 [source,javascript]
 ----
@@ -114,8 +114,8 @@ const createPersonClass = name => class extends Person {
     super(name)
   }
 }
-const Jake = createPersonClass('Jake')
-const jake = new Jake()
+const JakePerson = createPersonClass('Jake')
+const jake = new JakePerson()
 ----
 
 We'll dig deeper into class inheritance later. Let's take a more nuanced look at properties and methods first.
@@ -128,7 +128,7 @@ It should be noted that the +constructor+ method declaration is an optional memb
 ----
 class Fruit {
 }
-// the constructor function below is equivalent to the class above
+// the constructor function below is roughly equivalent to the class above
 function Fruit () {
 }
 ----
@@ -360,12 +360,12 @@ Like numbers or strings, symbols are immutable. Unlike other value types, howeve
 
 [source,javascript]
 ----
+console.log(Number(3) === Number(3))
+// <- true
 console.log(Symbol() === Symbol())
 // <- false
 console.log(Symbol('my symbol') === Symbol('my symbol'))
 // <- false
-console.log(Number(3) === Number(3))
-// <- true
 ----
 
 Symbols are of type +symbol+, new in ES6. The following snippet shows how +typeof+ returns the new type string for symbols.
@@ -512,7 +512,7 @@ Besides local symbols, there's also a global symbol registry, accessible from ac
 
 ==== 3.2.3 Global Symbol Registry
 
-A code realm is any JavaScript execution context, such as the page your application is running in, an +<iframe>+ within that page, an script running through +eval+, or a worker of any kind -- such as web workers, service workers, or shared workers. Each of these execution contexts has its own global object. Global variables defined on the +window+ object of a page, for example, aren't available to a +ServiceWorker+. In contrast, the global symbol registry is shared across all code realms.
+A code realm is any JavaScript execution context, such as the page your application is running in, an +<iframe>+ within that page, a script running through +eval+, or a worker of any kind -- such as web workers, service workers, or shared workersfootnote:[Workers are a way of executing background tasks in browsers. The initiator can communicate with their workers, which run in a different execution context, via messaging. https://mjavascript.com/out/workers]. Each of these execution contexts has its own global object. Global variables defined on the +window+ object of a page, for example, aren't available to a +ServiceWorker+. In contrast, the global symbol registry is shared across all code realms.
 
 There's two methods that interact with the runtime-wide global symbol registry: +Symbol.for+ and +Symbol.keyFor+. What do they do?
 
@@ -529,7 +529,7 @@ console.log(example === Symbol.for('example'))
 // <- true
 ----
 
-That contrasts with what we knew about symbols being unique. The global symbol registry keeps track of symbols by their +key+. Note that the +key+ will also be used as a +description+ when the symbols that go into the registry are created. Considering these symbols are global on a runtime-wide level, you might want to prefix symbol keys in the global registry with a value that identifies your library or component, mitigating potential name clashes.
+The global symbol registry keeps track of symbols by their +key+. Note that the +key+ will also be used as a +description+ when the symbols that go into the registry are created. Considering these symbols are global on a runtime-wide level, you might want to prefix symbol keys in the global registry with a value that identifies your library or component, mitigating potential name clashes.
 
 ===== Using +Symbol.keyFor(symbol)+ to retrieve symbol keys
 
@@ -576,13 +576,13 @@ console.log(s1 === s2)
 // <- true
 ----
 
-There's tradeoffs in using widely available symbols. On the one hand, they make it easy for libraries to expose their own symbols, but on the other hand they could also expose their symbols on their own API, using local symbols. The symbol registry is obviously useful when symbols need to be shared across any two code realms, for example: +ServiceWorker+ and a web page. The API is also convenient when you don't want to bother storing references to the symbols, you could use the registry directly for that, since every call with a given +key+ is guaranteed to return the same +symbol+. You'll have to keep in mind, though, that these symbols are shared across the runtime and that might lead to unwanted consequences if you use generic symbol names like +each+ or +contains+.
+There are tradeoffs in using widely available symbols. On the one hand, they make it easy for libraries to expose their own symbols, but on the other hand they could also expose their symbols on their own API, using local symbols. The symbol registry is obviously useful when symbols need to be shared across any two code realms, for example: +ServiceWorker+ and a web page. The API is also convenient when you don't want to bother storing references to the symbols, you could use the registry directly for that, since every call with a given +key+ is guaranteed to return the same +symbol+. You'll have to keep in mind, though, that these symbols are shared across the runtime and that might lead to unwanted consequences if you use generic symbol names like +each+ or +contains+.
 
-There's one more kind of symbols, the built-in well-known symbols.
+There's one more kind of symbols: built-in well-known symbols.
 
 ==== 3.2.4 Well-known Symbols
 
-So far we've covered symbols you can create using the +Symbol+ function and those you can create through +Symbol.for+. The third and last kind of symbols we're going to cover is the well-known symbols. These are built into the language instead of created by the user, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
+So far we've covered symbols you can create using the +Symbol+ function and those you can create through +Symbol.for+. The third and last kind of symbols we're going to cover is the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
 
 A great example of how symbols can add extensibility to the language without breaking existing code is the +Symbol.toPrimitive+ well-known symbol. It can be assigned a function to determine how an object is casted into a primitive value. The function receives a +hint+ parameter that can be +'string'+, +'number'+, or +'default'+, indicating what type of primitive value is expected.
 
@@ -796,7 +796,7 @@ These differences may not seem like much, but dealing with +NaN+ has always been
 
 ==== 3.3.3 +Object.setPrototypeOf+
 
-The +Object.setPrototypeOf+ method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using +__proto__+ which is a legacy feature.
+The +Object.setPrototypeOf+ method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__` which is a legacy feature.
 
 Before ES6, we were introduced to +Object.create+ in ES5. Using that method, we could create an object based on any prototype passed into +Object.create+, as shown next.
 
@@ -824,7 +824,7 @@ Using +Object.setPrototypeOf+ to change the prototype of an object is an expensi
 
 [quote, Mozilla Developer Network]
 ____
-Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a +obj.__proto__ = ...+ statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new object with the desired prototype using +Object.create()+.
+Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `obj.__proto__ = ...` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new object with the desired prototype using +Object.create()+.
 ____
 ====
 
