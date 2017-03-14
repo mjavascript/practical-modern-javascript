@@ -272,6 +272,7 @@ The first statement in the following snippet of code demonstrates that a seriali
 [source,javascript]
 ----
 JSON.parse('{ "payload": `message` }')
+// <- SyntaxError
 JSON.stringify({ payload: `message` })
 // <- '{"payload":"message"}'
 ----
