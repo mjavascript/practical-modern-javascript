@@ -246,7 +246,7 @@ Consider the following example using template literals.
 [source,javascript]
 ----
 const suitKind = `cat`
-`Alfred's {suitKind} suit is "slick".`
+`Alfred's ${suitKind} suit is "slick".`
 // <- Alfred's cat suit is "slick".
 ----
 
