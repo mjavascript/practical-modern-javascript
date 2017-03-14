@@ -7,7 +7,7 @@ To kick off the chapter, we'll start by discussing promises. Promises have exist
 
 === 4.1 Promises
 
-Promises can be vaguely defined as "a proxy for a value that will eventually become available". They can be used for both synchronous and asynchronous code flows, although they make asynchronous flows easier to reason about -- once you've mastered promises, that is.
+Promises can be vaguely defined as "a proxy for a value that will eventually become available". While we can write synchronous code inside Promises, Promise-based code flows in a strictly asynchronous manner. Promises make asynchronous flows easier to reason about -- once you've mastered promises, that is.
 
 ==== 4.1.1 Getting Started with Promises
 
@@ -26,40 +26,6 @@ fetch('/items').then(response => {
   // do something
 })
 ----
-
-.An alternative to callbacks and events
-****
-
-Traditionally JavaScript relied on callbacks instead of promises and chaining. If the +fetch+ function asked for a callback, you'd have to add one that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors -- that may or may not occur -- during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how +fetch+ would look like if it had a callback-based API.
-
-[source,javascript]
-----
-fetch('/items', (err, res) => {
-  if (err) {
-    // handle error
-  } else {
-    // handle response
-  }
-})
-----
-
-The callback wouldn't be invoked until the +/items+ resource has been retrieved, or an error arises from the +fetch+ operation. Execution remains asynchronous and non-blocking. Note that in this model you could only specify a single callback. That callback would be responsible for all functionality derived from the response, and it'd be up to the consumer to come up with a mechanism to compose different aspects of handling the response into that single callback.
-
-Besides traditional callbacks, another API design choice might have been to use an event-driven model. In this case the object returned by +fetch+ would be able to register callbacks for different kinds of events, binding as many event handlers as needed for any events -- just like when you attach event listeners to the browser DOM. Typically there's an +error+ event that's raised when things go awry, and other events that are raised when something notable happens. In the following piece of code, we show how +fetch+ would look like if it had an event-based API.
-
-[source,javascript]
-----
-fetch('/items')
-  .on('error', err => {
-    // handle error
-  })
-  .on('data', res => {
-    // handle response
-  })
-----
-
-Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in.
-****
 
 The following bit of code displays the promise-based API with which +fetch+ is actually implemented in browsers. Calls to +fetch+ return a +Promise+ object. Much like with events, you can bind as many reactions as you'd like, using the +.then+ and +.catch+ methods.
 
@@ -101,6 +67,40 @@ p.then(null, error => {
   // handle error
 })
 ----
+
+.Promises as an alternative to callbacks and events
+****
+
+Traditionally JavaScript relied on callbacks instead of promises and chaining. If the +fetch+ function asked for a callback, you'd have to add one that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors -- that may or may not occur -- during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how +fetch+ would look like if it had a callback-based API.
+
+[source,javascript]
+----
+fetch('/items', (err, res) => {
+  if (err) {
+    // handle error
+  } else {
+    // handle response
+  }
+})
+----
+
+The callback wouldn't be invoked until the +/items+ resource has been retrieved, or an error arises from the +fetch+ operation. Execution remains asynchronous and non-blocking. Note that in this model you could only specify a single callback. That callback would be responsible for all functionality derived from the response, and it'd be up to the consumer to come up with a mechanism to compose different aspects of handling the response into that single callback.
+
+Besides traditional callbacks, another API design choice might have been to use an event-driven model. In this case the object returned by +fetch+ would be able to register callbacks for different kinds of events, binding as many event handlers as needed for any events -- just like when you attach event listeners to the browser DOM. Typically there's an +error+ event that's raised when things go awry, and other events that are raised when something notable happens. In the following piece of code, we show how +fetch+ would look like if it had an event-based API.
+
+[source,javascript]
+----
+fetch('/items')
+  .on('error', err => {
+    // handle error
+  })
+  .on('data', res => {
+    // handle response
+  })
+----
+
+Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in.
+****
 
 When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the +.on+ method attach the event listener and then returning the event emitter itself. Promises are different. The +.then+ and +.catch+ methods return a new promise every time. That's important because chaining can have wildly different results depending on where you append a +.then+ or a +.catch+ call onto.
 
@@ -242,7 +242,7 @@ Similarly, if an error occurred in the +p3+ rejection handler, we could capture 
 ----
 const p1 = Promise.resolve(2)
 const p2 = p1.then(x => { throw new Error('failed'); })
-const p3 = p2.catch(err => { throw new Error('oops', err); })
+const p3 = p2.catch(err => { throw new Error('oops'); })
 const p4 = p3.catch(err => console.error(err))
 ----
 
@@ -292,7 +292,7 @@ Here is an enumeration of what is going on as that piece of code is executed.
 8. The +p3+ promise from +p2.catch+ is fulfilled, because it doesn't produce an error or result in a rejected promise
 9. Because +p3+ was fulfilled, the +p3.catch+ is never followed. The +p3.then+ branch would've been used instead
 
-You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure. It all starts with a single promise, which we'll next learn how to construct. Then you add branches with +.then+ or +.catch+. You can tack as many +.then+ or +.catch+ calls as you want onto each branch, creating new branches, and so on.
+You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structurefootnote:[I wrote an online visualization tool called Promisees where you can see the tree structure underlying a Promise chain: https://mjavascript.com/out/promisees.]. It all starts with a single promise, which we'll next learn how to construct. Then you add branches with +.then+ or +.catch+. You can tack as many +.then+ or +.catch+ calls as you want onto each branch, creating new branches, and so on.
 
 ==== 4.1.3 Creating a Promise From Scratch
 
@@ -310,7 +310,7 @@ new Promise((resolve, reject) => reject(new Error('reason')))
 
 Resolving and rejecting promises without a value is possible, but not that useful. Usually promises will fulfill with a +result+ such as the response from an AJAX call as we've seen with +fetch+. You'll definitely want to state the +reason+ for your rejections -- typically wrapping them in an +Error+ object so that you can report back a stack trace.
 
-As you may have guessed, there's nothing inherently synchronous about promises. Settlement can be completely asynchronous for fulfillment and rejection alike. That's the whole point of promises! The following example creates a promise that becomes fulfilled after two seconds elapse.
+As you may have guessed, there's nothing inherently synchronous about promise resolvers. Settlement can be completely asynchronous for fulfillment and rejection alike. Even if the resolver calls +resolve+ right away, the result won't trickle down to reactions until the next tick. That's the whole point of promises! The following example creates a promise that becomes fulfilled after two seconds elapse.
 
 [source,javascript]
 ----
@@ -418,7 +418,7 @@ Promise
   // <- [2, 4, 6]
 ----
 
-Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in section 4.1.3, when a +.catch+ reaction executes without errors, it will fulfill, following +.then+ reactions.
+Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in section 4.1.3, when a +.catch+ reaction executes without errors and doesn't return a rejected promise either, it will fulfill, following +.then+ reactions.
 
 ==== 4.1.5 Leveraging +Promise.all+ and +Promise.race+
 
@@ -570,7 +570,7 @@ The +for..of+ iteration method can be used to loop over any iterable. The follow
 
 [source,javascript]
 ----
-for (let item of sequence) {
+for (const item of sequence) {
   console.log(item)
   // <- 'i'
   // <- 't'
@@ -603,7 +603,7 @@ For example, jQuery and +document.querySelectorAll+ both return array-likes. If 
 
 [source,javascript]
 ----
-for (let element of $('li')) {
+for (const element of $('li')) {
   console.log(element)
   // <- a <li> in the jQuery collection
 }
@@ -643,7 +643,7 @@ Destructuring infinite sequences doesn't scale very well, particularly if we wan
 
 [source,javascript]
 ----
-for (let value of random) {
+for (const value of random) {
   if (value > 0.8) {
     break
   }
@@ -804,7 +804,7 @@ const colors = keyValueIterable({
   orange: '#f50',
   pink: '#e07'
 })
-for (let [, color] of colors) {
+for (const [, color] of colors) {
   console.log(color)
   // <- '#0e0'
   // <- '#f50'
@@ -1014,7 +1014,7 @@ If we now used a +for..of+ loop instead, we'd be able to preserve the order decl
 
 [source,javascript]
 ----
-for (let number of numbers()) {
+for (const number of numbers()) {
   console.log(number)
   // <- 1
   // <- 'a'
@@ -1238,7 +1238,7 @@ Whenever a question is yielded by the user-provided generator, execution in the 
 [source,javascript]
 ----
 function ball (questions) {
-  for (let question of questions()) {
+  for (const question of questions()) {
     console.log(`[q] ${ question }`)
     console.log(`[a] ${ answer() }`)
   }
@@ -1250,7 +1250,7 @@ One trade-off that you might've noticed is that +ball+ is no longer iterable and
 [source,javascript]
 ----
 function* ball (questions) {
-  for (let question of questions()) {
+  for (const question of questions()) {
     yield [
       `[q] ${ question }`,
       `[a] ${ answer() }`
@@ -1267,7 +1267,7 @@ function* questions () {
   yield 'Will JavaScript fall out of grace?'
   yield 'How do you know that?'
 }
-for (let [q,a] of ball(questions)) {
+for (const [q,a] of ball(questions)) {
   console.log(q)
   console.log(a)
 }
@@ -1449,7 +1449,7 @@ console.log([...numbers()])
 // <- [1, 2]
 console.log(Array.from(numbers()))
 // <- [1, 2]
-for (let number of numbers()) {
+for (const number of numbers()) {
   console.log(number)
   // <- 1
   // <- 2
@@ -1655,7 +1655,7 @@ getRandomArticle()
   .catch(reason => console.error(reason));
 ----
 
-Chaining promises can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
+Chained promises can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
 
 If we were to use plain JavaScript callbacks, our code would become repetitive, as demonstrated in the next code listing. At the same time, we're running into callback hell: we're adding a level of indentation for each step in our asynchronous code flow, making our code increasingly harder to read with each step we add.
 
@@ -2056,7 +2056,7 @@ At this point, +next+ evaluates to the following object.
 [source,javascript]
 ----
 {
-  value: ['slowest', 'slow']
+  value: ['slowest', 'slow'],
   done: true
 }
 ----

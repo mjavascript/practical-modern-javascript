@@ -25,7 +25,7 @@ We can make the proxy object a bit more interesting by adding traps. Traps allow
 
 ==== 6.1.1 Trapping +get+ accessors
 
-The proxy in the following code listing is able to track any and every property access event because it has a +handler.get+ trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor. We can already imagine +Proxy+ becoming a staple when it comes to developer tooling, as it's particularly well equipped for code instrumentation and introspection.
+The proxy in the following code listing is able to track any and every property access event because it has a +handler.get+ trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor.
 
 [source,javascript]
 ----
@@ -204,7 +204,7 @@ const validator = {
     if (validations.has(key)) {
       return validations[key](value)
     }
-    return true
+    return Reflect.set(target, key, value)
   }
 }
 validations.set('age', validateAge)
@@ -350,7 +350,7 @@ We could've thrown an exception instead. That would be useful in situations wher
 
 ==== 6.3.2 +deleteProperty+ Trap
 
-Setting a property to +undefined+ clears its value, but the property is still part of the object. Using the +delete+ operator on a property with code like +delete cat.furBall+ means that the +furBall+ property will be forever gone from the +cat+ object.
+Setting a property to +undefined+ clears its value, but the property is still part of the object. Using the +delete+ operator on a property with code like +delete cat.furBall+ means that the +furBall+ property will be completely gone from the +cat+ object.
 
 [source,javascript]
 ----
@@ -437,7 +437,7 @@ When creating properties through +defineProperty+, you can customize the followi
 - +get = undefined+ is a method that acts as the getter for the property
 - +set = undefined+ is a method that receives the new +value+ and updates the property's +value+
 
-Note that you'll have to choose between configuring the +value+ and +writable+ pair or +get+ and +set+ pair. When choosing the former you're configuring a data descriptor. You get a data descriptor when creating plain properties, such as in +pizza.topping = 'ham'+, too. In that case, +topping+ has a +value+ and it may or may not be +writable+. If you pick the second pair of options, you're creating an accessor descriptor which is entirely defined by the methods you can use to +get()+ or +set(value)+ for the property.
+Note that you'll have to choose between configuring the +value+ and +writable+ pair or +get+ and +set+ pair. When choosing the former you're configuring a data descriptor. You get a data descriptor when creating plain properties, such as in `pizza.topping = 'ham'`, too. In that case, +topping+ has a +value+ and it may or may not be +writable+. If you pick the second pair of options, you're creating an accessor descriptor which is entirely defined by the methods you can use to +get()+ or +set(value)+ for the property.
 
 The following code sample shows how property descriptors can be completely different depending on whether we use the declarative option or go through the programmatic API. We use +Object.getOwnPropertyDescriptor+, which receives a +target+ object+ and a property +key+, to pull the object descriptor for properties we create.
 
@@ -525,7 +525,7 @@ const target = {
   toppings: ['cheese', 'tomato', 'bacon']
 }
 const proxy = new Proxy(target, handler)
-for (let key of Object.keys(proxy)) {
+for (const key of Object.keys(proxy)) {
   console.log(key)
   // <- '_secret'
   // <- '_toppingCount'
@@ -571,7 +571,7 @@ const target = {
   toppings: ['cheese', 'tomato', 'bacon']
 }
 const proxy = new Proxy(target, handler)
-for (let key of Object.keys(proxy)) {
+for (const key of Object.keys(proxy)) {
   console.log(key)
   // <- 'toppings'
 }
@@ -588,7 +588,7 @@ const target = {
   toppings: ['cheese', 'tomato', 'bacon']
 }
 const proxy = new Proxy(target, handler)
-for (let key of Object.getOwnPropertySymbols(proxy)) {
+for (const key of Object.getOwnPropertySymbols(proxy)) {
   console.log(key)
   // <- Symbol(id)
 }
@@ -721,7 +721,7 @@ If we want to ensure that +get+ always returns +logger+, we could bind that meth
 logger.test = logger.test.bind(logger)
 ----
 
-The problem with that approach is that we'd have to do it for every single function on +logger+ that relies on +this+ being a reference to the +logger+ object itself. A better solution could involve using a proxy with a +get+ trap handler, where we modify returned functions by binding them to the +target+ object.
+The problem with that approach is that we'd have to do it for every single function on +logger+ that relies on +this+ being a reference to the +logger+ object itself. An alternative could involve using a proxy with a +get+ trap handler, where we modify returned functions by binding them to the +target+ object.
 
 [source,javascript]
 ----
@@ -828,7 +828,7 @@ const handler = {
 }
 ----
 
-Traps like +construct+ allow us to modify or extend the behavior of an object without using a factory function or changing the implementation, leading to more maintainable code. It should be noted, however, that proxies should always have a clearly defined goal, and that goal shouldn't meddle too much with the implementation of the underlying target. That is to say, a proxy trap for +construct+ that acts as a switch for several different underlying classes is probably the wrong kind of abstraction: a simple function would do.
+Traps like +construct+ allow us to modify or extend the behavior of an object without using a factory function or changing the implementation. It should be noted, however, that proxies should always have a clearly defined goal, and that goal shouldn't meddle too much with the implementation of the underlying target. That is to say, a proxy trap for +construct+ that acts as a switch for several different underlying classes is probably the wrong kind of abstraction: a simple function would do.
 
 Use cases for +construct+ traps should mostly revolve around rebalancing constructor parameters or doing things that should always be done around the constructor, such as logging and tracking object creation.
 
@@ -1046,4 +1046,6 @@ As we've learned over the last few pages, there's a myriad of use cases for prox
 - Return a result other than the object created via +new+ and a constructor
 - Swap out the prototype of an object for something else
 
-Proxies are an extremely powerful feature in ES6, with infinite practical applications.
+Proxies are an extremely powerful feature in ES6, with many potential applications, and they're well equipped for code instrumentation and introspection. However, they also have a significant performance impact in JavaScript engine execution as they're virtually impossible to optimize for. This makes proxies impractical for applications where speed is of the essence.
+
+At the same time it's easy to confuse consumers by providing complicated proxies that attempt to do too much. It may be a good idea to avoid them for most use cases, or at least develop consistent and uncomplicated access rules. Make sure you're not producing many side-effects in property access, which can lead to confusion even if properly documented.
