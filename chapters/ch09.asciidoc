@@ -149,7 +149,7 @@ makeCollection(2) // <- [1, 2, 3, 4]
 makeCollection(3) // <- [1, 2, 3, 4, 5, 6]
 ----
 
-When you do need to use +Array#concat+, you should probably use +[...result, 1, 2]+ instead, to keep it simpler.
+When you do need to use +Array#concat+, you might prefer to use +[...result, 1, 2]+ instead, to make the code shorter.
 
 The last case we'll cover is one of refactoring. Sometimes, we write code like the next snippet, usually in the context of a larger function.
 
@@ -246,7 +246,7 @@ Consider the following example using template literals.
 [source,javascript]
 ----
 const suitKind = `cat`
-`Alfred's ${suitKind} suit is "slick".`
+console.log(`Alfred's ${ suitKind } suit is "slick".`)
 // <- Alfred's cat suit is "slick".
 ----
 
@@ -255,7 +255,7 @@ A compiler such as Babel would transform our example into code similar to this, 
 [source,javascript]
 ----
 const suitKind = 'cat'
-'Alfred\'s ' + suitKind + ' suit is "slick".'
+console.log('Alfred\'s ' + suitKind + ' suit is "slick".')
 // <- Alfred's cat suit is "slick".
 ----
 
@@ -491,46 +491,7 @@ const summary = `This is a ${name} summary`
 const description = `${name} is a grocery item`
 ----
 
-Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dillute value, because of increased repetition in the destructuring statement. The following formula describes that relationship.
-
-[source,javascript]
-----
-destructuring_coefficient = host_references / property_count - 1
-----
-
-The formula shows how beneficial using destructuring would be in each case. A negative coefficient means the destructured alternative is worse, while a positive coefficient indicates destructuring is the way to go. A value of 0 is neutral as to whether destructuring should be used, it depends on the use case.
-
-In the next snippet, we use the formula to analyze the merits of destructuring in a few different scenarios.
-
-[source,javascript]
-----
-model.prop
-const { prop } = model
-// <- destructuring_coefficient: 0
-
-model.prop1
-const { prop1, prop2 } = model
-// <- destructuring_coefficient: -0.5
-
-model.prop1, model.prop1, model.prop1
-const { prop1 } = model
-// <- destructuring_coefficient: 2
-
-model.prop1, model.prop2, model.prop3
-const { prop1, prop2, prop3 } = model
-// <- destructuring_coefficient: 0
-
-model.prop1, model.prop2, model.prop2
-const { prop1, prop2 } = model
-// <- destructuring_coefficient: 0.5
-
-model.prop1, model.prop2, model.prop3
-model.prop1, model.prop2, model.prop3
-const { prop1, prop2, prop3 } = model
-// <- destructuring_coefficient: 1
-----
-
-Destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not many host references being removed.
+Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dillute value, because of increased repetition in the destructuring statement. In short, destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not that many host references being removed.
 
 === 9.4 Rest and Spread
 
@@ -563,7 +524,7 @@ administrators.concat(moderators)
 [...administrators, ...moderators, bob]
 ----
 
-Similarly, the object spread feature introduced in section +3.3.1+ allows us to merge objects onto a new object. Consider the following snippet where we programatically create a new object comprised of base +defaults+, user-provided +options+, and some important override property that prevails over previous properties.
+Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in section +3.3.1+ allows us to merge objects onto a new object. Consider the following snippet where we programatically create a new object comprised of base +defaults+, user-provided +options+, and some important override property that prevails over previous properties.
 
 [source,javascript]
 ----
@@ -725,7 +686,7 @@ console.log(sum())
 // <- ReferenceError: sum is not defined
 ----
 
-Arrow functions, introduced in ES6, are similar to function expressions. The syntax is made shorter by dropping the +function+ keyword. In arrow functions, parenthesis around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
+Arrow functions, introduced in section 2.2 of this book, are similar to function expressions. The syntax is made shorter by dropping the +function+ keyword. In arrow functions, parenthesis around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
 
 The following snippet shows an arrow function explicitly returning an expression in a block statement, one that implicitly returns the expression, one that drops the parenthesis around its only parameter, and one that uses a block statement but doesn't return a value.
 
@@ -747,7 +708,7 @@ const makeSlice = (discarded, ...items) => items
 
 Implicitly returning an object literal is a bit tricky because they're hard to tell apart from block statements, which are also wrapped in brackets. We'll have to add parenthesis around our object literal, turning it into an expression that evaluates into the object. This bit of indirection is just enough to help us disambiguate and tell JavaScript parsers that they're dealing with an object literal.
 
-Consider the following example, where we implicitly return an object expression. Without the parenthesis, the parser would interpret our code as a block statement containing a label and the literal expression +'Nico'+.
+Consider the following example, where we implicitly return an object expression. Without the parenthesis, the parser would interpret our code as a block statement containing a label and the literal expression `'Nico'`.
 
 [source,javascript]
 ----
@@ -798,6 +759,37 @@ function wait (delay) {
     setTimeout(() => resolve(), delay)
   )
 }
+----
+
+Another large upside in using arrow function lies in their lexical scoping, where they don't modify the meaning of `this` or `arguments`. If we find ourselves copying `this` to a temporary variable -- typically named `self`, `context`, or `_this` -- we may want to use an arrow function for the inner bit of code instead. Let's take a look at an example of this.
+
+[source,javascript]
+----
+const pistol = {
+  caliber: 50,
+  trigger() {
+    const self = this
+    setTimeout(function () {
+      console.log(`Fired pistol with caliber of ${ self.caliber }`)
+    }, 1000)
+  }
+}
+pistol.trigger()
+----
+
+If we tried to use `this` directly in the previous example, we'd get a caliber of `undefined` instead. With an arrow function, however, we can avoid the temporary `self` variable. We not only removed the `function` keyword but we also gained functional value due to lexical scoping, since we don't need to work our way around the language's limitations anymore in this case.
+
+[source,javascript]
+----
+const pistol = {
+  caliber: 50,
+  trigger() {
+    setTimeout(() => {
+      console.log(`Fired pistol with caliber of ${ this.caliber }`)
+    }, 1000)
+  }
+}
+pistol.trigger()
 ----
 
 As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, require several lines of code nor involve recursion, then consider an arrow function.
@@ -904,13 +896,13 @@ console.log(items.last)
 // <- `examples`
 ----
 
-JavaScript classes are less verbose than their prototype-based equivalents. Class sugar is thus a most welcome improvement over raw prototypal inheritance. As for the merits of using JavaScript classes, it depends. Even though classes may be compelling to use due to their improved syntax, sugar alone doesn't inherently promote classes to a wider variety of use cases.
+JavaScript classes are less verbose than their prototype-based equivalents. Class sugar is thus a most welcome improvement over raw prototypal inheritance. As for the merits of using JavaScript classes, it depends. Even though classes may be compelling to use due to their improved syntax, sugar alone doesn't instantly promote classes to a wider variety of use cases.
 
 In most situations when dealing with statically typed languages, you would have to use classes. In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
 
 Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and +Object.create+.
 
-In terms of practicality, proxies fall in a similar category as classes. Proxies empower many previously unavailable use cases. Solutions which involve a +Proxy+ object, however, may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
+Proxies empower many previously unavailable use cases, but we need to tread lightly. Solutions which involve a +Proxy+ object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
 
 There may indeed be cases where using a +Proxy+ is warranted, particularly when it comes to developer tooling meant for development environments, where a high degree of code introspection is desirable and complexity is hidden away in the developer tool's codebase. Using +Proxy+ in application-level code bases is easily avoided, and leads to less enigmatic code.
 

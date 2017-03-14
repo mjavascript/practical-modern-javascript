@@ -1496,10 +1496,10 @@ The +Array.of+ method is exactly like the +cast+ function we played around with 
 
 [source,javascript]
 ----
-Array.of = (...params) => params
+Array.of = (...items) => items
 ----
 
-You can think about +Array.of+ as an alternative for +new Array+ that doesn't have the +new Array(length)+ overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${ count }+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
+The +Array+ constructor has two overloads: `...items`, where you provide the items for the new array; and `length`, where you provide its numeric length. You can think about +Array.of+ as a flavor of +new Array+ that doesn't support a `length` overload. In the following code snippet, you'll find some of the unexpected ways in which +new Array+ behaves thanks to its single-argument +length+ overloaded constructor. If you're confused about the +undefined x ${ count }+ notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
 
 [source,javascript]
 ----
@@ -1614,8 +1614,8 @@ You could also specify the starting index and end index. In this case, as shown 
 ----
 [`a`, `b`, `c`,,,].fill(`x`, 2)
 // <- [`a`, `b`, `x`, `x`, `x`]
-new Array(5).fill(`x`, `x`, 3)
-// <- [`x`, `x`, `x`, undefined x 2]
+new Array(5).fill(`x`, 0, 1)
+// <- [`x`, undefined x 4]
 ----
 
 The provided +value+ can be anything, and is not just limited to primitive values.
