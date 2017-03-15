@@ -51,7 +51,7 @@ Firefox, Chrome, Edge, Safari and Node.js all offer over 95% compliancy of the E
 
 The new process involves four different maturity stagesfootnote:[The TC39 proposal process documentation can be found at https://mjavascript.com/out/tc39-process.]. The more mature a proposal is, the more likely it is to eventually make it into the specification.
 
-Any discussion, idea or proposal for a change or addition which has not yet been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0) and has no acceptance requirements, but Oonly TC39 members can create strawman proposals. At the time of this writing, there's over a dozen active strawman proposalsfootnote:[You can track strawman proposals here: https://mjavascript.com/out/tc39-stage0.].
+Any discussion, idea or proposal for a change or addition which has not yet been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0) and has no acceptance requirements, but only TC39 members can create strawman proposals. At the time of this writing, there's over a dozen active strawman proposalsfootnote:[You can track strawman proposals here: https://mjavascript.com/out/tc39-stage0.].
 
 At stage 1 a proposal is formalized and expected to address cross-cutting concerns, interactions with other proposals, and implementation concerns. Proposals at this stage should identify a discrete problem and offer a concrete solution to the problem. A stage 1 proposal often includes a high level API description, illustrative usage examples and a discussion of internal semantics and algorithms. Stage 1 proposals are likely to change significantly as they make their way through the process.
 
@@ -152,7 +152,7 @@ Packages installed by +npm+ will be placed in a +node_modules+ directory at the 
 
 Using the +--save-dev+ flag will add these packages to our +package.json+ manifest as development dependencies, so that when copying our project to new environments we can reinstall every dependency just by running +npm install+.
 
-The +@+ notation indicates we want to install a specific version of a package. Using +@6+ we're telling +npm+ to install the latest version of +babel-cli+ in the +6.x+ range. This preference is handy to future-proof our applications, as it would never install `7.0.0` or posterior versions, which might contain breaking changes that could not have been foreseen at the time of this writing.
+The +@+ notation indicates we want to install a specific version of a package. Using +@6+ we're telling +npm+ to install the latest version of +babel-cli+ in the +6.x+ range. This preference is handy to future-proof our applications, as it would never install `7.0.0` or later versions, which might contain breaking changes that could not have been foreseen at the time of this writing.
 ====
 
 For the next step, we'll replace the value of the +scripts+ property in +package.json+ with the following. The +babel+ command-line utility provided by +babel-cli+ can take the entire contents of our +src+ directory, compile them into the desired output format, and save the results to a +dist+ directory, while preserving the original directory structure under a different root.
@@ -173,8 +173,8 @@ Together with the packages we've installed in the previous step, a minimal +pack
     "build": "babel src --out-dir dist"
   },
   "devDependencies": {
-    "babel-cli": "6.24.0",
-    "babel-preset-env": "1.2.1"
+    "babel-cli": "^6.24.0",
+    "babel-preset-env": "^1.2.1"
   }
 }
 ----

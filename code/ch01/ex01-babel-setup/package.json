@@ -3,7 +3,7 @@
     "build": "babel src --out-dir dist"
   },
   "devDependencies": {
-    "babel-cli": "6.24.0",
-    "babel-preset-env": "1.2.1"
+    "babel-cli": "^6.24.0",
+    "babel-preset-env": "^1.2.1"
   }
 }
