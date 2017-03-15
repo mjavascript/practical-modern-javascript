@@ -2173,7 +2173,7 @@ In order to consume an async iterator, we can leverage the new +for await..of+ c
 ----
 async function print () {
   for await (const i of interval(1000)) {
-    console.log(`${i} seconds ellapsed.`)
+    console.log(`${ i } seconds ellapsed.`)
   }
 }
 print()

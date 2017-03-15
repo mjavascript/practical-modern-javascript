@@ -305,7 +305,7 @@ const brand = `Porsche`
 const car = {
   `wheels`: 4,
   `has fuel`: true,
-  `is ${brand}`: `you wish`
+  `is ${ brand }`: `you wish`
 }
 ----
 
@@ -438,7 +438,7 @@ Destructuring can also help avoid repeating references to the host object when i
 
 [source,javascript]
 ----
-const summary = `${model.units}x ${model.name} ($${model.unitPrice}) = $${model.totalPrice}`
+const summary = `${ model.units }x ${ model.name } ($${ model.unitPrice }) = $${ model.totalPrice }`
 // <- `4x Tomato ($1.25) = $5`
 ----
 
@@ -447,7 +447,7 @@ However, there's a trade-off here: we avoid repeating the host object when refer
 [source,javascript]
 ----
 const { name, units, unitPrice, totalPrice } = model
-const summary = `${units}x ${name} ($${unitPrice}) = $${totalPrice}`
+const summary = `${ units }x ${ name } ($${ unitPrice }) = $${ totalPrice }`
 ----
 
 Whenever there's several references to the same property, it becomes clear that we should avoid repeating references to the host object, by destructuring it.
@@ -457,21 +457,21 @@ When there's a single reference to a single property, it's clear we should avoid
 [source,javascript]
 ----
 const { name } = model
-const summary = `This is a ${name} summary`
+const summary = `This is a ${ name } summary`
 ----
 
 Having a reference to +model.name+ directly in the +summary+ code is less noisy.
 
 [source,javascript]
 ----
-const summary = `This is a ${model.name} summary`
+const summary = `This is a ${ model.name } summary`
 ----
 
 When we have two properties to destructure (or two references to one property), things change a bit.
 
 [source,javascript]
 ----
-const summary = `This is a summary for ${model.units}x  ${model.name}`
+const summary = `This is a summary for ${ model.units }x  ${ model.name }`
 ----
 
 Destructuring does help in this case. It reduces the character count in the +summary+ declaration statement, and it explicitly announces the +model+ properties we're going to be using.
@@ -479,7 +479,7 @@ Destructuring does help in this case. It reduces the character count in the +sum
 [source,javascript]
 ----
 const { name, units } = model
-const summary = `This is a summary for ${units}x  ${name}`
+const summary = `This is a summary for ${ units }x  ${ name }`
 ----
 
 If we have two references to the same property, similar conditions apply. In the next example, we have one less reference to +model+ and one more reference to +name+ than we'd have without destructuring. This case could go either way, although the value in explicitly declaring the future usage of +name+ could be incentive enough to warrant destructuring.
@@ -487,8 +487,8 @@ If we have two references to the same property, similar conditions apply. In the
 [source,javascript]
 ----
 const { name } = model
-const summary = `This is a ${name} summary`
-const description = `${name} is a grocery item`
+const summary = `This is a ${ name } summary`
+const description = `${ name } is a grocery item`
 ----
 
 Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dillute value, because of increased repetition in the destructuring statement. In short, destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not that many host references being removed.
