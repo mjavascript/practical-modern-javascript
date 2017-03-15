@@ -99,7 +99,7 @@ fetch('/items')
   })
 ----
 
-Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in.
+Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in. Moreover, events are better suited to handle streams of values, making them somewhat inappropriate in for this particular use case. Section 9.7 discusses proper asynchronous code flow design in more detail, expanding on which kinds of constructs are better suited for which kinds of code flows.
 ****
 
 When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the +.on+ method attach the event listener and then returning the event emitter itself. Promises are different. The +.then+ and +.catch+ methods return a new promise every time. That's important because chaining can have wildly different results depending on where you append a +.then+ or a +.catch+ call onto.
@@ -1382,7 +1382,7 @@ ball(function* questions () {
 })
 ----
 
-Generator functions allow you to use error handling semantics -- +try+, +catch+, and +throw+ -- which were previously only useful in synchronous code paths. Having the ability to use +try+/+catch+ blocks in generator code lets us treat the code as if it were synchronous, even when there's HTTP requests sitting behind +yield+ expressions, in iterator code.
+Even though generator functions allow us to suspend execution and then resume asynchronously, we can use the same error handling semantics -- +try+, +catch+, and +throw+ -- as with regular functions. Having the ability to use +try+/+catch+ blocks in generator code lets us treat the code as if it were synchronous, even when there's HTTP requests sitting behind +yield+ expressions, in iterator code.
 
 ==== 4.3.7 Returning on Behalf of a Generator
 
@@ -1863,7 +1863,7 @@ read()
 
 As you can see, there's quite a few ways in which we can notice exceptions and then handle, log, or offload them.
 
-==== 4.4.6 Understanding Async Function Internals
+==== 4.4.5 Understanding Async Function Internals
 
 Async Functions leverage both generators and promises internally. Let's suppose we have the following Async Function.
 
@@ -2178,6 +2178,8 @@ async function print () {
 }
 print()
 ----
+
+Note that async iterators -- as well as async generators -- are in stage 3 of the ECMAScript process as of the time of this writing.
 
 ==== 4.5.2 Async Generators
 
