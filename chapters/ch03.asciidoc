@@ -253,7 +253,7 @@ Banana.prototype.slice = function () {
 }
 ----
 
-Given the ephemeral knowledge one has to remember, and the fact that +Object.create+ was only made available in ES5, JavaScript developers have historically turned to libraries to resolve their prototype inheritance issues. One such example is +util.inherits+ in Node.js, which is usually favored over +Object.create+ for legacy support reasons.
+Given the ephemeral knowledge one has to remember, and the fact that `Object.create` was only made available in ES5, JavaScript developers have historically turned to libraries to resolve their prototype inheritance issues. One such example is +util.inherits+ in Node.js, which is usually favored over `Object.create` for legacy support reasons.
 
 [source,javascript]
 ----
@@ -322,7 +322,7 @@ class Plum extends createJuicyFruit('plum', 30) {
 }
 ----
 
-Let's move onto +Symbol+. While not iteration or flow control mechanism, learning about +Symbol+ is crucial to shaping an understanding of iteration protocols, which are discussed at length later in the chapter.
+Let's move onto +Symbol+. While not an iteration or flow control mechanism, learning about +Symbol+ is crucial to shaping an understanding of iteration protocols, which are discussed at length later in the chapter.
 
 === 3.2 Symbols
 
@@ -391,7 +391,7 @@ console.log(character[weapon])
 // <- 'umbrella'
 ----
 
-Keep in mind that symbol keys are hidden from many of the traditional ways of pulling keys from an object. The next bit of code shows how +for..in+, +Object.keys+, and +Object.getOwnPropertyNames+ fail to report on symbol properties.
+Keep in mind that symbol keys are hidden from many of the traditional ways of pulling keys from an object. The next bit of code shows how `for..in`, `Object.keys`, and `Object.getOwnPropertyNames` fail to report on symbol properties.
 
 [source,javascript]
 ----
@@ -413,7 +413,7 @@ console.log(JSON.stringify(character))
 // <- '{"name":"Penguin"}'
 ----
 
-That being said, symbols are by no means a safe mechanism to conceal properties. Even though you won't stumble upon symbol properties when using reflection or serialization methods, symbols are revealed by a dedicated method as shown in the next snippet of code. In other words, symbols are not non-enumerable, but hidden in plain sight. Note that +Object.getOwnPropertySymbols+
+That being said, symbols are by no means a safe mechanism to conceal properties. Even though you won't stumble upon symbol properties when using reflection or serialization methods, symbols are revealed by a dedicated method as shown in the next snippet of code. In other words, symbols are not non-enumerable, but hidden in plain sight. Using `Object.getOwnPropertySymbols` we can retrieve all symbols used as property keys on any given object.
 
 [source,javascript]
 ----
@@ -550,7 +550,7 @@ console.log(Symbol.keyFor(Symbol()))
 // <- undefined
 ----
 
-Also keep in mind that it's not possible to match symbols in the global registry usign local symbols, even when they share the same description. The reason for that is that local symbols aren't part of the global registry, as shown in the following piece of code.
+Also keep in mind that it's not possible to match symbols in the global registry using local symbols, even when they share the same description. The reason for that is that local symbols aren't part of the global registry, as shown in the following piece of code.
 
 [source,javascript]
 ----
@@ -703,6 +703,24 @@ print({ second: false })
 
 Before +Object.assign+ made its way into the language, there were numerous similar implementations of this technique in user-land JavaScript, with names like assign, or extend. Adding +Object.assign+ to the language consolidates these options into a single method.
 
+Note that +Object.assign+ takes into consideration only enumerable own properties, including both string and symbol properties.
+
+[source,javascript]
+----
+const defaults = {
+  [Symbol('currency')]: 'USD'
+}
+const options = {
+  price: '0.99'
+}
+Object.defineProperty(options, 'name', {
+  value: 'Espresso Shot',
+  enumerable: false
+})
+console.log(Object.assign({}, defaults, options))
+// <- { [Symbol('currency')]: 'USD', price: '0.99' }
+----
+
 Note, however, that +Object.assign+ doesn't cater to every need. While most user-land implementations have the ability to perform deep assignment, +Object.assign+ doesn't offer a recursive treatment of objects. Object values are assigned as properties on +target+ directly, instead of being recursively assigned key by key.
 
 In the following bit of code you might expect the +f+ property to be added to +target.a+ while keeping +b.c+ and +b.d+ intact, but the +b.c+ and +b.d+ properties are lost when using +Object.assign+.
@@ -798,7 +816,7 @@ These differences may not seem like much, but dealing with +NaN+ has always been
 
 The +Object.setPrototypeOf+ method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__` which is a legacy feature.
 
-Before ES6, we were introduced to +Object.create+ in ES5. Using that method, we could create an object based on any prototype passed into +Object.create+, as shown next.
+Before ES6, we were introduced to `Object.create` in ES5. Using that method, we could create an object based on any prototype passed into `Object.create`, as shown next.
 
 [source,javascript]
 ----
@@ -807,7 +825,7 @@ const cat = Object.create(baseCat)
 cat.name = 'Milanesita'
 ----
 
-The +Object.create+ method is, however, limited to newly created objects. In contrast, we could use +Object.setPrototypeOf+ to change the prototype of an object that already exists, as shown in the following code snippet.
+The `Object.create` method is, however, limited to newly created objects. In contrast, we could use +Object.setPrototypeOf+ to change the prototype of an object that already exists, as shown in the following code snippet.
 
 [source,javascript]
 ----
@@ -815,7 +833,7 @@ const baseCat = { type: 'cat', legs: 4 }
 const cat = Object.setPrototypeOf({ name: 'Milanesita' }, baseCat)
 ----
 
-Note however that there are serious performance implications when using +Obect.setPrototypeOf+ as opposed to +Object.create+, and some careful consideration is in order before you decide to go ahead and sprinkle +Object.setPrototypeOf+ all over a codebase.
+Note however that there are serious performance implications when using +Obect.setPrototypeOf+ as opposed to `Object.create`, and some careful consideration is in order before you decide to go ahead and sprinkle +Object.setPrototypeOf+ all over a codebase.
 
 .Performance issues
 [WARNING]
@@ -824,7 +842,7 @@ Using +Object.setPrototypeOf+ to change the prototype of an object is an expensi
 
 [quote, Mozilla Developer Network]
 ____
-Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `obj.__proto__ = ...` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new object with the desired prototype using +Object.create()+.
+Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `obj.__proto__ = ...` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new object with the desired prototype using `Object.create()`.
 ____
 ====
 

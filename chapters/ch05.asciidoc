@@ -36,7 +36,7 @@ function get (name) {
 }
 ----
 
-An alternative could also be using +Object.create(null)+ instead of an empty object literal. In this case, the created object won't inherit from +Object.prototype+, meaning it won't be harmed by `__proto__` and friends.
+An alternative could also be using `Object.create(null)` instead of an empty object literal. In this case, the created object won't inherit from `Object.prototype`, meaning it won't be harmed by `__proto__` and friends.
 
 [source,javascript]
 ----

@@ -29,7 +29,7 @@ As AOL laid off 50 Netscape employees in 2003footnote:[You can read a news repor
 
 It took two years until Brendan, now at Mozilla, had ECMA resurrect work on TC39 by using Firefox's growing market share as leverage to get Microsoft back in the fold. By mid 2005, TC39 started meeting regularly once again. As for ES4, there were plans for introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features. Due to how ambitious the project was, work on ES4 was repeatedly delayed.
 
-By 2007 the commitee was split in two: ES3.1, which hailed a more incremental approach to ES3; and ES4, which was overdesigned and underspecified. It wouldn't be until August 2008footnote:[Brendan Eich sent an email to the es-discuss mailing list in 2008 where he summarized the situation, almost ten years after ES3 had been released: https://mjavascript.com/out/harmony.] when ES3.1 was agreed upon as the way forward, but later rebranded as ES5. Although ES4 would be abandoned, many of its features eventually made its way into ES6 (which was dubbed Harmony at the time of this resolution), while some of them still remain under consideration. The ES3.1 update served as the foundation on top of which the ES4 specification could be laid upon in bits and pieces.
+By 2007 the commitee was split in two: ES3.1, which hailed a more incremental approach to ES3; and ES4, which was overdesigned and underspecified. It wouldn't be until August 2008footnote:[Brendan Eich sent an email to the es-discuss mailing list in 2008 where he summarized the situation, almost ten years after ES3 had been released: https://mjavascript.com/out/harmony.] when ES3.1 was agreed upon as the way forward, but later rebranded as ES5. Although ES4 would be abandoned, many of its features eventually made its way into ES6 (which was dubbed Harmony at the time of this resolution), while some of them still remain under consideration and a few others have been abandoned, rejected, or withdrawn. The ES3.1 update served as the foundation on top of which the ES4 specification could be laid upon in bits and pieces.
 
 In December 2009, on the ten-year anniversary since the publication of ES3, the fifth edition of ECMAScript was published. This edition codified de facto extensions to the language specification that had become common among browser implementations, adding get and set accessors, functional improvements to the +Array+ prototype, reflection and introspection, as well as native support for JSON parsing, and strict mode.
 
@@ -45,19 +45,19 @@ The sixth edition is a significant milestone in the history of JavaScript. Besid
 
 Having spent ten years without observing significant change to the language specification after ES3, and four years for ES6 to materialize, it was clear the TC39 process needed to improve. The revision process used to be deadline-driven. Any delay in arriving at consensus would cause long wait periods between revisions, which lead to feature creep, causing more delays. Minor revisions were delayed by large additions to the specification, and large additions faced pressure to finalize so that the revision would be pushed through avoiding further delays.
 
-Since ES6 came out, TC39 has streamlinedfootnote:[You can find the September 2013 presentation which lead to the streamlined proposal revisioning process here: https://mjavascript.com/out/tc39-improvement.] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using Ecmarkup and GitHub Pull Requests, greatly increasing the number of proposalsfootnoteref:[proposals,You can find all proposals being considered by TC39 at https://mjavascript.com/out/tc39-proposals.] being created as well as external participation by non-members.
+Since ES6 came out, TC39 has streamlinedfootnote:[You can find the September 2013 presentation which lead to the streamlined proposal revisioning process here: https://mjavascript.com/out/tc39-improvement.] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using ecmarkup and GitHub Pull Requests, greatly increasing the number of proposalsfootnoteref:[proposals,You can find all proposals being considered by TC39 at https://mjavascript.com/out/tc39-proposals.] being created as well as external participation by non-members.
 
 Firefox, Chrome, Edge, Safari and Node.js all offer over 95% compliancy of the ES6 specification,footnote:[For a detailed ES6 compatibility report across browsers, check out the following table: https://mjavascript.com/out/es6-compat.] but we’ve been able to use the features as they came out in each of these browsers rather than having to wait until the flip of a switch when their implementation of ES6 was 100% finalized.
 
 The new process involves four different maturity stagesfootnote:[The TC39 proposal process documentation can be found at https://mjavascript.com/out/tc39-process.]. The more mature a proposal is, the more likely it is to eventually make it into the specification.
 
-Any discussion, idea or proposal for a change or addition which has not been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0) and has no acceptance requirements. At the time of this writing, there's over a dozen active stage 0 proposalsfootnote:[You can track stage 0 proposals here: https://mjavascript.com/out/tc39-stage0.].
+Any discussion, idea or proposal for a change or addition which has not yet been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0) and has no acceptance requirements, but Oonly TC39 members can create strawman proposals. At the time of this writing, there's over a dozen active strawman proposalsfootnote:[You can track strawman proposals here: https://mjavascript.com/out/tc39-stage0.].
 
 At stage 1 a proposal is formalized and expected to address cross-cutting concerns, interactions with other proposals, and implementation concerns. Proposals at this stage should identify a discrete problem and offer a concrete solution to the problem. A stage 1 proposal often includes a high level API description, illustrative usage examples and a discussion of internal semantics and algorithms. Stage 1 proposals are likely to change significantly as they make their way through the process.
 
 Proposals in stage 2 offer an initial draft of the specification. At this point, it's reasonable to begin experimenting with actual implementations in runtimes. The implementation could come in the form of a polyfill, user code that mangles the runtime into adhering to the proposal; an engine implementation, natively providing support for the proposal; or compiled into something existing engines can execute, using build-time tools to transform source code.
 
-Proposals in stage 3 are candidate recommendations. At this point, implementors have expressed interest in the proposal. In practice, proposals move to this level with at least one browser implementation, a high-fidelity polyfill or when supported by a build-time compiler like Babel. At this stage, a proposal is unlikely to change beyond fixes to issues identified in the wild.
+Proposals in stage 3 are candidate recommendations. In order for a proposal to advance to this stage, the specification editor and designated reviewers must have signed off on the final specification. Implementors should've expressed interest in the proposal as well. In practice, proposals move to this level with at least one browser implementation, a high-fidelity polyfill or when supported by a build-time compiler like Babel. A stage 3 proposal is unlikely to change beyond fixes to issues identified in the wild.
 
 In order for a proposal to attain stage 4 status, two independent implementations need to pass acceptance tests. Proposals that make their way through to stage four will be included in the next revision of ECMAScript.
 
@@ -143,7 +143,7 @@ To install Babel, enter the following couple of commands into your favorite term
 [source,shell]
 ----
 npm install babel-cli​@6 --save-dev
-npm install babel-preset-es2015​@6 --save-dev
+npm install babel-preset-env@6 --save-dev
 ----
 
 [NOTE]
@@ -152,7 +152,7 @@ Packages installed by +npm+ will be placed in a +node_modules+ directory at the 
 
 Using the +--save-dev+ flag will add these packages to our +package.json+ manifest as development dependencies, so that when copying our project to new environments we can reinstall every dependency just by running +npm install+.
 
-The +@+ notation indicates we want to install a specific version of a package. Using +@6+ we're telling +npm+ to install the latest version of +babel-cli+ in the +6.x+ range. This preference is handy to future-proof our applications, as it would never install version, which might contain breaking changes that could not have been foreseen at the time of this writing.
+The +@+ notation indicates we want to install a specific version of a package. Using +@6+ we're telling +npm+ to install the latest version of +babel-cli+ in the +6.x+ range. This preference is handy to future-proof our applications, as it would never install `7.0.0` or posterior versions, which might contain breaking changes that could not have been foreseen at the time of this writing.
 ====
 
 For the next step, we'll replace the value of the +scripts+ property in +package.json+ with the following. The +babel+ command-line utility provided by +babel-cli+ can take the entire contents of our +src+ directory, compile them into the desired output format, and save the results to a +dist+ directory, while preserving the original directory structure under a different root.
@@ -173,8 +173,8 @@ Together with the packages we've installed in the previous step, a minimal +pack
     "build": "babel src --out-dir dist"
   },
   "devDependencies": {
-    "babel-cli": "6.18.0",
-    "babel-preset-es2015": "6.18.0"
+    "babel-cli": "6.24.0",
+    "babel-preset-env": "1.2.1"
   }
 }
 ----
@@ -189,11 +189,11 @@ If you execute +npm run build+ in your terminal now, you'll note that a +dist/ex
 [source,json]
 ----
 {
-  "presets": ["es2015"]
+  "presets": ["env"]
 }
 ----
 
-The +es2015+ preset, which we had installed earlier via +npm+, adds a series of plugins to Babel which transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our +example.js+ file into ES5 code.
+The +env+ preset, which we had installed earlier via +npm+, adds a series of plugins to Babel which transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our +example.js+ file into ES5 code. The +env+ Babel preset works by convention, enabling Babel transformation plugins according to feature support in the latest browsers. This preset is configurable, meaning we can decide how far back we want to cover browser support. The more browsers we support, the larger our transpiled bundle. The less browsers we support, the less customers we can satisfy. As always, research is of the essence to identify what the correct configuration for the Babel +env+ preset is. By default, every transform is enabled, providing broad runtime support.
 
 Once we run our build script again, we'll observe that the output is now valid ES5 code.
 
@@ -231,7 +231,7 @@ ESLint is a modern linter that packs several plugins, sporting different rules, 
 npm install eslint@3 --save-dev
 ----
 
-Next, we need to configure ESLint. Since we installed +eslint+ as a local dependency, we'll find its command-line tool in +node_modules/.bin+. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standard, then pick JSON format for the configuration file.
+Next, we need to configure ESLint. Since we installed +eslint+ as a local dependency, we'll find its command-line tool in +node_modules/.bin+. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standardfootnote:[Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's code base. The AirBnB style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.], then pick JSON format for the configuration file.
 
 [source,shell]
 ----

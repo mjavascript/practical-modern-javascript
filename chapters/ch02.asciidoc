@@ -201,8 +201,6 @@ var emitter = {
 }
 ----
 
-One problem with this syntax is that it tightly couples a method to an object. In terms of modular design, it would be cleaner to keep your code decoupled, and the syntax discourages it. By dropping the +function+ keyword and inferring the property name from the method, we are making it hard to extract +deplete+ from the object literal.
-
 Arrow functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave semantically.
 
 === 2.2 Arrow Functions
@@ -234,11 +232,13 @@ var example = (parameters) => {
 }
 ----
 
-While arrow functions look very similar to your typical anonymous function, they are fundamentally different: arrow functions can't have a name, and they are bound to their lexical scope. Let's dig into their semantic differences with traditional functions, the many ways to declare an arrow function, and practical use cases.
+While arrow functions look very similar to your typical anonymous function, they are fundamentally different: arrow functions can't have a name, they can't be used as constructors, they don't have a +prototype+ property, and they are bound to their lexical scope.
+
+Let's dig into their semantic differences with traditional functions, the many ways to declare an arrow function, and practical use cases.
 
 ==== 2.2.1 Lexical Scoping
 
-In the body of an arrow function, +this+ and +arguments+ both point to the containing scope. Consider the following example. We have a +timer+ object with a +seconds+ counter and a +start+ method defined using the syntax we've learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of ellapsed +seconds+.
+In the body of an arrow function, +this+, +arguments+ and +super+ point to the containing scope. Consider the following example. We have a +timer+ object with a +seconds+ counter and a +start+ method defined using the syntax we've learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of elapsed +seconds+.
 
 [source,javascript]
 ----
@@ -283,7 +283,7 @@ var double = value => {
 }
 ----
 
-Arrow functions are heavily used for simple functions, such as the +double+ function we just saw. The following flavor of arrow functions does away with the function body. Instead, you provide an expression such as +value * 2+. When the function is called, the expression is evaluated and its result is returned. The +return+ statement is implicit, and there's no need for brackets denoting the function body anymore, as you can only use a single expression.
+Arrow functions are heavily used for simple functions, such as the +double+ function we just saw. The following flavor of arrow functions does away with the function body. Instead, you provide an expression such as +value * 2+. When the function is called, the expression is evaluated and its result is returned. The +return+ statement is implicit, and there's no need for curly braces denoting the function body anymore, as you can only use a single expression.
 
 [source,javascript]
 ----
@@ -299,14 +299,14 @@ var double = value => value * 2
 
 .Implicitly Returning Object Literals
 ****
-When you need to implicitly return an object literal, you'll need to wrap that object literal expression in parenthesis. Otherwise, the compiler would interpret your brackets as the start and the end of the function block.
+When you need to implicitly return an object literal, you'll need to wrap that object literal expression in parenthesis. Otherwise, the compiler would interpret your curly braces as the start and the end of the function block.
 
 [source,javascript]
 ----
 var objectFactory = () => ({ modular: 'es6' })
 ----
 
-In the following example, JavaScript interprets the brackets as the body of our arrow function. Furthermore, +number+ is interpreted as a labelfootnote:[Labels are used as a way of identifying instructions. Labels can be used by +goto+ statements, to indicate what instruction we should jump to; +break+ statements, to indicate the sequence we want to break out of; and +continue+ statements, to indicate the sequence we want to advance. You can learn more about labels at: https://mjavascript.com/out/label.] and then figures out we have a +value+ expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be +undefined+.
+In the following example, JavaScript interprets the curly braces as the body of our arrow function. Furthermore, +number+ is interpreted as a labelfootnote:[Labels are used as a way of identifying instructions. Labels can be used by +goto+ statements, to indicate what instruction we should jump to; +break+ statements, to indicate the sequence we want to break out of; and +continue+ statements, to indicate the sequence we want to advance. You can learn more about labels at: https://mjavascript.com/out/label.] and then figures out we have a +value+ expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be +undefined+.
 
 [source,javascript]
 ----
@@ -341,7 +341,7 @@ Now that you understand arrow functions, let's ponder about their merits and whe
 
 As a rule of thumb, you shouldn't blindly adopt ES6 features wherever you can. Instead, it's best to reason about each case individually and see whether adopting the new feature actually improves code readibility and maintainability. ES6 features are not strictly better than what we had all along, and it's a bad idea to treat them as such.
 
-There's a few situations where arrow functions may not be the best tool. For example, if you have a large function with several lines of code, replacing +function+ for +=>+ is hardly going to improve your code. Arrow functions are often most effective for short routines, where the +function+ keyword and syntax boilerplate make up a significant portion of the function expression.
+There's a few situations where arrow functions may not be the best tool. For example, if you have a large function comprised of several lines of code, replacing `function` with `=>` is hardly going to improve your code. Arrow functions are often most effective for short routines, where the +function+ keyword and syntax boilerplate make up a significant portion of the function expression.
 
 Properly naming a function adds context to make it easier for humans to interpret them. Arrow functions can't be explicitly named, but they can be named implicitly by assigning them to a variable. In the following example, we assign an arrow function to the +throwError+ variable. When calling this function results in an error, the stack trace properly identifies the arrow function as +throwError+.
 
@@ -376,12 +376,12 @@ This is one of the most flexible and expressive features in ES6. It's also one o
 
 ==== 2.3.1 Destructuring Objects
 
-Imagine you had a program with some comic book characters, Bruno Diaz being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman.
+Imagine you had a program with some comic book characters, Bruce Wayne being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman.
 
 [source,javascript]
 ----
 var character = {
-  name: 'Bruno',
+  name: 'Bruce',
   pseudonym: 'Batman',
   metadata: {
     age: 34,
@@ -405,7 +405,7 @@ With destructuring in assignment, the syntax becomes a bit more clear. As you ca
 var { pseudonym } = character
 ----
 
-Just like you could declare multiple comma-separated variables with a single +var+ statement, you can also declare multiple variables within the brackets of a destructuring expression.
+Just like you could declare multiple comma-separated variables with a single +var+ statement, you can also declare multiple variables within the curly braces of a destructuring expression.
 
 [source,javascript]
 ----
@@ -580,7 +580,7 @@ var right = 7
 
 The last area of destructuring we'll be covering is function parameters.
 
-==== 2.3.3 Function Parameter Defaults and Destructuring
+==== 2.3.3 Function Parameter Defaults
 
 Function parameters in ES6 enjoy the ability of specifying default values as well. The following example defines a default +exponent+ with the most commonly used value.
 
@@ -631,7 +631,11 @@ carFactory({ make: 2000 })
 // <- 2000
 ----
 
-A better approach would be to destructure +options+ entirely, providing default values for each property, individually, within the destructuring pattern. This approach also lets you reference each option without going through an +options+ object, but you lose the ability to reference +options+ directly, which might represent an issue in some situations.
+We can mix function parameter default values with destructuring, and get the best of both worlds.
+
+==== 2.3.4 Function Parameter Destructuring
+
+A better approach than merely providing a default value might be to destructure +options+ entirely, providing default values for each property, individually, within the destructuring pattern. This approach also lets you reference each option without going through an +options+ object, but you lose the ability to reference +options+ directly, which might represent an issue in some situations.
 
 [source,javascript]
 ----
@@ -694,7 +698,7 @@ getCarProductModel(car)
 
 Besides default values and filling an +options+ object, let's explore what else destructuring is good at.
 
-==== 2.3.4 Use Cases for Destructuring
+==== 2.3.5 Use Cases for Destructuring
 
 Whenever there's a function that returns an object or an array, destructuring makes it much terser to interact with. The following example shows a function that returns an object with some coordinates, where we grab only the ones we're interested in: +x+ and +y+. We're avoiding an intermediate +point+ variable declaration that often gets in the way without adding a lot of value to the readability of your code.
 
@@ -1172,7 +1176,7 @@ function isItTwo (value) {
 }
 ----
 
-Whether we like it or not, hoisting is more confusing than having block-scoped variables would be. Block scoping works on the curly-braces level, rather than the function level.
+Whether we like it or not, hoisting is more confusing than having block-scoped variables would be. Block scoping works on the curly braces level, rather than the function level.
 
 ==== 2.6.1 Block Scoping and Let Statements
 
@@ -1192,7 +1196,7 @@ With +var+, because of lexical scoping, one could still access the +deep+ variab
 - The block in question has many siblings that would also want to use the same variable name
 - One of the parent blocks already has a variable with the name we need, but the name is still appropriate to use in the inner block
 
-The +let+ statement is an alternative to +var+. It follows block scoping rules instead of the default lexical scoping rules. With +var+, the only way of getting a deeper scope is to create a nested function, but with +let+ you can just open another pair of brackets. This means you don't need entirely new functions to get a new scope: a simple +{}+ block will do.
+The +let+ statement is an alternative to +var+. It follows block scoping rules instead of the default lexical scoping rules. With +var+, the only way of getting a deeper scope is to create a nested function, but with +let+ you can just open another pair of curly braces. This means you don't need entirely new functions to get a new scope: a simple +{}+ block will do.
 
 [source,javascript]
 ----

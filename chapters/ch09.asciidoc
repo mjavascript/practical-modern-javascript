@@ -706,7 +706,7 @@ const makeArray = (first, second) => [first, second]
 const makeSlice = (discarded, ...items) => items
 ----
 
-Implicitly returning an object literal is a bit tricky because they're hard to tell apart from block statements, which are also wrapped in brackets. We'll have to add parenthesis around our object literal, turning it into an expression that evaluates into the object. This bit of indirection is just enough to help us disambiguate and tell JavaScript parsers that they're dealing with an object literal.
+Implicitly returning an object literal is a bit tricky because they're hard to tell apart from block statements, which are also wrapped in curly braces. We'll have to add parenthesis around our object literal, turning it into an expression that evaluates into the object. This bit of indirection is just enough to help us disambiguate and tell JavaScript parsers that they're dealing with an object literal.
 
 Consider the following example, where we implicitly return an object expression. Without the parenthesis, the parser would interpret our code as a block statement containing a label and the literal expression `'Nico'`.
 
@@ -900,7 +900,7 @@ JavaScript classes are less verbose than their prototype-based equivalents. Clas
 
 In most situations when dealing with statically typed languages, you would have to use classes. In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
 
-Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and +Object.create+.
+Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
 
 Proxies empower many previously unavailable use cases, but we need to tread lightly. Solutions which involve a +Proxy+ object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
 
