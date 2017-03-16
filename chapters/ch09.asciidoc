@@ -1,7 +1,7 @@
 [[practical-considerations]]
 == Practical Considerations
 
-JavaScript is an ever evolving language. It has evolved at different paces throughout the years, entering a fast evolution phase with the introduction of ES5. Thus far, this book has taught you about dozens of language features and syntax changes introduced in ES6.
+JavaScript is an ever-evolving language. It's development rythm has had different paces throughout the years, entering a high velocity phase with the introduction of ES5. Thus far, this book has taught you about dozens of language features and syntax changes introduced in ES6, and a few that came out afterwards, in ES2016 and ES2017.
 
 Reconciling all of these new features with our existing ES5 knowledge may seem like a daunting task: what features should we take advantage of, and how? This chapter aims to rationalize the choices we have to make when considering whether to use specific ES6 features.
 
@@ -9,7 +9,7 @@ We'll take a look at a few different features, the use cases where they shine, a
 
 === 9.1 Variable Declarations
 
-When developing software, most of our time is spent reading code. ES6 offers +let+ and +const+ as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
+When developing software, most of our time is spent reading code, instead of writing it. ES6 offers +let+ and +const+ as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
 
 A +let+ statement indicates that a variable can't be used before its declaration, due to the Temporal Dead Zone rule. This isn't a convention, it is a fact: if we tried accessing the variable before its declaration statement was reached, the program would fail. These statements are block-scoped and not function-scoped; this means we need to read less code in order to fully grasp how a +let+ variable is used.
 
@@ -25,7 +25,7 @@ Constraints such as those offered by +let+ and +const+ are a powerful way of mak
 
 Granted, there's more rules to a +const+ declaration than to a +var+ declaration: block-scoped, TDZ, assign at declaration, no reassignment. Whereas +var+ statements only signal function scoping. Rule-counting, however, doesn't offer a lot of insight. It is better to weigh these rules in terms of complexity: does the rule add or subtract complexity? In the case of +const+, block scoping means a narrower scope than function scoping, TDZ means that we don't need to scan the scope backwards from the declaration in order to spot usage before declaration, and assignment rules mean that the binding will always preserve the same reference.
 
-The more constrained statements are, the simpler a piece of code becomes. As we add constraints to what a statement might mean, code becomes less unpredictable. This is one of the biggest reasons why statically typed programs are generally easier to read than dynamically typed ones. Static typing places a big constraint on the program writer, but it also places a big constraint on how the program can be interpreted, making its code easier to understand.
+The more constrained statements are, the simpler a piece of code becomes. As we add constraints to what a statement might mean, code becomes less unpredictable. This is one of the reasons why statically typed programs are, generally speaking, a bit easier to read than their dynamically typed counterparts. Static typing places a big constraint on the program writer, but it also places a big constraint on how the program can be interpreted, making its code easier to understand.
 
 With these arguments in mind, it is recommended that you use +const+ where possible, as it's the statement that gives us the least possibilities to think about.
 
@@ -220,7 +220,7 @@ Using template literals, we can avoid all of the extra quotes and concatenation,
 </div>`
 ----
 
-When it comes to quotes, +'+ and +"+ are more likely to be necessary to write a string than +`+ is. For the average English phrase, you're less likely to require backticks than single or double quotes. This means that backticks lead to less escaping.
+When it comes to quotes, +'+ and +"+ are more likely to be necessary to write a string than +`+ is. For the average English phrase, you're less likely to require backticks than single or double quotes. This means that backticks lead to less escaping.footnote:[Typography enthusiasts will be quick to point out that straight quotes are typographically incorrect, meaning we should be using “ ” ‘ ’, which don't lead to escaping. The fact remains that in practice we use straight quotes in code simply because they're easier to type. Meanwhile, typographic beautification is usually offloaded to utility libraries or a compilation step such as within a Markdown compiler.]
 
 [source,javascript]
 ----
@@ -898,7 +898,7 @@ console.log(items.last)
 
 JavaScript classes are less verbose than their prototype-based equivalents. Class sugar is thus a most welcome improvement over raw prototypal inheritance. As for the merits of using JavaScript classes, it depends. Even though classes may be compelling to use due to their improved syntax, sugar alone doesn't instantly promote classes to a wider variety of use cases.
 
-In most situations when dealing with statically typed languages, you would have to use classes. In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
+Statically typed languages typically offer and enforce the use of classesfootnote:[An exception should be made for most functional programming languages.]. In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
 
 Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
 
