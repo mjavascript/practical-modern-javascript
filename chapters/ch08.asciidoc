@@ -494,6 +494,13 @@ import(`./localizations/${ navigator.language }.json`)
   .then(module => localizationService.use(module))
 ----
 
+Note that writing code like this is generally a bad idea for a number of reasons.
+
+- It can be challenging to statically analyze, given that static analysis is executed at build-time, when it can be hard or impossible to infer the value of interpolations such as `${ navigator.language }`.
+- It can't be packaged up as easily by JavaScript bundlers, meaning the module would probably be loaded asynchronously while the bulk of our application has been loaded.
+- It can't be tree-shaken by tools like Rollup, which can be used to remove module code that's never imported anywhere in the codebase -- and thus never used -- reducing bundle size and improving performance.
+- It can't be linted by `eslint-plugin-import` or similar tools that help identify module import statements where the imported module file doesn't exist.
+
 Just like with +import+ statements, the mechanism for retrieving the module is unspecified and left up to the host environment.
 
 The proposal does specify that once the module is resolved, the promise should fulfill with its namespace object. It also specifies that whenever an error results in the module failing to load, the promise should be rejected.
@@ -598,5 +605,9 @@ Ease of adding or removing functionality from a module is yet another useful met
 - If modules become too co-dependant, then it can be hard to make edits as the codebase ages, mutates and grows in size.
 
 We'll plunge deeper into proper module design, effective module interaction and module testing over the next three books in this series.
+
+At the time of this writing, browsers are only scratching the surface of native JavaScript modules. It's expected that browsers will eventually be able to consume modules initiated by `<script type='module'>` elements.
+
+Meanwhile, Node.js hasn't yet shipped a working implementation of the JavaScript module system. Given that JavaScript ecosystem tooling relies on node, it's not yet clear how cross-compatibility will be attained. The dilemma of how to know whether a file is written in CJS or ESM is what's delaying a working implementation. A proposal to infer whether a file was ESM based on the presence of at least one +import+ or +export+ statement was abandoned, and it seems like the current course of action is to introduce a new file extension specifically tailored towards ESM modules. There is quite a bit of nuance given the variety of use cases and platforms Node.js runs on, making it tough to arrive at a solution that remains elegant, performant, and correct for every use case.
 
 With that said, let's turn over to the last chapter, on leveraging all of these new language features and syntax effectively.
