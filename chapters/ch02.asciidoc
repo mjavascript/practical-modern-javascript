@@ -232,7 +232,7 @@ var example = (parameters) => {
 }
 ----
 
-While arrow functions look very similar to your typical anonymous function, they are fundamentally different: arrow functions can't have a name, they can't be used as constructors, they don't have a +prototype+ property, and they are bound to their lexical scope.
+While arrow functions look very similar to your typical anonymous function, they are fundamentally different: arrow functions can't be named explicitly, although modern runtimes can infer a name based on the variable they're assigned to; they can't be used as constructors nor do they have a +prototype+ property, meaning you can't use +new+ on an arrow function; and they are bound to their lexical scope, which is the reason why they don't alter the meaning of +this+.
 
 Let's dig into their semantic differences with traditional functions, the many ways to declare an arrow function, and practical use cases.
 
@@ -260,6 +260,32 @@ setTimeout(function () {
 If we had defined the function passed to +setInterval+ as a regular anonymous function instead of using an arrow function, +this+ would've been bound to the context of the anonymous function, instead of the context of the +start+ method. We could have implemented +timer+ with a declaration like +var self = this+ at the beginning of the +start+ method, and then referencing +self+ instead of +this+. With arrow functions, the added complexity of keeping context references around fades away and we can focus on the functionality of our code.
 
 In a similar fashion, lexical binding in ES6 arrow functions also means that function calls won't be able to change the +this+ context when using +.call+, +.apply+, +.bind+, etc. That limitation is usually more useful than not, as it ensures that the context will always be preserved and constant.
+
+Let's now shift our attention to the following example. What do you think the `console.log` statement will print?
+
+[source,javascript]
+----
+function puzzle () {
+  return function () {
+    console.log(arguments)
+  }
+}
+puzzle('a', 'b', 'c')(1, 2, 3)
+----
+
+The answer is that `arguments` refers to the context of the anonymous function, and thus the arguments passed to that function will be printed. In this case, those arguments are `1, 2, 3`.
+
+What about in the following case, where we use an arrow function instead of the anonymous function in the previous example?
+
+[source,javascript]
+----
+function puzzle () {
+  return () => console.log(arguments)
+}
+puzzle('a', 'b', 'c')(1, 2, 3)
+----
+
+In this case, the `arguments` object refers to the context of the `puzzle` function, because arrow functions don't create a closure. For this reason, the printed arguments will be `'a', 'b', 'c'`.
 
 I've mentioned there's several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the others way to represent an arrow function?
 
