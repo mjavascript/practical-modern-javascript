@@ -802,7 +802,7 @@ There are dozens of ways of binding methods to their parent object, all with the
 
 We haven't used an +apply+ trap for the +selfish+ examples, which illustrates that not everything is one-size-fits-all. Using an +apply+ trap for this use case would involve the current +selfish+ proxy returning proxies for +value+ functions, and then returning a bound function in the +apply+ trap for the +value+ proxy. While this may sound more correct, in the sense that we're not using +.bind+ but instead relying on +Reflect.apply+, we'd still need the +WeakMap+ cache and +selfish+ proxy. That is to say we'd be adding an extra layer of abstraction, a second proxy, and getting little value in terms of separation of concerns or maintainability, since both proxy layers would remain coupled to some degree, it'd be best to keep everything in a single layer. While abstractions are a great thing, too many abstractions can become more insurmountable than the problem they attempt to fix.
 
-Up to what point is the abstraction justifiable over a few +.bind+ statements in the +constructor+ of a class object? These are hard questions that always depend on context, but they must be considered when designing a component system so that you don't add complexity for complexity's sake, while also adding abstraction layers that help you avoid repeating yourself.
+Up to what point is the abstraction justifiable over a few +.bind+ statements in the +constructor+ of a class object? These are hard questions that always depend on context, but they must be considered when designing a component system so that, in the process of adding abstraction layers meant to help you avoid repeating yourself, you don't add complexity for complexity's sake.
 
 ==== 6.4.3 +construct+ Trap
 
@@ -866,7 +866,7 @@ proxy.hello()
 // <- 'Hello, Nicolás'
 ----
 
-Let's move onto the next few traps.
+Note that arrow functions can't be used as constructors, and thus we can't use the +construct+ trap on them. Let's move onto the last few traps.
 
 ==== 6.4.4 +getPrototypeOf+ Trap
 
