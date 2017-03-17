@@ -36,7 +36,7 @@ function get (name) {
 }
 ----
 
-An alternative could also be using +Object.create(null)+ instead of an empty object literal. In this case, the created object won't inherit from +Object.prototype+, meaning it won't be harmed by `__proto__` and friends.
+An alternative could also be using `Object.create(null)` instead of an empty object literal. In this case, the created object won't inherit from `Object.prototype`, meaning it won't be harmed by `__proto__` and friends.
 
 [source,javascript]
 ----
@@ -416,7 +416,7 @@ Maps aren't the only kind of built-in collection in ES6, there's also +WeakMap+,
 
 === 5.2 Understanding and Using WeakMap
 
-For the most part, you can think of +WeakMap+ as a subset of +Map+. The +WeakMap+ collection imposes a number of limitations that we didn't find in +Map+. The biggest limitation is that +WeakMap+ is not iterable like +Map+: there is no iterable protocol in +WeakMap+, no +WeakMap#entries+, no +WeakMap#keys+, no +WeakMap#values+, no +WeakMap#forEach+ and no +WeakMap#clear+ methods.
+For the most part, you can think of +WeakMap+ as a subset of +Map+. The +WeakMap+ collection has a reduced API surface with less affordances than what we could find in +Map+. Collections created using +WeakMap+ are not iterable like +Map+, meaning there is no iterable protocol in +WeakMap+, no +WeakMap#entries+, no +WeakMap#keys+, no +WeakMap#values+, no +WeakMap#forEach+ and no +WeakMap#clear+ methods.
 
 Another distinction found in +WeakMap+ is that every +key+ must be an object. This is in contrast with +Map+ where, while object references were allowed as keys, they weren't enforced. Remember that +Symbol+ is a value type, and as such, they're not allowed either.
 
