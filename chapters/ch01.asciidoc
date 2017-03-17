@@ -231,7 +231,7 @@ ESLint is a modern linter that packs several plugins, sporting different rules, 
 npm install eslint@3 --save-dev
 ----
 
-Next, we need to configure ESLint. Since we installed +eslint+ as a local dependency, we'll find its command-line tool in +node_modules/.bin+. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standardfootnote:[Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's code base. The AirBnB style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.], then pick JSON format for the configuration file.
+Next, we need to configure ESLint. Since we installed +eslint+ as a local dependency, we'll find its command-line tool in +node_modules/.bin+. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standardfootnote:[Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's code base. The Airbnb style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.], then pick JSON format for the configuration file.
 
 [source,shell]
 ----

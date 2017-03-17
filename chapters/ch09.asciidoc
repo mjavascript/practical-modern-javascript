@@ -1,7 +1,7 @@
 [[practical-considerations]]
 == Practical Considerations
 
-JavaScript is an ever-evolving language. It's development rythm has had different paces throughout the years, entering a high velocity phase with the introduction of ES5. Thus far, this book has taught you about dozens of language features and syntax changes introduced in ES6, and a few that came out afterwards, in ES2016 and ES2017.
+JavaScript is an ever-evolving language. Its development rhythm has had different paces throughout the years, entering a high velocity phase with the introduction of ES5. Thus far, this book has taught you about dozens of language features and syntax changes introduced in ES6, and a few that came out afterwards, in ES2016 and ES2017.
 
 Reconciling all of these new features with our existing ES5 knowledge may seem like a daunting task: what features should we take advantage of, and how? This chapter aims to rationalize the choices we have to make when considering whether to use specific ES6 features.
 
