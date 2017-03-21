@@ -7,11 +7,11 @@ To kick off the chapter, we'll start by discussing promises. Promises have exist
 
 === 4.1 Promises
 
-Promises can be vaguely defined as "a proxy for a value that will eventually become available". While we can write synchronous code inside Promises, Promise-based code flows in a strictly asynchronous manner. Promises make asynchronous flows easier to reason about -- once you've mastered promises, that is.
+Promises can be vaguely defined as "a proxy for a value that will eventually become available". While we can write synchronous code inside promises, promise-based code flows in a strictly asynchronous manner. Promises can make asynchronous flows easier to reason about -- once you've mastered promises, that is.
 
 ==== 4.1.1 Getting Started with Promises
 
-As an example, let's take a look at the upcoming browser +fetch+ API. This API is a simplification of +XMLHttpRequest+. It aims to be super simple to use for the most basic use cases: making a +GET+ request against an HTTP resource. It also provides a comprehensive API that caters to advanced use cases as well, but that's not our focus for now. In its most basic incarnation, you can make a +GET /items+ request using a piece of code like the following.
+As an example, let's take a look at the upcoming browser +fetch+ API. This API is a simplification of +XMLHttpRequest+. It aims to be super simple to use for the most basic use cases: making a +GET+ request against an HTTP resource. It provides an extensive API that caters to advanced use cases, but that's not our focus for now. In its most basic incarnation, you can make a +GET /items+ HTTP request using a piece of code like the following.
 
 [source,javascript]
 ----
@@ -71,7 +71,7 @@ p.then(null, error => {
 .Promises as an alternative to callbacks and events
 ****
 
-Traditionally JavaScript relied on callbacks instead of promises and chaining. If the +fetch+ function asked for a callback, you'd have to add one that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors -- that may or may not occur -- during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how +fetch+ would look like if it had a callback-based API.
+Traditionally JavaScript relied on callbacks instead of promises and chaining. If the +fetch+ function asked for a callback, you'd have to add one that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors -- that may or may not occur -- during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how +fetch+ would look if it had a callback-based API.
 
 [source,javascript]
 ----
@@ -86,7 +86,7 @@ fetch('/items', (err, res) => {
 
 The callback wouldn't be invoked until the +/items+ resource has been retrieved, or an error arises from the +fetch+ operation. Execution remains asynchronous and non-blocking. Note that in this model you could only specify a single callback. That callback would be responsible for all functionality derived from the response, and it'd be up to the consumer to come up with a mechanism to compose different aspects of handling the response into that single callback.
 
-Besides traditional callbacks, another API design choice might have been to use an event-driven model. In this case the object returned by +fetch+ would be able to register callbacks for different kinds of events, binding as many event handlers as needed for any events -- just like when you attach event listeners to the browser DOM. Typically there's an +error+ event that's raised when things go awry, and other events that are raised when something notable happens. In the following piece of code, we show how +fetch+ would look like if it had an event-based API.
+Besides traditional callbacks, another API design choice might have been to use an event-driven model. In this case the object returned by +fetch+ would be able to register callbacks for different kinds of events, binding as many event handlers as needed for any events -- just like when you attach event listeners to the browser DOM. Typically there's an +error+ event that's raised when things go awry, and other events that are raised when something notable happens. In the following piece of code, we show how +fetch+ would look if it had an event-based API.
 
 [source,javascript]
 ----
@@ -104,10 +104,18 @@ Binding several listeners for each type of event would eliminate the concern we 
 
 When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the +.on+ method attach the event listener and then returning the event emitter itself. Promises are different. The +.then+ and +.catch+ methods return a new promise every time. That's important because chaining can have wildly different results depending on where you append a +.then+ or a +.catch+ call onto.
 
-.A major source of confusion
+.Visualizing Promise chains: a major source of confusion
 [WARNING]
 ====
 The +.then+ and +.catch+ methods return a new promise every time, creating a tree-like data structure. If you had a +p1+ promise and a +p2+ promise returned by +p1.then+, the +p1+ and +p2+ promises would be nodes connected by the +p1.then+ reaction handler. Reactions create new promises that are attached to the tree as children of the promise they're reacting to.
+
+When we chain promises, we need to understand that `p1.then(r1).then(r2)` creates two new `p2` and `p3` promises. The second reaction, `r2`, is going to fire if `p2` fulfills, while the `r1` reaction will fire when `p1` is fulfilled. When we have a statement such as `p1.then(r1); p1.then(r2)`, in contrast, both `r1` and `r2` will fire if `p1` is fulfilled. A discrepancy occurs when `p1` fulfills but `p2` doesn't.
+
+Figuring out the tree-like nature of promises is the key to unlocking a deep understanding of how promises behave. To this end, I've created an online tool called Promisees you can use to play around with promise chains while visualizing the tree structure they leave behind.
+
+image::../images/c04g01-promisees.png["Promisees lets you write a piece of code and visualize how the underlying graph evolves as promises are settled in fulfillment or rejection."]
+
+You can find Promisees at https://mjavascript.com/out/promisees.
 ====
 
 A promise is created by passing the +Promise+ constructor a resolver that decides how and when the promise is settled, by calling either a +resolve+ method that will settle the promise in fulfillment or a +reject+ method that'd settle the promise as a rejection. Until the promise is settled by calling either function, it'll be in pending state and any reactions attached to it won't be executed. The following snippet of code creates a promise from scratch where we'll wait for a second before randomly settling the promise with a fulfillment or rejection result.
@@ -135,7 +143,7 @@ Promise
 // <- 123
 ----
 
-When a +p+ promise is fulfilled, reactions registered with +p.then+ are executed. When a +p+ promise is rejected, reactions registered with +p.catch+ are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, +throw+ an error, or return a +Promise+ or thenable. Thenables are objects considered promise-like that can be casted into a +Promise+ using +Promise.resolve+ as observed in section 4.1.3.
+When a +p+ promise is fulfilled, reactions registered with +p.then+ are executed. When a +p+ promise is rejected, reactions registered with +p.catch+ are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, a +Promise+, a thenable, or +throw+ an error. Thenables are objects considered promise-like that can be casted into a +Promise+ using +Promise.resolve+ as observed in section 4.1.3.
 
 A reaction may return a value, which would cause the promise returned by +.then+ to become fulfilled with that value. In this sense, promises can be chained to transform the fulfillment value of the previous promise over and over, as shown in the following snippet of code.
 
@@ -719,7 +727,7 @@ This sort of abstraction of complexity into another function often helps keep co
 ====
 Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem, there is no way of knowing whether the sequence is infinite or not in code.
 
-image::../images/c04g01-halting-problem.png["The halting problem depicted by XKCD comic 1266"]
+image::../images/c04g02-halting-problem.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
 
 You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While +for..of+ won't run into the problem unless there's no escape condition, using mechanisms such as spread or +Array.from+ would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
 ====
@@ -749,7 +757,7 @@ const colors = {
   green: '#0e0',
   orange: '#f50',
   pink: '#e07',
-  [Symbol.iterator] () {
+  [Symbol.iterator]() {
     const keys = Object.keys(colors)
     return {
       next () {
@@ -832,26 +840,26 @@ const songs = [
 
 We could create a +playlist+ function that returns a sequence, representing all the songs that will be played by our application. This function would take the +songs+ provided by the human as well as the +repeat+ value, which indicates how many times they want the songs to be reproduced in a loop -- once, twice, or +Infinity+ times -- before coming to an end.
 
-The following piece of code shows how we could implement +playlist+. We could start with an empty playlist. In each turn of the loop we'll check if there are any songs left to play. If there aren't any songs left, and we have a +repeat+ value above zero, we'll create a +copy+ of the song list provided by the user. We use that +copy+ as state, to know where we are in their song list. We'll return the first song in the list by pulling it with +.shift+, until there aren't any songs left in our +copy+. The sequence ends when there aren't any songs left and +repeat+ is zero or less.
+The following piece of code shows how we could implement +playlist+. We start with an empty playlist and use an +index+ number to track where in the song list we are positioned. We return the next song in the list by incrementing the +index+, until there aren't any songs left in the current loop. At this point we decrement om the `repeat` count and reset the `index`. The sequence ends when there aren't any songs left and +repeat+ reaches zero.
 
 [source,javascript]
 ----
 function playlist (songs, repeat) {
   return {
-    [Symbol.iterator] () {
-      let copy = []
+    [Symbol.iterator]() {
+      let index = 0
       return {
         next () {
-          if (copy.length === 0) {
-            if (repeat < 1) {
-              return { done: true }
-            }
-            copy = songs.slice()
+          if (index >= songs.length) {
             repeat--
+            index = 0
           }
-          return {
-            value: copy.shift(), done: false
+          if (repeat < 1) {
+            return { done: true }
           }
+          const song = songs[index]
+          index++
+          return { done: false, value: song }
         }
       }
     }
@@ -867,7 +875,7 @@ console.log([...playlist(['a', 'b'], 3)])
 // <- ['a', 'b', 'a', 'b', 'a', 'b']
 ----
 
-To iterate over the playlist we'd probably come up with a +player+ function. Assuming a +playSong+ function that reproduces a song and invokes a callback when the song ends, our +player+ implementation could look like the following function, where we asynchronously loop the iterator coming from a sequence, requesting new songs as previous ones finish playback. Given that there's always a considerable waiting period in between +g.next+ calls -- while the songs are actually played inside +playSong+ -- there's no risk of running into an infinite loop even when the sequence produced by +playlist+ is infinite.
+To iterate over the playlist we'd probably come up with a +player+ function. Assuming a +playSong+ function that reproduces a song and invokes a callback when the song ends, our +player+ implementation could look like the following function, where we asynchronously loop the iterator coming from a sequence, requesting new songs as previous ones finish playback. Given that there's always a considerable waiting period in between +g.next+ calls -- while the songs are actually playing inside +playSong+ -- there's little risk of being stuck in an infinite loop that'd crash the runtime, even when the sequence produced by +playlist+ is infinite.
 
 [source,javascript]
 ----
@@ -898,36 +906,34 @@ const sequence = playlist(songs, Infinity)
 player(sequence)
 ----
 
-A change allowing the human to shuffle their playlist wouldn't be complicated to introduce. We'd have to tweak the +playlist+ function to include a +shuffle+ flag. That way, each step where we reproduce the list of user-provided songs could
+A change allowing the human to shuffle their playlist wouldn't be complicated to introduce. We'd have to tweak the +playlist+ function to include a +shuffle+ flag, and if that flag is present we'd sort the song list at random.
 
 [source,javascript]
 ----
-function playlist (songs, repeat, shuffle) {
+function playlist (inputSongs, repeat, shuffle) {
+  const songs = shuffle ? shuffleSongs(inputSongs) : inputSongs
   return {
-    [Symbol.iterator] () {
-      let copy = []
+    [Symbol.iterator]() {
+      let index = 0
       return {
         next () {
-          if (copy.length === 0) {
-            if (repeat < 1) {
-              return { done: true }
-            }
-            copy = songs.slice()
+          if (index >= songs.length) {
             repeat--
+            index = 0
           }
-          const value = shuffle ? randomSong() : nextSong()
-          return { done: false, value }
+          if (repeat < 1) {
+            return { done: true }
+          }
+          const song = songs[index]
+          index++
+          return { done: false, value: song }
         }
-      }
-      function randomSong () {
-        const index = Math.floor(Math.random() * copy.length)
-        return copy.splice(index, 1)[0]
-      }
-      function nextSong () {
-        return copy.shift()
       }
     }
   }
+}
+function shuffleSongs (songs) {
+  return songs.slice().sort(() => Math.random() > 0.5 ? 1 : -1)
 }
 ----
 
@@ -936,6 +942,17 @@ Lastly, we'd have to pass in the +shuffle+ flag as +true+ if we wanted to shuffl
 [source,javascript]
 ----
 console.log([...playlist(['a', 'b'], 3, true)])
+// <- ['a', 'b', 'b', 'a', 'a', 'b']
+----
+
+You may have noticed how the `playlist` function doesn't necessarily need to concern itself with the sort order of the songs passed to it. A better design choice may well be to extract shuffling into the calling code. If we kept the original +playlist+ code we had earlier, we could use code like the following to obtain a shuffled song collection.
+
+[source,javascript]
+----
+function shuffleSongs (songs) {
+  return songs.slice().sort(() => Math.random() > 0.5 ? 1 : -1)
+}
+console.log([...playlist(shuffleSongs(['a', 'b']), 3)])
 // <- ['a', 'b', 'b', 'a', 'a', 'b']
 ----
 
@@ -1279,7 +1296,7 @@ Yet another benefit of asking consumers to provide a generator function is that 
 
 ==== 4.3.5 Dealing with asynchronous flows
 
-Staying on the subject of our magic 8-ball, and going back to the example where we call +ball+ with a user-provided +questions+ generator, let's reminisce about what would change about our code if the answers were to be provided asynchronously. The beauty of generators is that if the way we iterate over the questions were to become asynchronous, the generator wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch the answers to the questions, and all it'd take would be to ask a service for the answer to the current question, return that value via an intermediary +yield+ statement or in some other way, and then call +g.next+ on the +questions+ generator object.
+Staying on the subject of our magic 8-ball, and going back to the example where we call +ball+ with a user-provided +questions+ generator, let's consider what would change about our code if the answers were to be provided asynchronously. The beauty of generators is that if the way we iterate over the questions were to become asynchronous, the generator wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch the answers to the questions, and all it'd take would be to ask a service for the answer to the current question, return that value via an intermediary +yield+ statement or in some other way, and then call +g.next+ on the +questions+ generator object.
 
 Let's assume we're back at the following usage of +ball+.
 
@@ -1626,7 +1643,7 @@ We've looked into flow control mechanisms such as callbacks, events, promises, i
 
 Languages like Python and C# have had +async+ / +await+ for a while. In ES2017, JavaScript gained native syntax that can be used to describe asynchronous operations.
 
-Let's go over a quick recap comparing promises, callbacks and generators. Afterwards we'll look into Async Functions in JavaScript, and how this new feature can help make our code more readable.
+Let's go over a quick recap comparing promises, callbacks and generators. Afterwards we'll look into async functions in JavaScript, and how this new feature can help make our code more readable.
 
 ==== 4.4.1 Flavors of Async Code
 
@@ -1722,17 +1739,17 @@ getRandomArticle(function* printRandomArticle () {
 });
 ----
 
-Generators may not be the most straightforward way of accomplishing the results that we want in this case: you're only moving the complexity somewhere else. We might as well stick with Promises.
+Generators may not be the most straightforward way of accomplishing the results that we want in this case: you're only moving the complexity somewhere else. We might as well stick with promises.
 
 Besides involving an unintuitive syntax into the mix, your iterator code will be highly coupled to the generator function that's being consumed. That means you'll have to change it often as you add new +yield+ expressions to the generator code.
 
-A better alternative would be to use an Async Function.
+A better alternative would be to use an async function.
 
 ==== 4.4.2 Using +async+ / +await+
 
-Async Functions let us take a +Promise+-based implementation and take advantage of the synchronous-looking generator style. A huge benefit in this approach is that you won't have to change the original +getRandomArticle+ at all: as long as it returns a promise it can be awaited.
+Async functions let us take a promise-based implementation and take advantage of the synchronous-looking generator style. A huge benefit in this approach is that you won't have to change the original +getRandomArticle+ at all: as long as it returns a promise it can be awaited.
 
-Note that +await+ may only be used inside Async Functions, marked with the +async+ keyword. Async Functions work similarly to generators, by suspending execution in the local context until a promise settles. If the awaited expression isn't originally a promise, it gets casted into a promise.
+Note that +await+ may only be used inside async functions, marked with the +async+ keyword. Async functions work similarly to generators, by suspending execution in the local context until a promise settles. If the awaited expression isn't originally a promise, it gets casted into a promise.
 
 The following piece of code consumes our original +getRandomArticle+, which relied on promises. Then it runs that model through an asynchronous +renderView+ function, which returns a bit of HTML, and updates the page. Note how we can use +try+ / +catch+ to handle errors in awaited promises from within the +async+ function, treating completely asynchronous code as if it were synchronous.
 
@@ -1752,7 +1769,7 @@ async function read () {
 read()
 ----
 
-An Async Function always returns a +Promise+. In the case of uncaught exceptions, the returned promise settles in rejection. Otherwise, the returned promise resolves to the return value. This aspect of Async Functions allows us to mix them with regular promise-based continuation as well. The following example shows how the two may be combined.
+An async function always returns a +Promise+. In the case of uncaught exceptions, the returned promise settles in rejection. Otherwise, the returned promise resolves to the return value. This aspect of async functions allows us to mix them with regular promise-based continuation as well. The following example shows how the two may be combined.
 
 [source,javascript]
 ----
@@ -1768,7 +1785,7 @@ read()
   .catch(err => console.error(err))
 ----
 
-Making the +read+ function a bit more reusable, we could return the resulting +html+, and allow consumers to do continuation using promises or yet another Async Function. That way, your +read+ function becomes only concerned with pulling down the HTML for a view.
+Making the +read+ function a bit more reusable, we could return the resulting +html+, and allow consumers to do continuation using promises or yet another async function. That way, your +read+ function becomes only concerned with pulling down the HTML for a view.
 
 [source,javascript]
 ----
@@ -1786,7 +1803,7 @@ Following the example, we can use plain promises to prints the HTML.
 read().then(html => console.log(html))
 ----
 
-Using Async Functions wouldn't be all that difficult for continuation, either. In the next snippet, we create a +write+ function used for continuation.
+Using async functions wouldn't be all that difficult for continuation, either. In the next snippet, we create a +write+ function used for continuation.
 
 [source,javascript]
 ----
@@ -1800,7 +1817,7 @@ What about concurrent asynchronous flows?
 
 ==== 4.4.3 Concurrent Async Flows
 
-In asynchronous code flows, it is commonplace to execute two or more tasks concurrently. While Async Functions make it easier to write asynchronous code, they also lend themselves to code that executes one asynchronous operation at a time. A function with multiple +await+ expressions in it will be suspended once at a time on each +await+ expression until that +Promise+ is settled, before unsuspending execution and moving onto the next +await+ expression -- this is a similar case to what we observe with generators and +yield+.
+In asynchronous code flows, it is commonplace to execute two or more tasks concurrently. While async functions make it easier to write asynchronous code, they also lend themselves to code that executes one asynchronous operation at a time. A function with multiple +await+ expressions in it will be suspended once at a time on each +await+ expression until that +Promise+ is settled, before unsuspending execution and moving onto the next +await+ expression -- this is a similar case to what we observe with generators and +yield+.
 
 [source,javascript]
 ----
@@ -1830,7 +1847,7 @@ async function concurrent () {
 }
 ----
 
-Promises offer an alternative to +Promise.all+ in +Promise.race+. We can use +Promise.race+ to get the result from the promise that fulfills quicker.
+We could use +Promise.race+ to get the result from the promise that fulfills quicker.
 
 [source,javascript]
 ----
@@ -1846,13 +1863,13 @@ async function race () {
 
 ==== 4.4.4 Error Handling
 
-Errors are swallowed silently within an +async+ function, just like inside normal Promises, due to Async Functions being wrapped in a +Promise+. Uncaught exceptions raised in the body of your Async Function or during suspended execution while evaluating an +await+ expresion will reject the promise returned by the +async+ function.
+Errors are swallowed silently within an +async+ function, just like inside normal Promises, due to async functions being wrapped in a +Promise+. Uncaught exceptions raised in the body of your async function or during suspended execution while evaluating an +await+ expresion will reject the promise returned by the +async+ function.
 
-That is, unless we add +try+ / +catch+ blocks around +await+ expressions. For the portion of the Async Function code that's wrapped, errors are treated under typical +try+ / +catch+ semantics.
+That is, unless we add +try+ / +catch+ blocks around +await+ expressions. For the portion of the async function code that's wrapped, errors are treated under typical +try+ / +catch+ semantics.
 
-Naturally, this can be seen as a strength: you can leverage +try+ / +catch+ conventions, something you were unable to do with asynchronous callbacks, and somewhat able to when using promises. In this sense, Async Functions are akin to generators, where we can take advantage of +try+ / +catch+ thanks to function execution suspension turning asynchronous flows into seemingly synchronous code.
+Naturally, this can be seen as a strength: you can leverage +try+ / +catch+ conventions, something you were unable to do with asynchronous callbacks, and somewhat able to when using promises. In this sense, async functions are akin to generators, where we can take advantage of +try+ / +catch+ thanks to function execution suspension turning asynchronous flows into seemingly synchronous code.
 
-Furthermore, you're able to catch these exceptions from outside the +async+ function, by adding a +.catch+ clause to the promise they return. While this is a flexible way of combining the +try+ / +catch+ error handling flavor with +.catch+ clauses in Promises, it can also lead to confusion and ultimately cause to errors going unhandled, unless everyone reading the code is comfortable with async function semantics in terms of the promise wrapper and how +try+ / +catch+ works under this context.
+Furthermore, you're able to catch these exceptions from outside the +async+ function, by adding a +.catch+ clause to the promise they return. While this is a flexible way of combining the +try+ / +catch+ error handling flavor with +.catch+ clauses in promises, it can also lead to confusion and ultimately cause to errors going unhandled, unless everyone reading the code is comfortable with async function semantics in terms of the promise wrapper and how +try+ / +catch+ works under this context.
 
 [source,javascript]
 ----
@@ -1865,7 +1882,7 @@ As you can see, there's quite a few ways in which we can notice exceptions and t
 
 ==== 4.4.5 Understanding Async Function Internals
 
-Async Functions leverage both generators and promises internally. Let's suppose we have the following Async Function.
+Async functions leverage both generators and promises internally. Let's suppose we have the following async function.
 
 [source,javascript]
 ----
@@ -1930,7 +1947,7 @@ function spawn (generator) {
 }
 ----
 
-Consider the following Async Function. In order to print the result, we're also using promise-based continuation. Let's follow the code as a thought exercise.
+Consider the following async function. In order to print the result, we're also using promise-based continuation. Let's follow the code as a thought exercise.
 
 [source,javascript]
 ----
@@ -1944,7 +1961,7 @@ exercise().then(result => console.log(result))
 // <- ['slowest', 'slow']
 ----
 
-First, we could translate the function to our +spawn+ based logic. We wrap the body of our Async Function in a generator passed to +spawn+, and replace any +await+ expressions with +yield+.
+First, we could translate the function to our +spawn+ based logic. We wrap the body of our async function in a generator passed to +spawn+, and replace any +await+ expressions with +yield+.
 
 [source,javascript]
 ----
@@ -1960,7 +1977,7 @@ exercise().then(result => console.log(result))
 // <- ['slowest', 'slow']
 ----
 
-When +spawn+ is called with the generator function, it immediately creates a generator object and executes +step+ a first time, as seen in the next code snippet. The +step+ function will also be used whenever we reach a +yield+ expression, which are equivalent to the +await+ expressions in our Async Function.
+When +spawn+ is called with the generator function, it immediately creates a generator object and executes +step+ a first time, as seen in the next code snippet. The +step+ function will also be used whenever we reach a +yield+ expression, which are equivalent to the +await+ expressions in our async function.
 
 [source,javascript]
 ----
@@ -1976,7 +1993,7 @@ function spawn (generator) {
 }
 ----
 
-The first thing that happens in the +step+ function is calling the +nextFn+ function inside a +try+ / +catch+ block. This resumes execution in the generator function. If the generator function were to produce an error, we'd fall into the +catch+ clause, and the underlying promise for our Async Function would be rejected without any further steps, as shown next.
+The first thing that happens in the +step+ function is calling the +nextFn+ function inside a +try+ / +catch+ block. This resumes execution in the generator function. If the generator function were to produce an error, we'd fall into the +catch+ clause, and the underlying promise for our async function would be rejected without any further steps, as shown next.
 
 [source,javascript]
 ----
@@ -1996,16 +2013,16 @@ function runNext (nextFn) {
 }
 ----
 
-Back to the Async Function, code up until the following expression is evaluated. No errors are incurred, and execution in the Async Function is suspended once again.
+Back to the async function, code up until the following expression is evaluated. No errors are incurred, and execution in the async function is suspended once again.
 
 [source,javascript]
 ----
 yield new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
 ----
 
-The yielded expression is received by +step+ as +next.value+, while +next.done+ indicates whether the generator sequence has ended. In this case, we receive the +Promise+ in the function controlling exactly how iteration should occur. At this time, +next.done+ is +false, meaning we won't be resolving the async function's wrapper Promise. We wrap +next.value+ in a fulfilled +Promise+, just in case we haven't received a +Promise+.
+The yielded expression is received by +step+ as +next.value+, while +next.done+ indicates whether the generator sequence has ended. In this case, we receive the +Promise+ in the function controlling exactly how iteration should occur. At this time, +next.done+ is +false+, meaning we won't be resolving the async function's wrapper Promise. We wrap +next.value+ in a fulfilled +Promise+, just in case we haven't received a +Promise+.
 
-We then wait on the +Promise+ to be fulfilled or rejected. If the promise is fulfilled, we push the fulfillment value to the generator function by advancing the generator sequence with +value+. If the promise is rejected, we would've used +g.throw+, which would've resulted in an error being raised in the generator function, causing the Async Function's wrapper promise to be rejected at +runNext+.
+We then wait on the +Promise+ to be fulfilled or rejected. If the promise is fulfilled, we push the fulfillment value to the generator function by advancing the generator sequence with +value+. If the promise is rejected, we would've used +g.throw+, which would've resulted in an error being raised in the generator function, causing the async function's wrapper promise to be rejected at +runNext+.
 
 [source,javascript]
 ----
@@ -2028,14 +2045,14 @@ function step (nextFn) {
 
 Using +g.next()+ on its own means that the generator function resumes execution. By passing a value to +g.next(value)+, we've made it so that the +yield+ expression evaluates to that +value+. The +value+ in question is, in this case, the fulfillment value of the originally yielded +Promise+, which is +'slowest'+.
 
-Back in the generator function, we assign +'slowest' to +r1+.
+Back in the generator function, we assign `'slowest'` to `r1`.
 
 [source,javascript]
 ----
 const r1 = yield new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
 ----
 
-Then, execution runs up until the second +yield+ statement. The +yield+ expression once again causes execution in the Async Function to be suspended, and sends the new +Promise+ to the +spawn+ iterator.
+Then, execution runs up until the second +yield+ statement. The +yield+ expression once again causes execution in the async function to be suspended, and sends the new +Promise+ to the +spawn+ iterator.
 
 [source,javascript]
 ----
@@ -2053,15 +2070,15 @@ return [r1, r2]
 
 At this point, +next+ evaluates to the following object.
 
-[source,javascript]
+[source,json]
 ----
 {
-  value: ['slowest', 'slow'],
-  done: true
+  "value": ["slowest", "slow"],
+  "done": true
 }
 ----
 
-Immediately, the iterator checks that +next.done+ is indeed +true+, and resolves the Async Function to +['slowest', 'slow']+.
+Immediately, the iterator checks that `next.done` is indeed `true`, and resolves the async function to `['slowest', 'slow']`.
 
 [source,javascript]
 ----
@@ -2080,9 +2097,9 @@ exercise().then(result => console.log(result))
 // <- ['slowest', 'slow']
 ----
 
-Async Functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the +spawn+ function used to iterate over the sequence of yielded expressions, and +yield+ becomes +await+.
+Async functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the +spawn+ function used to iterate over the sequence of yielded expressions, and +yield+ becomes +await+.
 
-Noting that Async Functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows together.
+Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows together.
 
 === 4.5 Asynchronous Iteration
 
@@ -2129,7 +2146,7 @@ The contract for an iterator mandates that the +next+ method of +Symbol.iterator
 
 ==== 4.5.1 Async Iterators
 
-In *async iterators*, the contract has a subtle difference: +next+ is supposed to return a +Promise+ that resolves to an object containing +value+ and +done+ properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new +Symbol.asyncIterator+ is introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing +Symbol.iterator+.
+In async iterators, the contract has a subtle difference: +next+ is supposed to return a +Promise+ that resolves to an object containing +value+ and +done+ properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new +Symbol.asyncIterator+ is introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing +Symbol.iterator+.
 
 The +sequence+ iterable could be made compatible with the async iterator interface with two small changes: we replace +Symbol.iterator+ with +Symbol.asyncIterator+, and we wrap the return value for the +next+ method in +Promise.resolve+, thus returning a +Promise+.
 
@@ -2167,7 +2184,7 @@ const interval = duration => ({
 })
 ----
 
-In order to consume an async iterator, we can leverage the new +for await..of+ construct introduced alongside Async Iterators. This is yet another way of writing code that behaves asynchronously yet looks synchronous. Note that +for await..of+ statements are only allowed inside Async Functions.
+In order to consume an async iterator, we can leverage the new +for await..of+ construct introduced alongside async iterators. This is yet another way of writing code that behaves asynchronously yet looks synchronous. Note that +for await..of+ statements are only allowed inside async functions.
 
 [source,javascript]
 ----
@@ -2196,7 +2213,7 @@ async function* fetchInterval(duration, ...params) {
 
 When stepped over, async generators return objects with a +{ next, return, throw }+ signature, whose methods return promises for +{ next, done }+. This is in contrast with regular generators which return +{ next, done }+ directly.
 
-You can consume the +interval+ async generator in exactly the same way you could consume the object-oriented async iterator. The following example consumes the +fetchInterval+ generator to poll an +/api/status+ HTTP resource and leverage its JSON response. After each step ends, we wait for a second and repeat the process.
+You can consume the +fetchInterval+ async generator in exactly the same way you could consume the object-based +interval+ async iterator. The following example consumes the +fetchInterval+ generator to poll an +/api/status+ HTTP resource and leverage its JSON response. After each step ends, we wait for a second and repeat the process.
 
 [source,javascript]
 ----

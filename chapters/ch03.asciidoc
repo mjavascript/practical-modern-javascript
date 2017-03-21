@@ -1,7 +1,7 @@
 [[classes-symbols-and-symbols]]
 == Classes, Symbols, and Objects
 
-Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes, and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript, like strings, booleans, and numbers. They can be used for defining protocols, and in this chapter we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the +Object+ built-in in ES6.
+Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes, and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript, like strings, booleans, and numbers. They can be used for defining protocols, and in this chapter we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the `Object` built-in in ES6.
 
 === 3.1 Classes
 
@@ -221,9 +221,24 @@ console.log(person.satiety)
 // <- 40
 ----
 
-Sometimes it's also important to have static methods at the class level, rather than at the instance level. JavaScript classes allow you to define such methods using the +static+ keyword, much like you would use +get+ or +set+ as a prefix to a method definition that's a getter or a setter.
+Sometimes it's necessary to add static methods at the class level, rather than members at the instance level. Using syntax available before ES6 instance members have to be explicitly added to the prototype chain. Meanwhile, static methods should be added to the constructor directly.
 
-The following example defines a +MathHelper+ class with a static +sum+ method that's able to calculate the sum of all numbers passed to it in a function call, by taking advantage of the +Array.prototype.reduce+ method.
+[source,javascript]
+----
+function Person () {
+  this.hunger = 100
+}
+Person.prototype.eat = function () {
+  this.hunger--
+}
+Person.isPerson = function (person) {
+  return person instanceof Person
+}
+----
+
+JavaScript classes allow you to define static methods like +Person.isPerson+ using the +static+ keyword, much like you would use +get+ or +set+ as a prefix to a method definition that's a getter or a setter.
+
+The following example defines a +MathHelper+ class with a static +sum+ method that's able to calculate the sum of all numbers passed to it in a function call, by taking advantage of the `Array#reduce` method.
 
 [source,javascript]
 ----
@@ -253,7 +268,7 @@ Banana.prototype.slice = function () {
 }
 ----
 
-Given the ephemeral knowledge one has to remember, and the fact that `Object.create` was only made available in ES5, JavaScript developers have historically turned to libraries to resolve their prototype inheritance issues. One such example is +util.inherits+ in Node.js, which is usually favored over `Object.create` for legacy support reasons.
+Given the ephemeral knowledge one has to remember, and the fact that `Object.create` was only made available in ES5, JavaScript developers have historically turned to libraries to resolve their prototype inheritance issues. One such example is `util.inherits` in Node.js, which is usually favored over `Object.create` for legacy support reasons.
 
 [source,javascript]
 ----
@@ -673,7 +688,7 @@ function md (input, options=defaults) {
 }
 ----
 
-The default values have to be merged with user-provided configuration, somehow. That's where +Object.assign+ comes in, as shown in the following example. Here, we start with an empty +{}+ object, copy our default values over to it, and then copy the options on top. The resulting +config+ object will have all of the default values plus the user-provided configuration.
+The default values have to be merged with user-provided configuration, somehow. That's where +Object.assign+ comes in, as shown in the following example. We start with an empty +{}+ object, -- which will be mutated and returned by `Object.assign` -- we copy the default values over to it, and then copy the options on top. The resulting +config+ object will have all of the default values plus the user-provided configuration.
 
 [source,javascript]
 ----
@@ -681,6 +696,23 @@ function md (input, options) {
   const config = Object.assign({}, defaults, options)
 }
 ----
+
+.Understanding the `target` of `Object.assign`
+[WARNING]
+====
+The `Object.assign` function mutates its first argument. It's signature is `(target, ...sources)`. Every source is applied onto the target object, source by source and property by property.
+
+Consider the following scenario, where we don't pass an empty object as the first argument of `Object.assign`, instead just providing it with the `defaults` and the `options`. We would be changing the contents of the `defaults` object, losing some of our default values -- and obtaining some wrong ones -- in the process of mutating the object. The first invocation would produce the same result as the previous example, but it would modify our defaults in the process, changing how subsequent calls to +md+ work.
+
+[source,javascript]
+----
+function md (input, options) {
+  const config = Object.assign(defaults, options)
+}
+----
+
+For this reason, it's generally best to pass a brand new object on the first position, every time.
+====
 
 For any properties that had a default value where the user also provided a value, the user-provided value will prevail. Here's how +Object.assign+ works. First, it takes the first argument passed to it, let's call it +target+. It then iterates over all keys of each of the other arguments, let's call them +sources+. For each source in +sources+, all of its properties are iterated and assigned to +target+. The end result is that right-most sources -- in our case, the +options+ object -- overwrite any previously assigned values, as shown in the following bit of code.
 
@@ -739,7 +771,7 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 // <- { a: ['e', 'f'] }
 ----
 
-At the time of this writing, there's an ECMAScript stage 3 proposal to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an +Object.assign+ function call.
+At the time of this writing, there's an ECMAScript stage 3 proposalfootnote:[You can find the proposal draft at: https://mjavascript.com/out/object-spread.] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an +Object.assign+ function call.
 
 The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and the +Object.assign+ counterpart. As you can see, using object spread is more succint and should be preferred where possible.
 
@@ -810,7 +842,7 @@ Object.is(-0, +0)
 // <- false
 ----
 
-These differences may not seem like much, but dealing with +NaN+ has always been cumbersome because of its special quirks, such as +typeof NaN+ being +'number'+ and it not being equal to itself.
+These differences may not seem like much, but dealing with +NaN+ has always been cumbersome because of its special quirks, such as +typeof NaN+ being `'number'` and it not being equal to itself.
 
 ==== 3.3.3 +Object.setPrototypeOf+
 
@@ -825,7 +857,7 @@ const cat = Object.create(baseCat)
 cat.name = 'Milanesita'
 ----
 
-The `Object.create` method is, however, limited to newly created objects. In contrast, we could use +Object.setPrototypeOf+ to change the prototype of an object that already exists, as shown in the following code snippet.
+The `Object.create` method is, however, limited to newly created objects. In contrast, we could use `Object.setPrototypeOf` to change the prototype of an object that already exists, as shown in the following code snippet.
 
 [source,javascript]
 ----
@@ -833,12 +865,12 @@ const baseCat = { type: 'cat', legs: 4 }
 const cat = Object.setPrototypeOf({ name: 'Milanesita' }, baseCat)
 ----
 
-Note however that there are serious performance implications when using +Obect.setPrototypeOf+ as opposed to `Object.create`, and some careful consideration is in order before you decide to go ahead and sprinkle +Object.setPrototypeOf+ all over a codebase.
+Note however that there are serious performance implications when using `Obect.setPrototypeOf` as opposed to `Object.create`, and some careful consideration is in order before you decide to go ahead and sprinkle `Object.setPrototypeOf` all over a codebase.
 
 .Performance issues
 [WARNING]
 ====
-Using +Object.setPrototypeOf+ to change the prototype of an object is an expensive operation. Here is what the Mozilla Developer Network documentation has to say about the matter.
+Using `Object.setPrototypeOf` to change the prototype of an object is an expensive operation. Here is what the Mozilla Developer Network documentation has to say about the matter.
 
 [quote, Mozilla Developer Network]
 ____
