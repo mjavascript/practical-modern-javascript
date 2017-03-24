@@ -221,7 +221,7 @@ console.log(person.satiety)
 // <- 40
 ----
 
-Sometimes it's necessary to add static methods at the class level, rather than members at the instance level. Using syntax available before ES6 instance members have to be explicitly added to the prototype chain. Meanwhile, static methods should be added to the constructor directly.
+Sometimes it's necessary to add static methods at the class level, rather than members at the instance level. Using syntax available before ES6, instance members have to be explicitly added to the prototype chain. Meanwhile, static methods should be added to the constructor directly.
 
 [source,javascript]
 ----
@@ -773,7 +773,7 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 
 At the time of this writing, there's an ECMAScript stage 3 proposalfootnote:[You can find the proposal draft at: https://mjavascript.com/out/object-spread.] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an +Object.assign+ function call.
 
-The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and the +Object.assign+ counterpart. As you can see, using object spread is more succint and should be preferred where possible.
+The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and their +Object.assign+ counterpart. As you can see, using object spread is more succint and should be preferred where possible.
 
 [source,javascript]
 ----

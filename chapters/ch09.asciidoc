@@ -918,7 +918,7 @@ When we prefer boring code, patterns flourish gradually and naturally. Once a pa
 
 === 9.7 Asynchronous Code Flows
 
-In chapter 4 we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, Promises, generators, async functions, and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
+In chapter 4 we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, promises, generators, async functions, and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
 
 Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
 
@@ -1026,7 +1026,7 @@ When we don't spend at least some of our time on figuring out what feature or fl
 
 Picking the right abstractions is hard: we want to reduce complexity in our code flows by introducing complexity that's hidden away behind the constructs we use. Async functions borrow their foundation from generators. Generator objects are iterable. Async iterators use promises. Iterators are implemented using symbols. Promises use callbacks.
 
-Consistency is an important theme when it comes to maintainable code. An application might mostly use callbacks, or mostly use Promises. Individually, both callbacks and promises can be used to reduce complexity in code flows. When mixing them together, however, we need to make sure we don't introduce context switching where developers reading different pieces of a codebase need to enter different mindsets to understand them.
+Consistency is an important theme when it comes to maintainable code. An application might mostly use callbacks, or mostly use promises. Individually, both callbacks and promises can be used to reduce complexity in code flows. When mixing them together, however, we need to make sure we don't introduce context switching where developers reading different pieces of a codebase need to enter different mindsets to understand them.
 
 This is why conventions exist. A strong convention such as "use promises where possible" goes a long way towards augmenting consistency across a codebase. Conventions, more than anything are what drive readability and maintainability in a codebase. Code is, after all, a communication device used to convey a message. This message is not only relevant to the computers executing the code, but most importantly to developers reading the code, maintaining and improving the application over time.
 

@@ -1,11 +1,11 @@
 [[managing-property-access-with-proxies]]
 == Managing Property Access with Proxies
 
-Proxies are an interesting and powerful feature coming in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a +Proxy+ to determine the desired behavior whenever the properties of an underlying +target+ object are accessed. A +handler+ object can be used to configure traps for your +Proxy+, which define and restrict how the underlying object is accessed, as we'll see in a bit.
+Proxies are an interesting and powerful feature in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a +Proxy+ to determine the desired behavior whenever the properties of an underlying +target+ object are accessed. A +handler+ object can be used to configure traps for your +Proxy+, which define and restrict how the underlying object is accessed, as we'll see in a bit.
 
 === 6.1 Getting Started with Proxy
 
-By default, proxies don't do much -- in fact they don't do anything. If you don't provide any configuration, your +proxy+ will just work as a pass-through to the +target+ object, also known as a "no-op forwarding +Proxy+" meaning that all operations on the +Proxy+ object defer to the underlying object.
+By default, proxies don't do much -- in fact they don't do anything. If you don't provide any configuration, your proxy will just work as a pass-through to the +target+ object, also known as a "no-op forwarding proxy" meaning that all operations on the proxy object defer to the underlying object.
 
 In the following piece of code, we create a no-op forwarding +Proxy+. You can observe how by assigning a value to +proxy.exposed+, that value is passed onto +target.exposed+. You could think of proxies as the gatekeepers of their underlying objects: they may allow certain operations to go through and prevent others from passing, but they carefully inspect every single interaction with their underlying objects.
 
@@ -46,9 +46,9 @@ proxy['something-else']
 // <- undefined
 ----
 
-As a complement to proxies, ES6 introduces a +Reflect+ built-in object. The traps in ES6 proxies are mapped one-to-one to the +Reflect+ API: For every trap, there’s a matching reflection method in +Reflect+. These methods can be particularly useful when we want to provide the default behavior of proxy traps, but we don't want to concern ourselves with the implementation of that behavior.
+As a complement to proxies, ES6 introduces a +Reflect+ built-in object. The traps in ES6 proxies are mapped one-to-one to the +Reflect+ API: For every trap, there’s a matching reflection method in +Reflect+. These methods can be particularly useful when we want the default behavior of proxy traps, but we don't want to concern ourselves with the implementation of that behavior.
 
-In the following code snippet we use +Reflect.get+ to provide the default behavior for +get+ operations, while not worrying about accessing the +key+ property in +target+ by hand. While in this case the operation may seem trivial, the default behavior for other traps may be harder to remember and implement correctly. However, when using the +Reflect+ API, we just need to forward the method call to the reflection API and return the result.
+In the following code snippet we use +Reflect.get+ to provide the default behavior for +get+ operations, while not worrying about accessing the +key+ property in +target+ by hand. While in this case the operation may seem trivial, the default behavior for other traps may be harder to remember and implement correctly. We can forward every parameter in the trap to the reflection API and return its result.
 
 [source,javascript]
 ----
@@ -68,8 +68,7 @@ The +get+ trap doesn't necessarily have to return the original +target[key]+ val
 ----
 const handler = {
   get (target, key) {
-    const [prefix] = key
-    if (prefix === '_') {
+    if (key.startsWith('_')) {
       throw new Error(`Property "${ key }" cannot be read through this proxy.`)
     }
     return Reflect.get(target, key)
@@ -182,7 +181,7 @@ const proxy = concealWithPrefix(target)
 // expose proxy to consumers
 ----
 
-You might be tempted to argue that you could achieve the same behavior in ES5 simply by using variables privately scoped to the +concealWithPrefix+ function, without the need for the +Proxy+ itself. The difference is that proxies allow you to "privatize" property access dynamically. Without relying on +Proxy+, you couldn't mark every property that starts with an underscore as private. You could use +Object.freeze+ on the object, but then you wouldn't be able to modify the properties yourself, either. Or you could define get and set accessors for every property, but then again you wouldn't be able to block access on every single property, only the ones you explicitly configured getters and setters for.
+You might be tempted to argue that you could achieve the same behavior in ES5 simply by using variables privately scoped to the +concealWithPrefix+ function, without the need for the +Proxy+ itself. The difference is that proxies allow you to "privatize" property access dynamically. Without relying on +Proxy+, you couldn't mark every property that starts with an underscore as private. You could use +Object.freeze+footnote:[The Object.freeze method prevents adding new properties, removing existing ones, and modifying property value references. Note that it doesn't make the values themselves immutable: their properties can still change provided Object.freeze isn't called on those objects as well.] on the object, but then you wouldn't be able to modify the property references yourself, either. Or you could define get and set accessors for every property, but then again you wouldn't be able to block access on every single property, only the ones you explicitly configured getters and setters for.
 
 ==== 6.1.3 Schema Validation with Proxies
 
@@ -190,7 +189,7 @@ Sometimes we have an object with user input that we want to validate against a s
 
 There is a number of ways in which you could do schema validation. You could use a validation function that throws errors if an invalid value is found on the object, but you'd have to ensure the object is off limits once you've deemed it valid. You could validate each property individually, but you'd have to remember to validate them whenever they're changed. You could also use a +Proxy+. By providing consumers with a +Proxy+ to the actual model object, you'd ensure that the object never enters an invalid state, as an exception would be thrown otherwise.
 
-Another aspect of schema validation via +Proxy+ is that it helps you separate validation concerns from the +target+ object, where validation occurs sometimes in the wild. The +target+ object would stay as a plain old JavaScript object (or POJO, for short), meaning that while you give consumers a validating proxy, you keep an untainted version of the data that's always valid, as guaranteed by the proxy.
+Another aspect of schema validation via +Proxy+ is that it helps you separate validation concerns from the +target+ object, where validation occurs sometimes in the wild. The +target+ object would stay as a plain JavaScript object, meaning that while you give consumers a validating proxy, you keep an untainted version of the data that's always valid, as guaranteed by the proxy.
 
 Just like a validation function, the handler settings can be reutilized across several +Proxy+ instances, without having to rely on prototypal inheritance or ES6 classes.
 
@@ -292,7 +291,7 @@ We've already covered +get+, which traps property access; and +set+, which traps
 
 ==== 6.3.1 +has+ Trap
 
-We can use +handler.has+ to conceal any property you want. It's a trap for the +in+ operator. In the +set+ trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the +proxy+ to figure out whether these properties exist. There are three alternatives here.
+We can use +handler.has+ to conceal any property you want when it comes to the `in` operator. In the +set+ trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the +proxy+ to figure out whether these properties exist. There are three alternatives here.
 
 - Do nothing, in which case +key in proxy+ falls through to +Reflect.has(target, key)+, the equivalent of +key in target+
 - Return +true+ or +false+ regardless of whether +key+ is or is not present in +target+
@@ -347,6 +346,16 @@ console.log('_secret' in target)
 ----
 
 We could've thrown an exception instead. That would be useful in situations where attempts to access properties in the private space is seen as a mistake that would've resulted in an invalid state, rather than as a security concern in code that aims to be embedded into third party websites.
+
+Note that if we wanted to prevent `Object#hasOwnProperty` from finding properties in the private space, the `has` trap won't help.
+
+[source,javascript]
+----
+console.log(proxy.hasOwnProperty('_secret'))
+// <- true
+----
+
+The `getOwnPropertyDescriptor` trap in section 6.4.1 offers a solution that's able to intercept `Object#hasOwnProperty` as well.
 
 ==== 6.3.2 +deleteProperty+ Trap
 
@@ -419,7 +428,7 @@ Consumers interacting with +target+ through the +proxy+ can no longer delete pro
 
 ==== 6.3.3 +defineProperty+ Trap
 
-The +Object.defineProperty+ function can be used to add new properties to a +target+ object, using a property +key+ and a property +descriptor+. For the most part, +Object.defineProperty(target, key, descriptor)+ is used in two kinds of situations.
+The +Object.defineProperty+ function -- introduced in ES5 -- can be used to add new properties to a +target+ object, using a property +key+ and a property +descriptor+. For the most part, +Object.defineProperty(target, key, descriptor)+ is used in two kinds of situations.
 
 1. When we need to ensure cross-browser support of getters and setters
 2. When we want to define a custom property accessor
@@ -577,7 +586,7 @@ for (const key of Object.keys(proxy)) {
 }
 ----
 
-Symbol iteration wouldn't be affected by our +handler+ because Symbol keys have a type of +'symbol'+, which would cause our +.filter+ function to return true.
+Symbol iteration wouldn't be affected by our +handler+ because `Symbol` keys have a type of +'symbol'+, which would cause our +.filter+ function to return true.
 
 [source,javascript]
 ----
@@ -650,6 +659,16 @@ console.log(Object.getOwnPropertyDescriptor(proxy, 'topping'))
 // <- { value: 'mozzarella', writable: true, enumerable: true, configurable: true }
 ----
 
+The `getOwnPropertyDescriptor` trap is able to intercept the implementation of `Object#hasOwnProperty`, which relies on property descriptors to check whether a property exists.
+
+[source,javascript]
+----
+console.log(proxy.hasOwnProperty('topping'))
+// <- true
+console.log(proxy.hasOwnProperty('_secret'))
+// <- false
+----
+
 When you're trying to hide things, it's best to have them try and behave as if they fell in some other category than the category they're actually in, thus concealing their behavior and passing it off for something else. Throwing, however, sends the wrong message when we want to conceal something: why does a property throw instead of return +undefined+? It must exist but be inaccessible. This is not unlike situations in HTTP API design where we might prefer to return "404 Not Found" responses for sensitive resources, such as an administration back end, when the user is unauthorized to access them, instead of the technically correct "401 Unauthorized" status code.
 
 When debugging concerns outweight security concerns, you should at least consider the +throw+ statement. In any case, it's important to understand your use case in order to figure out the optimal and least surprising behavior for a given component.
@@ -671,7 +690,7 @@ The +apply+ trap receives three arguments.
 
 - +target+ is the function being proxied
 - +ctx+ is the context passed as +this+ to +target+ when applying a call
-- +args+ is the arguments passed to +target+ when applying the call
+- +args+ is an array of arguments passed to +target+ when applying the call
 
 The default implementation that doesn't alter the outcome would return the results of calling +Reflect.apply+.
 
@@ -872,8 +891,8 @@ Note that arrow functions can't be used as constructors, and thus we can't use t
 
 We can use the +handler.getPrototypeOf+ method as a trap for all of the following operations.
 
-- `Object.prototype.__proto__` property
-- `Object.prototype.isPrototypeOf` method
+- `Object#__proto__` property
+- `Object#isPrototypeOf` method
 - `Object.getPrototypeOf` method
 - `Reflect.getPrototypeOf` method
 - `instanceof` operator
@@ -972,25 +991,15 @@ proxy.setPrototypeOf(proxy, base)
 // <- Error: Changing the prototype is forbidden
 ----
 
-In these cases, it's best to fail with an exception so that consumers can understand what is going on. By explicitly disallowing prototype changes, the consumer can start looking elsewhere. If we didn't throw an exception, the consumer could still eventually learn that the prototype isn't changing through debugging. You may as well save them from the pain!
+In these cases, it's best to fail with an exception so that consumers can understand what is going on. By explicitly disallowing prototype changes, the consumer can start looking elsewhere. If we didn't throw an exception, the consumer could still eventually learn that the prototype isn't changing through debugging. You might as well save them from that pain!
 
-==== 6.4.6 +isExtensible+ Trap
+==== 6.4.6 +preventExtensions+ Trap
 
-An extensible object is an object that you can add new properties to, an object you can extend.
-
-The +handler.isExtensible+ method can be used for logging or auditing calls to +Object.isExtensible+, but not to decide whether an object is extensible. That's because this trap is subject to a harsh invariant that puts a hard limit to what you can do with it: a +TypeError+ is thrown if +Object.isExtensible(proxy) !== Object.isExtensible(target)+.
-
-If you didn't want consumers to know whether the underlying object is extensible or not, you could +throw+ an error in an +isExtensible+ trap.
-
-While this trap is nearly useless, other than for auditing purposes, the hard invariant makes sense because there's also the +preventExtensions+ trap that's a bit more permissive.
-
-==== 6.4.7 +preventExtensions+ Trap
-
-You can use +handler.preventExtensions+ to trap the +Object.preventExtensions+ method. When extensions are prevented on an object, new properties can't be added any longer: the object can't be extended.
+You can use +handler.preventExtensions+ to trap the +Object.preventExtensions+ method introduced in ES5. When extensions are prevented on an object, new properties can't be added any longer: the object can't be extended.
 
 Imagine a scenario where you want to be able to selectively +preventExtensions+ on some objects, but not all of them. In that scenario, you could use a +WeakSet+ to keep track of the objects that should be extensible. If an object is in the set, then the +preventExtensions+ trap should be able to capture those requests and discard them.
 
-The following snippet does exactly that: it keeps objects that can be extended in a +WeakSet+ and prevents the rest from being extended. Note that the trap always returns the opposite of +Reflect.isExtensible(target)+. Returning +true+ means the object can't be extended anymore, while +false+ means the object can still be extended.
+The following snippet does exactly that: it keeps objects that can be extended in a +WeakSet+ and prevents the rest from being extended.
 
 [source,javascript]
 ----
@@ -1001,7 +1010,7 @@ const handler = {
     if (canPrevent) {
       Object.preventExtensions(target)
     }
-    return !Reflect.isExtensible(target)
+    return Reflect.preventExtensions(target)
   }
 }
 ----
@@ -1029,6 +1038,14 @@ Object.preventExtensions(proxy)
 console.log(Object.isExtensible(proxy))
 // <- false
 ----
+
+==== 6.4.7 +isExtensible+ Trap
+
+An extensible object is an object that you can add new properties to, an object you can extend.
+
+The +handler.isExtensible+ method can be used for logging or auditing calls to +Object.isExtensible+, but not to decide whether an object is extensible. That's because this trap is subject to a harsh invariant that puts a hard limit to what you can do with it: a +TypeError+ is thrown if +Object.isExtensible(proxy) !== Object.isExtensible(target)+.
+
+While this trap is nearly useless other than for auditing purposes, you could also throw an error within the handler if you don't want consumers to know whether the underlying object is extensible or not.
 
 As we've learned over the last few pages, there's a myriad of use cases for proxies. We can use +Proxy+ for all of the following, and that's just the tip of the iceberg.
 

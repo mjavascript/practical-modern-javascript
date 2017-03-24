@@ -764,7 +764,7 @@ Let's turn our attention to spread and rest operators next.
 
 === 2.4 Rest Parameters and Spread Operator
 
-Before ES6, interacting with an arbitrary amount of function parameters was complicated. You had to use +arguments+, which isn't an array but has a +length+ property. Usually you'd end up casting the +arguments+ object into an actual array using +Array.prototype.slice.call+, and going from there, as shown in the following snippet.
+Before ES6, interacting with an arbitrary amount of function parameters was complicated. You had to use +arguments+, which isn't an array but has a +length+ property. Usually you'd end up casting the +arguments+ object into an actual array using +Array#slice.call+, and going from there, as shown in the following snippet.
 
 [source,javascript]
 ----
