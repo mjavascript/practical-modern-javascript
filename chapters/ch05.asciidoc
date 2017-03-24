@@ -1,7 +1,7 @@
 [[leveraging-es-collections]]
 == Leveraging ECMAScript Collections
 
-JavaScript data structures are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map +npm+ package names to their metadata, as shown next.
+JavaScript data structures are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map npm package names to their metadata, as shown next.
 
 [source,javascript]
 ----
@@ -273,7 +273,7 @@ console.log([...map])
 // <- [['a', 3]]
 ----
 
-In ES6 maps, +NaN+ becomes a "corner-case" that gets treated as a value that's equal to itself, even though the +NaN === NaN+ expression evaluates to +false+. A number of ECMAScript features introduced in ES6 and later use a different comparison algorithm than that of ES5 and earlier where +NaN+ is equal to +NaN+, although +NaN !== NaN+; and ++0+ is different from +-0+, even though ++0 === -0+. The following piece of code shows how even though +NaN+ is typically evaluated to be different than itself, +Map+ considers +NaN+ to be a constant value that's always the same.
+In ES6 maps, `NaN` becomes a "corner-case" that gets treated as a value that's equal to itself, even though the `NaN === NaN` expression evaluates to `false`. A number of ECMAScript features introduced in ES6 and later use a different comparison algorithm than that of ES5 and earlier where `NaN` is equal to `NaN`, although `NaN !== NaN`; and `+0` is different from `-0`, even though `+0 === -0`. The following piece of code shows how even though `NaN` is typically evaluated to be different than itself, `Map` considers `NaN` to be a constant value that's always the same.
 
 [source,javascript]
 ----
@@ -309,7 +309,7 @@ console.log([...map.entries()])
 
 Map entries are always iterated in insertion order. This contrasts with +Object.keys+, which is specified to follow an arbitrary order. Although, in practice, insertion order is typically preserved by JavaScript engines regardless of the specification.
 
-Maps have a +.forEach+ method that's identical in behavior to that in ES5 +Array+ objects. Once again, keys do not get casted into strings in the case of +Map+, as demonstrated below.
+Maps have a +.forEach+ method that's equivalent in behavior to that in ES5 +Array+ objects. The signature is `(value, key, map)`, where `value` and `key` correspond to the current item in the iteration, while `map` is the map being iterated. Once again, keys do not get casted into strings in the case of +Map+, as demonstrated below.
 
 [source,javascript]
 ----
@@ -365,7 +365,9 @@ function destroy (entry) {
 }
 ----
 
-One of the most valuable aspects of +Map+ is the ability to index by any object, such as DOM elements. That, combined with the fact that +Map+ also has collection manipulation abilities greatly simplifies things.
+One of the most valuable aspects of +Map+ is the ability to index by any object, such as DOM elements. That, combined with the fact that +Map+ also has collection manipulation abilities greatly simplifies things. This is crucial for DOM manipulation in jQuery and other DOM-heavy libraries, which often need to map DOM elements to their internal state.
+
+The following example shows how `Map` would reduce the burden of maintenance in user code.
 
 [source,javascript]
 ----
@@ -393,7 +395,7 @@ function destroy (el) {
 }
 ----
 
-The fact that mapping functions have become one liners thanks to native +Map+ methods means we could inline those functions instead, as readability is no longer an issue. The following piece of code is a vastly simplified alternative to the ES5 piece of code we started with. Here we're not concerned with implementation details anymore, but have instead boiled the DOM-to-API mapping to its bare essentials.
+The fact that mapping functions have become one-liners thanks to native +Map+ methods means we could inline those functions instead, as readability is no longer an issue. The following piece of code is a vastly simplified alternative to the ES5 piece of code we started with. Here we're not concerned with implementation details anymore, but have instead boiled the DOM-to-API mapping to its bare essentials.
 
 [source,javascript]
 ----
@@ -430,7 +432,7 @@ map.set(Symbol(), 2)
 // <- TypeError
 ----
 
-In exchange for having a more limited feature set, +WeakMap+ key references are weakly held, meaning that the objects referenced by +WeakMap+ keys are subject to garbage collection if there are no other references to them. This kind of behavior is useful when you have metadata about a +person+, for example, but you want the +person+ to be garbage collected when and if the only reference back to +person+ is their metadata. You can now keep that metadata in a +WeakMap+ using +person+ as the key.
+In exchange for having a more limited feature set, +WeakMap+ key references are weakly held, meaning that the objects referenced by +WeakMap+ keys are subject to garbage collection if there are no references to them -- other than weak references. This kind of behavior is useful when you have metadata about a +person+, for example, but you want the +person+ to be garbage collected when and if the only reference back to +person+ is their metadata. You can now keep that metadata in a +WeakMap+ using +person+ as the key.
 
 With +WeakMap+, you are still able to provide an iterable for initialization.
 
@@ -457,33 +459,33 @@ map.has(date)
 // <- false
 ----
 
-==== 5.2.1 Is +WeakMap+ Strictly Worse Than +Map+?
+==== 5.2.1 Is +WeakMap+ A Worse +Map+?
 
-The distinction that makes +WeakMap+ worth the trouble is in its name. Given that +WeakMap+ holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as +WeakMap+ keys. This is in contrast with +Map+ which holds strong object references, preventing +Map+ keys and values from being garbage collected.
+The distinction which makes +WeakMap+ worth the trouble is in its name. Given that +WeakMap+ holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as +WeakMap+ keys. This is in contrast with +Map+ which holds strong object references, preventing +Map+ keys and values from being garbage collected.
 
-Correspondingly, use cases for +WeakMap+ revolve around the need to specify metadata or extend an object while still being able to garbage collect that object if there are no other references to it. A perfect example might be the underlying implementation for +process.on('unhandledRejection')+ in Node.js, which uses a +WeakMap+ to keep track of rejected promises that weren't dealt with. By using +WeakMap+, the implementation prevents memory leaks because the +WeakMap+ won't be grabbing onto those promises strongly. In this case, we have a simple map that weakly holds onto promises, but is flexible enough to handle entries being removed from the map when they're no longer referenced anywhere else.
+Correspondingly, use cases for +WeakMap+ revolve around the need to specify metadata or extend an object while still being able to garbage collect that object if there are no other references to it. A perfect example might be the underlying implementation for `process.on('unhandledRejection')` in Node.js, which uses a +WeakMap+ to keep track of rejected promises that weren't dealt with yet. By using +WeakMap+, the implementation prevents memory leaks because the +WeakMap+ won't be grabbing onto the state related to those promises strongly. In this case, we have a simple map that weakly holds onto state, but is flexible enough to handle entries being removed from the map when promises are no longer referenced anywhere else.
 
 Keeping data about DOM elements that should be released from memory when they're no longer of interest is another important use case, and in this regard using +WeakMap+ is an even better solution to the DOM-related API caching solution we implemented earlier using +Map+.
 
-In so many words, then: no, +WeakMap+ is not strictly worse than +Map+ -- they just cater to different use cases.
+In so many words, then: no, +WeakMap+ is definitely not worse than +Map+ -- they just cater to different use cases.
 
 === 5.3 Sets in ES6
 
-A set is a grouping of values. Sets are also a new collection type in ES6. Sets are similar to +Map+.
+The `Set` built-in is a new collection type in ES6 used to represent a grouping of values. In several aspects, `Set` is similar to `Map`.
 
-- +Set+ is also iterable
-- +Set+ constructor also accepts an iterable
-- +Set+ also has a +.size+ property
-- Keys can be arbitrary values or object references
-- Keys must be unique
-- +NaN+ equals +NaN+ when it comes to +Set+ too
-- All of +.keys+, +.values+, +.entries+, +.forEach+, +.has+, +.delete+, and +.clear+
+- `Set` is also iterable
+- `Set` constructor also accepts an iterable
+- `Set` also has a `.size` property
+- `Set` values can be arbitrary values or object references, like `Map` keys
+- `Set` values must be unique, like `Map` keys
+- `NaN` equals `NaN` when it comes to `Set` too
+- All of `.keys`, `.values`, `.entries`, `.forEach`, `.has`, `.delete`, and `.clear`
 
-At the same time, sets are different from +Map+ in a few key ways. Sets don't hold key value pairs, there's only one dimension. You can think of sets as being similar to arrays where every element is distinct from each other.
+At the same time, sets are different from `Map` in a few key ways. Sets don't hold key value pairs, there's only one dimension. You can think of sets as being similar to arrays where every element is distinct from each other.
 
-There isn't a +.get+ method in +Set+. A +set.get(key)+ method would be redundant: if you already have the +key+ then there isn't anything else to get, as that's the only dimension. If we wanted to check for whether the +key+ is in the set, there's +set.has(key)+ to fulfill that role.
+There isn't a `.get` method in `Set`. A `set.get(value)` method would be redundant: if you already have the `value` then there isn't anything else to get, as that's the only dimension. If we wanted to check for whether the `value` is in the set, there's `set.has(value)` to fulfill that role.
 
-Similarly, a +set.set(key)+ method wouldn't be aptly named, as you aren't setting a +value+ to a +key+, but merely adding a value to the set instead. Thus, the method to add values to a set is +set.add+, as demonstrated in the next snippet.
+Similarly, a `set.set(value)` method wouldn't be aptly named, as you aren't setting a `key` to a `value`, but merely adding a value to the set instead. Thus, the method to add values to a set is `set.add`, as demonstrated in the next snippet.
 
 [source,javascript]
 ----
@@ -491,7 +493,7 @@ const set = new Set()
 set.add({ an: 'example' })
 ----
 
-Sets are iterable, but unlike maps you only iterate over keys, not key value pairs. The following example demonstrates how sets can be spread over an array using the spread operator and creating a single dimensional list.
+Sets are iterable, but unlike maps you only iterate over values, not key value pairs. The following example demonstrates how sets can be spread over an array using the spread operator and creating a single dimensional list.
 
 [source,javascript]
 ----
@@ -500,7 +502,7 @@ console.log([...set])
 // <- ['a', 'b', 'c']
 ----
 
-In the following example you can note how a set won't contain duplicate entries: every element in a +Set+ must be unique.
+In the following example you can note how a set won't contain duplicate entries: every element in a `Set` must be unique.
 
 [source,javascript]
 ----
@@ -509,7 +511,7 @@ console.log([...set])
 // <- ['a', 'b', 'c']
 ----
 
-The following piece of code creates a +Set+ with all of the +<div>+ elements on a page and then prints how many were found. Then, we query the DOM again and call +set.add+ again for every DOM element. Given that they're all already in the +set+, the +.size+ property won't change, meaning the +set+ remains the same.
+The following piece of code creates a `Set` with all of the `<div>` elements on a page and then prints how many were found. Then, we query the DOM again and call `set.add` again for every DOM element. Given that they're all already in the `set`, the `.size` property won't change, meaning the `set` remains the same.
 
 [source,javascript]
 ----
@@ -524,11 +526,45 @@ console.log(set.size)
 // <- 56
 ----
 
+Given that a `Set` has no keys, the `Set#entries` method returns an iterator of `[value, value]` for each element in the set.
+
+[source,javascript]
+----
+const set = new Set(['a', 'b', 'c'])
+console.log([...set.entries()])
+// <- [['a', 'a'], ['b', 'b'], ['c', 'c']]
+----
+
+The `Set#entries` method is consistent with `Map#entries`, which returns an iterator of `[key, value]` pairs. Using `Set#entries` as the default iterator for `Set` collections wouldn't be valuable, since it's used in `for..of`, when spreading a `set`, and in `Array.from`. In all of those cases, you probably want to iterate over a sequence of values in the set, but not a sequence of `[value, value]` pairs.
+
+As demonstrated next, the default `Set` iterator uses `Set#values`, as opposed to `Map` which defined its iterator as `Map#entries`.
+
+[source,javascript]
+----
+const map = new Map()
+console.log(map[Symbol.iterator] === map.entries)
+// <- true
+const set = new Set()
+console.log(set[Symbol.iterator] === set.entries)
+// <- false
+console.log(set[Symbol.iterator] === set.values)
+// <- true
+----
+
+The `Set#keys` method also returns an iterator for values, again for consistency, and it's in fact a reference to the `Set#values` iterator.
+
+[source,javascript]
+----
+const set = new Set()
+console.log(set.keys === set.values)
+// <- true
+----
+
 === 5.4 ES6 WeakSets
 
-In a similar fashion to +Map+ and +WeakMap+, +WeakSet+ is the weak version of +Set+ that can't be iterated over. You can't iterate over a +WeakSet+. The values in a +WeakSet+ must be unique object references. If nothing else is referencing a +value+ found in a +WeakSet+, it'll be subject to garbage collection.
+In a similar fashion to `Map` and `WeakMap`, `WeakSet` is the weak version of `Set` that can't be iterated over. The values in a `WeakSet` must be unique object references. If nothing else is referencing a `value` found in a `WeakSet`, it'll be subject to garbage collection.
 
-Much like in +WeakMap+, you can only +.add+, +.delete+, and check if +WeakSet#has+ a given +value+. Just like in +Set+, there's no +.get+ because sets are one-dimensional.
+Much like in `WeakMap`, you can only `.add`, `.delete`, and check if `WeakSet#has` a given `value`. Just like in `Set`, there's no `.get` because sets are one-dimensional.
 
 We aren't allowed to add primitive values such as strings or symbols to a +WeakSet+.
 

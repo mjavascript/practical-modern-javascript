@@ -152,7 +152,7 @@ console.log(render(`list`, [{
 
 image::../images/c08g03-dynamic-render.png["Printing different views through a normalized render function."]
 
-Moving on, you'll notice that ES6 modules are heavily influenced by CommonJS. In the next few sections we'll look at +export+ and +import+ statements, and learn how ESM is compatible with CJS.
+Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. In the next few sections we'll look at +export+ and +import+ statements, and learn how ESM is compatible with CJS.
 
 === 8.2 JavaScript Modules
 
@@ -259,7 +259,7 @@ When you want to expose multiple values from CJS modules you don't necessarily n
 [source,javascript]
 ----
 module.exports.counter = 0
-module.exports.count = () => counter++
+module.exports.count = () => module.exports.counter++
 ----
 
 We can replicate this behavior in ESM by using the named exports syntax. Instead of assigning properties to an implicit +module.exports+ object like with CommonJS, in ES6 you declare the bindings you want to +export+, as shown in the following code snippet.
@@ -325,17 +325,34 @@ It's important to keep in mind that we are exporting bindings, and not merely va
 
 ===== Bindings, Not Values
 
-ES6 modules export bindings, not values nor references. This means that a +counter+ variable you export would be bound into the +counter+ variable on the module, and its value would be subject to changes made to +counter+. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
+ES6 modules export bindings, not values nor references. This means that a +fungible+ binding exported from a module would be bound into the +fungible+ variable on the module, and its value would be subject to changes made to +fungible+. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
 
-In the next code snippet, our module's +counter+ export would be initially bound to +0+ and increase by +1+ every second. Modules consuming this API would see the +counter+ value changing every second.
+In the next code snippet, our module's +fungible+ export would be initially bound to an object and be changed into an array after five seconds.
 
 [source,javascript]
 ----
-export let counter = 0
-setInterval(() => counter++, 1000)
+export let fungible = { name: 'bound' }
+setTimeout(() => fungible = [0, 1, 2], 5000)
 ----
 
-Finally, the JavaScript module system offers an +export..from+ syntax, where you can expose another module's interface.
+Modules consuming this API would see the +fungible+ value changing after five seconds. Consider the following example, where we print the consumed binding every 2 seconds.
+
+[source,javascript]
+----
+import { fungible } from './fungible'
+
+console.log(fungible) // <- { name: 'bound' }
+setInterval(() => console.log(fungible), 2000)
+// <- { name: 'bound' }
+// <- { name: 'bound' }
+// <- [0, 1, 2]
+// <- [0, 1, 2]
+// <- [0, 1, 2]
+----
+
+This kind of behavior is best suited for counters and flags, but is best avoided unless its purpose is clearly defined, since it can lead to confusing behavior and API surfaces changing unexpected from the point of view of a consumer.
+
+The JavaScript module system also offers an +export..from+ syntax, where you can expose another module's interface.
 
 ===== Exporting from another module
 
@@ -568,7 +585,7 @@ const random = (function() {
 })()
 ----
 
-Compare that to the following piece of code, used in an ESM module called +random+. The immediately-invoking function expression wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML +<script>+ tags.
+Compare that to the following piece of code, used in an ESM module called +random+. The immediately-invoking function expression (IIFE) wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML +<script>+ tags.
 
 [source,javascript]
 ----

@@ -232,7 +232,7 @@ var example = (parameters) => {
 }
 ----
 
-While arrow functions look very similar to your typical anonymous function, they are fundamentally different: arrow functions can't have a name, they can't be used as constructors, they don't have a +prototype+ property, and they are bound to their lexical scope.
+While arrow functions look very similar to your typical anonymous function, they are fundamentally different: arrow functions can't be named explicitly, although modern runtimes can infer a name based on the variable they're assigned to; they can't be used as constructors nor do they have a +prototype+ property, meaning you can't use +new+ on an arrow function; and they are bound to their lexical scope, which is the reason why they don't alter the meaning of +this+.
 
 Let's dig into their semantic differences with traditional functions, the many ways to declare an arrow function, and practical use cases.
 
@@ -261,6 +261,32 @@ If we had defined the function passed to +setInterval+ as a regular anonymous fu
 
 In a similar fashion, lexical binding in ES6 arrow functions also means that function calls won't be able to change the +this+ context when using +.call+, +.apply+, +.bind+, etc. That limitation is usually more useful than not, as it ensures that the context will always be preserved and constant.
 
+Let's now shift our attention to the following example. What do you think the `console.log` statement will print?
+
+[source,javascript]
+----
+function puzzle () {
+  return function () {
+    console.log(arguments)
+  }
+}
+puzzle('a', 'b', 'c')(1, 2, 3)
+----
+
+The answer is that `arguments` refers to the context of the anonymous function, and thus the arguments passed to that function will be printed. In this case, those arguments are `1, 2, 3`.
+
+What about in the following case, where we use an arrow function instead of the anonymous function in the previous example?
+
+[source,javascript]
+----
+function puzzle () {
+  return () => console.log(arguments)
+}
+puzzle('a', 'b', 'c')(1, 2, 3)
+----
+
+In this case, the `arguments` object refers to the context of the `puzzle` function, because arrow functions don't create a closure. For this reason, the printed arguments will be `'a', 'b', 'c'`.
+
 I've mentioned there's several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the others way to represent an arrow function?
 
 ==== 2.2.2 Arrow Function Flavors
@@ -274,7 +300,7 @@ var example = (parameters) => {
 }
 ----
 
-An arrow function with exactly one parameter can omit the parenthesis. This is optional. It's useful when passing the arrow function to another method, as it reduces the amount of parenthesis involved, making it easier for humans to parse the code.
+An arrow function with exactly one parameter can omit the parenthesis. This is optional. It's useful when passing the arrow function to another method, as it reduces the amount of parenthesis involved, making it easier for some humans to parse the code.
 
 [source,javascript]
 ----
@@ -738,7 +764,7 @@ Let's turn our attention to spread and rest operators next.
 
 === 2.4 Rest Parameters and Spread Operator
 
-Before ES6, interacting with an arbitrary amount of function parameters was complicated. You had to use +arguments+, which isn't an array but has a +length+ property. Usually you'd end up casting the +arguments+ object into an actual array using +Array.prototype.slice.call+, and going from there, as shown in the following snippet.
+Before ES6, interacting with an arbitrary amount of function parameters was complicated. You had to use +arguments+, which isn't an array but has a +length+ property. Usually you'd end up casting the +arguments+ object into an actual array using +Array#slice.call+, and going from there, as shown in the following snippet.
 
 [source,javascript]
 ----
@@ -861,8 +887,8 @@ In ES6, you can combine spread with array destructuring. The following piece of 
 
 [source,javascript]
 ----
-var [first, second, ...rest] = ['a', 'b', 'c', 'd', 'e']
-console.log(rest)
+var [first, second, ...other] = ['a', 'b', 'c', 'd', 'e']
+console.log(other)
 // <- ['c', 'd', 'e']
 ----
 
@@ -921,8 +947,8 @@ The following table summarizes the use cases we've discussed for the spread oper
 |=======
 |Use Case|ES5|ES6
 |Concatenation|+[1, 2].concat(more)+|+[1, 2, ...more]+
-|Push onto list|+list.push.apply(list, [3, 4])+|+list.push(...[3, 4])+
-|Destructuring|+a = list[0], rest = list.slice(1)+ | +[a, ...rest] = list+
+|Push an array onto list|+list.push.apply(list, items)+|+list.push(...items)+
+|Destructuring|+a = list[0], other = list.slice(1)+ | +[a, ...other] = list+
 |+new+ and +apply+|+new (Date.bind.apply(Date, [null,2015,31,8]))+| +new Date(...[2015,31,8])+
 |=======
 
@@ -1062,7 +1088,37 @@ The template we've just prepared would produce output like what's shown in the f
 </article>
 ----
 
-Sometimes, it might be a good idea to pre-process the results of expressions before inserting them into your templates. For these advanced kinds of use cases, it's possible to use another feature of template literals called tagged templates.
+A downside when it comes to multi-line template literals is indentation. The following example shows a typically indented piece of code with a template literal contained in a function. While we may have expected no indentation, the string is has four spaces of indentation.
+
+[source,javascript]
+----
+function getParagraph () {
+  return `
+    Dear Rod,
+
+    This is a template literal string that's indented
+    four spaces. However, you may have expected for it
+    to be not indented at all.
+
+    Nico
+  `
+}
+----
+
+While not ideal, we could get away with a utility function to remove indentation from each line in the resulting string.
+
+[source,javascript]
+----
+function unindent (text) {
+  return text
+    .split('\n')
+    .map(line => line.slice(4))
+    .join('\n')
+    .trim()
+}
+----
+
+Sometimes, it might be a good idea to pre-process the results of interpolated expressions before inserting them into your templates. For these advanced kinds of use cases, it's possible to use another feature of template literals called tagged templates.
 
 ==== 2.5.3 Tagged Templates
 
@@ -1126,7 +1182,7 @@ console.log(text)
 // <- 'Hello MAURICE, I am THRILLED to meet you!'
 ----
 
-A decidedly more useful use case would be to sanitize expressions interpolated into your templates, automatically, using a tagged template. Given a template where all expressions are considered user-input, we could use a hypothetical +sanitize+ library to remove HTML tags and similar hazards.
+A decidedly more useful use case would be to sanitize expressions interpolated into your templates, automatically, using a tagged template. Given a template where all expressions are considered user-input, we could use a hypothetical +sanitize+ library to remove HTML tags and similar hazards, preventing cross site scripting (XSS) attacks where users might inject malicious HTML into our websites.
 
 [source,javascript]
 ----
@@ -1225,6 +1281,35 @@ console.log(i)
 // <- i is not defined
 ----
 
+Given +let+ variables declared in a loop are scoped to each step in the loop, the bindings would work as expected in combination with an asynchronous function call, as opposed to what we're used to with +var+. Let's look at concrete examples.
+
+First, we'll look at the typical example of how +var+ scoping works. The +i+ binding is scoped to the +printNumbers+ function, and its value increases all the way to +10+ as each timeout callback is scheduled. By the time each callbacks run -- one every 100 milliseconds -- +i+ has a value of +10+ and thus that's what's printed every single time.
+
+[source,javascript]
+----
+function printNumbers () {
+  for (var i = 0; i < 10; i++) {
+    setTimeout(function () {
+      console.log(i)
+    }, i * 100)
+  }
+}
+printNumbers()
+----
+
+Using +let+, in contrast, binds the variable to the block's scope. Indeed, each step in the loop still increases the value of the variable, but a new binding is created each step of the way, meaning that each timeout callback will hold a reference to the binding holding the value of +i+ at the point when the callback was scheduled, printing every number from +0+ through +9+ as expected.
+
+[source,javascript]
+----
+function printNumbers () {
+  for (let i = 0; i < 10; i++) {
+    setTimeout(function () {
+      console.log(i)
+    }, i * 100)
+  }
+}
+printNumbers()
+----
 
 One more thing of note about +let+ is a concept called the "Temporal Dead Zone".
 

@@ -1,7 +1,7 @@
 [[ecmascript-and-the-future-of-javascript]]
 == ECMAScript and the Future of JavaScript
 
-JavaScript has gone from being a 1995 marketing ploy to gain a tactical advantage, to becoming the core programming experience in the world's most widely used application runtime platform in 2017. The language doesn't merely run in browsers anymore, but is also used to create desktop and mobile applications, in hardware devices, and even in the vacuum of space.
+JavaScript has gone from being a 1995 marketing ploy to gain a tactical advantage, to becoming the core programming experience in the world's most widely used application runtime platform in 2017. The language doesn't merely run in browsers anymore, but is also used to create desktop and mobile applications, in hardware devices, and even in space suit design at NASA.
 
 How did JavaScript get here, and where is it going next?
 
@@ -47,7 +47,7 @@ Having spent ten years without observing significant change to the language spec
 
 Since ES6 came out, TC39 has streamlinedfootnote:[You can find the September 2013 presentation which lead to the streamlined proposal revisioning process here: https://mjavascript.com/out/tc39-improvement.] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using ecmarkup and GitHub Pull Requests, greatly increasing the number of proposalsfootnoteref:[proposals,You can find all proposals being considered by TC39 at https://mjavascript.com/out/tc39-proposals.] being created as well as external participation by non-members.
 
-Firefox, Chrome, Edge, Safari and Node.js all offer over 95% compliancy of the ES6 specification,footnote:[For a detailed ES6 compatibility report across browsers, check out the following table: https://mjavascript.com/out/es6-compat.] but we’ve been able to use the features as they came out in each of these browsers rather than having to wait until the flip of a switch when their implementation of ES6 was 100% finalized.
+Firefox, Chrome, Edge, Safari and Node.js all offer over 95% compliance of the ES6 specification,footnote:[For a detailed ES6 compatibility report across browsers, check out the following table: https://mjavascript.com/out/es6-compat.] but we’ve been able to use the features as they came out in each of these browsers rather than having to wait until the flip of a switch when their implementation of ES6 was 100% finalized.
 
 The new process involves four different maturity stagesfootnote:[The TC39 proposal process documentation can be found at https://mjavascript.com/out/tc39-process.]. The more mature a proposal is, the more likely it is to eventually make it into the specification.
 
@@ -160,7 +160,9 @@ For the next step, we'll replace the value of the +scripts+ property in +package
 [source,json]
 ----
 {
-  "build": "babel src --out-dir dist"
+  "scripts": {
+    "build": "babel src --out-dir dist"
+  }
 }
 ----
 
@@ -258,12 +260,16 @@ Referencing the +node_modules/.bin+ directory, an implementation detail of how n
 
 [source,json]
 ----
-"lint": "eslint ."
+{
+  "scripts": {
+    "lint": "eslint ."
+  }
+}
 ----
 
 As you might recall from the Babel example, +npm+ add +node_modules+ to the +PATH+ when executing scripts. To lint our codebase, we can execute +npm run lint+ and npm will find the ESLint CLI embedded deep in the +node_modules+ directory.
 
-Let's consider the following +example.js+ file, which is purposely ridden with style issues, to demonstrate what ESLint does.
+Let's consider the following +example.js+ file, which is purposely riddled with style issues, to demonstrate what ESLint does.
 
 [source,javascript]
 ----
@@ -283,7 +289,11 @@ ESLint is able to fix most style problems automatically if we pass in a +--fix+ 
 
 [source,json]
 ----
-"lint-fix": "eslint . --fix"
+{
+  "scripts": {
+    "lint-fix": "eslint . --fix"
+  }
+}
 ----
 
 When we run +lint-fix+ we'll only get a pair of errors: +hello+ is never used and +false+ is a constant condition. Every other error has been fixed in place, resulting in the bit of source code found below. The remaining errors weren't fixed because ESLint avoids making assumptions about our code, and prefers not to incur in semantic changes. In doing so, +--fix+ becomes a useful tool to resolve code style wrinkles without risking a broken program as a result.
@@ -317,7 +327,7 @@ We get several new mechanics to describe asynchronous code flows in ES6: promise
 
 There's a common practice in JavaScript where developers use plain objects to create hash maps with arbitrary string keys. This can lead to vulnerabilities if we're not careful and let user input end up defining those keys. ES6 introduces a few different native built-ins to manage sets and maps, which don't have the limitation of using string keys exclusively. These collections are explored in chapter 5.
 
-Proxy objects redefine what can be done through JavaScript reflection. Proxy objects are similar to proxies in other contexts, such as web traffic routing. They can intercept any interaction with a JavaScript object such as defining, deleting, or accessing a property. Given the mechanics of how proxies work, they are impossible to implement holistically as a polyfill. We'll devote chapter 6 to understanding proxies.
+Proxy objects redefine what can be done through JavaScript reflection. Proxy objects are similar to proxies in other contexts, such as web traffic routing. They can intercept any interaction with a JavaScript object such as defining, deleting, or accessing a property. Given the mechanics of how proxies work, they are impossible to polyfill holistically: polyfills exist, but they have limitations making them incompatible with the specification in some use cases. We'll devote chapter 6 to understanding proxies.
 
 Besides new built-ins, ES6 comes with several updates to +Number+, +Math+, +Array+, and strings. In chapter 7 we'll go over a plethora of new instance and static methods added to these built-ins.
 

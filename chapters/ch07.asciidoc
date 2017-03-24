@@ -47,7 +47,7 @@ When ES5 came around, the default radix in +parseInt+ changed, from +8+ to +10+.
 
 [source,javascript]
 ----
-console.log(parseInt(`100`, `8`))
+console.log(parseInt(`100`, 8))
 // <- 64
 ----
 
@@ -236,7 +236,7 @@ parseInt(`0o110`.slice(2), 8)
 // <- 72
 ----
 
-To make matters even worse, the +Number+ function is perfectly able to cast these strings into the correct numbers.
+In contrast, the +Number+ function is perfectly able to cast these strings into the correct numbers.
 
 [source,javascript]
 ----
@@ -960,18 +960,18 @@ The +ToInteger+ function translates any values in the +(-1, 0)+ range into +-0+.
 // <- Uncaught RangeError: Invalid count value
 ----
 
-An example use case for +String#repeat+ may be the typical padding function. The +leftPad+ function in the next code snippet takes a multiline string and pads every line with as many +spaces+ as desired, using a default of two spaces.
+An example use case for +String#repeat+ may be the typical padding function. The +indent+ function in the next code snippet takes a multiline string and indents every line with as many +spaces+ as desired, using a default of two spaces.
 
 [source,javascript]
 ----
-function leftPad (text, spaces = 2) {
+function indent (text, spaces = 2) {
   return text
     .split(`\n`)
     .map(line => ` `.repeat(spaces) + line)
     .join(`\n`)
 }
 
-leftPad(`a
+indent(`a
 b
 c`, 2)
 // <- `  a\n  b\n  c`
@@ -979,7 +979,7 @@ c`, 2)
 
 ==== 7.3.5 String Padding and Trimming
 
-At the time of this writing, there's two new string padding methods slated for publication in ES2017: +String#padStart+ and +String#padEnd+. Using these methods, we wouldn't have to implement something like +leftPad+ in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
+At the time of this writing, there's two new string padding methods slated for publication in ES2017: +String#padStart+ and +String#padEnd+. Using these methods, we wouldn't have to implement something like +indent+ in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
 
 Using +padStart+, we will specify the desired length for the target string and the padding string, which defaults to a single space character. If the original string is at least as long as the specified length, +padStart+ will result in a null operation, returning the original string unchanged.
 
@@ -1048,7 +1048,7 @@ Let's switch protocols and learn about Unicode.
 
 ==== 7.3.6 Unicode
 
-JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
+JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ range using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
 
 For code points beyond +U+FFFF+, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji +`🐎`+ code point is represented with the +`\ud83d\udc0e`+ contiguous code units. In ES6 notation you can also represent code points using the +`\u{1f40e}`+ notation (that example is also the horse emoji).
 
@@ -1198,7 +1198,7 @@ const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 // <- [128014, 128113, 10084]
 ----
 
-You can take the base-16 representation of those base-10 code points, and use them to create a string with the new unicode code point escape syntax of +\u{codePoint}+. This syntax allows you to represent unicode code points that are beyond the BMP (or basic multilingual plane). That is, code points outside the +[U+0000, U+FFFF]+ range that are typically represented using the +\u1234+ syntax.
+You can take the base-16 representation of those base-10 code points, and use them to create a string with the new unicode code point escape syntax of +\u{codePoint}+. This syntax allows you to represent unicode code points that are beyond the BMP. That is, code points outside the +[U+0000, U+FFFF]+ range that are typically represented using the +\u1234+ syntax.
 
 Let's start by updating our example to print the hexadecimal version of our code points.
 
