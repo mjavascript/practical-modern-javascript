@@ -20,7 +20,8 @@ add('woofmark', { description: 'Markdown and WYSIWYG editor' })
 There's several problems with this approach, outlined below.
 
 - Security issues where user-provided keys like `__proto__`, +toString+, or anything in +Object.prototype+ break expectations and make interaction with this kind of hash-map data structures more cumbersome
-- Iteration over list items is verbose with +Object.keys(registry).forEach+
+- When iterating using +for..in+ we need to rely on +Object#hasOwnProperty+ to make sure properties aren't inherited
+- Iteration over list items with +Object.keys(registry).forEach+ is also verbose
 - Keys are limited to strings, making it hard to create hash-maps where you'd like to index values by DOM elements or other non-string references
 
 The first problem could be fixed using a prefix, and being careful to always get or set values in the hash-map through functions that add those prefixes, to avoid mistakes.
@@ -109,11 +110,11 @@ map.has('jquery')
 // <- false
 ----
 
-Earlier, we pointed out that maps don't cast keys the way traditional objects do. This is typically an advantage, but you need to keep in mind that they won't be treated the same when querying the map, either.
+Earlier, we pointed out that maps don't cast keys the way traditional objects do. This is typically an advantage, but you need to keep in mind that they won't be treated the same when querying the map, either. The following example uses the +Map+ constructor which takes an iterable of key value pairs and then illustrates how maps don't cast their keys to strings.
 
 [source,javascript]
 ----
-const map = new Map([[1, 'a']])
+const map = new Map([[1, 'the number one']])
 map.has(1)
 // <- true
 map.has('1')
@@ -273,17 +274,21 @@ console.log([...map])
 // <- [['a', 3]]
 ----
 
-In ES6 maps, `NaN` becomes a "corner-case" that gets treated as a value that's equal to itself, even though the `NaN === NaN` expression evaluates to `false`. A number of ECMAScript features introduced in ES6 and later use a different comparison algorithm than that of ES5 and earlier where `NaN` is equal to `NaN`, although `NaN !== NaN`; and `+0` is different from `-0`, even though `+0 === -0`. The following piece of code shows how even though `NaN` is typically evaluated to be different than itself, `Map` considers `NaN` to be a constant value that's always the same.
+ES6 maps compare keys using an algorithm called `SameValueZero` in the specification, where `NaN` equals `NaN` but `-0` equals `+0`. The following piece of code shows how even though `NaN` is typically evaluated to be different than itself, `Map` considers `NaN` to be a constant value that's always the same.
 
 [source,javascript]
 ----
 console.log(NaN === NaN)
 // <- false
+console.log(-0 === +0)
+// <- true
 const map = new Map()
-map.set(NaN, 'a')
-map.set(NaN, 'b')
+map.set(NaN, 'one')
+map.set(NaN, 'two')
+map.set(-0, 'three')
+map.set(+0, 'four')
 console.log([...map])
-// <- [[NaN, 'b']]
+// <- [[NaN, 'two'], [0, 'four']]
 ----
 
 When you iterate over a +Map+, you are actually looping over its +.entries()+. That means that you don't need to explicitly iterate over +.entries()+. It'll be done on your behalf anyways: +map[Symbol.iterator]+ points to +map.entries+. The +.entries()+ method returns an iterator for the key/value pairs in the map.
@@ -432,9 +437,11 @@ map.set(Symbol(), 2)
 // <- TypeError
 ----
 
-In exchange for having a more limited feature set, +WeakMap+ key references are weakly held, meaning that the objects referenced by +WeakMap+ keys are subject to garbage collection if there are no references to them -- other than weak references. This kind of behavior is useful when you have metadata about a +person+, for example, but you want the +person+ to be garbage collected when and if the only reference back to +person+ is their metadata. You can now keep that metadata in a +WeakMap+ using +person+ as the key.
+In exchange for having a more limited feature set, +WeakMap+ key references are weakly held, meaning that the objects referenced by +WeakMap+ keys are subject to garbage collection if there are no references to them -- other than weak references. This kind of behavior is useful when you have metadata about a +person+, for example, but you want the +person+ to be garbage collected when and if the only reference back to +person+ is their associated metadata. You can now keep that metadata in a +WeakMap+ using +person+ as the key.
 
-With +WeakMap+, you are still able to provide an iterable for initialization.
+In that sense, a +WeakMap+ is most useful when the component maintaining it doesn't own the mapped objects, but wants to assign its own information to them without modifying the original objects or their lifecycle; letting memory be reclaimed when, for example, a DOM node is removed from the document.
+
+To initialize a +WeakMap+, you are able to provide an iterable through the constructor. This should be a list of key value pairs, just like with +Map+.
 
 [source,javascript]
 ----
@@ -564,9 +571,9 @@ console.log(set.keys === set.values)
 
 In a similar fashion to `Map` and `WeakMap`, `WeakSet` is the weak version of `Set` that can't be iterated over. The values in a `WeakSet` must be unique object references. If nothing else is referencing a `value` found in a `WeakSet`, it'll be subject to garbage collection.
 
-Much like in `WeakMap`, you can only `.add`, `.delete`, and check if `WeakSet#has` a given `value`. Just like in `Set`, there's no `.get` because sets are one-dimensional.
+You can only `.set`, `.delete`, and check if the `WeakSet` `.has` a given `value`. Just like in `Set`, there's no `.get` because sets are one-dimensional.
 
-We aren't allowed to add primitive values such as strings or symbols to a +WeakSet+.
+Like with `WeakMap`, we aren't allowed to add primitive values such as strings or symbols to a +WeakSet+.
 
 [source,javascript]
 ----

@@ -45,7 +45,7 @@ The sixth edition is a significant milestone in the history of JavaScript. Besid
 
 Having spent ten years without observing significant change to the language specification after ES3, and four years for ES6 to materialize, it was clear the TC39 process needed to improve. The revision process used to be deadline-driven. Any delay in arriving at consensus would cause long wait periods between revisions, which lead to feature creep, causing more delays. Minor revisions were delayed by large additions to the specification, and large additions faced pressure to finalize so that the revision would be pushed through avoiding further delays.
 
-Since ES6 came out, TC39 has streamlinedfootnote:[You can find the September 2013 presentation which lead to the streamlined proposal revisioning process here: https://mjavascript.com/out/tc39-improvement.] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using ecmarkup and GitHub Pull Requests, greatly increasing the number of proposalsfootnoteref:[proposals,You can find all proposals being considered by TC39 at https://mjavascript.com/out/tc39-proposals.] being created as well as external participation by non-members.
+Since ES6 came out, TC39 has streamlinedfootnote:[You can find the September 2013 presentation which lead to the streamlined proposal revisioning process here: https://mjavascript.com/out/tc39-improvement.] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using ecmarkup (an HTML superset used to format ECMAScript specifications) and GitHub Pull Requests, greatly increasing the number of proposalsfootnoteref:[proposals,You can find all proposals being considered by TC39 at https://mjavascript.com/out/tc39-proposals.] being created as well as external participation by non-members.
 
 Firefox, Chrome, Edge, Safari and Node.js all offer over 95% compliance of the ES6 specification,footnote:[For a detailed ES6 compatibility report across browsers, check out the following table: https://mjavascript.com/out/es6-compat.] but we’ve been able to use the features as they came out in each of these browsers rather than having to wait until the flip of a switch when their implementation of ES6 was 100% finalized.
 
@@ -73,7 +73,7 @@ Babel and similar compilers that take code as input and produce output native to
 
 This transformation can be done at build-time, so that consumers receive code that's well supported by their JavaScript runtime of choice. This mechanism improves the runtime support baseline, giving JavaScript developers the ability to take advantage of new language features and syntax sooner. It is also significantly beneficial to specification writers and implementors, as it allows them to collect feedback regarding viability, desirability, and possible bugs or corner cases.
 
-A transpiler can take the ES6 source code we write and produce ES5 code that browsers can interpret more consistently. This is the most reliable way of running ES6 code in production today: using a build step to produce ES5 code that any modern browser can execute.
+A transpiler can take the ES6 source code we write and produce ES5 code that browsers can interpret more consistently. This is the most reliable way of running ES6 code in production today: using a build step to produce ES5 code that most old browsers, as well as modern browsers, can execute.
 
 The same applies to ES7 and beyond. As new versions of the language specification are released every year, we can expect compilers to support ES2017 input, ES2018 input and beyond. Similarly, as browser support becomes better, we can also expect compilers to reduce complexity in favor of ES6 output, then ES7 output, and so on. In this sense, we can think of JavaScript-to-JavaScript transpilers as a moving window that takes code written using the latest available language semantics and produces the most modern code they can output without compromising browser support.
 
@@ -115,7 +115,7 @@ Besides the REPL, Babel offers a command-line tool written as a Node.js package.
 You can download Node.js from their website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the +npm+ command-line tool in your terminal.
 ====
 
-Before getting started we'll create a project directory and a +package.json+ file, which is a manifest used to describe Node.js applications. We'll create a +package.json+ file through the +npm+ CLI as well.
+Before getting started we'll make a project directory and a +package.json+ file, which is a manifest used to describe Node.js applications. We can create the +package.json+ file through the +npm+ CLI.
 
 [source,shell]
 ----
@@ -183,7 +183,7 @@ Together with the packages we've installed in the previous step, a minimal +pack
 
 [NOTE]
 ====
-Any commands enumerated in the +scripts+ object can be executed through +npm run <name>+, which modifies the +$PATH+ environment variable so that we can run the command-line executables found in +babel-cli+ without installing +babel-cli+ globally on our system.
+Any commands enumerated in the +scripts+ object can be executed through +npm run <name>+, which temporarily modifies the +$PATH+ environment variable so that we can run the command-line executables found in +babel-cli+ without installing +babel-cli+ globally on our system.
 ====
 
 If you execute +npm run build+ in your terminal now, you'll note that a +dist/example.js+ file is created. The output file will be identical to our original file, because Babel doesn't make assumptions, and we have to configure it first. Create a +.babelrc+ file next to +package.json+, and write the following JSON in it.

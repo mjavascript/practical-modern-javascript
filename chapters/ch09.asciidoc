@@ -1,7 +1,7 @@
 [[practical-considerations]]
 == Practical Considerations
 
-JavaScript is an ever-evolving language. Its development rhythm has had different paces throughout the years, entering a high velocity phase with the introduction of ES5. Thus far, this book has taught you about dozens of language features and syntax changes introduced in ES6, and a few that came out afterwards, in ES2016 and ES2017.
+JavaScript is an ever-evolving language. Its development rhythm has had different paces throughout the years, entering a high-velocity phase with the introduction of ES5. Thus far, this book has taught you about dozens of language features and syntax changes introduced in ES6, and a few that came out afterwards, in ES2016 and ES2017.
 
 Reconciling all of these new features with our existing ES5 knowledge may seem like a daunting task: what features should we take advantage of, and how? This chapter aims to rationalize the choices we have to make when considering whether to use specific ES6 features.
 
@@ -265,7 +265,7 @@ When it comes to the +suitKind+ variable, a template literal with no interpolati
 
 Once we stop compiling template literals down to quoted strings, we can expect optimizing compilers to be able to interpet them as such with negligible slowdown.
 
-Another often-cited concern is syntax: as of this writing, we can't use backtick strings in JSON, object keys, +import+ declarations, or strict mode statements.
+Another often-cited concern is syntax: as of this writing, we can't use backtick strings in JSON, object keys, +import+ declarations, or strict mode directives.
 
 The first statement in the following snippet of code demonstrates that a serialized JSON object couldn't represent strings using backticks. As shown on the second line, we can certainly declare an object using template literals and then serialize that object as JSON. By the time +JSON.stringify+ is invoked, the template literal has evaluated to a quoted string.
 
@@ -501,17 +501,33 @@ In the following example, array destructuring helps us omit the whole match and 
 
 [source,javascript]
 ----
-const rnumber = /(\d+)\.(\d+)/
-const [, integer, fractional] = `1234.56`.match(rnumber)
-// <- integer: `1234`, fractional: `56`
+function getNumberParts (number) {
+  const rnumber = /(\d+)\.(\d+)/
+  const matches = number.match(rnumber)
+  if (matches === null) {
+    return null
+  }
+  const [, integer, fractional] = number.match(rnumber)
+  return { integer, fractional }
+}
+getNumberParts(`1234.56`)
+// <- { integer: `1234`, fractional: `56` }
 ----
 
 The spread operator could be used to pick up every captured group, as part of destructuring the result of +.match+.
 
 [source,javascript]
 ----
-const rnumber = /(\d+)\.(\d+)/
-const [, ...captures] = `1234.56`.match(rnumber)
+function getNumberParts (number) {
+  const rnumber = /(\d+)\.(\d+)/
+  const matches = number.match(rnumber)
+  if (matches === null) {
+    return null
+  }
+  const [, ...captures] = number.match(rnumber)
+  return captures
+}
+getNumberParts(`1234.56`)
 // <- [`1234`, `56`]
 ----
 

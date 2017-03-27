@@ -394,8 +394,6 @@ Arrow functions are neat when it comes to defining anonymous functions that shou
 // <- 8
 ----
 
-The next feature we'll analyze is destructuring in assignment. Let's see what that's all about.
-
 === 2.3 Assignment Destructuring
 
 This is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in +function+ parameter lists. Let's go step by step, starting with objects.
@@ -442,7 +440,7 @@ In a similar fashion, you could mix and match destructuring with regular variabl
 
 [source,javascript]
 ----
-var { pseudonym, name } = character, two = 2
+var { pseudonym } = character, two = 2
 ----
 
 If you want to extract a property named +pseudonym+ but would like to declare it as a variable named +alias+, you can use the following destructuring syntax known as aliasing. Note that you can use +alias+ or any other valid variable name.
@@ -464,13 +462,7 @@ var { metadata: { gender } } = character
 In cases like the previous one, where you have deeply nested properties being destructured, you might be able to convey a property name more clearly if you choose an alias. Consider the next snippet, where a property named +code+ wouldn't have been as indicative of its contents as +colorCode+ could be.
 [source,javascript]
 ----
-var palette = {
-  color: {
-    name: 'Red',
-    code: '#f00'
-  }
-}
-var { color: { code: colorCode } } = palette
+var { metadata: { gender: characterGender } } = character
 ----
 
 The scenario we just saw repeats itself frequently, because properties are often named in the context of their host object. While +palette.color.code+ is perfectly descriptive, +code+ on its own could mean a wide variety of things, and aliases such as +colorCode+ can help you bring context back into the variable name while still using destructuring.
@@ -498,7 +490,7 @@ A destructured declaration accessing a nested property of a parent object that's
 
 [source,javascript]
 ----
-var { batmobile: { gear } } = character
+var { boots: { size } } = character
 // <- Exception
 var { missing } = null
 // <- Exception
@@ -517,9 +509,9 @@ As part of destructuring, you can provide default values for those cases where t
 
 [source,javascript]
 ----
-var { boots = true } = character
+var { boots = { size: 10 } } = character
 console.log(boots)
-// <- true
+// <- { size: 10 }
 ----
 
 Default values can also be provided in nested property destructuring.
@@ -535,20 +527,19 @@ For use in combination with aliases, you should place the alias first, and then 
 
 [source,javascript]
 ----
-var { boots: footwear = true } = character
+var { boots: footwear = { size: 10 } } = character
 ----
 
-It's possible to use the computed property names syntax in destructuring patterns. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler isn't always able to infer a variable name. In the following example we use the +value+ alias, and a computed property name to extract the +scientist+ property from the +person+ object.
+It's possible to use the computed property names syntax in destructuring patterns. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler wouldn't be able to infer a variable name. In the following example we use the +value+ alias, and a computed property name to extract the +boots+ property from the +character+ object.
 
 [source,javascript]
 ----
-var person = { scientist: true }
-var { ['scient' + 'ist']: value } = person
-console.log(value)
+var { ['boo' + 'ts']: characterBoots } = character
+console.log(characterBoots)
 // <- true
 ----
 
-This flavor of destructuring is probably the least useful, as +value = person[type]+ is easier to read than +{ [type]: value } = person+, as it's a more sequential statement. That being said, the feature could still be useful in some deep destructuring scenarios.
+This flavor of destructuring is probably the least useful, as +characterBoots = character[type]+ is usually simpler than +{ [type]: characterBoots } = character+, as it's a more sequential statement. That being said, the feature is useful when you have properties you want to declare in the object literal, as opposed to using subsequent assignment statements.
 
 That's it, as far as objects go, in terms of destructuring. What about arrays?
 
@@ -758,6 +749,17 @@ function splitDate (date) {
   return rdate.exec(date)
 }
 var [, year, month, day] = splitDate('2015-11-06')
+----
+
+You'll want to be careful when the regular expression doesn't match, as that returns `null`. Perhaps a better approach would be to test for the failure case before destructuring, as shown in the following bit of code.
+
+[source,javascript]
+----
+var matches = splitDate('2015-11-06')
+if (matches === null) {
+  return
+}
+var [, year, month, day] = matches
 ----
 
 Let's turn our attention to spread and rest operators next.
@@ -1069,7 +1071,7 @@ var html = `<article>
 </article>`
 ----
 
-The template we've just prepared would produce output like what's shown in the following snippet of code. Note how spacing was preserved, and how +<li>+ tags are properly indented thanks for how we joined them together using a few spaces.
+The template we've just prepared would produce output like what's shown in the following snippet of code. Note how spacing was preservedfootnote:[When using multi-line template literals, spacing isn't preserved automatically. However, in many cases we can provide just enough indentation to make it work. Be wary of indented code blocks which may result in undesired indentation due to our code block being nested.], and how +<li>+ tags are properly indented thanks for how we joined them together using a few spaces.
 
 [source,html]
 ----
@@ -1182,7 +1184,7 @@ console.log(text)
 // <- 'Hello MAURICE, I am THRILLED to meet you!'
 ----
 
-A decidedly more useful use case would be to sanitize expressions interpolated into your templates, automatically, using a tagged template. Given a template where all expressions are considered user-input, we could use a hypothetical +sanitize+ library to remove HTML tags and similar hazards, preventing cross site scripting (XSS) attacks where users might inject malicious HTML into our websites.
+A decidedly more useful use case would be to sanitize expressions interpolated into your templates, automatically, using a tagged template. Given a template where all expressions are considered user-input, we could use a hypothetical +sanitize+ library to remove HTML tags and similar hazards, preventing cross-site scripting (XSS) attacks where users might inject malicious HTML into our websites.
 
 [source,javascript]
 ----
@@ -1197,7 +1199,7 @@ console.log(html)
 // <- '<div>A malicious comment</div>'
 ----
 
-Phew, that malicious +<iframe>+ almost got us. Rounding out ES6 syntax changes, we have the +let+ and +const+ statements.
+Phew, that malicious `<iframe>` almost got us. Rounding out ES6 syntax changes, we have the `let` and `const` statements.
 
 === 2.6 Let and Const Statements
 
