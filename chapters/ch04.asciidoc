@@ -11,7 +11,7 @@ Promises can be vaguely defined as "a proxy for a value that will eventually bec
 
 ==== 4.1.1 Getting Started with Promises
 
-As an example, let's take a look at the upcoming browser +fetch+ API. This API is a simplification of +XMLHttpRequest+. It aims to be super simple to use for the most basic use cases: making a +GET+ request against an HTTP resource. It provides an extensive API that caters to advanced use cases, but that's not our focus for now. In its most basic incarnation, you can make a +GET /items+ HTTP request using a piece of code like the following.
+As an example, let's take a look at the new +fetch+ API for the browser. This API is a simplification of +XMLHttpRequest+. It aims to be super simple to use for the most basic use cases: making a +GET+ request against an HTTP resource. It provides an extensive API that caters to advanced use cases, but that's not our focus for now. In its most basic incarnation, you can make a +GET /items+ HTTP request using a piece of code like the following.
 
 [source,javascript]
 ----
@@ -300,7 +300,11 @@ Here is an enumeration of what is going on as that piece of code is executed.
 8. The +p3+ promise from +p2.catch+ is fulfilled, because it doesn't produce an error or result in a rejected promise
 9. Because +p3+ was fulfilled, the +p3.catch+ is never followed. The +p3.then+ branch would've been used instead
 
-You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structurefootnote:[I wrote an online visualization tool called Promisees where you can see the tree structure underlying a Promise chain: https://mjavascript.com/out/promisees.]. It all starts with a single promise, which we'll next learn how to construct. Then you add branches with +.then+ or +.catch+. You can tack as many +.then+ or +.catch+ calls as you want onto each branch, creating new branches, and so on.
+You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structurefootnote:[I wrote an online visualization tool called Promisees where you can see the tree structure underlying a Promise chain: https://mjavascript.com/out/promisees.].
+
+image::../images/c04g02-promise-chain.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
+
+It all starts with a single promise, which we'll next learn how to construct. Then you add branches with +.then+ or +.catch+. You can tack as many +.then+ or +.catch+ calls as you want onto each branch, creating new branches, and so on.
 
 ==== 4.1.3 Creating a Promise From Scratch
 
@@ -555,18 +559,21 @@ The method assigned to +Symbol.iterator+ must return an object that adheres to t
 - +value+ is the current item in the sequence
 - +done+ is a boolean indicating whether the sequence has ended
 
-Let's use the following piece of code as a crutch to understand the concepts behind iteration protocols. We're turning the +sequence+ object into an iterable by adding a +Symbol.iterator+ property. The iterable returns an iterator object. Each time +next+ is asked for the following value in the sequence, an element from the +items+ array is provided, until there's no more +items+ left.
+Let's use the following piece of code as a crutch to understand the concepts behind iteration protocols. We're turning the +sequence+ object into an iterable by adding a +Symbol.iterator+ property. The iterable returns an iterator object. Each time +next+ is asked for the following value in the sequence, an element from the +items+ array is provided. When +i+ goes beyond the last index on the +items+ array, we return +done: true+, indicating the sequence has ended.
 
 [source,javascript]
 ----
+const items = ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
 const sequence = {
   [Symbol.iterator]() {
-    const items = ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
+    let i = 0
     return {
-      next: () => ({
-        done: items.length === 0,
-        value: items.shift()
-      })
+      next() {
+        const value = items[i]
+        i++
+        const done = i > items.length
+        return { value, done }
+      }
     }
   }
 }
@@ -727,7 +734,7 @@ This sort of abstraction of complexity into another function often helps keep co
 ====
 Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem, there is no way of knowing whether the sequence is infinite or not in code.
 
-image::../images/c04g02-halting-problem.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
+image::../images/c04g03-halting-problem.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
 
 You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While +for..of+ won't run into the problem unless there's no escape condition, using mechanisms such as spread or +Array.from+ would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
 ====
@@ -937,7 +944,7 @@ function shuffleSongs (songs) {
 }
 ----
 
-Lastly, we'd have to pass in the +shuffle+ flag as +true+ if we wanted to shuffle songs in each repeat cycle. Otherwise, songs would be reproduced in the original order provided by the user. Here again we've abstracted away something that usually would involve many lines of code used to decide what song comes next into a neatly decoupled function that's only concerned with producing a sequence of songs to be reproduced by a song player.
+Lastly, we'd have to pass in the +shuffle+ flag as +true+ if we wanted to shuffle songs in the playlist. Otherwise, songs would be reproduced in the original order provided by the user. Here again we've abstracted away something that usually would involve many lines of code used to decide what song comes next into a neatly decoupled function that's only concerned with producing a sequence of songs to be reproduced by a song player.
 
 [source,javascript]
 ----
@@ -945,7 +952,7 @@ console.log([...playlist(['a', 'b'], 3, true)])
 // <- ['a', 'b', 'b', 'a', 'a', 'b']
 ----
 
-You may have noticed how the `playlist` function doesn't necessarily need to concern itself with the sort order of the songs passed to it. A better design choice may well be to extract shuffling into the calling code. If we kept the original +playlist+ code we had earlier, we could use code like the following to obtain a shuffled song collection.
+You may have noticed how the `playlist` function doesn't necessarily need to concern itself with the sort order of the songs passed to it. A better design choice may well be to extract shuffling into the calling code. If we kept the original +playlist+ function without a +shuffle+ parameter, we could still use a snippet like the following to obtain a shuffled song collection.
 
 [source,javascript]
 ----
@@ -1134,7 +1141,7 @@ Whenever +.next()+ is called on a generator, there are four different kinds of "
 - A +yield+ expression returning the next value in the sequence
 - A +return+ statement returning the last value in the sequence
 - A +throw+ statement halts execution in the generator entirely
-- Reaching the end of the generator function signals +{ done: true }+
+- Reaching the end of the generator function signals +{ done: true }+, as the function implicitly returns +undefined+
 
 Once the +g+ generator ended iterating over a sequence, subsequent calls to +g.next()+ will have no effect and just return +{ done: true }+. The following code snippet demonstrates the idempotence we can observe when calling +g.next+ repeatedly once a sequence has ended.
 
@@ -2211,7 +2218,7 @@ async function* fetchInterval(duration, ...params) {
 }
 ----
 
-When stepped over, async generators return objects with a +{ next, return, throw }+ signature, whose methods return promises for +{ next, done }+. This is in contrast with regular generators which return +{ next, done }+ directly.
+When stepped over, async generators return objects with a +{ next, return, throw }+ signature, whose methods return promises for +{ value, done }+. This is in contrast with regular generators which return +{ value, done }+ directly.
 
 You can consume the +fetchInterval+ async generator in exactly the same way you could consume the object-based +interval+ async iterator. The following example consumes the +fetchInterval+ generator to poll an +/api/status+ HTTP resource and leverage its JSON response. After each step ends, we wait for a second and repeat the process.
 

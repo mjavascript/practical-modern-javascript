@@ -662,7 +662,7 @@ function log2 (value) {
 }
 ----
 
-Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example. Keep in mind that the +<<+ operator performs a "bitwise left shift"footnoteref:[bitwise-shift,Definition on MDN: https://mjavascript.com/out/bitwise-shift.].
+Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example.
 
 [source,javascript]
 ----
@@ -670,6 +670,22 @@ log2(1 << 29)
 // <- 29.000000000000004
 Math.log2(1 << 29)
 // <- 29
+----
+
+The +<<+ operator performs a "bitwise left shift"footnoteref:[bitwise-shift,Definition on MDN: https://mjavascript.com/out/bitwise-shift.]. In this operation, the bits on the binary representation of the left hand side number are shifted as many places to the left as indicated in the right hand side of the operation. The following couple of examples show how shifting works, using the binary literal notation introduced in section 7.1.1.
+
+[source]
+----
+0b00000001 // 1
+0b00000001 << 2 // shift bits two places to the left
+0b00000100 // 4
+----
+
+[source]
+----
+0b00001101 // 1
+0b00001101 << 4 // shift bits four places to the left
+0b11010000 // 208
 ----
 
 ==== 7.2.8 Trigonometric Functions
@@ -693,7 +709,7 @@ Math.hypot(1, 2, 3)
 // <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
 ----
 
-We could polyfill +Math.hypot+ by performing these operations manually. We can use +Math.sqrt+ to compute the square root and +Array#reduce+footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.], combined with the spread operator, to sum the squares.
+We could polyfill +Math.hypot+ by performing these operations manually. We can use +Math.sqrt+ to compute the square root and +Array#reduce+, combined with the spread operator, to sum the squares.footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.]
 
 [source,javascript]
 ----
@@ -901,7 +917,7 @@ This handy method allows you to repeat a string +count+ times.
 // <- ``
 ----
 
-The provided +count+ should be a positive and finite number.
+The provided +count+ should be a non-negative finite number.
 
 [source,javascript]
 ----

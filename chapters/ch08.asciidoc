@@ -160,7 +160,7 @@ As we explored the CommonJS module system, you might've noticed how the API is s
 
 ==== 8.2.1 Strict Mode
 
-In the ES6 module system, strict mode is turned on by default. Strict mode is a featurefootnote:[Read a comprehensive article about strict mode on Mozilla's MDN: https://mjavascript.com/out/strict-mode.] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can make optimizations making JavaScript runtime faster and safer.
+In the ES6 module system, strict mode is turned on by default. Strict mode is a featurefootnote:[Read a comprehensive article about strict mode on Mozilla's MDN: https://mjavascript.com/out/strict-mode.] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can enable optimizations making JavaScript runtime faster and safer.
 
 - Variables must be declared
 - Function parameters must have unique names
@@ -168,7 +168,7 @@ In the ES6 module system, strict mode is turned on by default. Strict mode is a 
 - Assignment to read-only properties results in errors being thrown
 - Octal numbers like +00840+ are syntax errors
 - Attempts to +delete+ undeletable properties throw an error
-- +delete prop+ is a syntax error, instead of assuming +delete global[prop]+
+- +delete prop+ is a syntax error, instead of assuming +delete global.prop+
 - +eval+ doesn't introduce new variables into its surrounding scope
 - +eval+ and +arguments+ can't be bound or assigned to
 - +arguments+ doesn't magically track changes to method parameters
@@ -390,7 +390,7 @@ We've now covered every way in which we can expose an API in ES6 modules. Let's 
 
 ==== 8.2.3 +import+ Statements
 
-We can load a module from another one using +import+ statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. No browsers have implemented module loading as of this writing. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
+We can load a module from another one using +import+ statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
 Compilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means +import+ statements in Babel mostly follow the same semantics as +require+ statements in CommonJS.
 

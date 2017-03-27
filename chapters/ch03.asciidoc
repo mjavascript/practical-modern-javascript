@@ -5,7 +5,7 @@ Now that we've covered the basic improvements to the syntax, we're in good shape
 
 === 3.1 Classes
 
-Many features in ES6 such as destructuring are in fact syntactic sugar, and classes are no exception to that. As we know, JavaScript is a prototype-based language, and classes are syntactic sugar on top of prototypical inheritance. In that sense, JavaScript classes don't introduce any fundamental changes to the language: they're merely a different way of declaring object prototypes.
+JavaScript is a prototype-based language, and classes are mostly syntactic sugar on top of prototypal inheritance. The fundamental difference between prototypal inheritance and classes is that classes can `extend` other classes, making it possible for us to extend the `Array` built-in -- something that was very convoluted before ES6.
 
 The +class+ keyword acts, then, as a device that makes JavaScript more inviting to programmers coming from other paradigms, who might not be all that familiar with prototype chains.
 
@@ -341,7 +341,7 @@ Let's move onto +Symbol+. While not an iteration or flow control mechanism, lear
 
 === 3.2 Symbols
 
-Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as +'text'+ for strings, or +1+ for numbers. The purpose of symbols is primarily to implement protocols. As we'll learn in section 3.3, the iterable protocol uses a symbol to define how objects are iterated.
+Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as +'text'+ for strings, or +1+ for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in section 4.2.
 
 There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the +Symbol+ built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
 
@@ -442,7 +442,7 @@ Now that we've established how symbols work. What can we use them for?
 
 Symbols could be used by a library to map objects to DOM elements. For example, a library that needs to associate the API object for a calendar to the provided DOM element. Before ES6, there wasn't a clear way of mapping DOM elements to objects. You could add a property to a DOM element pointing to the API, but polluting DOM elements with custom properties is a bad practice. You have to be careful to use property keys that won't be used by other libraries, or worse, by the language itself in the future. That leaves you with using an array lookup table containing an entry for each DOM/API pair. That, however, might be slow in long-running applications where the array lookup table might grow in size, slowing down the lookup operation over time.
 
-Symbols, on the other hand, don't have these problem. They can be used as properties that don't have a risk of clashing with future language features, as they're unique. The following code snippet shows how a symbol could be used to map DOM elements into calendar API objects.
+Symbols, on the other hand, don't have this problem. They can be used as properties that don't have a risk of clashing with future language features, as they're unique. The following code snippet shows how a symbol could be used to map DOM elements into calendar API objects.
 
 [source,javascript]
 ----
@@ -458,7 +458,7 @@ function createCalendar (el) {
 }
 ----
 
-A +WeakMap+ is an ES6 built-in that can be used to efficiently map objects to other objects without using regular properties, symbol properties, or arrays. In contrast with array lookup tables, +WeakMap+ is O(1), just like using symbol properties. The +WeakMap+ couldn't be accessed from outside the library unless explicitly exposed, unlike with symbols which can be accessed through +Object.getOwnPropertySymbols+. We'll explore +WeakMap+ in chapter 5, alongside other ES6 collection built-ins.
+There is an ES6 built-in -- the +WeakMap+ -- that can be used to uniquely map objects to other objects without using regular properties, symbol properties, or arrays. In contrast with array lookup tables, +WeakMap+ is O(1), just like using symbol properties. The +WeakMap+ couldn't be accessed from outside the library unless explicitly exposed, unlike with symbols which can be accessed through +Object.getOwnPropertySymbols+. We'll explore +WeakMap+ in chapter 5, alongside other ES6 collection built-ins.
 
 ===== Defining Protocols through Symbols
 
@@ -820,7 +820,7 @@ We dive deeper into object rest and spread in chapter 9.
 
 ==== 3.3.2 Comparing objects with +Object.is+
 
-The +Object.is+ method is a slightly different version of the strict equality comparison operator, +===+. For the most part, +Object.is(a, b)+ is equal to +a === b+. There are two differences: the case of +NaN+ and the case of +-0+ and ++0+.
+The +Object.is+ method is a slightly different version of the strict equality comparison operator, +===+. For the most part, +Object.is(a, b)+ is equal to +a === b+. There are two differences: the case of +NaN+ and the case of +-0+ and ++0+. This algorithm is referred to as `SameValue` in the ECMAScript specification.
 
 When +NaN+ is compared to +NaN+, the strict equality comparison operator returns +false+ because +NaN+ is not equal to itself. The +Object.is+ method, however, returns +true+ in this special case.
 
@@ -865,7 +865,7 @@ const baseCat = { type: 'cat', legs: 4 }
 const cat = Object.setPrototypeOf({ name: 'Milanesita' }, baseCat)
 ----
 
-Note however that there are serious performance implications when using `Obect.setPrototypeOf` as opposed to `Object.create`, and some careful consideration is in order before you decide to go ahead and sprinkle `Object.setPrototypeOf` all over a codebase.
+Note however that there are serious performance implications when using `Object.setPrototypeOf` as opposed to `Object.create`, and some careful consideration is in order before you decide to go ahead and sprinkle `Object.setPrototypeOf` all over a codebase.
 
 .Performance issues
 [WARNING]
