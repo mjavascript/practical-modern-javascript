@@ -1,4 +1,4 @@
-import counter, { increment, decrement as remove } from './counter'
+import counter, { increment, decrement as remove } from './counter.js'
 
 increment()
 console.log(counter) // <- 1

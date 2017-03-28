@@ -45,13 +45,13 @@ The sixth edition is a significant milestone in the history of JavaScript. Besid
 
 Having spent ten years without observing significant change to the language specification after ES3, and four years for ES6 to materialize, it was clear the TC39 process needed to improve. The revision process used to be deadline-driven. Any delay in arriving at consensus would cause long wait periods between revisions, which lead to feature creep, causing more delays. Minor revisions were delayed by large additions to the specification, and large additions faced pressure to finalize so that the revision would be pushed through avoiding further delays.
 
-Since ES6 came out, TC39 has streamlinedfootnote:[You can find the September 2013 presentation which lead to the streamlined proposal revisioning process here: https://mjavascript.com/out/tc39-improvement.] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using ecmarkup (an HTML superset used to format ECMAScript specifications) and GitHub Pull Requests, greatly increasing the number of proposalsfootnoteref:[proposals,You can find all proposals being considered by TC39 at https://mjavascript.com/out/tc39-proposals.] being created as well as external participation by non-members.
+Since ES6 came out, TC39 has streamlinedfootnote:[You can find the September 2013 presentation which lead to the streamlined proposal revisioning process here: https://mjavascript.com/out/tc39-improvement.] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using ecmarkup (an HTML superset used to format ECMAScript specifications) and GitHub Pull Requests, greatly increasing the number of proposalsfootnoteref:[proposals,You can find all proposals being considered by TC39 at https://mjavascript.com/out/tc39-proposals.] being created as well as external participation by non-members. Thew new flow is continuous and, thus, more transparent: while previously you'd have to download a Word doc or its PDF version from a web page, the latest draft of the specification is now always available at https://mjavascript.com/out/spec-draft.
 
 Firefox, Chrome, Edge, Safari and Node.js all offer over 95% compliance of the ES6 specification,footnote:[For a detailed ES6 compatibility report across browsers, check out the following table: https://mjavascript.com/out/es6-compat.] but we’ve been able to use the features as they came out in each of these browsers rather than having to wait until the flip of a switch when their implementation of ES6 was 100% finalized.
 
 The new process involves four different maturity stagesfootnote:[The TC39 proposal process documentation can be found at https://mjavascript.com/out/tc39-process.]. The more mature a proposal is, the more likely it is to eventually make it into the specification.
 
-Any discussion, idea or proposal for a change or addition which has not yet been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0) and has no acceptance requirements, but only TC39 members can create strawman proposals. At the time of this writing, there's over a dozen active strawman proposalsfootnote:[You can track strawman proposals here: https://mjavascript.com/out/tc39-stage0.].
+Any discussion, idea or proposal for a change or addition which has not yet been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0), but only TC39 members can create strawman proposals. At the time of this writing, there's over a dozen active strawman proposalsfootnote:[You can track strawman proposals here: https://mjavascript.com/out/tc39-stage0.].
 
 At stage 1 a proposal is formalized and expected to address cross-cutting concerns, interactions with other proposals, and implementation concerns. Proposals at this stage should identify a discrete problem and offer a concrete solution to the problem. A stage 1 proposal often includes a high level API description, illustrative usage examples and a discussion of internal semantics and algorithms. Stage 1 proposals are likely to change significantly as they make their way through the process.
 
@@ -75,9 +75,9 @@ This transformation can be done at build-time, so that consumers receive code th
 
 A transpiler can take the ES6 source code we write and produce ES5 code that browsers can interpret more consistently. This is the most reliable way of running ES6 code in production today: using a build step to produce ES5 code that most old browsers, as well as modern browsers, can execute.
 
-The same applies to ES7 and beyond. As new versions of the language specification are released every year, we can expect compilers to support ES2017 input, ES2018 input and beyond. Similarly, as browser support becomes better, we can also expect compilers to reduce complexity in favor of ES6 output, then ES7 output, and so on. In this sense, we can think of JavaScript-to-JavaScript transpilers as a moving window that takes code written using the latest available language semantics and produces the most modern code they can output without compromising browser support.
+The same applies to ES7 and beyond. As new versions of the language specification are released every year, we can expect compilers to support ES2017 input, ES2018 input and so on. Similarly, as browser support becomes better, we can also expect compilers to reduce complexity in favor of ES6 output, then ES7 output, and so on. In this sense, we can think of JavaScript-to-JavaScript transpilers as a moving window that takes code written using the latest available language semantics and produces the most modern code they can output without compromising browser support.
 
-Let's talk about how you can use Babel in your programs.
+Let's talk about how you can use Babel in as part of your workflow.
 
 ==== 1.3.1 Introduction to the Babel transpiler
 
@@ -112,7 +112,7 @@ Besides the REPL, Babel offers a command-line tool written as a Node.js package.
 
 [NOTE]
 ====
-You can download Node.js from their website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the +npm+ command-line tool in your terminal.
+You can download Node.js from its website: https://mjavascript.com/out/node. After installing +node+, you'll also be able to use the +npm+ command-line tool in your terminal.
 ====
 
 Before getting started we'll make a project directory and a +package.json+ file, which is a manifest used to describe Node.js applications. We can create the +package.json+ file through the +npm+ CLI.
@@ -203,12 +203,12 @@ Once we run our build script again, we'll observe that the output is now valid E
 ----
 » npm run build
 » cat dist/example.js
-"use strict";
+"use strict"
 
 var double = function double(value) {
-  return value * 2;
-};
-console.log(double(3));
+  return value * 2
+}
+console.log(double(3))
 // <- 6
 ----
 
@@ -273,7 +273,7 @@ Let's consider the following +example.js+ file, which is purposely riddled with 
 
 [source,javascript]
 ----
-var goodbye='Goodbye!';
+var goodbye='Goodbye!'
 
 function hello(){
   return goodbye}
@@ -309,7 +309,12 @@ function hello () {
 if (false) {}
 ----
 
-Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint your code, let's jump into ES6 feature themes and the future of JavaScript.
+[NOTE]
+====
+A similar kind of tool can be found in +prettier+, which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length. You can find prettier at https://mjavascript.com/out/prettier.
+====
+
+Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of JavaScript.
 
 === 1.4 Feature Themes in ES6
 

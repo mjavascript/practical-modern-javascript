@@ -21,14 +21,14 @@ You can now use the new +0b+ prefix to represent binary integer literals. You co
 
 [source,javascript]
 ----
-console.log(0b000); // <- 0
-console.log(0b001); // <- 1
-console.log(0b010); // <- 2
-console.log(0b011); // <- 3
-console.log(0b100); // <- 4
-console.log(0b101); // <- 5
-console.log(0b110); // <- 6
-console.log(0b111); // <- 7
+console.log(0b000) // <- 0
+console.log(0b001) // <- 1
+console.log(0b010) // <- 2
+console.log(0b011) // <- 3
+console.log(0b100) // <- 4
+console.log(0b101) // <- 5
+console.log(0b110) // <- 6
+console.log(0b111) // <- 7
 ----
 
 In ES3, +parseInt+ interpreted strings of digits starting with a +0+ as an octal value. That meant things got weird quickly when you forgot to specify a radix of +10+. As a result, specifying the radix of +10+ became a best practice, so that user input like +012+ wouldn't unexpectedly be parsed as the integer +10+.
@@ -55,17 +55,17 @@ You can now use the +0o+ prefix for octal literals, which are new in ES6. You co
 
 [source,javascript]
 ----
-console.log(0o001); // <- 1
-console.log(0o010); // <- 8
-console.log(0o100); // <- 64
+console.log(0o001) // <- 1
+console.log(0o010) // <- 8
+console.log(0o100) // <- 64
 ----
 
 You might be used to hexadecimal literals present in other languages, commonly prefixed with +0x+. Those were already introduced to the JavaScript language in ES5. The prefix for literal hexadecimal notation is either +0x+, or +0X+, as shown in the following code snippet.
 
 [source,javascript]
 ----
-console.log(0x0ff); // <- 255
-console.log(0xf00); // <- 3840
+console.log(0x0ff) // <- 255
+console.log(0xf00) // <- 3840
 ----
 
 Besides these minor syntax changes where octal and binary literals were introduced, a few methods were added to +Number+ in ES6. The first four +Number+ methods that we'll be discussing -- +Number.isNaN+, +Number.isFinite+, +Number.parseInt+, and +Number.parseFloat+ -- already existed as functions in the global namespace. In addition, the methods in +Number+ are slightly different in that they don't coerce non-numeric values into numbers before producing a result.
@@ -266,13 +266,13 @@ This is a new method coming in ES6, and it wasn't previously available as a glob
 
 [source,javascript]
 ----
-console.log(Number.isInteger(Infinity)); // <- false
-console.log(Number.isInteger(-Infinity)); // <- false
-console.log(Number.isInteger(NaN)); // <- false
-console.log(Number.isInteger(null)); // <- false
-console.log(Number.isInteger(0)); // <- true
-console.log(Number.isInteger(-10)); // <- true
-console.log(Number.isInteger(10.3)); // <- false
+console.log(Number.isInteger(Infinity)) // <- false
+console.log(Number.isInteger(-Infinity)) // <- false
+console.log(Number.isInteger(NaN)) // <- false
+console.log(Number.isInteger(null)) // <- false
+console.log(Number.isInteger(0)) // <- true
+console.log(Number.isInteger(-10)) // <- true
+console.log(Number.isInteger(10.3)) // <- false
 ----
 
 You might want to consider the following code snippet as a polyfill for +Number.isInteger+. The modulus operator returns the remainder of dividing the same operands. If we divide by one, we're effectively getting the decimal part. If that's +0+, then it means the number is an integer.
@@ -387,18 +387,18 @@ This method returns +true+ for any integer in the +[MIN_SAFE_INTEGER, MAX_SAFE_I
 
 [source,javascript]
 ----
-Number.isSafeInteger(`one`); // <- false
-Number.isSafeInteger(`0`); // <- false
-Number.isSafeInteger(null); // <- false
-Number.isSafeInteger(NaN); // <- false
-Number.isSafeInteger(Infinity); // <- false
-Number.isSafeInteger(-Infinity); // <- false
-Number.isSafeInteger(Number.MIN_SAFE_INTEGER - 1); // <- false
-Number.isSafeInteger(Number.MIN_SAFE_INTEGER); // <- true
-Number.isSafeInteger(1); // <- true
-Number.isSafeInteger(1.2); // <- false
-Number.isSafeInteger(Number.MAX_SAFE_INTEGER); // <- true
-Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1); // <- false
+Number.isSafeInteger(`one`) // <- false
+Number.isSafeInteger(`0`) // <- false
+Number.isSafeInteger(null) // <- false
+Number.isSafeInteger(NaN) // <- false
+Number.isSafeInteger(Infinity) // <- false
+Number.isSafeInteger(-Infinity) // <- false
+Number.isSafeInteger(Number.MIN_SAFE_INTEGER - 1) // <- false
+Number.isSafeInteger(Number.MIN_SAFE_INTEGER) // <- true
+Number.isSafeInteger(1) // <- true
+Number.isSafeInteger(1.2) // <- false
+Number.isSafeInteger(Number.MAX_SAFE_INTEGER) // <- true
+Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1) // <- false
 ----
 
 When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operandsfootnote:[Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://mjavascript.com/out/math-axel.]. One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of +left+, +right+, and the result of +left op right+ is, thus, necessary to verify that we can indeed trust the result.
@@ -510,14 +510,14 @@ Many languages have a mathematical +sign+ method that returns a vector (+-1+, +0
 
 [source,javascript]
 ----
-Math.sign(1); // <- 1
-Math.sign(0); // <- 0
-Math.sign(-0); // <- -0
-Math.sign(-30); // <- -1
-Math.sign(NaN); // <- NaN
-Math.sign(`one`); // <- NaN, because Number(`one`) is NaN
-Math.sign(`0`); // <- 0, because Number(`0`) is 0
-Math.sign(`7`); // <- 1, because Number(`7`) is 7
+Math.sign(1) // <- 1
+Math.sign(0) // <- 0
+Math.sign(-0) // <- -0
+Math.sign(-30) // <- -1
+Math.sign(NaN) // <- NaN
+Math.sign(`one`) // <- NaN, because Number(`one`) is NaN
+Math.sign(`0`) // <- 0, because Number(`0`) is 0
+Math.sign(`7`) // <- 1, because Number(`7`) is 7
 ----
 
 Note how +Math.sign+ casts its input into numeric values? While methods introduced to the +Number+ built-in don't cast their input via +Number(value)+, most of the methods added to +Math+ share this trait, as we shall see.
@@ -528,12 +528,12 @@ We already had +Math.floor+ and +Math.ceil+ in JavaScript, with which we can rou
 
 [source,javascript]
 ----
-Math.trunc(12.34567); // <- 12
-Math.trunc(-13.58); // <- -13
-Math.trunc(-0.1234); // <- -0
-Math.trunc(NaN); // <- NaN
-Math.trunc(`one`); // <- NaN, because Number(`one`) is NaN
-Math.trunc(`123.456`); // <- 123, because Number(`123.456`) is 123.456
+Math.trunc(12.34567) // <- 12
+Math.trunc(-13.58) // <- -13
+Math.trunc(-0.1234) // <- -0
+Math.trunc(NaN) // <- NaN
+Math.trunc(`one`) // <- NaN, because Number(`one`) is NaN
+Math.trunc(`123.456`) // <- 123, because Number(`123.456`) is 123.456
 ----
 
 Creating a simple polyfill for +Math.trunc+ would involve checking whether the value is greater than zero and applying one of +Math.floor+ or +Math.ceil+, as shown in the following code snippet.
@@ -549,18 +549,18 @@ The +Math.cbrt+ method is short for "cubic root", similarly to how +Math.sqrt+ i
 
 [source,javascript]
 ----
-Math.cbrt(-1); // <- -1
-Math.cbrt(3); // <- 1.4422495703074083
-Math.cbrt(8); // <- 2
-Math.cbrt(27); // <- 3
+Math.cbrt(-1) // <- -1
+Math.cbrt(3) // <- 1.4422495703074083
+Math.cbrt(8) // <- 2
+Math.cbrt(27) // <- 3
 ----
 
 Note that this method also coerces non-numerical values into numbers.
 
 [source,javascript]
 ----
-Math.cbrt(`8`); // <- 2, because Number(`8`) is 8
-Math.cbrt(`one`); // <- NaN, because Number(`one`) is NaN
+Math.cbrt(`8`) // <- 2, because Number(`8`) is 8
+Math.cbrt(`one`) // <- NaN, because Number(`one`) is NaN
 ----
 
 Let's move on.
@@ -636,9 +636,7 @@ You could polyfill +Math.log10+ using the +Math.LN10+ constant.
 
 [source,javascript]
 ----
-function log10 (value) {
-  return Math.log(x) / Math.LN10
-}
+Math.log10 = value => Math.log(x) / Math.LN10
 ----
 
 And then there's +Math.log2+.
@@ -657,19 +655,17 @@ You could polyfill +Math.log2+ using the +Math.LN2+ constant.
 
 [source,javascript]
 ----
-function log2 (value) {
-  return Math.log(x) / Math.LN2
-}
+Math.log2 = value => Math.log(x) / Math.LN2
 ----
 
 Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example.
 
 [source,javascript]
 ----
-log2(1 << 29)
-// <- 29.000000000000004
-Math.log2(1 << 29)
+Math.log2(1 << 29) // native implementation
 // <- 29
+Math.log2(1 << 29) // polyfill implementation
+// <- 29.000000000000004
 ----
 
 The +<<+ operator performs a "bitwise left shift"footnoteref:[bitwise-shift,Definition on MDN: https://mjavascript.com/out/bitwise-shift.]. In this operation, the bits on the binary representation of the left hand side number are shifted as many places to the left as indicated in the right hand side of the operation. The following couple of examples show how shifting works, using the binary literal notation introduced in section 7.1.1.
@@ -713,18 +709,17 @@ We could polyfill +Math.hypot+ by performing these operations manually. We can u
 
 [source,javascript]
 ----
-function hypot (...values) {
-  return Math.sqrt(values.reduce((sum, value) => sum + value * value, 0))
-}
+Math.hypot = (...values) =>
+  Math.sqrt(values.reduce((sum, value) => sum + value * value, 0))
 ----
 
 Our handmade function is, surprisingly, more precise than the native one for this particular use case. In the next code sample, we see the hand-rolled +hypot+ function offers precision with one more decimal place.
 
 [source,javascript]
 ----
-Math.hypot(1, 2, 3)
+Math.hypot(1, 2, 3) // native implementation
 // <- 3.741657386773941
-hypot(1, 2, 3)
+Math.hypot(1, 2, 3) // polyfill implementation
 // <- 3.7416573867739413
 ----
 
@@ -738,12 +733,12 @@ The name for this method is an acronym for "count leading zero bits in 32-bit bi
 
 [source,javascript]
 ----
-Math.clz32(0); // <- 32
-Math.clz32(1); // <- 31
-Math.clz32(1 << 1); // <- 30
-Math.clz32(1 << 2); // <- 29
-Math.clz32(1 << 29); // <- 2
-Math.clz32(1 << 31); // <- 0
+Math.clz32(0) // <- 32
+Math.clz32(1) // <- 31
+Math.clz32(1 << 1) // <- 30
+Math.clz32(1 << 2) // <- 29
+Math.clz32(1 << 29) // <- 2
+Math.clz32(1 << 31) // <- 0
 ----
 
 ===== +Math.imul+
@@ -1064,7 +1059,7 @@ Let's switch protocols and learn about Unicode.
 
 ==== 7.3.6 Unicode
 
-JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for basic multilingual plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ range using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +187+ character, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(187)+.
+JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the +[U+0000, U+FFFF]+ range -- also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the +`\u3456`+ syntax. You could also represent code units in the +[U+0000, U+0255]+ range using the +\x00..\xff+ notation. For instance, +`\xbb`+ represents +`»`+, the +U+00BB+ code point, as you can verify by doing +parseInt(`bb`, 16)+ -- or +String.fromCharCode(0xbb)+.
 
 For code points beyond +U+FFFF+, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji +`🐎`+ code point is represented with the +`\ud83d\udc0e`+ contiguous code units. In ES6 notation you can also represent code points using the +`\u{1f40e}`+ notation (that example is also the horse emoji).
 
@@ -1096,7 +1091,7 @@ Object.keys(`🐎👱❤`)
 // <- [`0`, `1`, `2`, `3`, `4`]
 ----
 
-If we now consider a +for+ loop, we can observe more clearly how this is a problem. In the following example, we wanted to exfill each individual emoji from the +text+ string, but we get each code point instead.
+If we now consider a +for+ loop, we can observe more clearly how this is a problem. In the following example, we wanted to exfill each individual emoji from the +text+ string, but we got each code unit instead of the code points they form.
 
 [source,javascript]
 ----
@@ -1173,23 +1168,44 @@ Attempts to näively figure out the actual length by counting code points prove 
 // <- 16, should be 11
 ----
 
-As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iteratorfootnoteref:[unicode-problem,See also "JavaScript has a Unicode problem", https://mjavascript.com/out/unicode-mathias.]. In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length. Forunately, these kinds of glyphs are used infrequently.
+As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iteratorfootnoteref:[unicode-problem,It is recommended you read "JavaScript has a Unicode problem": https://mjavascript.com/out/unicode-mathias from Mathias Bynens. In the article, Mathias analyzes JavaScript's relationship with Unicode.]. In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length.
+
+==== 7.3.8 A Proposal to Split Grapheme Segments
+
+Multiple code points that combine into a single visual glyph are getting more common.footnote:[Emoji popularize this with glyphs sometimes made up of four code points. See https://mjavascript.com/out/emoji for a list of emoji made up of several code points.] There is a new proposal in the works (currently in stage 2) that may settle the matter of iterating over grapheme clusters once and for all. It introduces an `Intl.Segmenter` built-in, which can be used to split a string into an iterable sequence.
+
+To use the `Segmenter` API, we start by creating an instance of `Intl.Segmenter` specifying a locale and the granularity level we want: per grapheme, word, sentence or line. The segmenter instance can be used to produce an iterator for any given string, splitting it by the specified `granularity`. Note that the segmenting algorithm may vary depending on the locale, which is why it is a part of the API.
+
+The following example defines a `getGraphemes` function which produces an array of grapheme clusters for any given locale and piece of text.
+
+[source,javascript]
+----
+function getGraphemes (locale, text) {
+  const segmenter = new Intl.Segmenter(locale, { granularity: 'grapheme' })
+  const sequence = segmenter.segment(text)
+  const graphemes = [...sequence].map(item => item.segment)
+  return graphemes
+}
+getGraphemes('es', 'Esto está bien bueno!')
+----
+
+Using the segmenter proposal, we wouldn't have any trouble splitting strings containing emoji or other combining code units. You can learn more about the `Segmenter` proposal at: https://mjavascript.com/out/segmenter.
 
 Let's look at more Unicode-related methods introduced in ES6.
 
-==== 7.3.8 +String#codePointAt+
+==== 7.3.9 +String#codePointAt+
 
-We can use +String#codePointAt+ to get the base-10 numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo +`🐎👱❤`+ string.
+We can use +String#codePointAt+ to get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo +`🐎👱❤`+ string.
 
 [source,javascript]
 ----
 const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 text.codePointAt(0)
-// <- 128014
+// <- 0x1f40e
 text.codePointAt(2)
-// <- 128113
+// <- 0x1f471
 text.codePointAt(4)
-// <- 10084
+// <- 0x2764
 ----
 
 Identifying the indices that need to be provided to +String#codePointAt+ may prove cumbersome, which is why you should instead loop through a string iterator that can identify them on your behalf. You can then call +.codePointAt(0)+ for each code point in the sequence, and +0+ will always be the correct start index.
@@ -1199,9 +1215,9 @@ Identifying the indices that need to be provided to +String#codePointAt+ may pro
 const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 for (const codePoint of text) {
   console.log(codePoint.codePointAt(0))
-  // <- 128014
-  // <- 128113
-  // <- 10084
+  // <- 0x1f40e
+  // <- 0x1f471
+  // <- 0x2764
 }
 ----
 
@@ -1211,10 +1227,10 @@ We could also reduce our example to a single line of code by using a combination
 ----
 const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 [...text].map(cp => cp.codePointAt(0))
-// <- [128014, 128113, 10084]
+// <- [0x1f40e, 0x1f471, 0x2764]
 ----
 
-You can take the base-16 representation of those base-10 code points, and use them to create a string with the new unicode code point escape syntax of +\u{codePoint}+. This syntax allows you to represent unicode code points that are beyond the BMP. That is, code points outside the +[U+0000, U+FFFF]+ range that are typically represented using the +\u1234+ syntax.
+You can take the base-16 representation of those base-10 code points, and use them to create a string with the new Unicode code point escape syntax of +\u{codePoint}+. This syntax allows you to represent Unicode code points that are beyond the BMP. That is, code points outside the +[U+0000, U+FFFF]+ range that are typically represented using the +\u1234+ syntax.
 
 Let's start by updating our example to print the hexadecimal version of our code points.
 
@@ -1237,7 +1253,7 @@ We could wrap those base-16 values in +`\u{codePoint}`+ and voilá: you'd get th
 // <- `❤`
 ----
 
-==== 7.3.9 +String.fromCodePoint+
+==== 7.3.10 +String.fromCodePoint+
 
 This method takes in a number and returns a code point. Note how I can use the +0x+ prefix with the terse base-16 code points we got from +String#codePointAt+ moments ago.
 
@@ -1267,7 +1283,7 @@ You can pass in as many code points as you'd like to +String.fromCodePoint+.
 
 [source,javascript]
 ----
-String.fromCodePoint(128014, 128113, 10084)
+String.fromCodePoint(0x1f40e, 0x1f471, 0x2764)
 // <- '🐎👱❤'
 ----
 
@@ -1285,7 +1301,7 @@ const text = `\ud83d\udc0e\ud83d\udc71\u2764`
 
 Reversing an string has potential to cause issues as well.
 
-==== 7.3.10 Unicode-Aware String Reversal
+==== 7.3.11 Unicode-Aware String Reversal
 
 Consider the following piece of code.
 
@@ -1317,9 +1333,9 @@ This way we avoid breaking up code points. Once again, keep in mind that this wo
 
 The last Unicode-related method we'll be addressing is +.normalize+.
 
-==== 7.3.11 +String#normalize+
+==== 7.3.12 +String#normalize+
 
-There are different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
+There are different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.footnoteref:[unicode-problem]
 
 [source,javascript]
 ----
@@ -1415,7 +1431,7 @@ cast(`a`, `b`)
 // <- [`a`, `b`]
 ----
 
-You may also want to cast +NodeList+ DOM element collections, like those returned from +document.querySelectorAll+, through the spread operator. Once again, this is made possible thanks to ES6 adding conformance to the iterator protocol for +NodeList+.
+You may also want to cast +NodeList+ DOM element collections, like those returned from +document.querySelectorAll+, through the spread operator. This can be helpful when we need access to native array methods like +Array#map+ or +Array#filter+. Once again, this is made possible thanks to ES6 adding conformance to the iterator protocol for +NodeList+.
 
 [source,javascript]
 ----
@@ -1519,28 +1535,28 @@ The +Array+ constructor has two overloads: `...items`, where you provide the ite
 
 [source,javascript]
 ----
-new Array(); // <- []
-new Array(undefined); // <- [undefined]
-new Array(1); // <- [undefined x 1]
-new Array(3); // <- [undefined x 3]
-new Array(`3`); // <- [`3`]
-new Array(1, 2); // <- [1, 2]
-new Array(-1, -2); // <- [-1, -2]
-new Array(-1); // <- RangeError: Invalid array length
+new Array() // <- []
+new Array(undefined) // <- [undefined]
+new Array(1) // <- [undefined x 1]
+new Array(3) // <- [undefined x 3]
+new Array(`3`) // <- [`3`]
+new Array(1, 2) // <- [1, 2]
+new Array(-1, -2) // <- [-1, -2]
+new Array(-1) // <- RangeError: Invalid array length
 ----
 
 In contrast, +Array.of+ has more consistent behavior because it doesn't have the special +length+ case. This makes it a more desirable way of consistently creating new arrays programatically.
 
 [source,javascript]
 ----
-console.log(Array.of()); // <- []
-console.log(Array.of(undefined)); // <- [undefined]
-console.log(Array.of(1)); // <- [1]
-console.log(Array.of(3)); // <- [3]
-console.log(Array.of(`3`)); // <- [`3`]
-console.log(Array.of(1, 2)); // <- [1, 2]
-console.log(Array.of(-1, -2)); // <- [-1, -2]
-console.log(Array.of(-1)); // <- [-1]
+console.log(Array.of()) // <- []
+console.log(Array.of(undefined)) // <- [undefined]
+console.log(Array.of(1)) // <- [1]
+console.log(Array.of(3)) // <- [3]
+console.log(Array.of(`3`)) // <- [`3`]
+console.log(Array.of(1, 2)) // <- [1, 2]
+console.log(Array.of(-1, -2)) // <- [-1, -2]
+console.log(Array.of(-1)) // <- [-1]
 ----
 
 ==== 7.4.3 +Array#copyWithin+
@@ -1558,7 +1574,7 @@ Let's lead with a simple example. Consider the +items+ array in the following co
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,]
+const items = [1, 2, 3, , , , , , , , ]
 // <- [1, 2, 3, undefined x 7]
 ----
 
@@ -1566,7 +1582,7 @@ The function call shown below takes the +items+ array and determines that it'll 
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,]
+const items = [1, 2, 3, , , , , , , , ]
 items.copyWithin(6, 1, 3)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
@@ -1577,7 +1593,7 @@ If we consider that the items to be copied were taken from the +[start, end)+ ra
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,]
+const items = [1, 2, 3, , , , , , , , ]
 const copy = items.slice(1, 3)
 // <- [2, 3]
 ----
@@ -1586,7 +1602,7 @@ We could also consider the pasting part of the operation as an advanced usage of
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,]
+const items = [1, 2, 3, , , , , , , , ]
 const copy = items.slice(1, 3)
 // <- [2, 3]
 items.splice(6, 3 - 1, ...copy)
@@ -1610,7 +1626,7 @@ The example we've been trying so far would work just as well with our custom +co
 
 [source,javascript]
 ----
-copyWithin([1, 2, 3, ,,,,,,,], 6, 1, 3)
+copyWithin([1, 2, 3, , , , , , , , ], 6, 1, 3)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
 
@@ -1620,15 +1636,15 @@ A convenient utility method to replace all items in an array with the provided +
 
 [source,javascript]
 ----
-[`a`, `b`, `c`].fill(`x`); // <- [`x`, `x`, `x`]
-new Array(3).fill(`x`); // <- [`x`, `x`, `x`]
+[`a`, `b`, `c`].fill(`x`) // <- [`x`, `x`, `x`]
+new Array(3).fill(`x`) // <- [`x`, `x`, `x`]
 ----
 
 You could also specify the starting index and end index. In this case, as shown next, only the items in those positions would be filled.
 
 [source,javascript]
 ----
-[`a`, `b`, `c`,,,].fill(`x`, 2)
+[`a`, `b`, `c`, , ,].fill(`x`, 2)
 // <- [`a`, `b`, `x`, `x`, `x`]
 new Array(5).fill(`x`, 0, 1)
 // <- [`x`, undefined x 4]

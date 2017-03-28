@@ -184,7 +184,7 @@ As an example, if we chose to use a symbol as the key for a map entry, we'd have
 const map = new Map()
 const key = Symbol('items')
 map.set(key, [1, 2])
-map.get(Symbol('items')); // not the same reference as "key"
+map.get(Symbol('items')) // not the same reference as "key"
 // <- undefined
 map.get(key)
 // <- [1, 2]
@@ -358,15 +358,15 @@ function storeInMap (el, api) {
   return entry
 }
 function findByElement (el) {
-  for (const i = 0; i < map.length; i++) {
-    if (map[i].el === el) {
-      return map[i].api
+  for (const index = 0; index < map.length; index++) {
+    if (map[index].el === el) {
+      return map[index].api
     }
   }
 }
 function destroy (entry) {
-  const i = map.indexOf(entry)
-  map.splice(i, 1)
+  const index = map.indexOf(entry)
+  map.splice(index, 1)
 }
 ----
 
@@ -523,7 +523,7 @@ The following piece of code creates a `Set` with all of the `<div>` elements on 
 [source,javascript]
 ----
 function divs () {
-  return [...document.querySelectorAll('div')]
+  return document.querySelectorAll('div')
 }
 const set = new Set(divs())
 console.log(set.size)

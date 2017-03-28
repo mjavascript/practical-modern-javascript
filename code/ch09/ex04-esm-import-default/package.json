@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "rm -rf dist ; babel . --ignore node_modules -d dist ; node dist/app"
+    "test": "rm -rf dist ; babel . --ignore node_modules -d dist ; node dist/app.js"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",

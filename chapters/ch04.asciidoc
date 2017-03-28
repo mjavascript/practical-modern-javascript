@@ -35,7 +35,7 @@ const p = fetch('/items')
 p.then(res => {
   // handle response
 })
-p.catch(error => {
+p.catch(err => {
   // handle error
 })
 ----
@@ -63,7 +63,7 @@ const p = fetch('/items')
 p.then(res => {
   // handle response
 })
-p.then(null, error => {
+p.then(null, err => {
   // handle error
 })
 ----
@@ -175,8 +175,8 @@ A reaction may also +throw+ an error, which would cause the promise returned by 
 [source,javascript]
 ----
 const p = fetch('/items')
-  .then(res => { throw new Error('unexpectedly'); })
-  .catch(error => console.error(error))
+  .then(res => { throw new Error('unexpectedly') })
+  .catch(err => console.error(err))
 ----
 
 Let's take a step back and pace ourselves, walking over more examples in each particular use case.
@@ -197,7 +197,7 @@ A promise will settle as a rejection when the resolver calls +reject+, but also 
 
 [source,javascript]
 ----
-new Promise((resolve, reject) => { throw new Error('oops'); })
+new Promise((resolve, reject) => { throw new Error('oops') })
   .catch(err => console.error(err))
 ----
 
@@ -207,7 +207,7 @@ Errors that occur while executing a fulfillment or rejection reaction behave in 
 ----
 Promise
   .resolve(2)
-  .then(x => { throw new Error('failed'); })
+  .then(x => { throw new Error('failed') })
   .catch(err => console.error(err))
 ----
 
@@ -216,7 +216,7 @@ It might be easier to decompose that series of chained method calls into variabl
 [source,javascript]
 ----
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
+const p2 = p1.then(x => { throw new Error('failed') })
 const p3 = p2.catch(err => console.error(err))
 ----
 
@@ -229,7 +229,7 @@ We've established that the promise you attach your reactions onto is important, 
 [source,javascript]
 ----
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
+const p2 = p1.then(x => { throw new Error('failed') })
 const p3 = p2.then(x => x * 2)
 const p4 = p3.catch(err => console.error(err))
 ----
@@ -239,7 +239,7 @@ Typically, promises like +p4+ fulfill because the rejection handler in +.catch+ 
 [source,javascript]
 ----
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
+const p2 = p1.then(x => { throw new Error('failed') })
 const p3 = p2.catch(err => console.error(err))
 const p4 = p3.then(() => console.log('crisis averted'))
 ----
@@ -249,8 +249,8 @@ Similarly, if an error occurred in the +p3+ rejection handler, we could capture 
 [source,javascript]
 ----
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
-const p3 = p2.catch(err => { throw new Error('oops'); })
+const p2 = p1.then(x => { throw new Error('failed') })
+const p3 = p2.catch(err => { throw new Error('oops') })
 const p4 = p3.catch(err => console.error(err))
 ----
 
@@ -339,8 +339,8 @@ function resolveUnderThreeSeconds (delay) {
     setTimeout(reject, 3000)
   })
 }
-resolveUnderThreeSeconds(2000); // becomes fulfilled after 2s
-resolveUnderThreeSeconds(7000); // becomes rejected after 3s
+resolveUnderThreeSeconds(2000) // becomes fulfilled after 2s
+resolveUnderThreeSeconds(7000) // becomes rejected after 3s
 ----
 
 When creating a new promise +p1+, you could call +resolve+ with another promise +p2+ -- besides calling +resolve+ with non-promise values. In those cases, +p1+ will be resolved but blocked on the outcome of +p2+. Once +p2+ settles, +p1+ will be settled with its value and outcome. The following bit of code is, thus, effectively the same as simply doing +fetch('/items')+.
@@ -481,7 +481,7 @@ const p2 = fetch('/products/chair')
 const p3 = fetch('/products/table')
 const p = Promise
   .all([p1, p2, p3])
-  .catch(reason => console.log(reason))
+  .catch(err => console.log(err))
   // <- 'failed'
 ----
 
@@ -689,7 +689,7 @@ function take (sequence, amount) {
 }
 ----
 
-Our implementation works great on infinite sequences because it provides them with a constant exit condition: whenever the +amount+ is depleted, the sequence returned by +take+ ends. Instead of looping to pull values out of +random+, you can now write a piece of code like the following.
+Our implementation works great on infinite sequences because it provides them with a constant exit condition: whenever the +amount+ counter is depleted, the sequence returned by +take+ ends. Instead of looping to pull values out of +random+, you can now write a piece of code like the following.
 
 [source,javascript]
 ----
@@ -701,7 +701,7 @@ This pattern allows you to reduce any infinite sequence into a finite one. If yo
 
 [source,javascript]
 ----
-function range (sequence, low=0, high=1) {
+function range (sequence, low = 0, high = 1) {
   return {
     [Symbol.iterator]() {
       const iterator = sequence[Symbol.iterator]()
@@ -1126,7 +1126,7 @@ Assuming the +numbers+ iterator we created earlier, the following example shows 
 ----
 const g = numbers()
 while (true) {
-  let item = g.next()
+  const item = g.next()
   if (item.done) {
     break
   }
@@ -1213,9 +1213,8 @@ Interestingly, +yield+ expressions are not just used to produce output from the 
 [source,javascript]
 ----
 function* ball () {
-  let question
   while (true) {
-    question = yield `[a] ${ answer() }`
+    const question = yield `[a] ${ answer() }`
     console.log(`[q] ${ question }`)
   }
 }
@@ -1346,9 +1345,9 @@ The problem when taking this approach is that we're back at the case where the c
 ----
 function ball (questions) {
   const g = questions()
-  let question = g.next()
   ask()
   function ask () {
+    const question = g.next()
     if (question.done) {
       return
     }
@@ -1384,7 +1383,7 @@ In the case of our magic 8-ball, the iterator may experience network issues -- o
 ----
 fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
   .then(response => response.text())
-  .then(answer => question = g.next(answer), reason => g.throw(reason))
+  .then(answer => question = g.next(answer), err => g.throw(err))
   .then(ask)
 ----
 
@@ -1676,7 +1675,7 @@ getRandomArticle()
   .then(model => renderView(model))
   .then(html => setPageContents(html))
   .then(() => console.log('Successfully changed page!'))
-  .catch(reason => console.error(reason));
+  .catch(err => console.error(err))
 ----
 
 Chained promises can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
@@ -1687,15 +1686,15 @@ If we were to use plain JavaScript callbacks, our code would become repetitive, 
 ----
 getRandomArticle((err, model) => {
   if (err) {
-    return console.error(reason)
+    return console.error(err)
   }
   renderView(model, (err, html) => {
     if (err) {
-      return console.error(reason)
+      return console.error(err)
     }
     setPageContents(html, err => {
       if (err) {
-        return console.error(reason)
+        return console.error(err)
       }
       console.log('Successfully changed page!')
     })
@@ -1713,7 +1712,7 @@ async.waterfall([
   setPageContents
 ], (err, html) => {
   if (err) {
-    return console.error(reason)
+    return console.error(err)
   }
   console.log('Successfully changed page!')
 })
@@ -1724,7 +1723,7 @@ Let's look at a similar example, but this time we'll be using generators. The fo
 [source,javascript]
 ----
 function getRandomArticle (gen) {
-  const g = gen();
+  const g = gen()
   fetch('/articles/random', {
     headers: new Headers({
       Accept: 'application/json'
@@ -1732,7 +1731,7 @@ function getRandomArticle (gen) {
   })
   .then(res => res.json())
   .then(json => g.next(json))
-  .catch(error => g.throw(error))
+  .catch(err => g.throw(err))
 }
 ----
 
@@ -1741,9 +1740,9 @@ The following piece of code shows how you can pull the +json+ from +getRandomArt
 [source,javascript]
 ----
 getRandomArticle(function* printRandomArticle () {
-  const json = yield;
+  const json = yield
   // render view
-});
+})
 ----
 
 Generators may not be the most straightforward way of accomplishing the results that we want in this case: you're only moving the complexity somewhere else. We might as well stick with promises.
