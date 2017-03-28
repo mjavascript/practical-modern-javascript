@@ -184,7 +184,7 @@ As an example, if we chose to use a symbol as the key for a map entry, we'd have
 const map = new Map()
 const key = Symbol('items')
 map.set(key, [1, 2])
-map.get(Symbol('items')); // not the same reference as "key"
+map.get(Symbol('items')) // not the same reference as "key"
 // <- undefined
 map.get(key)
 // <- [1, 2]

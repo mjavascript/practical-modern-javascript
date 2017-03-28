@@ -33,7 +33,7 @@ Suppose we take that snippet of code and save it as +union.js+. We can now consu
 
 [source,javascript]
 ----
-const union = require(`./union`)
+const union = require(`./union.js`)
 console.log(union([1, 2], 3))
 // <- [1, 2, 3]
 console.log(union([1, 2], 2))
@@ -44,7 +44,7 @@ We could run +app.js+ in its current state through the CLI for Node.js, +node+, 
 
 [source,shell]
 ----
-» node app
+» node app.js
 # [1, 2, 3]
 # [1, 2]
 ----
@@ -52,8 +52,6 @@ We could run +app.js+ in its current state through the CLI for Node.js, +node+, 
 [NOTE]
 ====
 You can download Node.js from their website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the +node+ program in your terminal.
-
-Note the +.js+ file extension is optional when executing programs through +node+.
 ====
 
 The +require+ function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of +require+ is sometimes leveraged to dynamically +require+ different modules that conform to one interface. As an example, let's conjure up a +templates+ directory with a number of view template functions. Our templates will take a model and return an HTML string.
@@ -70,12 +68,12 @@ module.exports = model => `<li>
 </li>`
 ----
 
-Our application could easily print a +<li>+ by leveraging the +item.js+ view template.
+Our application could print a +<li>+ by leveraging the +item.js+ view template.
 
 [source,javascript]
 ----
 // app.js
-const renderItem = require(`./views/item`)
+const renderItem = require(`./views/item.js`)
 const html = renderItem({
   name: `Banana bread`,
   amount: 3
@@ -92,7 +90,7 @@ The next template we'll make renders the grocery list itself. It receives an arr
 [source,javascript]
 ----
 // views/list.js
-const renderItem = require(`./item`)
+const renderItem = require(`./item.js`)
 
 module.exports = model => `<ul>
   ${ model.map(renderItem).join(`\n`) }
@@ -104,7 +102,7 @@ We can consume the +list.js+ template in a very similar way than what we did bef
 [source,javascript]
 ----
 // app.js
-const renderList = require(`./views/list`)
+const renderList = require(`./views/list.js`)
 const html = renderList([{
   name: `Banana bread`,
   amount: 3
@@ -127,7 +125,7 @@ Given that the views all have a similar API where they take a model and return a
 ----
 // render.js
 module.exports = function render(template, model) {
-  return require(`./views/${ template }`)(model)
+  return require(`./views/${ template }`)(mode.jsl)
 }
 ----
 
@@ -136,7 +134,7 @@ Once we had such an API, we wouldn't have to worry about carefully constructing 
 [source,javascript]
 ----
 // app.js
-const render = require(`./render`)
+const render = require(`./render.js`)
 console.log(render(`item`, {
   name: `Banana bread`,
   amount: 1
@@ -166,7 +164,7 @@ In the ES6 module system, strict mode is turned on by default. Strict mode is a 
 - Function parameters must have unique names
 - Using +with+ statements is forbidden
 - Assignment to read-only properties results in errors being thrown
-- Octal numbers like +00840+ are syntax errors
+- Octal numbers like +00740+ are syntax errors
 - Attempts to +delete+ undeletable properties throw an error
 - +delete prop+ is a syntax error, instead of assuming +delete global.prop+
 - +eval+ doesn't introduce new variables into its surrounding scope
@@ -339,7 +337,7 @@ Modules consuming this API would see the +fungible+ value changing after five se
 
 [source,javascript]
 ----
-import { fungible } from './fungible'
+import { fungible } from './fungible.js'
 
 console.log(fungible) // <- { name: 'bound' }
 setInterval(() => console.log(fungible), 2000)
@@ -360,30 +358,30 @@ We can expose another module's named exports using by adding a +from+ clause to 
 
 [source,javascript]
 ----
-export { increment } from './counter'
+export { increment } from './counter.js'
 increment()
 // ReferenceError: increment is not defined
 ----
 
-You can give aliases to named exports, as they pass through your module. If the module in the following example were named +aliased+, then consumers could +import { add } from './aliased'+ to get a reference to the +increment+ binding from the +counter+ module.
+You can give aliases to named exports, as they pass through your module. If the module in the following example were named +aliased+, then consumers could +import { add } from './aliased.js'+ to get a reference to the +increment+ binding from the +counter+ module.
 
 [source,javascript]
 ----
-export { increment as add } from './counter'
+export { increment as add } from './counter.js'
 ----
 
 An ESM module could also expose every single named export found in another module by using a wildcard, as shown in the next snippet. Note that this wouldn't include the default binding exported by the +counter+ module.
 
 [source,javascript]
 ----
-export * from './counter'
+export * from './counter.js'
 ----
 
 When we want to expose another module's +default+ binding, we'll have to use the named export syntax adding an alias.
 
 [source,javascript]
 ----
-export { default as counter } from './counter'
+export { default as counter } from './counter.js'
 ----
 
 We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to +import+ statements, which can be used to consume other modules.
@@ -408,8 +406,13 @@ The statement in the following code snippet could be used to load the +counter+ 
 
 [source,javascript]
 ----
-import './counter'
+import './counter.js'
 ----
+
+[WARNING]
+====
+While the +.js+ file extension is optional when executing programs through +node+, we should strongly consider getting into the habit of including it nevertheless. Browser implementations of ESM won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. You can learn more in the specification at: https://mjavascript.com/out/esm-integration.
+====
 
 In the same fashion as +export+ statements, +import+ statements are only allowed in the top level of your module definitions. This limitation helps compilers simplify their module loading capabilities, as well as help other static analysis tools parse your codebase.
 
@@ -419,14 +422,14 @@ CommonJS modules let you import other modules using +require+ statements. When w
 
 [source,javascript]
 ----
-const counter = require(`./counter`)
+const counter = require(`./counter.js`)
 ----
 
 To import the default binding exported from an ES6 module, we'll have to give it a name. The syntax and semantics are a bit different than what we use when declaring a variable, because we're importing a binding and not just assigning values to variables. This distinction also makes it easier for static analysis tools and compilers to parse our code.
 
 [source,javascript]
 ----
-import counter from './counter'
+import counter from './counter.js'
 console.log(counter)
 // <- 0
 ----
@@ -439,42 +442,42 @@ The following bit of code shows how we can import the +increment+ method from ou
 
 [source,javascript]
 ----
-import { increment } from './counter'
+import { increment } from './counter.js'
 ----
 
 To import multiple bindings, we separate them using commas.
 
 [source,javascript]
 ----
-import { increment, decrement } from './counter'
+import { increment, decrement } from './counter.js'
 ----
 
 The syntax and semantics are subtly different from destructuring. While destructuring relies on colons to create aliases, +import+ statements use an +as+ keyword, mirroring the syntax in +export+ statements. The following statement imports the +increment+ method as +add+.
 
 [source,javascript]
 ----
-import { increment as add } from './counter'
+import { increment as add } from './counter.js'
 ----
 
 You can combine a default export with named exports by separating them with a comma.
 
 [source,javascript]
 ----
-import counter, { increment } from './counter'
+import counter, { increment } from './counter.js'
 ----
 
 You can also explicitly name the +default+ binding, which needs an alias.
 
 [source,javascript]
 ----
-import { default as counter, increment } from './counter'
+import { default as counter, increment } from './counter.js'
 ----
 
 The following example demonstrates how ESM semantics differ from those of CJS. Remember: we're exporting and importing bindings, and not direct references. For practical purposes, you can think of the +counter+ binding found in the next example as a property getter that reaches into the +counter+ module and returns its local +counter+ variable.
 
 [source,javascript]
 ----
-import counter, { increment } from './counter'
+import counter, { increment } from './counter.js'
 console.log(counter) // <- 0
 increment()
 console.log(counter) // <- 1
@@ -490,7 +493,7 @@ We can import the namespace object for a module by using a wildcard. Instead of 
 
 [source,javascript]
 ----
-import * as counter from './counter'
+import * as counter from './counter.js'
 counter.increment()
 counter.increment()
 console.log(counter.default) // <- 2
@@ -506,7 +509,7 @@ Imagine you're looking to internationalize an application based on the language 
 
 [source,javascript]
 ----
-import localizationService from './localizationService'
+import localizationService from './localizationService.js'
 import(`./localizations/${ navigator.language }.json`)
   .then(module => localizationService.use(module))
 ----
@@ -623,7 +626,7 @@ Ease of adding or removing functionality from a module is yet another useful met
 
 We'll plunge deeper into proper module design, effective module interaction and module testing over the next three books in this series.
 
-At the time of this writing, browsers are only scratching the surface of native JavaScript modules. It's expected that browsers will eventually be able to consume modules initiated by `<script type='module'>` elements.
+Browsers are only scratching the surface of native JavaScript modules. At the time of this writing, some browsers already implement `import` and `export` statements. Some browsers have already implemented `<script type='module'>`, enabling them to consume modules when specifying the `module` script type. The module loader specification isn't finalized yet, and you can track its current status at https://mjavascript.com/out/loader.
 
 Meanwhile, Node.js hasn't yet shipped a working implementation of the JavaScript module system. Given that JavaScript ecosystem tooling relies on node, it's not yet clear how cross-compatibility will be attained. The dilemma of how to know whether a file is written in CJS or ESM is what's delaying a working implementation. A proposal to infer whether a file was ESM based on the presence of at least one +import+ or +export+ statement was abandoned, and it seems like the current course of action is to introduce a new file extension specifically tailored towards ESM modules. There is quite a bit of nuance given the variety of use cases and platforms Node.js runs on, making it tough to arrive at a solution that remains elegant, performant, and correct for every use case.
 

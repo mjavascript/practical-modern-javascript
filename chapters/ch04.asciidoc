@@ -175,7 +175,7 @@ A reaction may also +throw+ an error, which would cause the promise returned by 
 [source,javascript]
 ----
 const p = fetch('/items')
-  .then(res => { throw new Error('unexpectedly'); })
+  .then(res => { throw new Error('unexpectedly') })
   .catch(err => console.error(err))
 ----
 
@@ -197,7 +197,7 @@ A promise will settle as a rejection when the resolver calls +reject+, but also 
 
 [source,javascript]
 ----
-new Promise((resolve, reject) => { throw new Error('oops'); })
+new Promise((resolve, reject) => { throw new Error('oops') })
   .catch(err => console.error(err))
 ----
 
@@ -207,7 +207,7 @@ Errors that occur while executing a fulfillment or rejection reaction behave in 
 ----
 Promise
   .resolve(2)
-  .then(x => { throw new Error('failed'); })
+  .then(x => { throw new Error('failed') })
   .catch(err => console.error(err))
 ----
 
@@ -216,7 +216,7 @@ It might be easier to decompose that series of chained method calls into variabl
 [source,javascript]
 ----
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
+const p2 = p1.then(x => { throw new Error('failed') })
 const p3 = p2.catch(err => console.error(err))
 ----
 
@@ -229,7 +229,7 @@ We've established that the promise you attach your reactions onto is important, 
 [source,javascript]
 ----
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
+const p2 = p1.then(x => { throw new Error('failed') })
 const p3 = p2.then(x => x * 2)
 const p4 = p3.catch(err => console.error(err))
 ----
@@ -239,7 +239,7 @@ Typically, promises like +p4+ fulfill because the rejection handler in +.catch+ 
 [source,javascript]
 ----
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
+const p2 = p1.then(x => { throw new Error('failed') })
 const p3 = p2.catch(err => console.error(err))
 const p4 = p3.then(() => console.log('crisis averted'))
 ----
@@ -249,8 +249,8 @@ Similarly, if an error occurred in the +p3+ rejection handler, we could capture 
 [source,javascript]
 ----
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed'); })
-const p3 = p2.catch(err => { throw new Error('oops'); })
+const p2 = p1.then(x => { throw new Error('failed') })
+const p3 = p2.catch(err => { throw new Error('oops') })
 const p4 = p3.catch(err => console.error(err))
 ----
 
@@ -339,8 +339,8 @@ function resolveUnderThreeSeconds (delay) {
     setTimeout(reject, 3000)
   })
 }
-resolveUnderThreeSeconds(2000); // becomes fulfilled after 2s
-resolveUnderThreeSeconds(7000); // becomes rejected after 3s
+resolveUnderThreeSeconds(2000) // becomes fulfilled after 2s
+resolveUnderThreeSeconds(7000) // becomes rejected after 3s
 ----
 
 When creating a new promise +p1+, you could call +resolve+ with another promise +p2+ -- besides calling +resolve+ with non-promise values. In those cases, +p1+ will be resolved but blocked on the outcome of +p2+. Once +p2+ settles, +p1+ will be settled with its value and outcome. The following bit of code is, thus, effectively the same as simply doing +fetch('/items')+.
@@ -1675,7 +1675,7 @@ getRandomArticle()
   .then(model => renderView(model))
   .then(html => setPageContents(html))
   .then(() => console.log('Successfully changed page!'))
-  .catch(err => console.error(err));
+  .catch(err => console.error(err))
 ----
 
 Chained promises can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
@@ -1723,7 +1723,7 @@ Let's look at a similar example, but this time we'll be using generators. The fo
 [source,javascript]
 ----
 function getRandomArticle (gen) {
-  const g = gen();
+  const g = gen()
   fetch('/articles/random', {
     headers: new Headers({
       Accept: 'application/json'
@@ -1740,9 +1740,9 @@ The following piece of code shows how you can pull the +json+ from +getRandomArt
 [source,javascript]
 ----
 getRandomArticle(function* printRandomArticle () {
-  const json = yield;
+  const json = yield
   // render view
-});
+})
 ----
 
 Generators may not be the most straightforward way of accomplishing the results that we want in this case: you're only moving the complexity somewhere else. We might as well stick with promises.

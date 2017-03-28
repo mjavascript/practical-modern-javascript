@@ -203,12 +203,12 @@ Once we run our build script again, we'll observe that the output is now valid E
 ----
 » npm run build
 » cat dist/example.js
-"use strict";
+"use strict"
 
 var double = function double(value) {
-  return value * 2;
-};
-console.log(double(3));
+  return value * 2
+}
+console.log(double(3))
 // <- 6
 ----
 
@@ -273,7 +273,7 @@ Let's consider the following +example.js+ file, which is purposely riddled with 
 
 [source,javascript]
 ----
-var goodbye='Goodbye!';
+var goodbye='Goodbye!'
 
 function hello(){
   return goodbye}

@@ -89,7 +89,7 @@ It's worth noting that class declarations aren't hoisted to the top of their sco
 
 [source,javascript]
 ----
-new Person(); // <- ReferenceError: Person is not defined
+new Person() // <- ReferenceError: Person is not defined
 class Person {
 }
 ----
@@ -449,7 +449,7 @@ Symbols, on the other hand, don't have this problem. They can be used as propert
 const cache = Symbol('calendar')
 function createCalendar (el) {
   if (cache in el) { // check if the symbol exists in the element
-    return el[cache]; // use the cache to avoid re-instantiation
+    return el[cache] // use the cache to avoid re-instantiation
   }
   const api = el[cache] = {
     // the calendar API goes here

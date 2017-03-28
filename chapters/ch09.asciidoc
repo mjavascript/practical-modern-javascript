@@ -281,7 +281,7 @@ When it comes to object keys, we're out of luck. Attempting to use a template li
 
 [source,javascript]
 ----
-const alfred = { `suit kind`: `cat` };
+const alfred = { `suit kind`: `cat` }
 ----
 
 Object property keys accept value types which are then casted into plain strings, but template literals aren't value types, and thus it's not possible to use them as property keys.
@@ -619,11 +619,11 @@ One way to achieve that with plain JavaScript would be to destructure the +name+
 const { name, ...metadata } = person
 ----
 
-In the following bit of code, we map a list of persons to a list of person models, excluding personally identifiable information such as their name and social security number, while placing everything else in the +person+ rest parameter.
+In the following bit of code, we map a list of people to a list of `person` models, excluding personally identifiable information such as their name and social security number, while placing everything else in the +person+ rest parameter.
 
 [source,javascript]
 ----
-persons.map(({ name, ssn, ...person }) => person)
+people.map(({ name, ssn, ...person }) => person)
 ----
 
 === 9.5 Savoring Function Flavors

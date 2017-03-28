@@ -1405,7 +1405,7 @@ We've mentioned major differences between +let+ and +const+. The first one is th
 [source,javascript]
 ----
 const pi = 3.1415
-const e; // SyntaxError, missing initializer
+const e // SyntaxError, missing initializer
 ----
 
 Besides the assignment when initializing a +const+, variables declared using a +const+ statement can't be assigned to. Once a +const+ is initialized, you can't change its value. Under strict mode, attempts to change a +const+ variable will throw. Outside of strict mode, they'll fail silently as demonstrated by the following piece of code.
