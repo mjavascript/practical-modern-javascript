@@ -18,7 +18,7 @@ var book = {
 }
 ----
 
-There's a few improvements coming to object literal syntax in ES6: property value shorthands, computed property names, and method definitions. Let's go through them and describe their use cases as well.
+ES6 brings a few improvements to object literal syntax: property value shorthands, computed property names, and method definitions. Let's go through them and describe their use cases as well.
 
 ==== 2.1.1 Property Value Shorthands
 
@@ -178,7 +178,7 @@ var emitter = {
 }
 ----
 
-Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the +function+ keyword. This is meant as a terse alternative to traditional method declarations where you need to use the +function+ keyword. The following example shows how our +emitter+ object would look like when using method definitions.
+Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the +function+ keyword. This is meant as a terse alternative to traditional method declarations where you need to use the +function+ keyword. The following example shows how our +emitter+ object looks like when using method definitions.
 
 [source,javascript]
 ----
@@ -238,7 +238,7 @@ Let's dig into their semantic differences with traditional functions, the many w
 
 ==== 2.2.1 Lexical Scoping
 
-In the body of an arrow function, +this+, +arguments+ and +super+ point to the containing scope. Consider the following example. We have a +timer+ object with a +seconds+ counter and a +start+ method defined using the syntax we've learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of elapsed +seconds+.
+In the body of an arrow function, +this+, +arguments+ and +super+ point to the containing scope, since arrow functions don't create a new scope. Consider the following example. We have a +timer+ object with a +seconds+ counter and a +start+ method defined using the syntax we've learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of elapsed +seconds+.
 
 [source,javascript]
 ----
@@ -560,7 +560,7 @@ When destructuring arrays, you can skip uninteresting properties or those that y
 [source,javascript]
 ----
 var names = ['James', 'L.', 'Howlett']
-var [ firstName,, lastName ] = names
+var [ firstName, , lastName ] = names
 console.log(lastName)
 // <- 'Howlett'
 ----
@@ -570,7 +570,7 @@ Array destructuring allows for default values just like object destructuring.
 [source,javascript]
 ----
 var names = ['James', 'L.']
-var [ firstName = 'John',, lastName = 'Doe' ] = names
+var [ firstName = 'John', , lastName = 'Doe' ] = names
 console.log(lastName)
 // <- 'Doe'
 ----
@@ -615,7 +615,7 @@ Defaults can be applied to arrow function parameters as well. When we have defau
 var double = (input = 0) => input * 2
 ----
 
-Default values aren't limited to the rightmost parameters of a function, as is commonplace in other programming languages. You could provide default values for any parameter, in any position.
+Default values aren't limited to the rightmost parameters of a function, as in a few other programming languages. You could provide default values for any parameter, in any position.
 
 [source,javascript]
 ----
@@ -682,7 +682,7 @@ Besides default values, you can use destructuring in function parameters to desc
 
 [source,javascript]
 ----
-const car = {
+var car = {
   owner: {
     id: 'e2c3503a4181968c',
     name: 'Donald Draper'
@@ -704,7 +704,7 @@ When we destructure everything up front, it's easy to spot when input doesn't ad
 
 [source,javascript]
 ----
-const getCarProductModel = ({ brand, make, model }) => ({
+var getCarProductModel = ({ brand, make, model }) => ({
   sku: brand + ':' make + ':' + model,
   brand,
   make,
@@ -727,7 +727,7 @@ function getCoordinates () {
 var { x, y } = getCoordinates()
 ----
 
-The case for default option values bears repeating. Imagine you have a +random+ function which yields random integers between a +min+ and a +max+ value, and that it should default to values between 1 and 10. This is particularly interesting as an alternative to named parameters in other languages like Python and C#. This pattern, where you're able to define default values for options and then let consumers override them individually, offers great flexibility.
+The case for default option values bears repeating. Imagine you have a +random+ function which produces random integers between a +min+ and a +max+ value, and that it should default to values between 1 and 10. This is particularly interesting as an alternative to named parameters in other languages like Python and C#. This pattern, where you're able to define default values for options and then let consumers override them individually, offers great flexibility.
 
 [source,javascript]
 ----
@@ -1152,7 +1152,7 @@ The following snippet of code shows a possible implementation of the default +ta
 ----
 function tag (parts, ...values) {
   return parts.reduce(
-    (all, part, i) => all + values[i - 1] + part
+    (all, part, index) => all + values[index - 1] + part
   )
 }
 ----
@@ -1174,7 +1174,7 @@ Multiple use cases apply to tagged templates. One possible use case might be to 
 ----
 function upper (parts, ...values) {
   return parts.reduce(
-    (all, part, i) => all + values[i - 1].toUpperCase() + part
+    (all, part, index) => all + values[index - 1].toUpperCase() + part
   )
 }
 var name = 'Maurice'
@@ -1190,7 +1190,7 @@ A decidedly more useful use case would be to sanitize expressions interpolated i
 ----
 function sanitized (parts, ...values) {
   return parts.reduce(
-    (all, part, i) => all + sanitize(values[i - 1]) + part
+    (all, part, index) => all + sanitize(values[index - 1]) + part
   )
 }
 var comment = 'A malicious comment<iframe src="http://evil.corp"></iframe>'
@@ -1221,7 +1221,7 @@ isItTwo('two')
 // <- undefined
 ----
 
-JavaScript code like this works, even though +two+ was declared in a code branch and then accessed outside of said branch. The reason why, as we know, is that +var+ bindings are bound to the enclosing scope, be it a function or the global scope. That, coupled with hoisting, means that what the code we've written earlier will be interpreted as if it were written in a similar way to the next piece of code.
+JavaScript code like this works, even though +two+ was declared in a code branch and then accessed outside of said branch. That behavior is due to the fact that +var+ bindings are bound to the enclosing scope, be it a function or the global scope. That, coupled with hoisting, means that the code we've written earlier will be interpreted as if it were written in a similar way to the next piece of code.
 
 [source,javascript]
 ----

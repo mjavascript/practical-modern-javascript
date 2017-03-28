@@ -37,7 +37,7 @@ const handler = {
 }
 const target = {}
 const proxy = new Proxy(target, handler)
-proxy.numbers = 123
+proxy.numbers = [1, 1, 2, 3, 5, 8, 13]
 proxy.numbers
 // 'Get on property "numbers"'
 // <- 123

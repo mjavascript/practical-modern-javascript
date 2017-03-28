@@ -636,9 +636,7 @@ You could polyfill +Math.log10+ using the +Math.LN10+ constant.
 
 [source,javascript]
 ----
-function log10 (value) {
-  return Math.log(x) / Math.LN10
-}
+Math.log10 = value => Math.log(x) / Math.LN10
 ----
 
 And then there's +Math.log2+.
@@ -657,19 +655,17 @@ You could polyfill +Math.log2+ using the +Math.LN2+ constant.
 
 [source,javascript]
 ----
-function log2 (value) {
-  return Math.log(x) / Math.LN2
-}
+Math.log2 = value => Math.log(x) / Math.LN2
 ----
 
 Note that the polyfilled version won't be as precise as +Math.log2+, as demonstrated in the following example.
 
 [source,javascript]
 ----
-log2(1 << 29)
-// <- 29.000000000000004
-Math.log2(1 << 29)
+Math.log2(1 << 29) // native implementation
 // <- 29
+Math.log2(1 << 29) // polyfill implementation
+// <- 29.000000000000004
 ----
 
 The +<<+ operator performs a "bitwise left shift"footnoteref:[bitwise-shift,Definition on MDN: https://mjavascript.com/out/bitwise-shift.]. In this operation, the bits on the binary representation of the left hand side number are shifted as many places to the left as indicated in the right hand side of the operation. The following couple of examples show how shifting works, using the binary literal notation introduced in section 7.1.1.
@@ -713,18 +709,17 @@ We could polyfill +Math.hypot+ by performing these operations manually. We can u
 
 [source,javascript]
 ----
-function hypot (...values) {
-  return Math.sqrt(values.reduce((sum, value) => sum + value * value, 0))
-}
+Math.hypot = (...values) =>
+  Math.sqrt(values.reduce((sum, value) => sum + value * value, 0))
 ----
 
 Our handmade function is, surprisingly, more precise than the native one for this particular use case. In the next code sample, we see the hand-rolled +hypot+ function offers precision with one more decimal place.
 
 [source,javascript]
 ----
-Math.hypot(1, 2, 3)
+Math.hypot(1, 2, 3) // native implementation
 // <- 3.741657386773941
-hypot(1, 2, 3)
+Math.hypot(1, 2, 3) // polyfill implementation
 // <- 3.7416573867739413
 ----
 
@@ -1558,7 +1553,7 @@ Let's lead with a simple example. Consider the +items+ array in the following co
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,]
+const items = [1, 2, 3, , , , , , , , ]
 // <- [1, 2, 3, undefined x 7]
 ----
 
@@ -1566,7 +1561,7 @@ The function call shown below takes the +items+ array and determines that it'll 
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,]
+const items = [1, 2, 3, , , , , , , , ]
 items.copyWithin(6, 1, 3)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
@@ -1577,7 +1572,7 @@ If we consider that the items to be copied were taken from the +[start, end)+ ra
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,]
+const items = [1, 2, 3, , , , , , , , ]
 const copy = items.slice(1, 3)
 // <- [2, 3]
 ----
@@ -1586,7 +1581,7 @@ We could also consider the pasting part of the operation as an advanced usage of
 
 [source,javascript]
 ----
-const items = [1, 2, 3, ,,,,,,,]
+const items = [1, 2, 3, , , , , , , , ]
 const copy = items.slice(1, 3)
 // <- [2, 3]
 items.splice(6, 3 - 1, ...copy)
@@ -1610,7 +1605,7 @@ The example we've been trying so far would work just as well with our custom +co
 
 [source,javascript]
 ----
-copyWithin([1, 2, 3, ,,,,,,,], 6, 1, 3)
+copyWithin([1, 2, 3, , , , , , , , ], 6, 1, 3)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
 
@@ -1628,7 +1623,7 @@ You could also specify the starting index and end index. In this case, as shown 
 
 [source,javascript]
 ----
-[`a`, `b`, `c`,,,].fill(`x`, 2)
+[`a`, `b`, `c`, , ,].fill(`x`, 2)
 // <- [`a`, `b`, `x`, `x`, `x`]
 new Array(5).fill(`x`, 0, 1)
 // <- [`x`, undefined x 4]
