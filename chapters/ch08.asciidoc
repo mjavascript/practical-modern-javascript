@@ -11,16 +11,16 @@ CommonJS (CJS) surfaced as an alternative to RequireJS, and it was swiftly popul
 
 === 8.1 CommonJS
 
-Unlike other module formats where modules are declared programatically, in CommonJS every file is a module. CommonJS modules have an implicit local scope, while the +global+ scope needs to be accessed explicitly. CommonJS modules can dynamically export a public interface consumers can interact with. CommonJS modules import their dependencies dynamically as well, resolving dependencies through +require+ function calls. These +require+ function calls are synchronous and return the interface exposed by required modules.
+Unlike other module formats where modules are declared programatically, in CommonJS every file is a module. CommonJS modules have an implicit local scope, while the `global` scope needs to be accessed explicitly. CommonJS modules can dynamically export a public interface consumers can interact with. CommonJS modules import their dependencies dynamically as well, resolving dependencies through `require` function calls. These `require` function calls are synchronous and return the interface exposed by required modules.
 
-Interpreting the definition of a module format without looking at some code can be confusing. The following code snippet shows how a reusable CommonJS module file may look like. Both the +has+ and +union+ functions are local to our module's scope. Given that we've assigned +union+ to +module.exports+, that'll be the public API for our module.
+Interpreting the definition of a module format without looking at some code can be confusing. The following code snippet shows how a reusable CommonJS module file may look like. Both the `has` and `union` functions are local to our module's scope. Given that we've assigned `union` to `module.exports`, that'll be the public API for our module.
 
 [source,javascript]
 ----
-function has (list, item) {
+function has(list, item) {
   return list.includes(item)
 }
-function union (list, item) {
+function union(list, item) {
   if (has(list, item)) {
     return list
   }
@@ -29,18 +29,18 @@ function union (list, item) {
 module.exports = union
 ----
 
-Suppose we take that snippet of code and save it as +union.js+. We can now consume +union.js+ in another CommonJS module. Let's call that one +app.js+. In order to consume +union.js+, we call +require+ passing in a relative path to the +union.js+ file. We can omit the file extension as long as it's +.js+ or +.json+.
+Suppose we take that snippet of code and save it as `union.js`. We can now consume `union.js` in another CommonJS module. Let's call that one `app.js`. In order to consume `union.js`, we call `require` passing in a relative path to the `union.js` file. We can omit the file extension as long as it's `.js` or `.json`.
 
 [source,javascript]
 ----
-const union = require(`./union.js`)
+const union = require('./union.js')
 console.log(union([1, 2], 3))
 // <- [1, 2, 3]
 console.log(union([1, 2], 2))
 // <- [1, 2]
 ----
 
-We could run +app.js+ in its current state through the CLI for Node.js, +node+, as seen in the next snippet.
+We could run `app.js` in its current state through the CLI for Node.js, `node`, as seen in the next snippet.
 
 [source,shell]
 ----
@@ -51,12 +51,12 @@ We could run +app.js+ in its current state through the CLI for Node.js, +node+, 
 
 [NOTE]
 ====
-You can download Node.js from their website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the +node+ program in your terminal.
+You can download Node.js from their website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the `node` program in your terminal.
 ====
 
-The +require+ function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of +require+ is sometimes leveraged to dynamically +require+ different modules that conform to one interface. As an example, let's conjure up a +templates+ directory with a number of view template functions. Our templates will take a model and return an HTML string.
+The `require` function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of `require` is sometimes leveraged to dynamically `require` different modules that conform to one interface. As an example, let's conjure up a `templates` directory with a number of view template functions. Our templates will take a model and return an HTML string.
 
-The template found in the following code snippet renders an item of a grocery shopping list by reading its attributes from a +model+ object.
+The template found in the following code snippet renders an item of a grocery shopping list by reading its attributes from a `model` object.
 
 [source,javascript]
 ----
@@ -68,14 +68,14 @@ module.exports = model => `<li>
 </li>`
 ----
 
-Our application could print a +<li>+ by leveraging the +item.js+ view template.
+Our application could print a `<li>` by leveraging the `item.js` view template.
 
 [source,javascript]
 ----
 // app.js
-const renderItem = require(`./views/item.js`)
+const renderItem = require('./views/item.js')
 const html = renderItem({
-  name: `Banana bread`,
+  name: 'Banana bread',
   amount: 3
 })
 console.log(html)
@@ -85,29 +85,29 @@ The following screenshot shows our tiny application in action.
 
 image::../images/c08g01-grocery-item.png["Printing an item for our grocery shopping list"]
 
-The next template we'll make renders the grocery list itself. It receives an array of items, and renders each of them by reusing the +item.js+ template from the previous code snippet.
+The next template we'll make renders the grocery list itself. It receives an array of items, and renders each of them by reusing the `item.js` template from the previous code snippet.
 
 [source,javascript]
 ----
 // views/list.js
-const renderItem = require(`./item.js`)
+const renderItem = require('./item.js')
 
 module.exports = model => `<ul>
-  ${ model.map(renderItem).join(`\n`) }
+  ${ model.map(renderItem).join('\n') }
 </ul>`
 ----
 
-We can consume the +list.js+ template in a very similar way than what we did before, but we'll need to adjust the model passed into the template so that we provide a collection of items instead of a single one.
+We can consume the `list.js` template in a very similar way than what we did before, but we'll need to adjust the model passed into the template so that we provide a collection of items instead of a single one.
 
 [source,javascript]
 ----
 // app.js
-const renderList = require(`./views/list.js`)
+const renderList = require('./views/list.js')
 const html = renderList([{
-  name: `Banana bread`,
+  name: 'Banana bread',
   amount: 3
 }, {
-  name: `Chocolate chip muffin`,
+  name: 'Chocolate chip muffin',
   amount: 2
 }])
 console.log(html)
@@ -117,9 +117,9 @@ The following screenshot shows our updated application in all its glory.
 
 image::../images/c08g02-grocery-list.png["Printing a grocery shopping list"]
 
-In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a +model+ object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the +item.js+ templating function, and joining their HTML representations with newlines.
+In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a `model` object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the `item.js` templating function, and joining their HTML representations with newlines.
 
-Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a +render+ function that could render any template, we could easily do that thanks to the dynamic nature of +require+. The next example shows how we can construct the path to a template module. An important distinction is how +require+ calls doesn't necessarily need to be on the top level of a module. Calls to +require+ can be anywhere, even embedded within other functions.
+Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` function that could render any template, we could easily do that thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls doesn't necessarily need to be on the top level of a module. Calls to `require` can be anywhere, even embedded within other functions.
 
 [source,javascript]
 ----
@@ -129,28 +129,28 @@ module.exports = function render(template, model) {
 }
 ----
 
-Once we had such an API, we wouldn't have to worry about carefully constructing +require+ statements that match the directory structure of our view templates, because the +render.js+ module could take care of that. Rendering any template becomes a matter of calling the +render+ function with the template's name and the model for that template.
+Once we had such an API, we wouldn't have to worry about carefully constructing `require` statements that match the directory structure of our view templates, because the `render.js` module could take care of that. Rendering any template becomes a matter of calling the `render` function with the template's name and the model for that template.
 
 [source,javascript]
 ----
 // app.js
-const render = require(`./render.js`)
-console.log(render(`item`, {
-  name: `Banana bread`,
+const render = require('./render.js')
+console.log(render('item', {
+  name: 'Banana bread',
   amount: 1
 }))
-console.log(render(`list`, [{
-  name: `Apple pie`,
+console.log(render('list', [{
+  name: 'Apple pie',
   amount: 2
 }, {
-  name: `Roasted almond`,
+  name: 'Roasted almond',
   amount: 25
 }]))
 ----
 
 image::../images/c08g03-dynamic-render.png["Printing different views through a normalized render function."]
 
-Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. In the next few sections we'll look at +export+ and +import+ statements, and learn how ESM is compatible with CJS.
+Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. In the next few sections we'll look at `export` and `import` statements, and learn how ESM is compatible with CJS.
 
 === 8.2 JavaScript Modules
 
@@ -162,97 +162,97 @@ In the ES6 module system, strict mode is turned on by default. Strict mode is a 
 
 - Variables must be declared
 - Function parameters must have unique names
-- Using +with+ statements is forbidden
+- Using `with` statements is forbidden
 - Assignment to read-only properties results in errors being thrown
-- Octal numbers like +00740+ are syntax errors
-- Attempts to +delete+ undeletable properties throw an error
-- +delete prop+ is a syntax error, instead of assuming +delete global.prop+
-- +eval+ doesn't introduce new variables into its surrounding scope
-- +eval+ and +arguments+ can't be bound or assigned to
-- +arguments+ doesn't magically track changes to method parameters
-- +arguments.callee+ is no longer supported, throws a +TypeError+
-- +arguments.caller+ is no longer supported, throws a +TypeError+
-- Context passed as +this+ in method invocations is not "boxed" into an +Object+
-- No longer able to use +fn.caller+ and +fn.arguments+ to access the JavaScript stack
-- Reserved words (e.g +protected+, +static+, +interface+, etc) cannot be bound
+- Octal numbers like `00740` are syntax errors
+- Attempts to `delete` undeletable properties throw an error
+- `delete prop` is a syntax error, instead of assuming `delete global.prop`
+- `eval` doesn't introduce new variables into its surrounding scope
+- `eval` and `arguments` can't be bound or assigned to
+- `arguments` doesn't magically track changes to method parameters
+- `arguments.callee` is no longer supported, throws a `TypeError`
+- `arguments.caller` is no longer supported, throws a `TypeError`
+- Context passed as `this` in method invocations is not "boxed" into an `Object`
+- No longer able to use `fn.caller` and `fn.arguments` to access the JavaScript stack
+- Reserved words (e.g `protected`, `static`, `interface`, etc) cannot be bound
 
-Let's now dive into the +export+ statement.
+Let's now dive into the `export` statement.
 
-==== 8.2.2 +export+ Statements
+==== 8.2.2 `export` Statements
 
-In CommonJS modules, you export values by exposing them on +module.exports+. You can expose anything from a value type to an object, an array, or a function, as seen in the next few code snippets.
-
-[source,javascript]
-----
-module.exports = `hello`
-----
+In CommonJS modules, you export values by exposing them on `module.exports`. You can expose anything from a value type to an object, an array, or a function, as seen in the next few code snippets.
 
 [source,javascript]
 ----
-module.exports = { hello: `world` }
+module.exports = 'hello'
 ----
 
 [source,javascript]
 ----
-module.exports = [`hello`, 'world']
+module.exports = { hello: 'world' }
 ----
 
 [source,javascript]
 ----
-module.exports = function hello () {}
+module.exports = ['hello', 'world']
 ----
 
-ES6 modules are files that may expose an API through +export+ statements. Declarations in ESM are scoped to the local module, just like we observed about CommonJS. Any variables declared inside a module aren't available to other modules unless they're explicitly exported as part of that module's API and then imported in the module that wants to access them.
+[source,javascript]
+----
+module.exports = function hello() {}
+----
+
+ES6 modules are files that may expose an API through `export` statements. Declarations in ESM are scoped to the local module, just like we observed about CommonJS. Any variables declared inside a module aren't available to other modules unless they're explicitly exported as part of that module's API and then imported in the module that wants to access them.
 
 ===== Exporting a Default Binding
 
-You can mimic the CommonJS code we just saw by replacing +module.exports =+ with +export default+ statements.
+You can mimic the CommonJS code we just saw by replacing `module.exports =` with `export default` statements.
 
 [source,javascript]
 ----
-export default `hello`
-----
-
-[source,javascript]
-----
-export default { hello: `world` }
+export default 'hello'
 ----
 
 [source,javascript]
 ----
-export default [`hello`, `world`]
+export default { hello: 'world' }
 ----
 
 [source,javascript]
 ----
-export default function hello () {}
+export default ['hello', 'world']
 ----
-
-In CommonJS, +module.exports+ can be assigned-to dynamically.
 
 [source,javascript]
 ----
-function initialize () {
-  module.exports = `hello!`
+export default function hello() {}
+----
+
+In CommonJS, `module.exports` can be assigned-to dynamically.
+
+[source,javascript]
+----
+function initialize() {
+  module.exports = 'hello!'
 }
 initialize()
 ----
 
-In contrast with CJS, +export+ statements in ESM can only be placed at the top level. "Top-level only" +export+ statements is a good constraint to have, as there aren't many good reasons to dynamically define and expose an API based on method calls. This limitation also helps compilers and static analysis tools parse ES6 modules.
+In contrast with CJS, `export` statements in ESM can only be placed at the top level. "Top-level only" `export` statements is a good constraint to have, as there aren't many good reasons to dynamically define and expose an API based on method calls. This limitation also helps compilers and static analysis tools parse ES6 modules.
 
 [source,javascript]
 ----
-function initialize () {
-  export default `hello!` // SyntaxError
+function initialize() {
+  export default 'hello!' // SyntaxError
 }
 initialize()
 ----
 
-There are a few other ways of exposing an API in ESM, besides +export default+ statements.
+There are a few other ways of exposing an API in ESM, besides `export default` statements.
 
 ===== Named Exports
 
-When you want to expose multiple values from CJS modules you don't necessarily need to explicitly export an object containing every one of those values. You could simply add properties onto the implicit +module.exports+ object. There's still a single binding being exported, containing all properties the +module.exports+ object ends up holding. While the following example exports two individual values, both are exposed as properties on the exported object.
+When you want to expose multiple values from CJS modules you don't necessarily need to explicitly export an object containing every one of those values. You could simply add properties onto the implicit `module.exports` object. There's still a single binding being exported, containing all properties the `module.exports` object ends up holding. While the following example exports two individual values, both are exposed as properties on the exported object.
 
 [source,javascript]
 ----
@@ -260,7 +260,7 @@ module.exports.counter = 0
 module.exports.count = () => module.exports.counter++
 ----
 
-We can replicate this behavior in ESM by using the named exports syntax. Instead of assigning properties to an implicit +module.exports+ object like with CommonJS, in ES6 you declare the bindings you want to +export+, as shown in the following code snippet.
+We can replicate this behavior in ESM by using the named exports syntax. Instead of assigning properties to an implicit `module.exports` object like with CommonJS, in ES6 you declare the bindings you want to `export`, as shown in the following code snippet.
 
 [source,javascript]
 ----
@@ -268,7 +268,7 @@ export let counter = 0
 export const count = () => counter++
 ----
 
-Note that the last bit of code cannot be refactored to extract the variable declarations into standalone statements that are later passed to +export+ as a named export, as that'd be a syntax error.
+Note that the last bit of code cannot be refactored to extract the variable declarations into standalone statements that are later passed to `export` as a named export, as that'd be a syntax error.
 
 [source,javascript]
 ----
@@ -282,7 +282,7 @@ By being rigid in how its declarative module syntax works, ESM favors static ana
 
 ===== Exporting Lists
 
-ES6 modules let you +export+ lists of named top-level members, as seen in the following snippet. The syntax for export lists is easy to parse, and presents a solution to the problem we observed in the last code snippet from the previous section.
+ES6 modules let you `export` lists of named top-level members, as seen in the following snippet. The syntax for export lists is easy to parse, and presents a solution to the problem we observed in the last code snippet from the previous section.
 
 [source,javascript]
 ----
@@ -291,7 +291,7 @@ const count = () => counter++
 export { counter, count }
 ----
 
-If you'd like to export a binding but give it a different name, you can use the aliasing syntax: +export { count as increment }+. In doing so, we're exposing the +count+ binding from the local scope as a public method under the +increment+ alias, as the following snippet shows.
+If you'd like to export a binding but give it a different name, you can use the aliasing syntax: `export { count as increment }`. In doing so, we're exposing the `count` binding from the local scope as a public method under the `increment` alias, as the following snippet shows.
 
 [source,javascript]
 ----
@@ -300,7 +300,7 @@ const count = () => counter++
 export { counter, count as increment }
 ----
 
-Finally, we can specify a default export when using the named member list syntax. The next bit of code uses +as default+ to define a default export at the same time as we're enumerating named exports.
+Finally, we can specify a default export when using the named member list syntax. The next bit of code uses `as default` to define a default export at the same time as we're enumerating named exports.
 
 [source,javascript]
 ----
@@ -323,9 +323,9 @@ It's important to keep in mind that we are exporting bindings, and not merely va
 
 ===== Bindings, Not Values
 
-ES6 modules export bindings, not values nor references. This means that a +fungible+ binding exported from a module would be bound into the +fungible+ variable on the module, and its value would be subject to changes made to +fungible+. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
+ES6 modules export bindings, not values nor references. This means that a `fungible` binding exported from a module would be bound into the `fungible` variable on the module, and its value would be subject to changes made to `fungible`. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
 
-In the next code snippet, our module's +fungible+ export would be initially bound to an object and be changed into an array after five seconds.
+In the next code snippet, our module's `fungible` export would be initially bound to an object and be changed into an array after five seconds.
 
 [source,javascript]
 ----
@@ -333,7 +333,7 @@ export let fungible = { name: 'bound' }
 setTimeout(() => fungible = [0, 1, 2], 5000)
 ----
 
-Modules consuming this API would see the +fungible+ value changing after five seconds. Consider the following example, where we print the consumed binding every 2 seconds.
+Modules consuming this API would see the `fungible` value changing after five seconds. Consider the following example, where we print the consumed binding every 2 seconds.
 
 [source,javascript]
 ----
@@ -350,11 +350,11 @@ setInterval(() => console.log(fungible), 2000)
 
 This kind of behavior is best suited for counters and flags, but is best avoided unless its purpose is clearly defined, since it can lead to confusing behavior and API surfaces changing unexpected from the point of view of a consumer.
 
-The JavaScript module system also offers an +export..from+ syntax, where you can expose another module's interface.
+The JavaScript module system also offers an `export..from` syntax, where you can expose another module's interface.
 
 ===== Exporting from another module
 
-We can expose another module's named exports using by adding a +from+ clause to an +export+ statement. The bindings are not imported into the local scope: our module acts as a pass-through where we expose another module's bindings without getting direct access to them.
+We can expose another module's named exports using by adding a `from` clause to an `export` statement. The bindings are not imported into the local scope: our module acts as a pass-through where we expose another module's bindings without getting direct access to them.
 
 [source,javascript]
 ----
@@ -363,36 +363,36 @@ increment()
 // ReferenceError: increment is not defined
 ----
 
-You can give aliases to named exports, as they pass through your module. If the module in the following example were named +aliased+, then consumers could +import { add } from './aliased.js'+ to get a reference to the +increment+ binding from the +counter+ module.
+You can give aliases to named exports, as they pass through your module. If the module in the following example were named `aliased`, then consumers could `import { add } from './aliased.js'` to get a reference to the `increment` binding from the `counter` module.
 
 [source,javascript]
 ----
 export { increment as add } from './counter.js'
 ----
 
-An ESM module could also expose every single named export found in another module by using a wildcard, as shown in the next snippet. Note that this wouldn't include the default binding exported by the +counter+ module.
+An ESM module could also expose every single named export found in another module by using a wildcard, as shown in the next snippet. Note that this wouldn't include the default binding exported by the `counter` module.
 
 [source,javascript]
 ----
 export * from './counter.js'
 ----
 
-When we want to expose another module's +default+ binding, we'll have to use the named export syntax adding an alias.
+When we want to expose another module's `default` binding, we'll have to use the named export syntax adding an alias.
 
 [source,javascript]
 ----
 export { default as counter } from './counter.js'
 ----
 
-We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to +import+ statements, which can be used to consume other modules.
+We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to `import` statements, which can be used to consume other modules.
 
-==== 8.2.3 +import+ Statements
+==== 8.2.3 `import` Statements
 
-We can load a module from another one using +import+ statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
+We can load a module from another one using `import` statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
-Compilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means +import+ statements in Babel mostly follow the same semantics as +require+ statements in CommonJS.
+Compilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means `import` statements in Babel mostly follow the same semantics as `require` statements in CommonJS.
 
-Let's suppose we have the following code snippet in a +./counter.js+ module.
+Let's suppose we have the following code snippet in a `./counter.js` module.
 
 [source,javascript]
 ----
@@ -402,7 +402,7 @@ const decrement = () => counter--
 export { counter as default, increment, decrement }
 ----
 
-The statement in the following code snippet could be used to load the +counter+ module into our +app+ module. It won't create any variables in the +app+ scope, though. It will execute any code in the top level of the +counter+ module, though, including that module's own +import+ statements.
+The statement in the following code snippet could be used to load the `counter` module into our `app` module. It won't create any variables in the `app` scope, though. It will execute any code in the top level of the `counter` module, though, including that module's own `import` statements.
 
 [source,javascript]
 ----
@@ -411,18 +411,18 @@ import './counter.js'
 
 [WARNING]
 ====
-While the +.js+ file extension is optional when executing programs through +node+, we should strongly consider getting into the habit of including it nevertheless. Browser implementations of ESM won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. You can learn more in the specification at: https://mjavascript.com/out/esm-integration.
+While the `.js` file extension is optional when executing programs through `node`, we should strongly consider getting into the habit of including it nevertheless. Browser implementations of ESM won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. You can learn more in the specification at: https://mjavascript.com/out/esm-integration.
 ====
 
-In the same fashion as +export+ statements, +import+ statements are only allowed in the top level of your module definitions. This limitation helps compilers simplify their module loading capabilities, as well as help other static analysis tools parse your codebase.
+In the same fashion as `export` statements, `import` statements are only allowed in the top level of your module definitions. This limitation helps compilers simplify their module loading capabilities, as well as help other static analysis tools parse your codebase.
 
 ===== Importing Default Exports
 
-CommonJS modules let you import other modules using +require+ statements. When we need a reference to the default export, all we'd have to do is assign that to a variable.
+CommonJS modules let you import other modules using `require` statements. When we need a reference to the default export, all we'd have to do is assign that to a variable.
 
 [source,javascript]
 ----
-const counter = require(`./counter.js`)
+const counter = require('./counter.js')
 ----
 
 To import the default binding exported from an ES6 module, we'll have to give it a name. The syntax and semantics are a bit different than what we use when declaring a variable, because we're importing a binding and not just assigning values to variables. This distinction also makes it easier for static analysis tools and compilers to parse our code.
@@ -438,7 +438,7 @@ Besides default exports, you could also import named exports and alias them.
 
 ===== Importing Named Exports
 
-The following bit of code shows how we can import the +increment+ method from our +counter+ module. Reminiscent of assignment destructuring, the syntax for importing named exports is wrapped in braces.
+The following bit of code shows how we can import the `increment` method from our `counter` module. Reminiscent of assignment destructuring, the syntax for importing named exports is wrapped in braces.
 
 [source,javascript]
 ----
@@ -452,7 +452,7 @@ To import multiple bindings, we separate them using commas.
 import { increment, decrement } from './counter.js'
 ----
 
-The syntax and semantics are subtly different from destructuring. While destructuring relies on colons to create aliases, +import+ statements use an +as+ keyword, mirroring the syntax in +export+ statements. The following statement imports the +increment+ method as +add+.
+The syntax and semantics are subtly different from destructuring. While destructuring relies on colons to create aliases, `import` statements use an `as` keyword, mirroring the syntax in `export` statements. The following statement imports the `increment` method as `add`.
 
 [source,javascript]
 ----
@@ -466,14 +466,14 @@ You can combine a default export with named exports by separating them with a co
 import counter, { increment } from './counter.js'
 ----
 
-You can also explicitly name the +default+ binding, which needs an alias.
+You can also explicitly name the `default` binding, which needs an alias.
 
 [source,javascript]
 ----
 import { default as counter, increment } from './counter.js'
 ----
 
-The following example demonstrates how ESM semantics differ from those of CJS. Remember: we're exporting and importing bindings, and not direct references. For practical purposes, you can think of the +counter+ binding found in the next example as a property getter that reaches into the +counter+ module and returns its local +counter+ variable.
+The following example demonstrates how ESM semantics differ from those of CJS. Remember: we're exporting and importing bindings, and not direct references. For practical purposes, you can think of the `counter` binding found in the next example as a property getter that reaches into the `counter` module and returns its local `counter` variable.
 
 [source,javascript]
 ----
@@ -487,9 +487,9 @@ console.log(counter) // <- 2
 
 Lastly, there are also namespace imports.
 
-===== Wildcard +import+ statements
+===== Wildcard `import` statements
 
-We can import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the +*+ must be followed by an alias where all the bindings will be placed. If there was a +default+ export, it'll be placed in the namespace binding as well.
+We can import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the `*` must be followed by an alias where all the bindings will be placed. If there was a `default` export, it'll be placed in the namespace binding as well.
 
 [source,javascript]
 ----
@@ -499,13 +499,13 @@ counter.increment()
 console.log(counter.default) // <- 2
 ----
 
-==== 8.2.4 Dynamic +import()+
+==== 8.2.4 Dynamic `import()`
 
-At the time of this writing, a proposal for dynamic +import()+footnote:[You can find the proposal specification draft here: https://mjavascript.com/out/dynamic-import.] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike +import+ statements, which are statically analyzed and linked, +import()+ loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
+At the time of this writing, a proposal for dynamic `import()`footnote:[You can find the proposal specification draft here: https://mjavascript.com/out/dynamic-import.] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike `import` statements, which are statically analyzed and linked, `import()` loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
 
-The module specifier can be any string, like with +import+ statements. Keep in mind +import+ statements only allow statically defined plain string literals as module specifiers. In contrast, we're able to use template literals or any valid JavaScript expression to produce the module specifier string for +import()+ function calls.
+The module specifier can be any string, like with `import` statements. Keep in mind `import` statements only allow statically defined plain string literals as module specifiers. In contrast, we're able to use template literals or any valid JavaScript expression to produce the module specifier string for `import()` function calls.
 
-Imagine you're looking to internationalize an application based on the language provided by user agents. You might statically import a +localizationService+, and then dynamically import the localized data for a given language using +import()+ and a module specifier built using a template literal which interpolates +navigator.language+, as shown in the following example.
+Imagine you're looking to internationalize an application based on the language provided by user agents. You might statically import a `localizationService`, and then dynamically import the localized data for a given language using `import()` and a module specifier built using a template literal which interpolates `navigator.language`, as shown in the following example.
 
 [source,javascript]
 ----
@@ -521,7 +521,7 @@ Note that writing code like this is generally a bad idea for a number of reasons
 - It can't be tree-shaken by tools like Rollup, which can be used to remove module code that's never imported anywhere in the codebase -- and thus never used -- reducing bundle size and improving performance.
 - It can't be linted by `eslint-plugin-import` or similar tools that help identify module import statements where the imported module file doesn't exist.
 
-Just like with +import+ statements, the mechanism for retrieving the module is unspecified and left up to the host environment.
+Just like with `import` statements, the mechanism for retrieving the module is unspecified and left up to the host environment.
 
 The proposal does specify that once the module is resolved, the promise should fulfill with its namespace object. It also specifies that whenever an error results in the module failing to load, the promise should be rejected.
 
@@ -529,7 +529,7 @@ This allows for loading non-critical modules asynchronously, without blocking pa
 
 [source,javascript]
 ----
-import(`./vendor/jquery.js`)
+import('./vendor/jquery.js')
   .then($ => {
     // use jquery
   })
@@ -538,14 +538,14 @@ import(`./vendor/jquery.js`)
   })
 ----
 
-We could load multiple modules asynchronously using +Promise.all+. The following example imports three modules and then leverages destructuring to reference them directly in the +.then+ clause.
+We could load multiple modules asynchronously using `Promise.all`. The following example imports three modules and then leverages destructuring to reference them directly in the `.then` clause.
 
 [source,javascript]
 ----
 const specifiers = [
-  `./vendor/jquery.js`,
-  `./vendor/backbone.js`,
-  `./lib/util.js`
+  './vendor/jquery.js',
+  './vendor/backbone.js',
+  './lib/util.js'
 ]
 Promise
   .all(specifiers.map(specifier => import(specifier)))
@@ -554,30 +554,30 @@ Promise
   })
 ----
 
-In a similar fashion, you could load modules using synchonous loops or even +async+/+await+, as demonstrated next.
+In a similar fashion, you could load modules using synchonous loops or even `async`/`await`, as demonstrated next.
 
 [source,javascript]
 ----
-async function load () {
-  const { map } = await import(`./vendor/jquery.js`)
-  const $ = await import(`./vendor/jquery.js`)
-  const response = await fetch(`/cats`)
+async function load() {
+  const { map } = await import('./vendor/jquery.js')
+  const $ = await import('./vendor/jquery.js')
+  const response = await fetch('/cats')
   const cats = await response.json()
-  $(`<div>`)
-    .addClass(`container cats`)
+  $('<div>')
+    .addClass('container cats')
     .html(map(cats, cat => cat.htmlSnippet))
     .appendTo(document.body)
 }
 load()
 ----
 
-Using +await import()+ makes dynamic module loading look and feel like static +import+ statements. We need to watch out and remind ourselves that the modules are asynchronously loaded one by one, though.
+Using `await import()` makes dynamic module loading look and feel like static `import` statements. We need to watch out and remind ourselves that the modules are asynchronously loaded one by one, though.
 
-Keep in mind that +import+ is function-like, but it has different semantics from regular functions: +import+ is not a function definition, it can't be extended, it can't be assigned properties, and it can't be destructured. In this sense, +import()+ falls in a similar category as the +super()+ call that's available in class constructors.
+Keep in mind that `import` is function-like, but it has different semantics from regular functions: `import` is not a function definition, it can't be extended, it can't be assigned properties, and it can't be destructured. In this sense, `import()` falls in a similar category as the `super()` call that's available in class constructors.
 
 === 8.3 Practical Considerations for ES Modules
 
-When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a +random+ module with a locally scoped +calc+ function, which computes a random number in the +[0, n)+ range; and a public API with the +range+ method, which computes a random number in the +[min, max]+ range.
+When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a `random` module with a locally scoped `calc` function, which computes a random number in the `[0, n)` range; and a public API with the `range` method, which computes a random number in the `[min, max]` range.
 
 [source,javascript]
 ----
@@ -588,7 +588,7 @@ const random = (function() {
 })()
 ----
 
-Compare that to the following piece of code, used in an ESM module called +random+. The immediately-invoking function expression (IIFE) wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML +<script>+ tags.
+Compare that to the following piece of code, used in an ESM module called `random`. The immediately-invoking function expression(IIFE) wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
 
 [source,javascript]
 ----
@@ -628,6 +628,6 @@ We'll plunge deeper into proper module design, effective module interaction and 
 
 Browsers are only scratching the surface of native JavaScript modules. At the time of this writing, some browsers already implement `import` and `export` statements. Some browsers have already implemented `<script type='module'>`, enabling them to consume modules when specifying the `module` script type. The module loader specification isn't finalized yet, and you can track its current status at https://mjavascript.com/out/loader.
 
-Meanwhile, Node.js hasn't yet shipped a working implementation of the JavaScript module system. Given that JavaScript ecosystem tooling relies on node, it's not yet clear how cross-compatibility will be attained. The dilemma of how to know whether a file is written in CJS or ESM is what's delaying a working implementation. A proposal to infer whether a file was ESM based on the presence of at least one +import+ or +export+ statement was abandoned, and it seems like the current course of action is to introduce a new file extension specifically tailored towards ESM modules. There is quite a bit of nuance given the variety of use cases and platforms Node.js runs on, making it tough to arrive at a solution that remains elegant, performant, and correct for every use case.
+Meanwhile, Node.js hasn't yet shipped a working implementation of the JavaScript module system. Given that JavaScript ecosystem tooling relies on node, it's not yet clear how cross-compatibility will be attained. The dilemma of how to know whether a file is written in CJS or ESM is what's delaying a working implementation. A proposal to infer whether a file was ESM based on the presence of at least one `import` or `export` statement was abandoned, and it seems like the current course of action is to introduce a new file extension specifically tailored towards ESM modules. There is quite a bit of nuance given the variety of use cases and platforms Node.js runs on, making it tough to arrive at a solution that remains elegant, performant, and correct for every use case.
 
 With that said, let's turn over to the last chapter, on leveraging all of these new language features and syntax effectively.

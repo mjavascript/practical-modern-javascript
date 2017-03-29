@@ -7,17 +7,17 @@ Now that we've covered the basic improvements to the syntax, we're in good shape
 
 JavaScript is a prototype-based language, and classes are mostly syntactic sugar on top of prototypal inheritance. The fundamental difference between prototypal inheritance and classes is that classes can `extend` other classes, making it possible for us to extend the `Array` built-in -- something that was very convoluted before ES6.
 
-The +class+ keyword acts, then, as a device that makes JavaScript more inviting to programmers coming from other paradigms, who might not be all that familiar with prototype chains.
+The `class` keyword acts, then, as a device that makes JavaScript more inviting to programmers coming from other paradigms, who might not be all that familiar with prototype chains.
 
 ==== 3.1.1 Class Fundamentals
 
 When learning about new language features, it's always a good idea to look at existing constructs first, and then see how the new feature improves those use cases. We'll start by looking at a simple prototype-based JavaScript constructor and then compare that with the newer classes syntax in ES6.
 
-The code snippet shown below represents a fruit using a constructor function and adding a couple of methods to the prototype. The constructor function takes a +name+ and the amount of +calories+ for a fruit, and defaults to the fruit being in a single piece. There's a +.chop+ method that will slice another piece of fruit, and then there's a +.bite+ method. The +person+ passed into +.bite+ will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
+The code snippet shown below represents a fruit using a constructor function and adding a couple of methods to the prototype. The constructor function takes a `name` and the amount of `calories` for a fruit, and defaults to the fruit being in a single piece. There's a `.chop` method that will slice another piece of fruit, and then there's a `.bite` method. The `person` passed into `.bite` will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
 
 [source,javascript]
 ----
-function Fruit (name, calories) {
+function Fruit(name, calories) {
   this.name = name
   this.calories = calories
   this.pieces = 1
@@ -36,7 +36,7 @@ Fruit.prototype.bite = function (person) {
 }
 ----
 
-While fairly simple, the piece of code we just put together should be enough to note a few things. We have a constructor function that takes a couple of parameters, a pair of methods, and a number of properties. The next snippet codifies how one should create a +Fruit+ and a +person+ that chops the fruit into four slices and then takes three bites.
+While fairly simple, the piece of code we just put together should be enough to note a few things. We have a constructor function that takes a couple of parameters, a pair of methods, and a number of properties. The next snippet codifies how one should create a `Fruit` and a `person` that chops the fruit into four slices and then takes three bites.
 
 [source,javascript]
 ----
@@ -56,20 +56,20 @@ console.log(apple.calories)
 // <- 35
 ----
 
-When using +class+ syntax, as shown in the following code listing, the +constructor+ function is declared as an explicit member of the +Fruit+ class, and methods follow the object literal method definition syntax. When we compare the +class+ syntax with the prototype-based syntax, you'll notice we're reducing the amount of boilerplate code quite a bit by avoiding explicit references to +Fruit.prototype+ while declaring methods. The fact that the entire declaration is kept inside the +class+ block also helps the reader understand the scope of this piece of code, making our classes' intent clearer. Lastly, having the constructor explicitly as a method member of +Fruit+ makes the +class+ syntax easier to understand when compared with the prototype-based flavor of class syntax.
+When using `class` syntax, as shown in the following code listing, the `constructor` function is declared as an explicit member of the `Fruit` class, and methods follow the object literal method definition syntax. When we compare the `class` syntax with the prototype-based syntax, you'll notice we're reducing the amount of boilerplate code quite a bit by avoiding explicit references to `Fruit.prototype` while declaring methods. The fact that the entire declaration is kept inside the `class` block also helps the reader understand the scope of this piece of code, making our classes' intent clearer. Lastly, having the constructor explicitly as a method member of `Fruit` makes the `class` syntax easier to understand when compared with the prototype-based flavor of class syntax.
 
 [source,javascript]
 ----
 class Fruit {
-  constructor (name, calories) {
+  constructor(name, calories) {
     this.name = name
     this.calories = calories
     this.pieces = 1
   }
-  chop () {
+  chop() {
     this.pieces++
   }
-  bite (person) {
+  bite(person) {
     if (this.pieces < 1) {
       return
     }
@@ -81,9 +81,9 @@ class Fruit {
 }
 ----
 
-A not-so-minor detail you might have missed is that there aren't any commas in between method declarations of the +Fruit+ class. That's not a mistake our copious copy editors missed, but rather part of the +class+ syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as public and private class fields.
+A not-so-minor detail you might have missed is that there aren't any commas in between method declarations of the `Fruit` class. That's not a mistake our copious copy editors missed, but rather part of the `class` syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as public and private class fields.
 
-The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest, the API for +Fruit+ remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces and ate most of it would work well with our +class+ flavored +Fruit+ as well.
+The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest, the API for `Fruit` remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces and ate most of it would work well with our `class` flavored `Fruit` as well.
 
 It's worth noting that class declarations aren't hoisted to the top of their scope, unlike function declarations. That means you won't be able to instantiate, or otherwise access, a class before its declaration is reached and executed.
 
@@ -94,23 +94,23 @@ class Person {
 }
 ----
 
-Besides the class declaration syntax presented above, classes can also be declared as expressions, just like with function declarations and function expressions. You may omit the name for a +class+ expression, as shown in the following bit of code.
+Besides the class declaration syntax presented above, classes can also be declared as expressions, just like with function declarations and function expressions. You may omit the name for a `class` expression, as shown in the following bit of code.
 
 [source,javascript]
 ----
 const Person = class {
-  constructor (name) {
+  constructor(name) {
     this.name = name
   }
 }
 ----
 
-Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a +JakePerson+ class dynamically in arrow function which takes a name parameter and then feeds that to the parent +Person+ constructor via +super()+.
+Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a `JakePerson` class dynamically in arrow function which takes a name parameter and then feeds that to the parent `Person` constructor via `super()`.
 
 [source,javascript]
 ----
 const createPersonClass = name => class extends Person {
-  constructor () {
+  constructor() {
     super(name)
   }
 }
@@ -122,23 +122,23 @@ We'll dig deeper into class inheritance later. Let's take a more nuanced look at
 
 ==== 3.1.2 Properties and Methods in Classes
 
-It should be noted that the +constructor+ method declaration is an optional member of a +class+ declaration. The following bit of code is an entirely valid +class+ declaration that's comparable to an empty constructor function.
+It should be noted that the `constructor` method declaration is an optional member of a `class` declaration. The following bit of code is an entirely valid `class` declaration that's comparable to an empty constructor function.
 
 [source,javascript]
 ----
 class Fruit {
 }
 // the constructor function below is roughly equivalent to the class above
-function Fruit () {
+function Fruit() {
 }
 ----
 
-Any arguments passed to +new Log()+ will be received as parameters to the +constructor+ method for +Log+, as depicted next. You can use those parameters to initialize instances of the class.
+Any arguments passed to `new Log()` will be received as parameters to the `constructor` method for `Log`, as depicted next. You can use those parameters to initialize instances of the class.
 
 [source,javascript]
 ----
 class Log {
-  constructor (...args) {
+  constructor(...args) {
     console.log(args)
   }
 }
@@ -146,21 +146,21 @@ new Log('a', 'b', 'c')
 // <- ['a' 'b' 'c']
 ----
 
-The following example shows a class where we create and initialize an instance property named +count+ upon construction of each instance. The +get next+ method declaration indicates instances of our +Counter+ class will have a +next+ property that will return the results of calling its method, whenever that property is accessed.
+The following example shows a class where we create and initialize an instance property named `count` upon construction of each instance. The `get next` method declaration indicates instances of our `Counter` class will have a `next` property that will return the results of calling its method, whenever that property is accessed.
 
 [source,javascript]
 ----
 class Counter {
-  constructor (start) {
+  constructor(start) {
     this.count = start
   }
-  get next () {
+  get next() {
     return this.count++
   }
 }
 ----
 
-In this case, you could consume the +Counter+ class as shown in the next snippet. Each time the +.next+ property is accessed, the count raises by one. While mildly useful, this sort of use case is usually better suited by methods than by magical +get+ property accessors, and we need to be careful not to abuse property accesors, as consuming an object that abuses of accessors may become very confusing.
+In this case, you could consume the `Counter` class as shown in the next snippet. Each time the `.next` property is accessed, the count raises by one. While mildly useful, this sort of use case is usually better suited by methods than by magical `get` property accessors, and we need to be careful not to abuse property accesors, as consuming an object that abuses of accessors may become very confusing.
 
 [source,javascript]
 ----
@@ -173,24 +173,24 @@ console.log(counter.next)
 // <- 4
 ----
 
-When paired with setters, though, accessors may provide an interesting bridge between an object and its underlying data store. Consider the following example where we define a class that can be used to store and retrieve JSON data from +localStorage+ using the provided storage +key+.
+When paired with setters, though, accessors may provide an interesting bridge between an object and its underlying data store. Consider the following example where we define a class that can be used to store and retrieve JSON data from `localStorage` using the provided storage `key`.
 
 [source,javascript]
 ----
 class LocalStorage {
-  constructor (key) {
+  constructor(key) {
     this.key = key
   }
-  get data () {
+  get data() {
     return JSON.parse(localStorage.getItem(this.key))
   }
-  set data (data) {
+  set data(data) {
     localStorage.setItem(this.key, JSON.stringify(data))
   }
 }
 ----
 
-Then you could use the +LocalStorage+ class as shown in the next example. Any value that's assigned to +ls.data+ will be converted to its JSON object string representation and stored in +localStorage+. Then, when the property is read from, the same +key+ will be used to retrieve the previously stored contents, parse them as JSON into an object, and returned.
+Then you could use the `LocalStorage` class as shown in the next example. Any value that's assigned to `ls.data` will be converted to its JSON object string representation and stored in `localStorage`. Then, when the property is read from, the same `key` will be used to retrieve the previously stored contents, parse them as JSON into an object, and returned.
 
 [source,javascript]
 ----
@@ -200,15 +200,15 @@ console.log(ls.data)
 // <- ['apples', 'bananas', 'grapes']
 ----
 
-Besides getters and setters, you can also define regular instance methods, as we've explored earlier when creating the +Fruit+ class. The following code example creates a +Person+ class that's able to eat +Fruit+ instances as we had declared them earlier. We then instantiate a fruit and a person, and have the person eat the fruit. The person ends up with a satiety level equal to +40+, because they ate the whole fruit.
+Besides getters and setters, you can also define regular instance methods, as we've explored earlier when creating the `Fruit` class. The following code example creates a `Person` class that's able to eat `Fruit` instances as we had declared them earlier. We then instantiate a fruit and a person, and have the person eat the fruit. The person ends up with a satiety level equal to `40`, because they ate the whole fruit.
 
 [source,javascript]
 ----
 class Person {
-  constructor () {
+  constructor() {
     this.satiety = 0
   }
-  eat (fruit) {
+  eat(fruit) {
     while (fruit.pieces > 0) {
       fruit.bite(this)
     }
@@ -225,7 +225,7 @@ Sometimes it's necessary to add static methods at the class level, rather than m
 
 [source,javascript]
 ----
-function Person () {
+function Person() {
   this.hunger = 100
 }
 Person.prototype.eat = function () {
@@ -236,14 +236,14 @@ Person.isPerson = function (person) {
 }
 ----
 
-JavaScript classes allow you to define static methods like +Person.isPerson+ using the +static+ keyword, much like you would use +get+ or +set+ as a prefix to a method definition that's a getter or a setter.
+JavaScript classes allow you to define static methods like `Person.isPerson` using the `static` keyword, much like you would use `get` or `set` as a prefix to a method definition that's a getter or a setter.
 
-The following example defines a +MathHelper+ class with a static +sum+ method that's able to calculate the sum of all numbers passed to it in a function call, by taking advantage of the `Array#reduce` method.
+The following example defines a `MathHelper` class with a static `sum` method that's able to calculate the sum of all numbers passed to it in a function call, by taking advantage of the `Array#reduce` method.
 
 [source,javascript]
 ----
 class MathHelper {
-  static sum (...numbers) {
+  static sum(...numbers) {
     return numbers.reduce((a, b) => a + b)
   }
 }
@@ -251,15 +251,15 @@ console.log(MathHelper.sum(1, 2, 3, 4, 5))
 // <- 15
 ----
 
-Finally, it's worth mentioning that you could also declare static property accessors, such as getters or setters (+static get+, +static set+). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, after all.
+Finally, it's worth mentioning that you could also declare static property accessors, such as getters or setters (`static get`, `static set`). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, after all.
 
 ==== 3.1.3 Extending JavaScript Classes
 
-You could use plain JavaScript to extend the +Fruit+ class, but as you will notice by reading the next code snippet, declaring a sub-class involves esoteric knowledge such as +Parent.call(this)+ in order to pass in parameters to the parent class so that we can properly initialize the sub-class, and setting the prototype of the sub-class to an instance of the parent class' prototype. We won't be delving into detailed minutia about these constructs, as you can readily find heaps of information about prototypal inheritance around the web, and our focus in in the newly introduced +class+ syntax anyways.
+You could use plain JavaScript to extend the `Fruit` class, but as you will notice by reading the next code snippet, declaring a sub-class involves esoteric knowledge such as `Parent.call(this)` in order to pass in parameters to the parent class so that we can properly initialize the sub-class, and setting the prototype of the sub-class to an instance of the parent class' prototype. We won't be delving into detailed minutia about these constructs, as you can readily find heaps of information about prototypal inheritance around the web, and our focus in in the newly introduced `class` syntax anyways.
 
 [source,javascript]
 ----
-function Banana () {
+function Banana() {
   Fruit.call(this, 'banana', 105)
 }
 Banana.prototype = Object.create(Fruit.prototype)
@@ -273,7 +273,7 @@ Given the ephemeral knowledge one has to remember, and the fact that `Object.cre
 [source,javascript]
 ----
 const util = require('util')
-function Banana () {
+function Banana() {
   Fruit.call(this, 'banana', 105)
 }
 util.inherits(Banana, Fruit)
@@ -282,7 +282,7 @@ Banana.prototype.slice = function () {
 }
 ----
 
-Consuming the +Banana+ constructor is no different than how we used +Fruit+, except that the banana has a +name+ and calories already assigned to it, and they come with an extra +slice+ method we can use to promptly chop the banana instance into 12 pieces. The following piece of code shows the +Banana+ in action as we take a bite.
+Consuming the `Banana` constructor is no different than how we used `Fruit`, except that the banana has a `name` and calories already assigned to it, and they come with an extra `slice` method we can use to promptly chop the banana instance into 12 pieces. The following piece of code shows the `Banana` in action as we take a bite.
 
 [source,javascript]
 ----
@@ -300,32 +300,32 @@ console.log(banana.calories)
 
 Classes consolidate prototypal inheritance, which up until recently had been highly contested in user-space by several libraries trying to make it easier to deal with prototypal inheritance in JavaScript.
 
-The +Fruit+ class is ripe for inheritance. In the following code snippet we create the +Banana+ class as an extension of the +Fruit+ class. Here, the syntax clearly signals our intent and we don't have to worry about thoroughly understanding prototypal inheritance in order to get to the results that we want. When we want to forward parameters to the underlying +Fruit+ constructor, we can use +super+. The +super+ keyword can also be used to call functions in the parent class, such as +super.chop+, and it's not just limited to the constructor for the parent class.
+The `Fruit` class is ripe for inheritance. In the following code snippet we create the `Banana` class as an extension of the `Fruit` class. Here, the syntax clearly signals our intent and we don't have to worry about thoroughly understanding prototypal inheritance in order to get to the results that we want. When we want to forward parameters to the underlying `Fruit` constructor, we can use `super`. The `super` keyword can also be used to call functions in the parent class, such as `super.chop`, and it's not just limited to the constructor for the parent class.
 
 [source,javascript]
 ----
 class Banana extends Fruit {
-  constructor () {
+  constructor() {
     super('banana', 105)
   }
-  slice () {
+  slice() {
     this.pieces = 12
   }
 }
 ----
 
-Even though the +class+ keyword is static we can still leverage JavaScript's flexible and functional properties when declaring classes. Any expression that returns a constructor function can be fed to +extends+. For example, we could have a constructor function factory and use that as the base class.
+Even though the `class` keyword is static we can still leverage JavaScript's flexible and functional properties when declaring classes. Any expression that returns a constructor function can be fed to `extends`. For example, we could have a constructor function factory and use that as the base class.
 
-The following piece of code has a +createJuicyFruit+ function where we forward the name and calories for a fruit to the +Fruit+ class using a +super+ call, and then all we have to do to create a +Plum+ is extend the intermediary +JuicyFruit+ class.
+The following piece of code has a `createJuicyFruit` function where we forward the name and calories for a fruit to the `Fruit` class using a `super` call, and then all we have to do to create a `Plum` is extend the intermediary `JuicyFruit` class.
 
 [source,javascript]
 ----
 const createJuicyFruit = (...params) => class JuicyFruit extends Fruit {
-  constructor () {
+  constructor() {
     this.juice = 0
     super(...params)
   }
-  squeeze () {
+  squeeze() {
     if (this.calories <= 0) {
       return
     }
@@ -337,26 +337,26 @@ class Plum extends createJuicyFruit('plum', 30) {
 }
 ----
 
-Let's move onto +Symbol+. While not an iteration or flow control mechanism, learning about +Symbol+ is crucial to shaping an understanding of iteration protocols, which are discussed at length later in the chapter.
+Let's move onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length later in the chapter.
 
 === 3.2 Symbols
 
-Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as +'text'+ for strings, or +1+ for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in section 4.2.
+Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in section 4.2.
 
-There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the +Symbol+ built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
+There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the `Symbol` built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
 
 We'll explore each of these, looking into possible use cases along the way. Let's begin with local symbols.
 
 ==== 3.2.1 Local Symbols
 
-Symbols can be created using the +Symbol+ wrapper object. In the following piece of code, we create our +first+ symbol.
+Symbols can be created using the `Symbol` wrapper object. In the following piece of code, we create our `first` symbol.
 
 [source,javascript]
 ----
 const first = Symbol()
 ----
 
-While you can use the `new` keyword with +Number+ and +String+, the `new` operator throws a `TypeError` when we try it on `Symbol`. This avoids mistakes and confusing behavior like +new Number(3) !== Number(3)+. The following snippet shows the error being thrown.
+While you can use the `new` keyword with `Number` and `String`, the `new` operator throws a `TypeError` when we try it on `Symbol`. This avoids mistakes and confusing behavior like `new Number(3) !== Number(3)`. The following snippet shows the error being thrown.
 
 [source,javascript]
 ----
@@ -383,7 +383,7 @@ console.log(Symbol('my symbol') === Symbol('my symbol'))
 // <- false
 ----
 
-Symbols are of type +symbol+, new in ES6. The following snippet shows how +typeof+ returns the new type string for symbols.
+Symbols are of type `symbol`, new in ES6. The following snippet shows how `typeof` returns the new type string for symbols.
 
 [source,javascript]
 ----
@@ -393,7 +393,7 @@ console.log(typeof Symbol('my symbol'))
 // <- 'symbol'
 ----
 
-Symbols can be used as property keys on objects. Note how you can use a computed property name to avoid an extra statement just to add a +weapon+ symbol key to the +character+ object, as shown in the following example. Note also that, in order to access a symbol property, you'll need a reference to the symbol that was used to create said property.
+Symbols can be used as property keys on objects. Note how you can use a computed property name to avoid an extra statement just to add a `weapon` symbol key to the `character` object, as shown in the following example. Note also that, in order to access a symbol property, you'll need a reference to the symbol that was used to create said property.
 
 [source,javascript]
 ----
@@ -447,7 +447,7 @@ Symbols, on the other hand, don't have this problem. They can be used as propert
 [source,javascript]
 ----
 const cache = Symbol('calendar')
-function createCalendar (el) {
+function createCalendar(el) {
   if (cache in el) { // check if the symbol exists in the element
     return el[cache] // use the cache to avoid re-instantiation
   }
@@ -458,13 +458,13 @@ function createCalendar (el) {
 }
 ----
 
-There is an ES6 built-in -- the +WeakMap+ -- that can be used to uniquely map objects to other objects without using arrays nor placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, +WeakMap+ lookups are constant in time or O(1). We'll explore +WeakMap+ in chapter 5, alongside other ES6 collection built-ins.
+There is an ES6 built-in -- the `WeakMap` -- that can be used to uniquely map objects to other objects without using arrays nor placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in chapter 5, alongside other ES6 collection built-ins.
 
 ===== Defining Protocols through Symbols
 
 Earlier, we posited that a use case for symbols is to define protocols. A protocol is a communication contract or convention that defines behavior. In less abstract terms, a library could use a symbol that could then be used by objects that adhere to a convention from the library.
 
-Consider the following bit of code, where we use the special +toJSON+ method to determine the object serialized by +JSON.stringify+. As you can see, stringifying the +character+ object produces a serialized version of the object returned by +toJSON+.
+Consider the following bit of code, where we use the special `toJSON` method to determine the object serialized by `JSON.stringify`. As you can see, stringifying the `character` object produces a serialized version of the object returned by `toJSON`.
 
 [source,javascript]
 ----
@@ -478,7 +478,7 @@ console.log(JSON.stringify(character))
 // <- '"{"key":"value"}"'
 ----
 
-In contrast, if +toJSON+ was anything other than a function, the original +character+ object would be serialized, including the +toJSON+ property, as shown next. This sort of inconsistency ensues from relying on regular properties to define behavior.
+In contrast, if `toJSON` was anything other than a function, the original `character` object would be serialized, including the `toJSON` property, as shown next. This sort of inconsistency ensues from relying on regular properties to define behavior.
 
 [source,javascript]
 ----
@@ -490,7 +490,7 @@ console.log(JSON.stringify(character))
 // <- '"{"name":"Thor","toJSON":true}"'
 ----
 
-The reason why it would be better to implement the +toJSON+ modifier as a symbol is that that way it wouldn't interfere with other object keys. Given that symbols are unique, never serialized, and never exposed unless explicitly requested through +Object.getOwnPropertySymbols+, they would represent a better choice when defining a contract between +JSON.stringify+ and how objects want to be serialized. Consider the following piece of code with an alternative implementation of +toJSON+ using a symbol to define serialization behavior for a +stringify+ function.
+The reason why it would be better to implement the `toJSON` modifier as a symbol is that that way it wouldn't interfere with other object keys. Given that symbols are unique, never serialized, and never exposed unless explicitly requested through `Object.getOwnPropertySymbols`, they would represent a better choice when defining a contract between `JSON.stringify` and how objects want to be serialized. Consider the following piece of code with an alternative implementation of `toJSON` using a symbol to define serialization behavior for a `stringify` function.
 
 [source,javascript]
 ----
@@ -502,7 +502,7 @@ const character = {
   })
 }
 stringify(character)
-function stringify (target) {
+function stringify(target) {
   if (json in target) {
     return JSON.stringify(target[json]())
   }
@@ -510,16 +510,16 @@ function stringify (target) {
 }
 ----
 
-Using a symbol means we need to use a computed property name to define the +json+ behavior directly on an object literal. It also means that the behavior won't clash with other user-defined properties or upcoming language features we couldn't foresee. Another difference is that the +json+ symbol should be available to consumers of the +stringify+ function, so that they can define their own behavior. We could easily add the following line of code to expose the +json+ symbol directly through +stringify+, as shown below. That'd also tie the +stringify+ function with the symbol that modifies its behavior.
+Using a symbol means we need to use a computed property name to define the `json` behavior directly on an object literal. It also means that the behavior won't clash with other user-defined properties or upcoming language features we couldn't foresee. Another difference is that the `json` symbol should be available to consumers of the `stringify` function, so that they can define their own behavior. We could easily add the following line of code to expose the `json` symbol directly through `stringify`, as shown below. That'd also tie the `stringify` function with the symbol that modifies its behavior.
 
 [source,javascript]
 ----
 stringify.as = json
 ----
 
-By exposing the +stringify+ function we'd be exposing the +stringify.as+ symbol as well, allowing consumers to tweak behavior by minimally modifying objects, using the custom symbol.
+By exposing the `stringify` function we'd be exposing the `stringify.as` symbol as well, allowing consumers to tweak behavior by minimally modifying objects, using the custom symbol.
 
-When it comes to the merits of using a symbol to describe behavior, as opposed to an option passed as to the +stringify+ function, there's a few considerations to keep in mind. First, adding option parameters to a function changes its public API, whereas changing the internal implementation of the function to support another symbol wouldn't affect the public API. Using an +options+ object with different properties for each option mitigates this effect, but it's not always convenient to require an +options+ object in every function call.
+When it comes to the merits of using a symbol to describe behavior, as opposed to an option passed as to the `stringify` function, there's a few considerations to keep in mind. First, adding option parameters to a function changes its public API, whereas changing the internal implementation of the function to support another symbol wouldn't affect the public API. Using an `options` object with different properties for each option mitigates this effect, but it's not always convenient to require an `options` object in every function call.
 
 A benefit of defining behavior via symbols is that you could augment and customize the behavior of objects without changing anything other than the value assigned to a symbol property and perhaps the internal implementation of the piece of code that leverages that behavior. The benefit of using symbols over properties is that you're not subject to name clashes when new language features are introduced.
 
@@ -527,15 +527,15 @@ Besides local symbols, there's also a global symbol registry, accessible from ac
 
 ==== 3.2.3 Global Symbol Registry
 
-A code realm is any JavaScript execution context, such as the page your application is running in, an +<iframe>+ within that page, a script running through +eval+, or a worker of any kind -- such as web workers, service workers, or shared workersfootnote:[Workers are a way of executing background tasks in browsers. The initiator can communicate with their workers, which run in a different execution context, via messaging. https://mjavascript.com/out/workers]. Each of these execution contexts has its own global object. Global variables defined on the +window+ object of a page, for example, aren't available to a +ServiceWorker+. In contrast, the global symbol registry is shared across all code realms.
+A code realm is any JavaScript execution context, such as the page your application is running in, an `<iframe>` within that page, a script running through `eval`, or a worker of any kind -- such as web workers, service workers, or shared workersfootnote:[Workers are a way of executing background tasks in browsers. The initiator can communicate with their workers, which run in a different execution context, via messaging. https://mjavascript.com/out/workers]. Each of these execution contexts has its own global object. Global variables defined on the `window` object of a page, for example, aren't available to a `ServiceWorker`. In contrast, the global symbol registry is shared across all code realms.
 
-There's two methods that interact with the runtime-wide global symbol registry: +Symbol.for+ and +Symbol.keyFor+. What do they do?
+There's two methods that interact with the runtime-wide global symbol registry: `Symbol.for` and `Symbol.keyFor`. What do they do?
 
-===== Getting symbols with +Symbol.for(key)+
+===== Getting symbols with `Symbol.for(key)`
 
-The +Symbol.for(key)+ method looks up +key+ in the runtime-wide symbol registry. If a symbol with the provided +key+ exists in the global registry, that symbol is returned. If no symbol with that +key+ is found in the registry, one is created and added to the registry under the provided +key+. That's to say, +Symbol.for(key)+ is idempotent: it looks for a symbol under a +key+, creates one if it didn't already exist, and then returns the symbol.
+The `Symbol.for(key)` method looks up `key` in the runtime-wide symbol registry. If a symbol with the provided `key` exists in the global registry, that symbol is returned. If no symbol with that `key` is found in the registry, one is created and added to the registry under the provided `key`. That's to say, `Symbol.for(key)` is idempotent: it looks for a symbol under a `key`, creates one if it didn't already exist, and then returns the symbol.
 
-In the following code snippet, the first call to +Symbol.for+ creates a symbol identified as +'example'+, adds it to the registry, and returns it. The second call returns that same symbol because the +key+ is already in the registry -- and associated to the symbol returned by the first call.
+In the following code snippet, the first call to `Symbol.for` creates a symbol identified as `'example'`, adds it to the registry, and returns it. The second call returns that same symbol because the `key` is already in the registry -- and associated to the symbol returned by the first call.
 
 [source,javascript]
 ----
@@ -544,11 +544,11 @@ console.log(example === Symbol.for('example'))
 // <- true
 ----
 
-The global symbol registry keeps track of symbols by their +key+. Note that the +key+ will also be used as a +description+ when the symbols that go into the registry are created. Considering these symbols are global on a runtime-wide level, you might want to prefix symbol keys in the global registry with a value that identifies your library or component, mitigating potential name clashes.
+The global symbol registry keeps track of symbols by their `key`. Note that the `key` will also be used as a `description` when the symbols that go into the registry are created. Considering these symbols are global on a runtime-wide level, you might want to prefix symbol keys in the global registry with a value that identifies your library or component, mitigating potential name clashes.
 
-===== Using +Symbol.keyFor(symbol)+ to retrieve symbol keys
+===== Using `Symbol.keyFor(symbol)` to retrieve symbol keys
 
-Given a symbol +symbol+, +Symbol.keyFor(symbol)+ returns the +key+ that was associated with +symbol+ when the symbol was added to the global registry. The next example shows how we can grab a the +key+ for a +symbol+ using +Symbol.keyFor+.
+Given a symbol `symbol`, `Symbol.keyFor(symbol)` returns the `key` that was associated with `symbol` when the symbol was added to the global registry. The next example shows how we can grab a the `key` for a `symbol` using `Symbol.keyFor`.
 
 [source,javascript]
 ----
@@ -557,7 +557,7 @@ console.log(Symbol.keyFor(example))
 // <- 'example'
 ----
 
-Note that if the symbol isn't in the global runtime registry, then the method returns +undefined+.
+Note that if the symbol isn't in the global runtime registry, then the method returns `undefined`.
 
 [source,javascript]
 ----
@@ -578,7 +578,7 @@ Now that you've learned about the API for interacting with the global symbol reg
 
 ===== Best Practices and Considerations
 
-A runtime-wide registry means the symbols are accessible across code realms. The global registry returns a reference to the same object in any realm the code runs in. In the following example, we demonstrate how the +Symbol.for+ API returns the same symbol in a page and within an +<iframe>+.
+A runtime-wide registry means the symbols are accessible across code realms. The global registry returns a reference to the same object in any realm the code runs in. In the following example, we demonstrate how the `Symbol.for` API returns the same symbol in a page and within an `<iframe>`.
 
 [source,javascript]
 ----
@@ -591,15 +591,15 @@ console.log(s1 === s2)
 // <- true
 ----
 
-There are tradeoffs in using widely available symbols. On the one hand, they make it easy for libraries to expose their own symbols, but on the other hand they could also expose their symbols on their own API, using local symbols. The symbol registry is obviously useful when symbols need to be shared across any two code realms, for example: +ServiceWorker+ and a web page. The API is also convenient when you don't want to bother storing references to the symbols, you could use the registry directly for that, since every call with a given +key+ is guaranteed to return the same +symbol+. You'll have to keep in mind, though, that these symbols are shared across the runtime and that might lead to unwanted consequences if you use generic symbol names like +each+ or +contains+.
+There are tradeoffs in using widely available symbols. On the one hand, they make it easy for libraries to expose their own symbols, but on the other hand they could also expose their symbols on their own API, using local symbols. The symbol registry is obviously useful when symbols need to be shared across any two code realms, for example: `ServiceWorker` and a web page. The API is also convenient when you don't want to bother storing references to the symbols, you could use the registry directly for that, since every call with a given `key` is guaranteed to return the same `symbol`. You'll have to keep in mind, though, that these symbols are shared across the runtime and that might lead to unwanted consequences if you use generic symbol names like `each` or `contains`.
 
 There's one more kind of symbols: built-in well-known symbols.
 
 ==== 3.2.4 Well-known Symbols
 
-So far we've covered symbols you can create using the +Symbol+ function and those you can create through +Symbol.for+. The third and last kind of symbols we're going to cover is the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
+So far we've covered symbols you can create using the `Symbol` function and those you can create through `Symbol.for`. The third and last kind of symbols we're going to cover is the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
 
-A great example of how symbols can add extensibility to the language without breaking existing code is the +Symbol.toPrimitive+ well-known symbol. It can be assigned a function to determine how an object is casted into a primitive value. The function receives a +hint+ parameter that can be +'string'+, +'number'+, or +'default'+, indicating what type of primitive value is expected.
+A great example of how symbols can add extensibility to the language without breaking existing code is the `Symbol.toPrimitive` well-known symbol. It can be assigned a function to determine how an object is casted into a primitive value. The function receives a `hint` parameter that can be `'string'`, `'number'`, or `'default'`, indicating what type of primitive value is expected.
 
 [source,javascript]
 ----
@@ -622,7 +622,7 @@ console.log(morphling + ' is powerful')
 // <- '[object Morphling] is powerful'
 ----
 
-Another example of a well-known symbol is +Symbol.match+. A regular expression that sets +Symbol.match+ to +false+ will be treated as a string literal when passed to +.startsWith+, +.endsWith+, or +.includes+. These three functions are new string methods in ES6. First we have +.startsWith+, which can be used to determine if the string starts with another string. Then there's +.endsWith+, that finds out whether the string ends in another one. Lastly, the +.includes+ method returns +true+ if a string contains another one. The next snippet of code shows how +Symbol.match+ can be used to compare a string with the string representation of a regular expression.
+Another example of a well-known symbol is `Symbol.match`. A regular expression that sets `Symbol.match` to `false` will be treated as a string literal when passed to `.startsWith`, `.endsWith`, or `.includes`. These three functions are new string methods in ES6. First we have `.startsWith`, which can be used to determine if the string starts with another string. Then there's `.endsWith`, that finds out whether the string ends in another one. Lastly, the `.includes` method returns `true` if a string contains another one. The next snippet of code shows how `Symbol.match` can be used to compare a string with the string representation of a regular expression.
 
 [source,javascript]
 ----
@@ -633,11 +633,11 @@ console.log(text.startsWith(regex))
 // <- true
 ----
 
-If the regular expression wasn't modified through the symbol, it would've thrown because the +.startsWith+ method expects a string instead of a regular expression.
+If the regular expression wasn't modified through the symbol, it would've thrown because the `.startsWith` method expects a string instead of a regular expression.
 
 ===== Shared across realms but not in the registry
 
-Well-known symbols are shared across realms. The following example shows how +Symbol.iterator+ is the same reference as that within the context of an +<iframe>+ window.
+Well-known symbols are shared across realms. The following example shows how `Symbol.iterator` is the same reference as that within the context of an `<iframe>` window.
 
 [source,javascript]
 ----
@@ -647,7 +647,7 @@ console.log(Symbol.iterator === frame.contentWindow.Symbol.iterator)
 // <- true
 ----
 
-Note that even though well-known symbols are shared across code realms, they're not in the global registry. The following bit of code shows that +Symbol.iterator+ produces +undefined+ when we ask for its +key+ in the registry. That means the symbol isn't listed in the global registry.
+Note that even though well-known symbols are shared across code realms, they're not in the global registry. The following bit of code shows that `Symbol.iterator` produces `undefined` when we ask for its `key` in the registry. That means the symbol isn't listed in the global registry.
 
 [source,javascript]
 ----
@@ -655,19 +655,19 @@ console.log(Symbol.keyFor(Symbol.iterator))
 // <- undefined
 ----
 
-One of the most useful well-known symbols is +Symbol.iterator+, used by a few different language constructs to iterate over a sequence, as defined by a function assigned to a property using that symbol on any object. In the next chapter we'll go over +Symbol.iterator+ in detail, using it extensively along with the iterator and iterable protocols.
+One of the most useful well-known symbols is `Symbol.iterator`, used by a few different language constructs to iterate over a sequence, as defined by a function assigned to a property using that symbol on any object. In the next chapter we'll go over `Symbol.iterator` in detail, using it extensively along with the iterator and iterable protocols.
 
 === 3.3 Object Built-in Improvements
 
-While we've already addressed syntax enhancements coming to object literals in chapter 2, there's a few new static methods available to the +Object+ built-in which we haven't addressed yet. It's time to take a look at what these methods bring to the table.
+While we've already addressed syntax enhancements coming to object literals in chapter 2, there's a few new static methods available to the `Object` built-in which we haven't addressed yet. It's time to take a look at what these methods bring to the table.
 
-We've already looked at +Object.getOwnPropertySymbols+, but let's also take a look at +Object.assign+, +Object.is+, and +Object.setPrototypeOf+.
+We've already looked at `Object.getOwnPropertySymbols`, but let's also take a look at `Object.assign`, `Object.is`, and `Object.setPrototypeOf`.
 
-==== 3.3.1 Extending objects with +Object.assign+
+==== 3.3.1 Extending objects with `Object.assign`
 
 The need to provide default values for a configuration object is not at all uncommon. Typically, libraries and well-designed component interfaces come with sensible defaults that cater to the most frequented use cases.
 
-A Markdown library, for example, might convert Markdown into HTML by providing only an +input+ parameter. That's its most common use case, simply parsing Markdown, and so the library doesn't demand that the consumer provides any options. The library might, however, support many different options that could be used to tweak its parsing behavior. It could have an option to allow +<script>+ or +<iframe>+ tags, or an option to highlight keywords in code snippets using CSS.
+A Markdown library, for example, might convert Markdown into HTML by providing only an `input` parameter. That's its most common use case, simply parsing Markdown, and so the library doesn't demand that the consumer provides any options. The library might, however, support many different options that could be used to tweak its parsing behavior. It could have an option to allow `<script>` or `<iframe>` tags, or an option to highlight keywords in code snippets using CSS.
 
 Imagine, for example, that you want to provide a set of defaults like the one shown next.
 
@@ -680,19 +680,19 @@ const defaults = {
 }
 ----
 
-One possibility would be to use the +defaults+ object as the default value for the +options+ parameter, using destructuring. In this case, the user must provide values for every option whenever they decide to provide any options at all.
+One possibility would be to use the `defaults` object as the default value for the `options` parameter, using destructuring. In this case, the user must provide values for every option whenever they decide to provide any options at all.
 
 [source,javascript]
 ----
-function md (input, options=defaults) {
+function md(input, options=defaults) {
 }
 ----
 
-The default values have to be merged with user-provided configuration, somehow. That's where +Object.assign+ comes in, as shown in the following example. We start with an empty +{}+ object, -- which will be mutated and returned by `Object.assign` -- we copy the default values over to it, and then copy the options on top. The resulting +config+ object will have all of the default values plus the user-provided configuration.
+The default values have to be merged with user-provided configuration, somehow. That's where `Object.assign` comes in, as shown in the following example. We start with an empty `{}` object, -- which will be mutated and returned by `Object.assign` -- we copy the default values over to it, and then copy the options on top. The resulting `config` object will have all of the default values plus the user-provided configuration.
 
 [source,javascript]
 ----
-function md (input, options) {
+function md(input, options) {
   const config = Object.assign({}, defaults, options)
 }
 ----
@@ -702,11 +702,11 @@ function md (input, options) {
 ====
 The `Object.assign` function mutates its first argument. It's signature is `(target, ...sources)`. Every source is applied onto the target object, source by source and property by property.
 
-Consider the following scenario, where we don't pass an empty object as the first argument of `Object.assign`, instead just providing it with the `defaults` and the `options`. We would be changing the contents of the `defaults` object, losing some of our default values -- and obtaining some wrong ones -- in the process of mutating the object. The first invocation would produce the same result as the previous example, but it would modify our defaults in the process, changing how subsequent calls to +md+ work.
+Consider the following scenario, where we don't pass an empty object as the first argument of `Object.assign`, instead just providing it with the `defaults` and the `options`. We would be changing the contents of the `defaults` object, losing some of our default values -- and obtaining some wrong ones -- in the process of mutating the object. The first invocation would produce the same result as the previous example, but it would modify our defaults in the process, changing how subsequent calls to `md` work.
 
 [source,javascript]
 ----
-function md (input, options) {
+function md(input, options) {
   const config = Object.assign(defaults, options)
 }
 ----
@@ -714,7 +714,7 @@ function md (input, options) {
 For this reason, it's generally best to pass a brand new object on the first position, every time.
 ====
 
-For any properties that had a default value where the user also provided a value, the user-provided value will prevail. Here's how +Object.assign+ works. First, it takes the first argument passed to it, let's call it +target+. It then iterates over all keys of each of the other arguments, let's call them +sources+. For each source in +sources+, all of its properties are iterated and assigned to +target+. The end result is that right-most sources -- in our case, the +options+ object -- overwrite any previously assigned values, as shown in the following bit of code.
+For any properties that had a default value where the user also provided a value, the user-provided value will prevail. Here's how `Object.assign` works. First, it takes the first argument passed to it, let's call it `target`. It then iterates over all keys of each of the other arguments, let's call them `sources`. For each source in `sources`, all of its properties are iterated and assigned to `target`. The end result is that right-most sources -- in our case, the `options` object -- overwrite any previously assigned values, as shown in the following bit of code.
 
 [source,javascript]
 ----
@@ -722,7 +722,7 @@ const defaults = {
   first: 'first',
   second: 'second'
 }
-function applyDefaults (options) {
+function applyDefaults(options) {
   return Object.assign({}, defaults, options)
 }
 applyDefaults()
@@ -733,9 +733,9 @@ applyDefaults({ second: false })
 // <- { first: 'first', second: false }
 ----
 
-Before +Object.assign+ made its way into the language, there were numerous similar implementations of this technique in user-land JavaScript, with names like assign, or extend. Adding +Object.assign+ to the language consolidates these options into a single method.
+Before `Object.assign` made its way into the language, there were numerous similar implementations of this technique in user-land JavaScript, with names like assign, or extend. Adding `Object.assign` to the language consolidates these options into a single method.
 
-Note that +Object.assign+ takes into consideration only enumerable own properties, including both string and symbol properties.
+Note that `Object.assign` takes into consideration only enumerable own properties, including both string and symbol properties.
 
 [source,javascript]
 ----
@@ -753,9 +753,9 @@ console.log(Object.assign({}, defaults, options))
 // <- { [Symbol('currency')]: 'USD', price: '0.99' }
 ----
 
-Note, however, that +Object.assign+ doesn't cater to every need. While most user-land implementations have the ability to perform deep assignment, +Object.assign+ doesn't offer a recursive treatment of objects. Object values are assigned as properties on +target+ directly, instead of being recursively assigned key by key.
+Note, however, that `Object.assign` doesn't cater to every need. While most user-land implementations have the ability to perform deep assignment, `Object.assign` doesn't offer a recursive treatment of objects. Object values are assigned as properties on `target` directly, instead of being recursively assigned key by key.
 
-In the following bit of code you might expect the +f+ property to be added to +target.a+ while keeping +b.c+ and +b.d+ intact, but the +b.c+ and +b.d+ properties are lost when using +Object.assign+.
+In the following bit of code you might expect the `f` property to be added to `target.a` while keeping `b.c` and `b.d` intact, but the `b.c` and `b.d` properties are lost when using `Object.assign`.
 
 [source,javascript]
 ----
@@ -763,7 +763,7 @@ Object.assign({}, { a: { b: 'c', d: 'e' } }, { a: { f: 'g' } })
 // <- { a: { f: 'g' } }
 ----
 
-In the same vein, arrays don't get any special treatment either. If you expected recursive behavior in +Object.assign+ the following snippet of code may also come as a surprise, where you may have expected the resulting object to have +'d'+ in the third position of the array.
+In the same vein, arrays don't get any special treatment either. If you expected recursive behavior in `Object.assign` the following snippet of code may also come as a surprise, where you may have expected the resulting object to have `'d'` in the third position of the array.
 
 [source,javascript]
 ----
@@ -771,9 +771,9 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 // <- { a: ['e', 'f'] }
 ----
 
-At the time of this writing, there's an ECMAScript stage 3 proposalfootnote:[You can find the proposal draft at: https://mjavascript.com/out/object-spread.] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an +Object.assign+ function call.
+At the time of this writing, there's an ECMAScript stage 3 proposalfootnote:[You can find the proposal draft at: https://mjavascript.com/out/object-spread.] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an `Object.assign` function call.
 
-The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and their +Object.assign+ counterpart. As you can see, using object spread is more succint and should be preferred where possible.
+The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and their `Object.assign` counterpart. As you can see, using object spread is more succint and should be preferred where possible.
 
 [source,javascript]
 ----
@@ -802,7 +802,7 @@ getUnknownProperties({
 // <- { color: 'orange' }
 ----
 
-We could take a similar approach when destructuring an object in a variable declaration statement. In the next example, every property that's not explicitly destructured is placed in a +meta+ object.
+We could take a similar approach when destructuring an object in a variable declaration statement. In the next example, every property that's not explicitly destructured is placed in a `meta` object.
 
 [source,javascript]
 ----
@@ -818,11 +818,11 @@ const { name, type, ...meta } = {
 
 We dive deeper into object rest and spread in chapter 9.
 
-==== 3.3.2 Comparing objects with +Object.is+
+==== 3.3.2 Comparing objects with `Object.is`
 
-The +Object.is+ method is a slightly different version of the strict equality comparison operator, +===+. For the most part, +Object.is(a, b)+ is equal to +a === b+. There are two differences: the case of +NaN+ and the case of +-0+ and ++0+. This algorithm is referred to as `SameValue` in the ECMAScript specification.
+The `Object.is` method is a slightly different version of the strict equality comparison operator, `===`. For the most part, `Object.is(a, b)` is equal to `a === b`. There are two differences: the case of `NaN` and the case of `-0` and `+0`. This algorithm is referred to as `SameValue` in the ECMAScript specification.
 
-When +NaN+ is compared to +NaN+, the strict equality comparison operator returns +false+ because +NaN+ is not equal to itself. The +Object.is+ method, however, returns +true+ in this special case.
+When `NaN` is compared to `NaN`, the strict equality comparison operator returns `false` because `NaN` is not equal to itself. The `Object.is` method, however, returns `true` in this special case.
 
 [source,javascript]
 ----
@@ -832,7 +832,7 @@ Object.is(NaN, NaN)
 // <- true
 ----
 
-Similarly, when +-0+ is compared to ++0+, the +===+ operator produces +true+ while +Object.is+ returns +false+.
+Similarly, when `-0` is compared to `+0`, the `===` operator produces `true` while `Object.is` returns `false`.
 
 [source,javascript]
 ----
@@ -842,11 +842,11 @@ Object.is(-0, +0)
 // <- false
 ----
 
-These differences may not seem like much, but dealing with +NaN+ has always been cumbersome because of its special quirks, such as +typeof NaN+ being `'number'` and it not being equal to itself.
+These differences may not seem like much, but dealing with `NaN` has always been cumbersome because of its special quirks, such as `typeof NaN` being `'number'` and it not being equal to itself.
 
-==== 3.3.3 +Object.setPrototypeOf+
+==== 3.3.3 `Object.setPrototypeOf`
 
-The +Object.setPrototypeOf+ method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__` which is a legacy feature.
+The `Object.setPrototypeOf` method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__` which is a legacy feature.
 
 Before ES6, we were introduced to `Object.create` in ES5. Using that method, we could create an object based on any prototype passed into `Object.create`, as shown next.
 

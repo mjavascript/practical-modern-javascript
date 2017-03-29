@@ -1,6 +1,6 @@
 var goodbye = 'Goodbye!'
 
-function hello () {
+function hello() {
   return goodbye
 }
 

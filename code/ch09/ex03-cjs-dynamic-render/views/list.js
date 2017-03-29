@@ -1,11 +1,11 @@
-const renderItem = require(`./item`)
+const renderItem = require('./item')
 
 module.exports = model => `<ul>
   ${
     model
       .map(renderItem)
-      .join(`\n`)
-      .split(`\n`)
-      .join(`\n  `)
+      .join('\n')
+      .split('\n')
+      .join('\n  ')
   }
 </ul>`

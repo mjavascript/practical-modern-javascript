@@ -9,25 +9,25 @@ We'll take a look at a few different features, the use cases where they shine, a
 
 === 9.1 Variable Declarations
 
-When developing software, most of our time is spent reading code, instead of writing it. ES6 offers +let+ and +const+ as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
+When developing software, most of our time is spent reading code, instead of writing it. ES6 offers `let` and `const` as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
 
-A +let+ statement indicates that a variable can't be used before its declaration, due to the Temporal Dead Zone rule. This isn't a convention, it is a fact: if we tried accessing the variable before its declaration statement was reached, the program would fail. These statements are block-scoped and not function-scoped; this means we need to read less code in order to fully grasp how a +let+ variable is used.
+A `let` statement indicates that a variable can't be used before its declaration, due to the Temporal Dead Zone rule. This isn't a convention, it is a fact: if we tried accessing the variable before its declaration statement was reached, the program would fail. These statements are block-scoped and not function-scoped; this means we need to read less code in order to fully grasp how a `let` variable is used.
 
-The +const+ statement is block-scoped as well, and it follows TDZ semantics too. The upside is that a +const+ binding can only be assigned during declaration.
+The `const` statement is block-scoped as well, and it follows TDZ semantics too. The upside is that a `const` binding can only be assigned during declaration.
 
-Note that this means that the variable binding can't change, but it doesn't mean that the value itself is immutable or constant in any way. A +const+ binding that references an object can't later reference a different value, but the underlying object can indeed mutate.
+Note that this means that the variable binding can't change, but it doesn't mean that the value itself is immutable or constant in any way. A `const` binding that references an object can't later reference a different value, but the underlying object can indeed mutate.
 
-In addition to the signals offered by +let+, the +const+ keyword indicates that a variable binding can't be reassigned. This is a strong signal. You know what the value is going to be; you know that the binding can't be accessed outside of its immediately containing block, due to block scoping; and you know that the binding is never accessed before declaration, because of TDZ semantics.
+In addition to the signals offered by `let`, the `const` keyword indicates that a variable binding can't be reassigned. This is a strong signal. You know what the value is going to be; you know that the binding can't be accessed outside of its immediately containing block, due to block scoping; and you know that the binding is never accessed before declaration, because of TDZ semantics.
 
-You know all of this just by reading the +const+ declaration statement and without scanning for other references to that variable.
+You know all of this just by reading the `const` declaration statement and without scanning for other references to that variable.
 
-Constraints such as those offered by +let+ and +const+ are a powerful way of making code easier to understand. Try to accrue as many of these constraints as possible in the code you write. The more declarative constraints that limit what a piece of code could mean, the easier and faster it is for humans to read, parse, and understand a piece of code in the future.
+Constraints such as those offered by `let` and `const` are a powerful way of making code easier to understand. Try to accrue as many of these constraints as possible in the code you write. The more declarative constraints that limit what a piece of code could mean, the easier and faster it is for humans to read, parse, and understand a piece of code in the future.
 
-Granted, there's more rules to a +const+ declaration than to a +var+ declaration: block-scoped, TDZ, assign at declaration, no reassignment. Whereas +var+ statements only signal function scoping. Rule-counting, however, doesn't offer a lot of insight. It is better to weigh these rules in terms of complexity: does the rule add or subtract complexity? In the case of +const+, block scoping means a narrower scope than function scoping, TDZ means that we don't need to scan the scope backwards from the declaration in order to spot usage before declaration, and assignment rules mean that the binding will always preserve the same reference.
+Granted, there's more rules to a `const` declaration than to a `var` declaration: block-scoped, TDZ, assign at declaration, no reassignment. Whereas `var` statements only signal function scoping. Rule-counting, however, doesn't offer a lot of insight. It is better to weigh these rules in terms of complexity: does the rule add or subtract complexity? In the case of `const`, block scoping means a narrower scope than function scoping, TDZ means that we don't need to scan the scope backwards from the declaration in order to spot usage before declaration, and assignment rules mean that the binding will always preserve the same reference.
 
 The more constrained statements are, the simpler a piece of code becomes. As we add constraints to what a statement might mean, code becomes less unpredictable. This is one of the reasons why statically typed programs are, generally speaking, a bit easier to read than their dynamically typed counterparts. Static typing places a big constraint on the program writer, but it also places a big constraint on how the program can be interpreted, making its code easier to understand.
 
-With these arguments in mind, it is recommended that you use +const+ where possible, as it's the statement that gives us the least possibilities to think about.
+With these arguments in mind, it is recommended that you use `const` where possible, as it's the statement that gives us the least possibilities to think about.
 
 [source,javascript]
 ----
@@ -39,45 +39,45 @@ if (condition) {
 // can't access `isReady` outside of its containing block scope
 ----
 
-When +const+ isn't an option, because the variable needs to be reassigned later, we may resort to a +let+ statement. Using +let+ carries all the benefits of +const+, except that the variable can be reassigned. This may be necessary in order to increment a counter, flip a boolean flag, or to defer initialization.
+When `const` isn't an option, because the variable needs to be reassigned later, we may resort to a `let` statement. Using `let` carries all the benefits of `const`, except that the variable can be reassigned. This may be necessary in order to increment a counter, flip a boolean flag, or to defer initialization.
 
-Consider the following example, where we take a number of megabytes and return a string such as +1.2 GB+. We're using +let+, as the values need to change if a condition is met.
+Consider the following example, where we take a number of megabytes and return a string such as `1.2 GB`. We're using `let`, as the values need to change if a condition is met.
 
 [source,javascript]
 ----
-function prettySize (input) {
+function prettySize(input) {
   let value = input
-  let unit = `MB`
+  let unit = 'MB'
   if (value >= 1024) {
     value /= 1024
-    unit = `GB`
+    unit = 'GB'
   }
   if (value >= 1024) {
     value /= 1024
-    unit = `TB`
+    unit = 'TB'
   }
   return `${ value.toFixed(1) } ${ unit }`
 }
 ----
 
-Adding support for petabytes would involve a new +if+ branch before the +return+ statement.
+Adding support for petabytes would involve a new `if` branch before the `return` statement.
 
 [source,javascript]
 ----
 if (value >= 1024) {
   value /= 1024
-  unit = `PB`
+  unit = 'PB'
 }
 ----
 
-If we were looking to make +prettySize+ easier to extend with new units, we could consider implementing a +toLargestUnit+ function that computes the +unit+ and +value+ for any given +input+ and its current unit. We could then consume +toLargestUnit+ in +prettySize+ to return the formatted string.
+If we were looking to make `prettySize` easier to extend with new units, we could consider implementing a `toLargestUnit` function that computes the `unit` and `value` for any given `input` and its current unit. We could then consume `toLargestUnit` in `prettySize` to return the formatted string.
 
-The following code snippet implements such a function. It relies on a list of supported +units+ instead of using a new branch for each unit. When the input +value+ is at least +1024+ and there's larger units, we divide the input by +1024+ and move to the next unit. Then we call +toLargestUnit+ with the updated values, which will continue recursively reducing the +value+ until it's small enough or we reach the largest unit.
+The following code snippet implements such a function. It relies on a list of supported `units` instead of using a new branch for each unit. When the input `value` is at least `1024` and there's larger units, we divide the input by `1024` and move to the next unit. Then we call `toLargestUnit` with the updated values, which will continue recursively reducing the `value` until it's small enough or we reach the largest unit.
 
 [source,javascript]
 ----
-function toLargestUnit (value, unit = `MB`) {
-  const units = [`MB`, `GB`, `TB`]
+function toLargestUnit(value, unit = 'MB') {
+  const units = ['MB', 'GB', 'TB']
   const i = units.indexOf(unit)
   const nextUnit = units[i + 1]
   if (value >= 1024 && nextUnit) {
@@ -87,13 +87,13 @@ function toLargestUnit (value, unit = `MB`) {
 }
 ----
 
-Introducing petabyte support used to involve a new +if+ branch and repeating logic, but now it's only a matter of adding the +`PB`+ string at the end of the +units+ array.
+Introducing petabyte support used to involve a new `if` branch and repeating logic, but now it's only a matter of adding the `'PB'` string at the end of the `units` array.
 
-The +prettySize+ function becomes concerned only with how to display the string, as it can offload its calculations to the +toLargestUnit+ function. This separation of concerns is also instrumental in producing more readable code.
+The `prettySize` function becomes concerned only with how to display the string, as it can offload its calculations to the `toLargestUnit` function. This separation of concerns is also instrumental in producing more readable code.
 
 [source,javascript]
 ----
-function prettySize (input) {
+function prettySize(input) {
   const { value, unit } = toLargestUnit(input)
   return `${ value.toFixed(1) } ${ unit }`
 }
@@ -103,11 +103,11 @@ Whenever a piece of code has variables that need to be reassigned, we should spe
 
 Once you've arrived at a different solution, compare it to what you used to have. Make sure that code readability has actually improved and that the implementation is still correct. Unit tests can be instrumental in this regard, as they'll ensure you don't run into the same shortcomings twice. If the refactored piece of code seems worse in terms of readability or extensibility, carefully consider going back to the previous solution.
 
-Consider the following contrived example, where we use array concatenation to generate the +result+ array. Here, too, we could change from +let+ to +const+ by making a simple adjustment.
+Consider the following contrived example, where we use array concatenation to generate the `result` array. Here, too, we could change from `let` to `const` by making a simple adjustment.
 
 [source,javascript]
 ----
-function makeCollection (size) {
+function makeCollection(size) {
   let result = []
   if (size > 0) {
     result = result.concat([1, 2])
@@ -126,11 +126,11 @@ makeCollection(2) // <- [1, 2, 3, 4]
 makeCollection(3) // <- [1, 2, 3, 4, 5, 6]
 ----
 
-We can replace the reassignment operations with +Array#push+, which accepts multiple values. If we had a dynamic list, we could use the spread operator to push as many +...items+ as necessary.
+We can replace the reassignment operations with `Array#push`, which accepts multiple values. If we had a dynamic list, we could use the spread operator to push as many `...items` as necessary.
 
 [source,javascript]
 ----
-function makeCollection (size) {
+function makeCollection(size) {
   const result = []
   if (size > 0) {
     result.push(1, 2)
@@ -149,23 +149,23 @@ makeCollection(2) // <- [1, 2, 3, 4]
 makeCollection(3) // <- [1, 2, 3, 4, 5, 6]
 ----
 
-When you do need to use +Array#concat+, you might prefer to use +[...result, 1, 2]+ instead, to make the code shorter.
+When you do need to use `Array#concat`, you might prefer to use `[...result, 1, 2]` instead, to make the code shorter.
 
 The last case we'll cover is one of refactoring. Sometimes, we write code like the next snippet, usually in the context of a larger function.
 
 [source,javascript]
 ----
-let completionText = `in progress`
+let completionText = 'in progress'
 if (completionPercent >= 85) {
-  completionText = `almost done`
+  completionText = 'almost done'
 } else if (completionPercent >= 70) {
-  completionText = `reticulating splines`
+  completionText = 'reticulating splines'
 }
 ----
 
 In these cases, it makes sense to extract the logic into a pure function. This way we avoid the initialization complexity near the top of the larger function, while clustering all the logic about computing the completion text in one place.
 
-The following piece of code shows how we could extract the completion text logic into its own function. We can then move +getCompletionText+ out of the way, making the code more linear in terms of readability.
+The following piece of code shows how we could extract the completion text logic into its own function. We can then move `getCompletionText` out of the way, making the code more linear in terms of readability.
 
 [source,javascript]
 ----
@@ -173,12 +173,12 @@ const completionText = getCompletionText(completionPercent)
 // ...
 function getCompletionText(progress) {
   if (progress >= 85) {
-    return `almost done`
+    return 'almost done'
   }
   if (progress >= 70) {
-    return `reticulating splines`
+    return 'reticulating splines'
   }
-  return `in progress`
+  return 'in progress'
 }
 ----
 
@@ -194,16 +194,16 @@ With a template literal, you can use expression interpolation, which enables you
 `Hello, ${ name }!` // after
 ----
 
-Multi-line strings as the one shown in the following snippet involve one or more of array concatenation, string concatenation, explicit +\n+ line feeds. The code is a typical example for writing an HTML string in the pre-ES6 era.
+Multi-line strings as the one shown in the following snippet involve one or more of array concatenation, string concatenation, explicit `\n` line feeds. The code is a typical example for writing an HTML string in the pre-ES6 era.
 
 [source,javascript]
 ----
-'<div>' +
-  '<p>' +
-    '<span>Hello</span>' +
-    '<span>' + name + '</span>' +
-    '<span>!</span>' +
-  '</p>' +
+'<div>' `
+  '<p>' `
+    '<span>Hello</span>' `
+    '<span>' + name + '</span>' `
+    '<span>!</span>' `
+  '</p>' `
 '</div>'
 ----
 
@@ -220,7 +220,7 @@ Using template literals, we can avoid all of the extra quotes and concatenation,
 </div>`
 ----
 
-When it comes to quotes, +'+ and +"+ are more likely to be necessary to write a string than +`+ is. For the average English phrase, you're less likely to require backticks than single or double quotes. This means that backticks lead to less escaping.footnote:[Typography enthusiasts will be quick to point out that straight quotes are typographically incorrect, meaning we should be using “ ” ‘ ’, which don't lead to escaping. The fact remains that in practice we use straight quotes in code simply because they're easier to type. Meanwhile, typographic beautification is usually offloaded to utility libraries or a compilation step such as within a Markdown compiler.]
+When it comes to quotes, `'` and `"` are more likely to be necessary when writing a string than +`+ is. For the average English phrase, you're less likely to require backticks than single or double quotes. This means that backticks lead to less escaping.footnote:[Typography enthusiasts will be quick to point out that straight quotes are typographically incorrect, meaning we should be using “ ” ‘ ’, which don't lead to escaping. The fact remains that in practice we use straight quotes in code simply because they're easier to type. Meanwhile, typographic beautification is usually offloaded to utility libraries or a compilation step such as within a Markdown compiler.]
 
 [source,javascript]
 ----
@@ -229,13 +229,9 @@ When it comes to quotes, +'+ and +"+ are more likely to be necessary to write a 
 `Alfred's cat suit is "slick".`
 ----
 
-As we've discovered in chapter 2, there's also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions.
+As we've discovered in chapter 2, there's also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multi-line support, expression interpolation, or reduced escaping.
 
-While useful, tagged templates are not as pervasively beneficial as multi-line support, expression interpolation, or reduced escaping.
-
-The combination of all of these features, warrants considering template literals as the default string flavor over single or double quoted strings.
-
-There's a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
+The combination of all of these features, warrants considering template literals as the default string flavor over single or double quoted strings. There's a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
 
 Before we begin, let's set a starting point everyone agrees on: using template literals when an expression has to be interpolated in a string is better than using quoted string concatenation.
 
@@ -261,13 +257,13 @@ console.log('Alfred\'s ' + suitKind + ' suit is "slick".')
 
 We've already settled that interpolated expressions are better than quoted string concatenation, in terms of readability, and the compiler turns those into quoted string concatenation, maximizing browser support.
 
-When it comes to the +suitKind+ variable, a template literal with no interpolation, no newlines, and no tags, the compiler simply turns it into a plain quoted string.
+When it comes to the `suitKind` variable, a template literal with no interpolation, no newlines, and no tags, the compiler simply turns it into a plain quoted string.
 
 Once we stop compiling template literals down to quoted strings, we can expect optimizing compilers to be able to interpet them as such with negligible slowdown.
 
-Another often-cited concern is syntax: as of this writing, we can't use backtick strings in JSON, object keys, +import+ declarations, or strict mode directives.
+Another often-cited concern is syntax: as of this writing, we can't use backtick strings in JSON, object keys, `import` declarations, or strict mode directives.
 
-The first statement in the following snippet of code demonstrates that a serialized JSON object couldn't represent strings using backticks. As shown on the second line, we can certainly declare an object using template literals and then serialize that object as JSON. By the time +JSON.stringify+ is invoked, the template literal has evaluated to a quoted string.
+The first statement in the following snippet of code demonstrates that a serialized JSON object couldn't represent strings using backticks. As shown on the second line, we can certainly declare an object using template literals and then serialize that object as JSON. By the time `JSON.stringify` is invoked, the template literal has evaluated to a quoted string.
 
 [source,javascript]
 ----
@@ -316,7 +312,7 @@ Attempts to import a module using template literals will also result in a syntax
 import { SayHello } from `./World`
 ----
 
-Strict mode directives have to be single or double quoted strings. As of this writing, there's no plan to allow template literals for +'use strict'+ statements. The following piece of code does not result in a syntax error, but it also does not enable strict mode. This is the biggest caveat when heavily using template literals.
+Strict mode directives have to be single or double quoted strings. As of this writing, there's no plan to allow template literals for `'use strict'` directives. The following piece of code does not result in a syntax error, but it also does not enable strict mode. This is the biggest caveat when heavily using template literals.
 
 [source,javascript]
 ----
@@ -327,7 +323,7 @@ Strict mode directives have to be single or double quoted strings. As of this wr
 
 Lastly, it could be argued that turning an existing codebase from single quoted strings to template literals would be error prone and a waste of time that could be otherwise used to develop features or fix bugs.
 
-Fortunately, we have +eslint+ at our disposal, as discussed in chapter 1. To switch our codebase to backticks by default, we can set up an +.eslintrc.json+ configuration similar to the one in the following piece of code. Note how we turn the +quotes+ rule into an error unless the code uses backticks.
+Fortunately, we have `eslint` at our disposal, as discussed in chapter 1. To switch our codebase to backticks by default, we can set up an `.eslintrc.json` configuration similar to the one in the following piece of code. Note how we turn the `quotes` rule into an error unless the code uses backticks.
 
 [source,json]
 ----
@@ -342,7 +338,7 @@ Fortunately, we have +eslint+ at our disposal, as discussed in chapter 1. To swi
 }
 ----
 
-With that in place, we can add a +lint+ script to our +package.json+, like the one in the next snippet. The +--fix+ flag ensures that any style errors found by the linter, such as using single quotes over backticks, are autocorrected.
+With that in place, we can add a `lint` script to our `package.json`, like the one in the next snippet. The `--fix` flag ensures that any style errors found by the linter, such as using single quotes over backticks, are autocorrected.
 
 [source,json]
 ----
@@ -370,8 +366,8 @@ Chapter 2 introduced us to the concept of shorthand notation. Whenever we want t
 ----
 const unitPrice = 1.25
 const tomato = {
-  name: `Tomato`,
-  color: `red`,
+  name: 'Tomato',
+  color: 'red',
   unitPrice
 }
 ----
@@ -380,7 +376,7 @@ This feature becomes particularly useful in the context of functions and informa
 
 [source,javascript]
 ----
-function getGroceryModel ({ name, unitPrice }, units) {
+function getGroceryModel({ name, unitPrice }, units) {
   return {
     name,
     unitPrice,
@@ -391,7 +387,7 @@ function getGroceryModel ({ name, unitPrice }, units) {
 getGroceryModel(tomato, 4)
 /*
 {
-  name: `Tomato`,
+  name: 'Tomato',
   unitPrice: 1.25,
   units: 4,
   totalPrice: 5
@@ -399,18 +395,18 @@ getGroceryModel(tomato, 4)
 */
 ----
 
-Note how well shorthand notation works in tandem with destructuring. If you think of destructuring as a way of pulling properties out of an object, then you can think of shorthand notation as the analog for placing properties onto an object. The following example shows how we can leverage the +getGroceryModel+ function to pull the +totalPrice+ of a grocery item when we know how many the customer is buying.
+Note how well shorthand notation works in tandem with destructuring. If you think of destructuring as a way of pulling properties out of an object, then you can think of shorthand notation as the analog for placing properties onto an object. The following example shows how we can leverage the `getGroceryModel` function to pull the `totalPrice` of a grocery item when we know how many the customer is buying.
 
 [source,javascript]
 ----
 const { totalPrice } = getGroceryModel(tomato, 4)
 ----
 
-While counterintuitive at first, usage of destructuring in function parameters results in a convenient and implicitly contract-based solution, where we know that the first parameter to +getGroceryModel+ is expected to be an object containing +name+ and +unitPrice+ properties.
+While counterintuitive at first, usage of destructuring in function parameters results in a convenient and implicitly contract-based solution, where we know that the first parameter to `getGroceryModel` is expected to be an object containing `name` and `unitPrice` properties.
 
 [source,javascript]
 ----
-function getGroceryModel ({ name, unitPrice }, units) {
+function getGroceryModel({ name, unitPrice }, units) {
   return {
     name,
     unitPrice,
@@ -427,7 +423,7 @@ Conversely, destructuring a function's output gives the reader an immediate feel
 const { name, totalPrice } = getGroceryModel(tomato, 4)
 ----
 
-Compare the last snippet with the following line of code, where we don't use destructuring. Instead, we pull the output into a +model+ binding. While subtle, the key difference is that this piece communicates less information explicitly: we need to dig deeper into the code to find out which parts of the model are being used.
+Compare the last snippet with the following line of code, where we don't use destructuring. Instead, we pull the output into a `model` binding. While subtle, the key difference is that this piece communicates less information explicitly: we need to dig deeper into the code to find out which parts of the model are being used.
 
 [source,javascript]
 ----
@@ -439,7 +435,7 @@ Destructuring can also help avoid repeating references to the host object when i
 [source,javascript]
 ----
 const summary = `${ model.units }x ${ model.name } ($${ model.unitPrice }) = $${ model.totalPrice }`
-// <- `4x Tomato ($1.25) = $5`
+// <- '4x Tomato ($1.25) = $5'
 ----
 
 However, there's a trade-off here: we avoid repeating the host object when referencing properties, but at the expense of repeating property names in our destructuring declaration statement.
@@ -460,7 +456,7 @@ const { name } = model
 const summary = `This is a ${ name } summary`
 ----
 
-Having a reference to +model.name+ directly in the +summary+ code is less noisy.
+Having a reference to `model.name` directly in the `summary` code is less noisy.
 
 [source,javascript]
 ----
@@ -474,7 +470,7 @@ When we have two properties to destructure (or two references to one property), 
 const summary = `This is a summary for ${ model.units }x  ${ model.name }`
 ----
 
-Destructuring does help in this case. It reduces the character count in the +summary+ declaration statement, and it explicitly announces the +model+ properties we're going to be using.
+Destructuring does help in this case. It reduces the character count in the `summary` declaration statement, and it explicitly announces the `model` properties we're going to be using.
 
 [source,javascript]
 ----
@@ -482,7 +478,7 @@ const { name, units } = model
 const summary = `This is a summary for ${ units }x  ${ name }`
 ----
 
-If we have two references to the same property, similar conditions apply. In the next example, we have one less reference to +model+ and one more reference to +name+ than we'd have without destructuring. This case could go either way, although the value in explicitly declaring the future usage of +name+ could be incentive enough to warrant destructuring.
+If we have two references to the same property, similar conditions apply. In the next example, we have one less reference to `model` and one more reference to `name` than we'd have without destructuring. This case could go either way, although the value in explicitly declaring the future usage of `name` could be incentive enough to warrant destructuring.
 
 [source,javascript]
 ----
@@ -497,11 +493,11 @@ Destructuring is as valuable as the amount of references to host objects it elim
 
 Matches for regular expressions are represented as an array. The matched portion of the input is placed in the first position, while each captured group is placed in subsequent elements in the array. Often, we are interested in specific captures such as the first one.
 
-In the following example, array destructuring helps us omit the whole match and place the +integer+ and +fractional+ parts of a number into corresponding variables. This way, we avoid resorting to magic numbers pointing at the indices where captured groups will reside at in the match result.
+In the following example, array destructuring helps us omit the whole match and place the `integer` and `fractional` parts of a number into corresponding variables. This way, we avoid resorting to magic numbers pointing at the indices where captured groups will reside at in the match result.
 
 [source,javascript]
 ----
-function getNumberParts (number) {
+function getNumberParts(number) {
   const rnumber = /(\d+)\.(\d+)/
   const matches = number.match(rnumber)
   if (matches === null) {
@@ -510,15 +506,15 @@ function getNumberParts (number) {
   const [, integer, fractional] = number.match(rnumber)
   return { integer, fractional }
 }
-getNumberParts(`1234.56`)
-// <- { integer: `1234`, fractional: `56` }
+getNumberParts('1234.56')
+// <- { integer: '1234', fractional: '56' }
 ----
 
-The spread operator could be used to pick up every captured group, as part of destructuring the result of +.match+.
+The spread operator could be used to pick up every captured group, as part of destructuring the result of `.match`.
 
 [source,javascript]
 ----
-function getNumberParts (number) {
+function getNumberParts(number) {
   const rnumber = /(\d+)\.(\d+)/
   const matches = number.match(rnumber)
   if (matches === null) {
@@ -527,11 +523,11 @@ function getNumberParts (number) {
   const [, ...captures] = number.match(rnumber)
   return captures
 }
-getNumberParts(`1234.56`)
-// <- [`1234`, `56`]
+getNumberParts('1234.56')
+// <- ['1234', '56']
 ----
 
-When we need to concatenate lists, we use +.concat+ to create a new array. The spread operator improves code readability by making it immediately obvious that we want to create a new collection comprised of each list of inputs, while preserving the ease of adding new elements declaratively in array literals.
+When we need to concatenate lists, we use `.concat` to create a new array. The spread operator improves code readability by making it immediately obvious that we want to create a new collection comprised of each list of inputs, while preserving the ease of adding new elements declaratively in array literals.
 
 [source,javascript]
 ----
@@ -540,14 +536,14 @@ administrators.concat(moderators)
 [...administrators, ...moderators, bob]
 ----
 
-Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in section +3.3.1+ allows us to merge objects onto a new object. Consider the following snippet where we programatically create a new object comprised of base +defaults+, user-provided +options+, and some important override property that prevails over previous properties.
+Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in section `3.3.1` allows us to merge objects onto a new object. Consider the following snippet where we programatically create a new object comprised of base `defaults`, user-provided `options`, and some important override property that prevails over previous properties.
 
 [source,javascript]
 ----
 Object.assign({}, defaults, options, { important: true })
 ----
 
-Compare that to the equivalent snippet using object spread declaratively. We have the object literal, the +defaults+ and +options+ being spread, and the +important+ property. Not using the +Object.assign+ function has greatly improved our code's readability, even letting us inline the +important+ property in the object literal declaration.
+Compare that to the equivalent snippet using object spread declaratively. We have the object literal, the `defaults` and `options` being spread, and the `important` property. Not using the `Object.assign` function has greatly improved our code's readability, even letting us inline the `important` property in the object literal declaration.
 
 [source,javascript]
 ----
@@ -558,14 +554,14 @@ Compare that to the equivalent snippet using object spread declaratively. We hav
 }
 ----
 
-Being able to visualize object spread as an +Object.assign+ helps internalize how the feature works. In the following example we've replaced the +defaults+ and +options+ variables with object literals. Since object spread relies on the same operation as +Object.assign+ for every property, we can observe how the +options+ literal overrides +speed+, with the number +3+; and why +important+ remains +true+ even when the +options+ literal attempts to override it, due to precedence.
+Being able to visualize object spread as an `Object.assign` helps internalize how the feature works. In the following example we've replaced the `defaults` and `options` variables with object literals. Since object spread relies on the same operation as `Object.assign` for every property, we can observe how the `options` literal overrides `speed`, with the number `3`; and why `important` remains `true` even when the `options` literal attempts to override it, due to precedence.
 
 [source,javascript]
 ----
 {
   ...{ // defaults
     speed: 1,
-    type: `sports`
+    type: 'sports'
   },
   ...{ // options
     speed: 3,
@@ -575,7 +571,7 @@ Being able to visualize object spread as an +Object.assign+ helps internalize ho
 }
 ----
 
-Object spread comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a +player+ object and a function call that casts a healing spell and returns a new, healthier, player object.
+Object spread comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a `player` object and a function call that casts a healing spell and returns a new, healthier, player object.
 
 [source,javascript]
 ----
@@ -588,7 +584,7 @@ const player = {
 castHealingSpell(player) // consumes 40 mana, gains 110 health
 ----
 
-The following snippet shows an implementation of +castHealingSpell+ where we create a new +player+ object without mutating the original +player+ parameter. Every property in the original +player+ object is copied over, and we can update individual properties as needed.
+The following snippet shows an implementation of `castHealingSpell` where we create a new `player` object without mutating the original `player` parameter. Every property in the original `player` object is copied over, and we can update individual properties as needed.
 
 [source,javascript]
 ----
@@ -601,7 +597,7 @@ const castHealingSpell = player => ({
 
 As we explained in chapter 3, we can use object rest properties while destructuring objects. Among other uses, such as listing unknown properties, object rest can be used to create a shallow copy of an object.
 
-In the next snippet, we'll look at three of the simplest ways in which we can create a shallow copy of an object in JavaScript. The first one uses +Object.assign+, assigning every property of +source+ to an empty object that's then returned; the second example uses object spread and is equivalent to using +Object.assign+, but a bit more gentle on the eyes; the last example relies on destructuring the rest parameter.
+In the next snippet, we'll look at three of the simplest ways in which we can create a shallow copy of an object in JavaScript. The first one uses `Object.assign`, assigning every property of `source` to an empty object that's then returned; the second example uses object spread and is equivalent to using `Object.assign`, but a bit more gentle on the eyes; the last example relies on destructuring the rest parameter.
 
 [source,javascript]
 ----
@@ -610,16 +606,16 @@ const copy = { ...source }
 const { ...copy } = source
 ----
 
-Sometimes we need to create a copy of an object, but omit some properties in the resulting copy. For instance, we may want to create a copy of +person+ while omitting their +name+, so that we only keep their metadata.
+Sometimes we need to create a copy of an object, but omit some properties in the resulting copy. For instance, we may want to create a copy of `person` while omitting their `name`, so that we only keep their metadata.
 
-One way to achieve that with plain JavaScript would be to destructure the +name+ property while placing other properties in a +metadata+ object, using the rest parameter. Even though we don't need the +name+, we've effectively "removed" that property from the +metadata+ object, which contains the rest of the properties in +person+.
+One way to achieve that with plain JavaScript would be to destructure the `name` property while placing other properties in a `metadata` object, using the rest parameter. Even though we don't need the `name`, we've effectively "removed" that property from the `metadata` object, which contains the rest of the properties in `person`.
 
 [source,javascript]
 ----
 const { name, ...metadata } = person
 ----
 
-In the following bit of code, we map a list of people to a list of `person` models, excluding personally identifiable information such as their name and social security number, while placing everything else in the +person+ rest parameter.
+In the following bit of code, we map a list of people to a list of `person` models, excluding personally identifiable information such as their name and social security number, while placing everything else in the `person` rest parameter.
 
 [source,javascript]
 ----
@@ -637,20 +633,20 @@ The following snippet displays three function declarations arranged in such a wa
 [source,javascript]
 ----
 printSum(2, 3)
-function printSum (x, y) {
+function printSum(x, y) {
   return print(sum(x, y))
 }
-function sum (x, y) {
+function sum(x, y) {
   return x + y
 }
-function print (message) {
+function print(message) {
   console.log(`printing: ${ message }`)
 }
 ----
 
 Function expressions, in contrast, must be assigned to a variable before we can execute them. Keeping with the preceding example, this means we would necessarily need to have all function expressions declared before any code can use them.
 
-The next snippet uses function expressions. Note that if we were to place the +printSum+ function call anywhere other than after all three expression assignments, our code would fail because of a variable that hasn't been initialized yet.
+The next snippet uses function expressions. Note that if we were to place the `printSum` function call anywhere other than after all three expression assignments, our code would fail because of a variable that hasn't been initialized yet.
 
 [source,javascript]
 ----
@@ -683,13 +679,13 @@ var printSum = function (x, y) {
 printSum(2, 3)
 ----
 
-While this code is a bit harder to follow, it becomes immediately obvious that we can't call +printSum+ before the function expression is assigned to that variable. In the previous piece of code this wasn't obvious because we weren't following the LIFO rule. This is reason enough to prefer function declarations for the vast majority of our code.
+While this code is a bit harder to follow, it becomes immediately obvious that we can't call `printSum` before the function expression is assigned to that variable. In the previous piece of code this wasn't obvious because we weren't following the LIFO rule. This is reason enough to prefer function declarations for the vast majority of our code.
 
-Function expressions can have a name that can be used for recursion, but that name is not accessible in the outer scope. The following example shows a function expression that's named +sum+ and assigned to a +sumMany+ variable. The +sum+ reference is used for recursion in the inner scope, but we get an error when trying to use it from the outer scope.
+Function expressions can have a name that can be used for recursion, but that name is not accessible in the outer scope. The following example shows a function expression that's named `sum` and assigned to a `sumMany` variable. The `sum` reference is used for recursion in the inner scope, but we get an error when trying to use it from the outer scope.
 
 [source,javascript]
 ----
-var sumMany = function sum (accumulator = 0, ...values) {
+var sumMany = function sum(accumulator = 0, ...values) {
   if (values.length === 0) {
     return accumulator
   }
@@ -702,7 +698,7 @@ console.log(sum())
 // <- ReferenceError: sum is not defined
 ----
 
-Arrow functions, introduced in section 2.2 of this book, are similar to function expressions. The syntax is made shorter by dropping the +function+ keyword. In arrow functions, parenthesis around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
+Arrow functions, introduced in section 2.2 of this book, are similar to function expressions. The syntax is made shorter by dropping the `function` keyword. In arrow functions, parenthesis around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
 
 The following snippet shows an arrow function explicitly returning an expression in a block statement, one that implicitly returns the expression, one that drops the parenthesis around its only parameter, and one that uses a block statement but doesn't return a value.
 
@@ -741,9 +737,9 @@ Using function declarations by default should be preferred. They are less limite
 
 That said, arrow functions are a terse and powerful way of declaring functions in short form. The smaller the function, the more valuable using arrow syntax becomes, as it helps avoid a situation where we spend more code on form than we spend on function. As a function grows larger, writing it in arrow form loses its appeal due to the aforementioned ordering and naming issues.
 
-Arrow functions are invaluable in cases where we would've otherwise declared an anonymous function expression, such as in test cases, functions passed to +new Promise()+ and +setTimeout+, or array mapping functions.
+Arrow functions are invaluable in cases where we would've otherwise declared an anonymous function expression, such as in test cases, functions passed to `new Promise()` and `setTimeout`, or array mapping functions.
 
-Consider the following example, where we use a non-blocking +wait+ promise to print a statement after five seconds. The +wait+ function takes a +delay+ in milliseconds and returns a +Promise+ which resolves after waiting for the specified time with +setTimeout+.
+Consider the following example, where we use a non-blocking `wait` promise to print a statement after five seconds. The `wait` function takes a `delay` in milliseconds and returns a `Promise` which resolves after waiting for the specified time with `setTimeout`.
 
 [source,javascript]
 ----
@@ -751,7 +747,7 @@ wait(5000).then(function () {
   console.log('waited 5 seconds!')
 })
 
-function wait (delay) {
+function wait(delay) {
   return new Promise(function (resolve) {
     setTimeout(function () {
       resolve()
@@ -760,9 +756,9 @@ function wait (delay) {
 }
 ----
 
-When switching to arrow functions, we should stick with the top level +wait+ function declaration so that we don't need to hoist it to the top of our scope. We can turn every other function into arrows to improve readability, thus removing many +function+ keywords which got in the way of interpreting what those functions do.
+When switching to arrow functions, we should stick with the top level `wait` function declaration so that we don't need to hoist it to the top of our scope. We can turn every other function into arrows to improve readability, thus removing many `function` keywords which got in the way of interpreting what those functions do.
 
-The next snippet shows how that code would look like using arrow functions. With all the keywords out of the way after refactoring, it's easier to understand the relationship between the +delay+ parameter of +wait+ and the second argument to +setTimeout+.
+The next snippet shows how that code would look like using arrow functions. With all the keywords out of the way after refactoring, it's easier to understand the relationship between the `delay` parameter of `wait` and the second argument to `setTimeout`.
 
 [source,javascript]
 ----
@@ -770,7 +766,7 @@ wait(5000).then(
   () => console.log('waited 5 seconds!')
 )
 
-function wait (delay) {
+function wait(delay) {
   return new Promise(resolve =>
     setTimeout(() => resolve(), delay)
   )
@@ -818,7 +814,7 @@ When writing prototype-based solutions the constructor code is the function itse
 
 [source,javascript]
 ----
-function Player () {
+function Player() {
   this.health = 5
 }
 Player.prototype.damage = function () {
@@ -829,7 +825,7 @@ Player.prototype.attack = function (player) {
 }
 ----
 
-In contrast, classes normalize the +constructor+ as an instance method, thus making it clear that the constructor is executed for every instance. At the same time, methods are built into the +class+ literal and rely on a syntax that's consistent with methods in object literals.
+In contrast, classes normalize the `constructor` as an instance method, thus making it clear that the constructor is executed for every instance. At the same time, methods are built into the `class` literal and rely on a syntax that's consistent with methods in object literals.
 
 [source,javascript]
 ----
@@ -848,7 +844,7 @@ class Player {
 
 Grouping instance methods under an object literal ensures class declarations aren't spread over several files, but rather unified in a single location describing their whole API.
 
-Declaring any +static+ methods as part of a +class+ literal, as opposed to dynamically injecting them onto the class, also helps centralize API knowledge. Keeping this knowledge in a central location helps code readability because developers need to go through less code to learn the +Player+ API. At the same time, when we define a convention of declaring instance and static methods on the +class+ literal, coders know not to waste time looking elsewhere for methods defined dynamically. The same applies to getters and setters, which we can also define on the +class+ literal.
+Declaring any `static` methods as part of a `class` literal, as opposed to dynamically injecting them onto the class, also helps centralize API knowledge. Keeping this knowledge in a central location helps code readability because developers need to go through less code to learn the `Player` API. At the same time, when we define a convention of declaring instance and static methods on the `class` literal, coders know not to waste time looking elsewhere for methods defined dynamically. The same applies to getters and setters, which we can also define on the `class` literal.
 
 [source,javascript]
 ----
@@ -871,7 +867,7 @@ class Player {
 }
 ----
 
-Classes also offer +extends+, simple syntactic sugar on top of prototypal inheritance. This, again, is more convenient than prototype-based solutions. With +extends+, we don't have to worry about choosing a library or otherwise dynamic method of inheriting from another class.
+Classes also offer `extends`, simple syntactic sugar on top of prototypal inheritance. This, again, is more convenient than prototype-based solutions. With `extends`, we don't have to worry about choosing a library or otherwise dynamic method of inheriting from another class.
 
 [source,javascript]
 ----
@@ -888,7 +884,7 @@ class GameMaster extends Player {
 }
 ----
 
-Using that same syntax, classes can extend native built-ins such as +Array+ or +Date+ without relying on an +<iframe>+ or shallow copying. Consider the +List+ class in the following code snippet, which skips the default +Array+ constructor in order to avoid the often-confusing single number parameter overload. It also illustrates how we could implement our own methods on top of the native +Array+ prototype.
+Using that same syntax, classes can extend native built-ins such as `Array` or `Date` without relying on an `<iframe>` or shallow copying. Consider the `List` class in the following code snippet, which skips the default `Array` constructor in order to avoid the often-confusing single number parameter overload. It also illustrates how we could implement our own methods on top of the native `Array` prototype.
 
 [source,javascript]
 ----
@@ -907,9 +903,9 @@ class List extends Array {
 const number = new List(2)
 console.log(number.first)
 // <- 2
-const items = new List(`a`, `few`, `examples`)
+const items = new List('a', 'few', 'examples')
 console.log(items.last)
-// <- `examples`
+// <- 'examples'
 ----
 
 JavaScript classes are less verbose than their prototype-based equivalents. Class sugar is thus a most welcome improvement over raw prototypal inheritance. As for the merits of using JavaScript classes, it depends. Even though classes may be compelling to use due to their improved syntax, sugar alone doesn't instantly promote classes to a wider variety of use cases.
@@ -918,13 +914,13 @@ Statically typed languages typically offer and enforce the use of classesfootnot
 
 Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
 
-Proxies empower many previously unavailable use cases, but we need to tread lightly. Solutions which involve a +Proxy+ object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
+Proxies empower many previously unavailable use cases, but we need to tread lightly. Solutions which involve a `Proxy` object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
 
-There may indeed be cases where using a +Proxy+ is warranted, particularly when it comes to developer tooling meant for development environments, where a high degree of code introspection is desirable and complexity is hidden away in the developer tool's codebase. Using +Proxy+ in application-level code bases is easily avoided, and leads to less enigmatic code.
+There may indeed be cases where using a `Proxy` is warranted, particularly when it comes to developer tooling meant for development environments, where a high degree of code introspection is desirable and complexity is hidden away in the developer tool's codebase. Using `Proxy` in application-level code bases is easily avoided, and leads to less enigmatic code.
 
-Readability hinges on code that has a clear purpose. Declarative code is readable: upon reading a piece of code, it becomes clear what it is intended to do. In contrast, using layers of indirection such as a +Proxy+ on top of an object can result in highly complex access rules that may be hard to infer when reading a piece of code. It's not that a solution involving a +Proxy+ is impossible to understand, but the fact that more code needs to be read and carefully considered before we fully understand the nuances of how the proxy layer behaves.
+Readability hinges on code that has a clear purpose. Declarative code is readable: upon reading a piece of code, it becomes clear what it is intended to do. In contrast, using layers of indirection such as a `Proxy` on top of an object can result in highly complex access rules that may be hard to infer when reading a piece of code. It's not that a solution involving a `Proxy` is impossible to understand, but the fact that more code needs to be read and carefully considered before we fully understand the nuances of how the proxy layer behaves.
 
-If we're considering proxies, then maybe objects aren't the tool for what we're trying to accomplish. Instead of going straight to a +Proxy+ indirection layer, consider whether a simple function offers just enough indirection without causing an object to behave in a manner that's inconsistent with how plain objects typically behave in JavaScript.
+If we're considering proxies, then maybe objects aren't the tool for what we're trying to accomplish. Instead of going straight to a `Proxy` indirection layer, consider whether a simple function offers just enough indirection without causing an object to behave in a manner that's inconsistent with how plain objects typically behave in JavaScript.
 
 As such, always prefer boring, static, and declarative code over smart and elegant abstractions. Boring code might be a little more repetitive than using an abstraction, but it will also be simpler, easier to understand, and decidedly a safer bet in the short-term.
 
@@ -938,7 +934,7 @@ In chapter 4 we discussed how many of the different ways in which we can manage 
 
 Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
 
-When it comes to callbacks, libraries like +async+ can help reduce complexity when we have three or more related tasks that need to be executed asynchronouslyfootnote:[A popular flow control library. You can find async on GitHub: https://mjavascript.com/out/async-library.]. Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
+When it comes to callbacks, libraries like `async` can help reduce complexity when we have three or more related tasks that need to be executed asynchronouslyfootnote:[A popular flow control library. You can find async on GitHub: https://mjavascript.com/out/async-library.]. Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
 
 Events are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Event don't lend themselves well to managing the complexity of asynchronous tasks, however.
 
@@ -947,18 +943,18 @@ The following example shows how convoluted our code could become if we wanted to
 [source,javascript]
 ----
 const tracker = emitter()
-tracker.on(`started`, multiply)
-tracker.on(`multiplied`, print)
+tracker.on('started', multiply)
+tracker.on('multiplied', print)
 start(256, 512, 1024)
-function start (...input) {
+function start(...input) {
   const sum = input.reduce((a, b) => a + b, 0)
-  tracker.emit(`started`, { sum, input })
+  tracker.emit('started', { sum, input })
 }
-function multiply ({ sum, input }) {
-  const message = `The sum of ${ input.join(`+`) } is ${ sum }`
-  tracker.emit(`multiplied`, message)
+function multiply({ sum, input }) {
+  const message = `The sum of ${ input.join('`') } is ${ sum }`
+  tracker.emit('multiplied', message)
 }
-function print (message) {
+function print(message) {
   console.log(message)
 }
 ----
@@ -971,9 +967,9 @@ Committing to promises isn't inherently bad, however, but merely a cost you need
 
 Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the language.
 
-We could use iterators to lazily describe sequences that don't necessarily need to be finite. Futher, their asynchronous counterpart could be used to describe sequences that require out-of-band processing, such as +GET+ requests, to produce elements. Those sequences can be consumed by using a +for await..of+ loop, hiding away the complexity of their asynchronous nature.
+We could use iterators to lazily describe sequences that don't necessarily need to be finite. Futher, their asynchronous counterpart could be used to describe sequences that require out-of-band processing, such as `GET` requests, to produce elements. Those sequences can be consumed by using a `for await..of` loop, hiding away the complexity of their asynchronous nature.
 
-An iterator is a useful way of describing how an object is iterated to produce a sequence. When there isn't an object to describe, generators offer a way of describing standalone sequences. Implementing an iterator is the ideal way of describing how a +Movie+ object should be iterated, perhaps using +Symbol.asyncIterator+ and fetching information about each actor and their roles for every credited actor in a movie. Without the context of a +Movie+ object, however, such an iterator would make more sense as a generator.
+An iterator is a useful way of describing how an object is iterated to produce a sequence. When there isn't an object to describe, generators offer a way of describing standalone sequences. Implementing an iterator is the ideal way of describing how a `Movie` object should be iterated, perhaps using `Symbol.asyncIterator` and fetching information about each actor and their roles for every credited actor in a movie. Without the context of a `Movie` object, however, such an iterator would make more sense as a generator.
 
 Another case where generators are useful are infinite sequences, consider the following iterator, where we produce an infinite stream of integer numbers.
 
@@ -991,20 +987,20 @@ const integers = value => ({
 })
 ----
 
-You probably remember generators are inherently iterable, meaning they follow the iterator protocol without the need for us to supply an iterator. Now compare the iterable +integers+ object to the equivalent generator function found in the next piece of code.
+You probably remember generators are inherently iterable, meaning they follow the iterator protocol without the need for us to supply an iterator. Now compare the iterable `integers` object to the equivalent generator function found in the next piece of code.
 
 [source,javascript]
 ----
-function* integers (value = 0) {
+function* integers(value = 0) {
   while (true) {
     yield value++
   }
 }
 ----
 
-Not only is the generator code shorter, but it's also far more readable. The fact that it produces an infinite sequence becomes immediately obvious due to the +while+ loop. The iterable requires us to understand that the sequence is infinite because the code never returns an element with the +done: true+ flag. Setting the seed +value+ is more natural and doesn't involve wrapping the object in a function that receives the initial parameters.
+Not only is the generator code shorter, but it's also far more readable. The fact that it produces an infinite sequence becomes immediately obvious due to the `while` loop. The iterable requires us to understand that the sequence is infinite because the code never returns an element with the `done: true` flag. Setting the seed `value` is more natural and doesn't involve wrapping the object in a function that receives the initial parameters.
 
-Promises were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows be hard. Async functions present an elegant solution to this problem, where we can describe the same promise based code using +await+ expressions.
+Promises were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows be hard. Async functions present an elegant solution to this problem, where we can describe the same promise based code using `await` expressions.
 
 Consider the following piece of code.
 
@@ -1017,11 +1013,11 @@ Promise
   .then(x => x * 2)
 ----
 
-When we use an +await+ expression, the expression on its right-hand side is coerced into a promise. When an +await+ expression is reached, the async function will pause execution until the promise -- coerced or otherwise -- has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a +catch+ handler.
+When we use an `await` expression, the expression on its right-hand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise -- coerced or otherwise -- has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
 
 [source,javascript]
 ----
-async function calculate () {
+async function calculate() {
   let x = 2
   x = await x * 2
   x = await x * 2
@@ -1030,9 +1026,9 @@ async function calculate () {
 }
 ----
 
-The beauty of +async+/+await+ lies in the fact that it fixes the biggest problem with promises, where you can't easily mix synchronous code into your flows. At the same time, async functions let you use +try+/+catch+, a construct we are unable to leverage when using callbacks. Meanwhile, +async+/+await+ manages to stay synergistic with promises by using them under the hood, always returning a +Promise+ from every async function and coercing awaited expressions into promises. Moreover, async functions accomplish all of the above while turning asynchronous code into synchronous-looking code.
+The beauty of `async`/`await` lies in the fact that it fixes the biggest problem with promises, where you can't easily mix synchronous code into your flows. At the same time, async functions let you use `try`/`catch`, a construct we are unable to leverage when using callbacks. Meanwhile, `async`/`await` manages to stay synergistic with promises by using them under the hood, always returning a `Promise` from every async function and coercing awaited expressions into promises. Moreover, async functions accomplish all of the above while turning asynchronous code into synchronous-looking code.
 
-While using +await+ expressions are optimized towards reducing complexity in serial asynchronous code, it becomes hard to reason about concurrent asynchronous code flows when replacing promises with +async+/+await+. This can be mitigated by using +await Promise.all(tasks)+ and firing those tasks concurrently before the +await+ expression is reached. Given, however, that async functions don't optimize for this use case, reading this kind of code can be confusing, so this is something to look out for. If our code is highly concurrent, we might want to consider a callback based approach.
+While using `await` expressions are optimized towards reducing complexity in serial asynchronous code, it becomes hard to reason about concurrent asynchronous code flows when replacing promises with `async`/`await`. This can be mitigated by using `await Promise.all(tasks)` and firing those tasks concurrently before the `await` expression is reached. Given, however, that async functions don't optimize for this use case, reading this kind of code can be confusing, so this is something to look out for. If our code is highly concurrent, we might want to consider a callback based approach.
 
 Once again, this leads us to critical thinking. New language features aren't always necessarily better, for all use cases. While sticking to conventions is important so that our code remains consistent and we don't spend most of our time deciding on how to better represent a small portion of a program, it is also important to have a fine balance.
 
