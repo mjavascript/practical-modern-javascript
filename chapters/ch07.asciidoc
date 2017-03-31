@@ -1534,7 +1534,7 @@ parseKeyValuePair('strong is true') // <- { key: 'strong', value: 'true' }
 parseKeyValuePair('flexible=too') // <- { key: 'flexible', value: 'too' }
 ----
 
-While array destructuring in the previous example hid our code's reliance on magic array indices, the fact remains that matches are placed in an ordered array regardless. The named capture groups proposalfootnote:[You can find the named capture groups proposal document at: https://mjavascript.com/out/regexp-named-groups.] *(in stage 3 at the time of this writing)* adds syntax like `(?<groupName>)` where we can name capturing groups, which are then returned in a `groups` property of the returned match object. The `groups` property can then be destructured from the resulting object when calling `RegExp#exec` or `String#match`.
+While array destructuring in the previous example hid our code's reliance on magic array indices, the fact remains that matches are placed in an ordered array regardless. The named capture groups proposalfootnote:[You can find the named capture groups proposal document at: https://mjavascript.com/out/regexp-named-groups.] (in stage 3 at the time of this writing) adds syntax like `(?<groupName>)` where we can name capturing groups, which are then returned in a `groups` property of the returned match object. The `groups` property can then be destructured from the resulting object when calling `RegExp#exec` or `String#match`.
 
 [source,javascript]
 ----
@@ -1603,7 +1603,7 @@ americanDateToHungarianFormat('06/09/1988') // <- '1988-09-06'
 
 ==== 7.4.4 Unicode Property Escapes
 
-The proposed Unicode property escapesfootnote:[You can find the Unicode property escapes proposal document at: https://mjavascript.com/out/unicode-property-escapes.] *(currently in stage 3)* are a new kind of escape sequence that's available in regular expressions marked with the `u` flag. This proposal adds a escape in the form of `\p{LoneUnicodePropertyNameOrValue}` for binary Unicode properties and `\p{UnicodePropertyName=UnicodePropertyValue}` for non-binary Unicode properties. In addition, `\P` is the negated version of a `\p` escape sequence.
+The proposed Unicode property escapesfootnote:[You can find the Unicode property escapes proposal document at: https://mjavascript.com/out/unicode-property-escapes.] (currently in stage 3) are a new kind of escape sequence that's available in regular expressions marked with the `u` flag. This proposal adds a escape in the form of `\p{LoneUnicodePropertyNameOrValue}` for binary Unicode properties and `\p{UnicodePropertyName=UnicodePropertyValue}` for non-binary Unicode properties. In addition, `\P` is the negated version of a `\p` escape sequence.
 
 The Unicode standard defines properties for every symbol. Armed with these properties, one may make advanced queries about Unicode characters. For example, symbols in the greek alphabet have a `Script` property set to `Greek`. We could use the new escapes to match any greek Unicode symbol.
 
@@ -1679,7 +1679,7 @@ getNonJavaScriptFilename('index.js') // <- null
 getNonJavaScriptFilename('index.php') // <- 'index'
 ----
 
-The proposal for lookbehindfootnote:[You can find the lookbehind assertions proposal document at: https://mjavascript.com/out/regexp-lookbehind.] *(stage 3)* introduces positive and negative lookbehind assertions, denoted with `(?<=…)` and `(?<!…)` respectively. These assertions can be used to ensure a pattern we want to match is or isn't preceded by another given pattern. The following snippet uses a positive lookbehind to match the digits in dollar amounts, but not for amounts in euros.
+The proposal for lookbehindfootnote:[You can find the lookbehind assertions proposal document at: https://mjavascript.com/out/regexp-lookbehind.] (stage 3) introduces positive and negative lookbehind assertions, denoted with `(?<=…)` and `(?<!…)` respectively. These assertions can be used to ensure a pattern we want to match is or isn't preceded by another given pattern. The following snippet uses a positive lookbehind to match the digits in dollar amounts, but not for amounts in euros.
 
 [source,javascript]
 ----
@@ -1713,7 +1713,7 @@ getDollarAmount('€12.34') // <- '12.34'
 
 ==== 7.4.6 A New `/s` "`dotAll`" Flag
 
-When using the `.` pattern, we typically expect to match every single character. In JavaScript, however, a `.` expression doesn't match astral characters *(which can be fixed by adding the `u` flag)* nor line terminators.
+When using the `.` pattern, we typically expect to match every single character. In JavaScript, however, a `.` expression doesn't match astral characters (which can be fixed by adding the `u` flag) nor line terminators.
 
 [source,javascript]
 ----
@@ -1733,7 +1733,7 @@ rcharacter.test('\t') // <- true
 rcharacter.test('\n') // <- true
 ----
 
-The `dotAll` proposalfootnote:[You can find the "'dotAll' flag proposal document at: https://mjavascript.com/out/regexp-dotall.] *(stage 3)* adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
+The `dotAll` proposalfootnote:[You can find the "'dotAll' flag proposal document at: https://mjavascript.com/out/regexp-dotall.] (stage 1) adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
 
 [source,javascript]
 ----
