@@ -175,11 +175,13 @@ Number.isFinite('10')
 // <- false, because '10' is not a number
 ----
 
-Creating a polyfill for `Number.isFinite` would involve returning `false` for non-numeric values, effectively turning off the type-casting feature, and then calling `isFinite` on the input value.
+Creating a ponyfillfootnote:[Like polyfills, ponyfills are user-land implementations of features that aren't available in every JavaScript runtime. While polyfills try to patch the runtime environment so that it behaves as if the feature was indeed available on the runtime, ponyfills implement the missing functionality as standalone modules that don't pollute the runtime environment. This has the benefit of not breaking expectations third party libraries (that don't know about your polyfill) may have about the environment. You can learn more about the distinction at: https://mjavascript.com/out/ponyfills.] for `Number.isFinite` would involve returning `false` for non-numeric values, effectively turning off the type-casting feature, and then calling `isFinite` on the input value.
 
 [source,javascript]
 ----
-Number.isFinite = value => typeof value === 'number' && isFinite(value)
+function numberIsFinite(value) {
+  return typeof value === 'number' && isFinite(value)
+}
 ----
 
 ==== 7.1.4 `Number.parseInt`
@@ -275,11 +277,13 @@ console.log(Number.isInteger(-10)) // <- true
 console.log(Number.isInteger(10.3)) // <- false
 ----
 
-You might want to consider the following code snippet as a polyfill for `Number.isInteger`. The modulus operator returns the remainder of dividing the same operands. If we divide by one, we're effectively getting the decimal part. If that's `0`, then it means the number is an integer.
+You might want to consider the following code snippet as a ponyfill for `Number.isInteger`. The modulus operator returns the remainder of dividing the same operands. If we divide by one, we're effectively getting the decimal part. If that's `0`, then it means the number is an integer.
 
 [source,javascript]
 ----
-Number.isInteger = value => Number.isFinite(value) && value % 1 === 0
+function numberIsInteger(value) {
+  return Number.isFinite(value) && value % 1 === 0
+}
 ----
 
 Next up we'll dive into floating point arithmetic, which is well-documented as having interesting corner cases.
@@ -536,11 +540,13 @@ Math.trunc('one') // <- NaN, because Number('one') is NaN
 Math.trunc('123.456') // <- 123, because Number('123.456') is 123.456
 ----
 
-Creating a simple polyfill for `Math.trunc` would involve checking whether the value is greater than zero and applying one of `Math.floor` or `Math.ceil`, as shown in the following code snippet.
+Creating a simple ponyfill for `Math.trunc` would involve checking whether the value is greater than zero and applying one of `Math.floor` or `Math.ceil`, as shown in the following code snippet.
 
 [source,javascript]
 ----
-Math.trunc = value => value > 0 ? Math.floor(value) : Math.ceil(value)
+function mathTrunc(value) {
+  return value > 0 ? Math.floor(value) : Math.ceil(value)
+}
 ----
 
 ==== 7.2.3 `Math.cbrt`
@@ -632,11 +638,13 @@ Math.log10(1000)
 // <- 3
 ----
 
-You could polyfill `Math.log10` using the `Math.LN10` constant.
+You could ponyfill `Math.log10` using the `Math.LN10` constant.
 
 [source,javascript]
 ----
-Math.log10 = value => Math.log(x) / Math.LN10
+function mathLog10(value) {
+  return Math.log(x) / Math.LN10
+}
 ----
 
 And then there's `Math.log2`.
@@ -651,20 +659,22 @@ Math.log2(1024)
 // <- 10
 ----
 
-You could polyfill `Math.log2` using the `Math.LN2` constant.
+You could ponyfill `Math.log2` using the `Math.LN2` constant.
 
 [source,javascript]
 ----
-Math.log2 = value => Math.log(x) / Math.LN2
+function mathLog2(value) {
+  return Math.log(x) / Math.LN2
+}
 ----
 
-Note that the polyfilled version won't be as precise as `Math.log2`, as demonstrated in the following example.
+Note that the ponyfill version won't be as precise as `Math.log2`, as demonstrated in the following example.
 
 [source,javascript]
 ----
 Math.log2(1 << 29) // native implementation
 // <- 29
-Math.log2(1 << 29) // polyfill implementation
+mathLog2(1 << 29) // ponyfill implementation
 // <- 29.000000000000004
 ----
 
@@ -705,12 +715,15 @@ Math.hypot(1, 2, 3)
 // <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
 ----
 
-We could polyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.]
+We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.]
 
 [source,javascript]
 ----
-Math.hypot = (...values) =>
-  Math.sqrt(values.reduce((sum, value) => sum + value * value, 0))
+function mathHypot(...values) {
+  const accumulateSquares (total, value) => total + value * value
+  const squares = values.reduce(accumulateSquares, 0)
+  return Math.sqrt(squares)
+}
 ----
 
 Our handmade function is, surprisingly, more precise than the native one for this particular use case. In the next code sample, we see the hand-rolled `hypot` function offers precision with one more decimal place.
@@ -719,7 +732,7 @@ Our handmade function is, surprisingly, more precise than the native one for thi
 ----
 Math.hypot(1, 2, 3) // native implementation
 // <- 3.741657386773941
-Math.hypot(1, 2, 3) // polyfill implementation
+mathHypot(1, 2, 3) // ponyfill implementation
 // <- 3.7416573867739413
 ----
 
@@ -762,7 +775,7 @@ greet('Gandalf')
 // <- 'Hello, Gandalf!'
 ----
 
-Strings are getting a number of new methods in ES6, besides the template literal syntax. These can be categorized as string manipulation methods and unicode related methods. Let's start with the former.
+Besides the template literal syntax, strings got a number of new methods in ES6. These can be categorized as string manipulation methods and Unicode related methods. Let's start with the former.
 
 ==== 7.3.1 `String#startsWith`
 
@@ -1059,9 +1072,9 @@ Let's switch protocols and learn about Unicode.
 
 ==== 7.3.6 Unicode
 
-JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the `[U`0000, U`FFFF]` range -- also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the `'\u3456'` syntax. You could also represent code units in the `[U`0000, U`0255]` range using the `\x00..\xff` notation. For instance, `'\xbb'` represents `'»'`, the `U`00BB` code point, as you can verify by doing `parseInt('bb', 16)` -- or `String.fromCharCode(0xbb)`.
+JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the `[U+0000, U+FFFF]` range -- also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the `'\u3456'` syntax. You could also represent code units in the `[U+0000, U+0255]` range using the `\x00..\xff` notation. For instance, `'\xbb'` represents `'»'`, the `U+00BB` code point, as you can also verify by doing `String.fromCharCode(0xbb)`.
 
-For code points beyond `U`FFFF`, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji `'🐎'` code point is represented with the `'\ud83d\udc0e'` contiguous code units. In ES6 notation you can also represent code points using the `'\u{1f40e}'` notation (that example is also the horse emoji).
+For code points beyond `U+FFFF`, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji `'🐎'` code point is represented with the `'\ud83d\udc0e'` contiguous code units. In ES6 notation you can also represent code points using the `'\u{1f40e}'` notation (that example is also the horse emoji).
 
 Note that the internal representation hasn't changed, so there's still two code units behind that single code point. In fact, `'\u{1f40e}'.length` evaluates to `2`, one for each code unit.
 
@@ -1091,7 +1104,7 @@ Object.keys('🐎👱❤')
 // <- ['0', '1', '2', '3', '4']
 ----
 
-If we now consider a `for` loop, we can observe more clearly how this is a problem. In the following example, we wanted to exfill each individual emoji from the `text` string, but we got each code unit instead of the code points they form.
+If we now consider a `for` loop, we can observe more clearly how this is a problem. In the following example, we wanted to extract each individual emoji from the `text` string, but we got each code unit instead of the code points they form.
 
 [source,javascript]
 ----
@@ -1230,7 +1243,7 @@ const text = '\ud83d\udc0e\ud83d\udc71\u2764'
 // <- [0x1f40e, 0x1f471, 0x2764]
 ----
 
-You can take the base-16 representation of those base-10 code points, and use them to create a string with the new Unicode code point escape syntax of `\u{codePoint}`. This syntax allows you to represent Unicode code points that are beyond the BMP. That is, code points outside the `[U`0000, U`FFFF]` range that are typically represented using the `\u1234` syntax.
+You can take the base-16 representation of those base-10 code points, and use them to create a string with the new Unicode code point escape syntax of `\u{codePoint}`. This syntax allows you to represent Unicode code points that are beyond the BMP. That is, code points outside the `[U+0000, U+FFFF]` range that are typically represented using the `\u1234` syntax.
 
 Let's start by updating our example to print the hexadecimal version of our code points.
 
@@ -1389,13 +1402,464 @@ compare(normal, irregular)
 // <- true
 ----
 
-=== 7.4 Array
+=== 7.4 Regular Expressions
+
+In this section we'll take a look at regular expressions in and after ES6. There's a couple of regular expressions flags which were introduced in ES6: the `/y` or sticky flag, and the `/u` or Unicode flag. Then we'll discuss five proposals which are making their way through the ECMAScript specification development process at TC39.
+
+==== 7.4.1 Sticky Matching Flag `/y`
+
+The sticky matching `y` flag introduced in ES6 is similar to the global `g` flag. Like global regular expressions, sticky ones are typically used to match several times until the input string is exhausted. Sticky regular expressions move `lastIndex` to the position after the last match, just like global regular expressions. The only difference is that a sticky regular expression must start matching where the previous match left off, unlike global regular expressions that move onto the rest of the input string when the regular expression goes unmatched at any given position.
+
+The following example illustrates the difference between the two. Given an input string like `'haha haha haha'` and the `/ha/` regular expression, the global flag will match every occurrence of `'ha'`, while the sticky flag will only match the first two, since the third occurrence doesn't match starting at index `4`, but rather at index `5`.
+
+[source,javascript]
+----
+function matcher(regex, input) {
+  return () => {
+    const match = regex.exec(input)
+    const lastIndex = regex.lastIndex
+    return { lastIndex, match }
+  }
+}
+const input = 'haha haha haha'
+const nextGlobal = matcher(/ha/g, input)
+console.log(nextGlobal()) // <- { lastIndex: 2, match: ['ha'] }
+console.log(nextGlobal()) // <- { lastIndex: 4, match: ['ha'] }
+console.log(nextGlobal()) // <- { lastIndex: 7, match: ['ha'] }
+const nextSticky = matcher(/ha/y, input)
+console.log(nextSticky()) // <- { lastIndex: 2, match: ['ha'] }
+console.log(nextSticky()) // <- { lastIndex: 4, match: ['ha'] }
+console.log(nextSticky()) // <- { lastIndex: 0, match: null }
+----
+
+We can verify that the sticky matcher would work if we forcefully moved `lastIndex` with the next piece of code.
+
+[source,javascript]
+----
+const rsticky = /ha/y
+const nextSticky = matcher(rsticky, input)
+console.log(nextSticky()) // <- { lastIndex: 2, match: ['ha'] }
+console.log(nextSticky()) // <- { lastIndex: 4, match: ['ha'] }
+rsticky.lastIndex = 5
+console.log(nextSticky()) // <- { lastIndex: 7, match: ['ha'] }
+----
+
+Sticky matching was added to JavaScript as a way of improving the performance of lexical analyzers in compilers, which heavily rely on regular expressions.
+
+==== 7.4.2 Unicode Flag `/u`
+
+ES6 also introduced a `u` flag. The `u` stands for Unicode, but this flag can also be thought of as a more strict version of regular expressions.
+
+Without the `u` flag, the following snippet has a regular expression containing an `'a'` character literal that was unnecessarily escaped.
+
+[source,javascript]
+----
+/\a/.test('ab')
+// <- true
+----
+
+Using an escape sequence for an unreserved character such as `a` in a regular expression with the `u` flag results in an error, as shown in the following bit of code.
+
+[source,javascript]
+----
+/\a/u.test('ab')
+// <- SyntaxError: Invalid regular expression: /\a/: Invalid escape
+----
+
+The following example attempts to embed the horse emoji in a regular expression by way of the `\u{1f40e}` notation which ES6 introduced for strings like `'\u{1f40e}'`, but the regular expression fails to match against the horse emoji. Without the `u` flag, the `\u{…}` pattern is interpreted as having an unnecessarily escaped `u` character followed by the rest of the sequence.
+
+[source,javascript]
+----
+/\u{1f40e}/.test('🐎') // <- false
+/\u{1f40e}/.test('u{1f40e}') // <- true
+----
+
+The `u` flag introduces support for Unicode code point escapes, like the `\u{1f40e}` horse emoji, within regular expressions.
+
+[source,javascript]
+----
+/\u{1f40e}/u.test('🐎')
+// <- true
+----
+
+Without the `u` flag, the `.` pattern matches any BMP symbol except for line terminators. The following example shows `U+1D11E MUSICAL SYMBOL G CLEF`, an astral symbol that wouldn't match the dot pattern in plain regular expressions.
+
+[source,javascript]
+----
+const rdot = /./
+rdot.test('a') // <- true
+rdot.test('\n') // <- false
+rdot.test('\u{1d11e}') // <- false
+----
+
+When using the `u` flag, Unicode symbols that aren't on the BMP are matched as well. The next snippet shows how the astral symbol matches when the flag is set.
+
+[source,javascript]
+----
+const rdot = /./u
+rdot.test('a') // <- true
+rdot.test('\n') // <- false
+rdot.test('\u{1d11e}') // <- true
+----
+
+When the `u` flag is set, similar Unicode awareness improvements can be found in quantifiers and character classes, both of which treat each Unicode code point as a single symbol, instead of matching on the first code unit only. Insensitive case matching with the `i` flag performs Unicode case folding when the `u` flag is set as well, which is used tonormalize code points in both the input string and the regular expression.
+
+For more details around the `u` flag in regular expressions, read this piece by Mathias Bynens titled "Unicode-aware regular expressions in ECMAScript 6 by Mathias Bynens": https://mjavascript.com/out/regexp-unicode.
+
+==== 7.4.3 Named Capture Groups
+
+Up until now, JavaScript regular expressions could group matches in numbered capturing groups and non-capturing groups. In the next snippet we're using a couple of groups to extract a key and value from an input string containing a key value pair delimited by `'='`.
+
+[source,javascript]
+----
+function parseKeyValuePair(input) {
+  const rattribute = /([a-z]+)=([a-z]+)/
+  const [, key, value] = rattribute.exec(input)
+  return { key, value }
+}
+parseKeyValuePair('strong=true')
+// <- { key: 'strong', value: 'true' }
+----
+
+There's also non-capturing groups, which are discarded and not present in the final result, but are still useful for matching. The following example supports input with key value pairs delimited by `' is '` in addition to `'='`.
+
+[source,javascript]
+----
+function parseKeyValuePair(input) {
+  const rattribute = /([a-z]+)(?:=|\sis\s)([a-z]+)/
+  const [, key, value] = rattribute.exec(input)
+  return { key, value }
+}
+parseKeyValuePair('strong is true') // <- { key: 'strong', value: 'true' }
+parseKeyValuePair('flexible=too') // <- { key: 'flexible', value: 'too' }
+----
+
+While array destructuring in the previous example hid our code's reliance on magic array indices, the fact remains that matches are placed in an ordered array regardless. The named capture groups proposalfootnote:[You can find the named capture groups proposal document at: https://mjavascript.com/out/regexp-named-groups.] *(in stage 3 at the time of this writing)* adds syntax like `(?<groupName>)` where we can name capturing groups, which are then returned in a `groups` property of the returned match object. The `groups` property can then be destructured from the resulting object when calling `RegExp#exec` or `String#match`.
+
+[source,javascript]
+----
+function parseKeyValuePair(input) {
+  const rattribute = /(?<key>[a-z]+)(?:=|\sis\s)(?<value>[a-z]+)/
+  const { group } = rattribute.exec(input)
+  return groups
+}
+parseKeyValuePair('strong=true') // <- { key: 'strong', value: 'true' }
+parseKeyValuePair('flexible=too') // <- { key: 'flexible', value: 'too' }
+----
+
+JavaScript regular expressions support backreferences, where captured groups can be reused to look for duplicates. The following snippet uses a backreference for the first capturing group to identify cases where a username is the same as a password in a piece of `'user:password'` input.
+
+[source,javascript]
+----
+function hasSameUserAndPassword(input) {
+  const rduplicate = /([^:]+):\1/
+  return rduplicate.exec(input) !== null
+}
+hasSameUserAndPassword('root:root') // <- true
+hasSameUserAndPassword('root:pF6GGlyPhoy1!9i') // <- false
+----
+
+The named capture groups proposal adds support for named backreferences, which refer back to named groups.
+
+[source,javascript]
+----
+function hasSameUserAndPassword(input) {
+  const rduplicate = /(?<user>[^:]+):\k<user>/
+  return rduplicate.exec(input) !== null
+}
+hasSameUserAndPassword('root:root') // <- true
+hasSameUserAndPassword('root:pF6GGlyPhoy1!9i') // <- false
+----
+
+The `\k<groupName>` reference can be used in tandem with numbered references, but the latter are better avoided when already using named references.
+
+Lastly, named groups can be referenced from the replacement passed to `String#replace`. In the next code snippet we use `String#replace` and named groups to change an American date string to use Hungarian formatting.
+
+[source,javascript]
+----
+function americanDateToHungarianFormat(input) {
+  const ramerican = /(?<month>\d{2})\/(?<day>\d{2})\/(?<year>\d{4})/
+  const hungarian = input.replace(ramerican, '$<year>-$<month>-$<day>')
+  return hungarian
+}
+americanDateToHungarianFormat('06/09/1988')
+// <- '1988-09-06'
+----
+
+If the second argument to `String#replace` is a function, then the named groups can be accessed via a new parameter called `groups` that is at the end of the parameter list. The signature for that function now is `(match, ...captures, groups)`. In the following example, note how we're using a template literal that's similar to the replacement string found in the last example. The fact that replacement strings follow a `$<groupName>` syntax as opposed to a +`${ groupName }`+ syntax means we can name groups in replacement strings without having to resort to escape codes if we were using template literals.
+
+[source,javascript]
+----
+function americanDateToHungarianFormat(input) {
+  const ramerican = /(?<month>\d{2})\/(?<day>\d{2})\/(?<year>\d{4})/
+  const hungarian = input.replace(ramerican, (match, capture1, capture2, capture3, groups) => {
+    const { month, day, year } = groups
+    return `${ year }-${ month }-${ day }`
+  })
+  return hungarian
+}
+americanDateToHungarianFormat('06/09/1988') // <- '1988-09-06'
+----
+
+==== 7.4.4 Unicode Property Escapes
+
+The proposed Unicode property escapesfootnote:[You can find the Unicode property escapes proposal document at: https://mjavascript.com/out/unicode-property-escapes.] *(currently in stage 3)* are a new kind of escape sequence that's available in regular expressions marked with the `u` flag. This proposal adds a escape in the form of `\p{LoneUnicodePropertyNameOrValue}` for binary Unicode properties and `\p{UnicodePropertyName=UnicodePropertyValue}` for non-binary Unicode properties. In addition, `\P` is the negated version of a `\p` escape sequence.
+
+The Unicode standard defines properties for every symbol. Armed with these properties, one may make advanced queries about Unicode characters. For example, symbols in the greek alphabet have a `Script` property set to `Greek`. We could use the new escapes to match any greek Unicode symbol.
+
+[source,javascript]
+----
+function isGreekSymbol(input) {
+  const rgreek = /^\p{Script=Greek}$/u
+  return rgreek.test(input)
+}
+isGreekSymbol('π')
+// <- true
+----
+
+Or, using `\P`, we could match non-greek Unicode symbols.
+
+[source,javascript]
+----
+function isNonGreekSymbol(input) {
+  const rgreek = /^\P{Script=Greek}$/u
+  return rgreek.test(input)
+}
+isNonGreekSymbol('π')
+// <- false
+----
+
+When we need to match every Unicode decimal number symbol, and not just `[0-9]` like `\d` does, we could use `\p{Decimal_Number}` as shown next.
+
+[source,javascript]
+----
+function isDecimalNumber(input) {
+  const rdigits = /^\p{Decimal_Number}+$/u
+  return rdigits.test(input)
+}
+isDecimalNumber('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼')
+// <- true
+----
+
+For an exhaustive overview of supported Unicode properties and values visit: https://mjavascript.com/out/unicode-property-list.
+
+==== 7.4.5 Lookbehind Assertions
+
+JavaScript has had positive lookahead assertions for a long time. That feature allows us to match an expression but only if it's followed by another expression. These assertions are expressed as `(?=…)`. Regardless of whether a lookahead assertion matches, the results of that match are discarded and no characters of the input string are consumed.
+
+The following example uses a positive lookahead to test whether an input string has a sequence of letters followed by `.js`, in which case it returns the filename without the `.js` part.
+
+[source,javascript]
+----
+function getJavaScriptFilename(input) {
+  const rfile = /^(?<filename>[a-z]+)(?=\.js)\.[a-z]+$/
+  const match = rfile.exec(input)
+  if (match === null) {
+    return null
+  }
+  return match.groups.filename
+}
+getJavaScriptFilename('index.js') // <- 'index'
+getJavaScriptFilename('index.php') // <- null
+----
+
+There are also negative lookahead assertions, which are expressed as `(?!…)` as opposed to `(?=…)` for positive lookaheads. In this case, the assertion succeeds only if the lookahead expression isn't matched. The next bit of code uses a negative lookahead and we can observe how the results are flipped: now any expression other than `'.js'` results in a passed assertion.
+
+[source,javascript]
+----
+function getNonJavaScriptFilename(input) {
+  const rfile = /^(?<filename>[a-z]+)(?!\.js)\.[a-z]+$/
+  const match = rfile.exec(input)
+  if (match === null) {
+    return null
+  }
+  return match.groups.filename
+}
+getNonJavaScriptFilename('index.js') // <- null
+getNonJavaScriptFilename('index.php') // <- 'index'
+----
+
+The proposal for lookbehindfootnote:[You can find the lookbehind assertions proposal document at: https://mjavascript.com/out/regexp-lookbehind.] *(stage 3)* introduces positive and negative lookbehind assertions, denoted with `(?<=…)` and `(?<!…)` respectively. These assertions can be used to ensure a pattern we want to match is or isn't preceded by another given pattern. The following snippet uses a positive lookbehind to match the digits in dollar amounts, but not for amounts in euros.
+
+[source,javascript]
+----
+function getDollarAmount(input) {
+  const rdollars = /^(?<=\$)(?<amount>\d+(?:\.\d+)?)$/
+  const match = rdollars.exec(input)
+  if (match === null) {
+    return null
+  }
+  return match.groups.amount
+}
+getDollarAmount('$12.34') // <- '12.34'
+getDollarAmount('€12.34') // <- null
+----
+
+On the other hand, a negative lookbehind could be used to match numbers that aren't preceded by a dollar sign.
+
+[source,javascript]
+----
+function getDollarAmount(input) {
+  const rnumbers = /^(?<!\$)(?<amount>\d+(?:\.\d+)?)$/
+  const match = rnumbers.exec(input)
+  if (match === null) {
+    return null
+  }
+  return match.groups.amount
+}
+getDollarAmount('$12.34') // <- null
+getDollarAmount('€12.34') // <- '12.34'
+----
+
+==== 7.4.6 A New `/s` "`dotAll`" Flag
+
+When using the `.` pattern, we typically expect to match every single character. In JavaScript, however, a `.` expression doesn't match astral characters *(which can be fixed by adding the `u` flag)* nor line terminators.
+
+[source,javascript]
+----
+const rcharacter = /^.$/
+rcharacter.test('a') // <- true
+rcharacter.test('\t') // <- true
+rcharacter.test('\n') // <- false
+----
+
+This sometimes drives developers to write other kinds of expressions to synthesize a pattern that matches any character. The expression in the next bit of code matches any character that's either a whitespace character or a non-whitespace character, delivering the behavior we'd expect from the `.` pattern matcher.
+
+[source,javascript]
+----
+const rcharacter = /^[\s\S]$/
+rcharacter.test('a') // <- true
+rcharacter.test('\t') // <- true
+rcharacter.test('\n') // <- true
+----
+
+The `dotAll` proposalfootnote:[You can find the "'dotAll' flag proposal document at: https://mjavascript.com/out/regexp-dotall.] *(stage 3)* adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
+
+[source,javascript]
+----
+const rcharacter = /^.$/s
+rcharacter.test('a') // <- true
+rcharacter.test('\t') // <- true
+rcharacter.test('\n') // <- true
+----
+
+==== 7.4.7 `String#matchAll`
+
+Often, when we have a regular expression with a global or sticky flag, we want to iterate over the set of captured groups for each match. Currently, it can be a bit of a hassle to produce the list of matches: we need to collect the captured groups using `String#match` or `RegExp#exec` in a loop, until the regular expression doesn't match the input starting at the `lastIndex` position property. In the following piece of code, the `parseAttributes` generator function does just that for a given regular expression.
+
+[source,javascript]
+----
+function* parseAttributes(input) {
+  const rattributes = /(\w+)="([^"]+)"\s/ig
+  while (true) {
+    const match = rattributes.exec(input)
+    if (match === null) {
+      break
+    }
+    const [ , key, value] = match
+    yield [key, value]
+  }
+}
+const html = '<input type="email" placeholder="hello@mjavascript.com" />'
+console.log(...parseAttributes(html))
+// <- ['type', 'email'] ['placeholder', 'hello@mjavascript.com']
+----
+
+One problem with this approach is that it's tailor-made for our regular expression and its capturing groups. We could fix that issue by creating a `matchAll` generator which is only concerned about looping over matches and collecting sets of captured groups, as shown in the following snippet.
+
+[source,javascript]
+----
+function* matchAll(regex, input) {
+  while (true) {
+    const match = regex.exec(input)
+    if (match === null) {
+      break
+    }
+    const [ , ...captures] = match
+    yield captures
+  }
+}
+function* parseAttributes(input) {
+  const rattributes = /(\w+)="([^"]+)"\s/ig
+  yield* matchAll(rattributes, input)
+}
+const html = '<input type="email" placeholder="hello@mjavascript.com" />'
+console.log(...parseAttributes(html))
+// <- ['type', 'email'] ['placeholder', 'hello@mjavascript.com']
+----
+
+A bigger source of confusion is that `rattributes` mutates its `lastIndex` property on each call to `RegExp#exec`, which is how it can track the position after the last match. When there are no matches left, `lastIndex` is reset back to `0`. A problem arises when we don't iterate over all possible matches for a piece of input in one go -- which would reset `lastIndex` to `0` -- and then we use the regular expression on a second piece of input, obtaining unexpected results.
+
+While it looks like our `matchAll` implementation wouldn't fall victim of this given it loops over all matches, it's be possible to iterate over the generator by hand, meaning that we'd run into trouble if we reused the same regular expression, as shown in the next bit of code. Note how the second matcher should report `['type', 'text']` but instead starts at an index much further ahead than `0`, even misreporting the `'placeholder'` key as `'laceholder'`.
+
+[source,javascript]
+----
+const rattributes = /(\w+)="([^"]+)"\s/ig
+const email = '<input type="email" placeholder="hello@mjavascript.com" />'
+const emailMatcher = matchAll(rattributes, email)
+const address = '<input type="text" placeholder="Enter your business address" />'
+const addressMatcher = matchAll(rattributes, address)
+console.log(emailMatcher.next().value)
+// <- ['type', 'email']
+console.log(addressMatcher.next().value)
+// <- ['laceholder', 'Enter your business address']
+----
+
+One solution would be to change `matchAll` so that `lastIndex` is always `0` when we yield back to the consumer code, while keeping track of `lastIndex` internally so that we can pick up where we left off in each step of the sequence.
+
+The following piece of code shows that indeed, that'd fix the problems we're observing. Reusable global regular expressions are often avoided for this very reason: so that we don't have to worry about resetting `lastIndex` after every use.
+
+[source,javascript]
+----
+function* matchAll(regex, input) {
+  let lastIndex = 0
+  while (true) {
+    regex.lastIndex = lastIndex
+    const match = regex.exec(input)
+    if (match === null) {
+      break
+    }
+    lastIndex = regex.lastIndex
+    regex.lastIndex = 0
+    const [ , ...captures] = match
+    yield captures
+  }
+}
+const rattributes = /(\w+)="([^"]+)"\s/ig
+const email = '<input type="email" placeholder="hello@mjavascript.com" />'
+const emailMatcher = matchAll(rattributes, email)
+const address = '<input type="text" placeholder="Enter your business address" />'
+const addressMatcher = matchAll(rattributes, address)
+console.log(emailMatcher.next().value)
+// <- ['type', 'email']
+console.log(addressMatcher.next().value)
+// <- ['type', 'text']
+console.log(emailMatcher.next().value)
+// <- ['placeholder', 'hello@mjavascript.com']
+console.log(addressMatcher.next().value)
+// <- ['placeholder', 'Enter your business address']
+----
+
+The `String#matchAll` proposalfootnote:[You can find the String#matchAll proposal document at: https://mjavascript.com/out/string-matchall.] introduces a new method for the string prototype which would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` object as opposed to just the `captures` in the example above. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the sequence.
+
+[source,javascript]
+----
+const rattributes = /(?<key>\w+)="(?<value>[^"]+)"\s/ig
+const email = '<input type="email" placeholder="hello@mjavascript.com" />'
+for (const { groups: { key, value } } of email.matchAll(rattributes)) {
+  console.log(`${ key }: ${ value }`)
+}
+// <- type: email
+// <- placeholder: hello@mjavascript.com
+----
+
+=== 7.5 Array
 
 Over the years, libraries like Underscore and Lodash spoke loudly of missing features when it came to arrays. As a result, ES5 brought in heaps of functional methods to arrays: `Array#filter`, `Array#map`, `Array#reduce`, `Array#reduceRight`, `Array#forEach`, `Array#some`, and `Array#every`.
 
 ES6 brings a few more methods that will help manipulate, fill, and filter arrays.
 
-==== 7.4.1 `Array.from`
+==== 7.5.1 `Array.from`
 
 
 Before ES6, JavaScript developers often needed to cast `arguments` to a function into an array.
@@ -1431,12 +1895,12 @@ cast('a', 'b')
 // <- ['a', 'b']
 ----
 
-You may also want to cast `NodeList` DOM element collections, like those returned from `document.querySelectorAll`, through the spread operator. This can be helpful when we need access to native array methods like `Array#map` or `Array#filter`. Once again, this is made possible thanks to ES6 adding conformance to the iterator protocol for `NodeList`.
+You may also want to cast `NodeList` DOM element collections, like those returned from `document.querySelectorAll`, through the spread operator. This can be helpful when we need access to native array methods like `Array#map` or `Array#filter`. This is possible because the DOM standard upgraded `NodeList` to an iterable, after ES6 defined the iterator protocol.
 
 [source,javascript]
 ----
 [...document.querySelectorAll('div')]
-// <- [<div>, <div>, <div>, ...]
+// <- [<div>, <div>, <div>, …]
 ----
 
 What happens when we try to cast a jQuery collection through the spread operator? If you're on a modern version of jQuery that implements the iterator protocol, spreading a jQuery object will work, otherwise you may get an exception.
@@ -1444,7 +1908,7 @@ What happens when we try to cast a jQuery collection through the spread operator
 [source,javascript]
 ----
 [...$('div')]
-// <- [<div>, <div>, <div>, ...]
+// <- [<div>, <div>, <div>, …]
 ----
 
 The new `Array.from` method is a bit different. It doesn't only rely on the iterator protocol to figure out how to pull values from an object. It has support for array-likes out the box, unlike the spread operator. The following code snippet will work with any version of jQuery.
@@ -1452,7 +1916,7 @@ The new `Array.from` method is a bit different. It doesn't only rely on the iter
 [source,javascript]
 ----
 Array.from($('div'))
-// <- [<div>, <div>, <div>, ...]
+// <- [<div>, <div>, <div>, …]
 ----
 
 The one thing you cannot do with either `Array.from` nor the spread operator is to pick a start index. Suppose you wanted to pull every `<div>` after the first one. With `Array#slice`, you could do the following.
@@ -1522,13 +1986,15 @@ Array.from(groceries, grocery => grocery.type)
 // <- ['fruit', 'vegetable']
 ----
 
-==== 7.4.2 `Array.of`
+==== 7.5.2 `Array.of`
 
-The `Array.of` method is exactly like the `cast` function we played around with earlier. Next is a code snippet that shows how `Array.of` might be polyfilled.
+The `Array.of` method is exactly like the `cast` function we played around with earlier. Next is a code snippet that shows how `Array.of` might be ponyfilled.
 
 [source,javascript]
 ----
-Array.of = (...items) => items
+function arrayOf(...items) {
+  return items
+}
 ----
 
 The `Array` constructor has two overloads: `...items`, where you provide the items for the new array; and `length`, where you provide its numeric length. You can think about `Array.of` as a flavor of `new Array` that doesn't support a `length` overload. In the following code snippet, you'll find some of the unexpected ways in which `new Array` behaves thanks to its single-argument `length` overloaded constructor. If you're confused about the `undefined x ${ count }` notation in the browser console, that's indicating there are array holes in those positions. This is also known as an sparse array.
@@ -1559,7 +2025,7 @@ console.log(Array.of(-1, -2)) // <- [-1, -2]
 console.log(Array.of(-1)) // <- [-1]
 ----
 
-==== 7.4.3 `Array#copyWithin`
+==== 7.5.3 `Array#copyWithin`
 
 Let's start with the signature of `Array#copyWithin`.
 
@@ -1630,7 +2096,7 @@ copyWithin([1, 2, 3, , , , , , , , ], 6, 1, 3)
 // <- [1, 2, 3, undefined × 3, 2, 3, undefined × 2]
 ----
 
-==== 7.4.4 `Array#fill`
+==== 7.5.4 `Array#fill`
 
 A convenient utility method to replace all items in an array with the provided `value`. Note that sparse arrays will be filled in their entirety, while existing items will be replaced by the fill value.
 
@@ -1667,7 +2133,7 @@ new Array(3).fill(map)
 // <- [map, map, map]
 ----
 
-==== 7.4.5 `Array#find` and `Array#findIndex`
+==== 7.5.5 `Array#find` and `Array#findIndex`
 
 The `Array#find` method runs a `callback` for each `item` in an array until the first one that returns `true`, and then returns that `item`. The method follows the signature of `(callback(item, i, array), context)` that's also present in `Array#map`, `Array#filter`, and others. You can think of `Array#find` as a version of `Array#some` that returns the matching element instead of just `true`.
 
@@ -1693,7 +2159,7 @@ There's an `Array#findIndex` method as well, and it leverages the same signature
 // <- -1
 ----
 
-==== 7.4.6 `Array#keys`
+==== 7.5.6 `Array#keys`
 
 Returns an iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with `for..of`, the spread operator, or by manually calling `.next()`.
 
@@ -1728,7 +2194,7 @@ Object.keys(new Array(4))
 
 Now onto values.
 
-==== 7.4.7 `Array#values`
+==== 7.5.7 `Array#values`
 
 Same thing as `Array#keys()`, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
 
@@ -1748,7 +2214,7 @@ You can use `for..of` or any other methods like a spread operator to pull out th
 
 Note that omitting the `.values()` method call would still produce a copy of the array: the sequence is iterated and spread over a new array.
 
-==== 7.4.8 `Array#entries`
+==== 7.5.8 `Array#entries`
 
 Similar to both preceding methods, except `Array#entries` returns an iterator with a sequence of key-value pairs.
 
@@ -1768,7 +2234,7 @@ Each item in the sequence is a two dimensional array with the key and the value 
 
 Great, one last method left!
 
-==== 7.4.9 `Array.prototype[Symbol.iterator]`
+==== 7.5.9 `Array.prototype[Symbol.iterator]`
 
 This is exactly the same as the `Array#values` method.
 

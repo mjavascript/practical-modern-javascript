@@ -170,7 +170,7 @@ The following piece of code shows how we could extract the completion text logic
 [source,javascript]
 ----
 const completionText = getCompletionText(completionPercent)
-// ...
+// …
 function getCompletionText(progress) {
   if (progress >= 85) {
     return 'almost done'
@@ -503,7 +503,7 @@ function getNumberParts(number) {
   if (matches === null) {
     return null
   }
-  const [, integer, fractional] = number.match(rnumber)
+  const [ , integer, fractional] = number.match(rnumber)
   return { integer, fractional }
 }
 getNumberParts('1234.56')
@@ -520,7 +520,7 @@ function getNumberParts(number) {
   if (matches === null) {
     return null
   }
-  const [, ...captures] = number.match(rnumber)
+  const [ , ...captures] = number.match(rnumber)
   return captures
 }
 getNumberParts('1234.56')

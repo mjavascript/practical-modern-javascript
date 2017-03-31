@@ -819,7 +819,7 @@ const colors = keyValueIterable({
   orange: '#f50',
   pink: '#e07'
 })
-for (const [, color] of colors) {
+for (const [ , color] of colors) {
   console.log(color)
   // <- '#0e0'
   // <- '#f50'
@@ -1159,11 +1159,53 @@ console.log(g.next())
 // <- { done: true }
 ----
 
+
+
+
+
+
+
+
+
+==== 4.3.3 A Reasonable Use Case for Generators
+
+
+
+
+..
+
+
+
+
+
+
+[source,javascript]
+----
+function* concatenate(...lists) {
+  for (const list of lists) {
+    yield* list
+  }
+}
+[...concatenate([1, 2], [3, 4], [5], [6])]
+----
+
+
+
+
+
+
 Moving onto a more practical example, let's write a magic 8-ball generator where we'll put that sort of message-passing into action.
 
-==== 4.3.3 Coding A Magic 8-ball Generator
 
-A magic 8-ball consists of an interface that, when asked a question, returns a vague, random answer, as a result. The following function returns an answer at random, out of a pool of ten possible values. Note how I used template literals to define every string: that way, I don't need to worry about escaping single or double quotes in my strings.
+
+
+
+
+
+
+==== 4.3.3 Coding a Magic 8-ball Generator
+
+A magic 8-ball consists of an interface that, when asked a question, returns a vague, random answer, as a result. The following function returns an answer at random, out of a pool of ten possible values.
 
 [source,javascript]
 ----
@@ -1300,7 +1342,7 @@ When we compare the API in the previous section with the one we've just created,
 
 Yet another benefit of asking consumers to provide a generator function is that providing them with the `yield` keyword opens up a world of possibilities where execution in their code may be suspended while your iterator performs an asynchronous operation in between `g.next` calls. Let's explore asynchronous uses of generators in the next section.
 
-==== 4.3.5 Dealing with asynchronous flows
+==== 4.3.5 Dealing with Asynchronous Flows
 
 Staying on the subject of our magic 8-ball, and going back to the example where we call `ball` with a user-provided `questions` generator, let's consider what would change about our code if the answers were to be provided asynchronously. The beauty of generators is that if the way we iterate over the questions were to become asynchronous, the generator wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch the answers to the questions, and all it'd take would be to ask a service for the answer to the current question, return that value via an intermediary `yield` statement or in some other way, and then call `g.next` on the `questions` generator object.
 
@@ -1642,6 +1684,114 @@ function saveProducts(productList) {
 ----
 
 As you may have noticed, the implementation doesn't hardcode any important aspects of the operation, which means you could use the inputs and output pattern in a generic way as long as you have zero or more inputs you want to pipe into one output. The consumer ends up with an elegant-looking method that's easy to understand -- they `yield` input stores and `return` an output store. Furthermore, our use of promises makes it easy to concatenate this operation with others. This way, we're keeping a potential tangle of conditional statements and flow control mechanisms in check, by abstracting away flow control into the iteration mechanism under the `saveProducts` method.
+
+==== 4.3.9 Mixing Generators Into Iterators
+
+Let's do a quick recap of generators. Generator functions return generator objects when invoked. A generator object has a `next` method, which returns the next element in the sequence. The `next` method returns objects with a `{ value, done }` shape.
+
+The following example shows an infinite fibonacci number generator. We then instantiate a generator object and read the first eight values in the sequence.
+
+[source,javascript]
+----
+function* fibonacci() {
+  let previous = 0
+  let current = 1
+  while (true) {
+    yield current
+    const next = current + previous
+    previous = current
+    current = next
+  }
+}
+const g = fibonacci()
+console.log(g.next()) // <- { value: 1, done: false }
+console.log(g.next()) // <- { value: 1, done: false }
+console.log(g.next()) // <- { value: 2, done: false }
+console.log(g.next()) // <- { value: 3, done: false }
+console.log(g.next()) // <- { value: 5, done: false }
+console.log(g.next()) // <- { value: 8, done: false }
+console.log(g.next()) // <- { value: 13, done: false }
+console.log(g.next()) // <- { value: 21, done: false }
+----
+
+Iterators follow a similar pattern. They enforce a contract that dictates we should return an object with a `next` method. That method should return sequence elements following a `{ value, done }` shape. The following example shows a `fibonacci` iterable that's a rough equivalent of the generator we were just looking at.
+
+[source,javascript]
+----
+const fibonacci = {
+  [Symbol.iterator]() {
+    let previous = 0
+    let current = 1
+    return {
+      next() {
+        const value = current
+        const next = current + previous
+        previous = current
+        current = next
+        return { value, done: false }
+      }
+    }
+  }
+}
+const sequence = fibonacci[Symbol.iterator]()
+console.log(sequence.next()) // <- { value: 1, done: false }
+console.log(sequence.next()) // <- { value: 1, done: false }
+console.log(sequence.next()) // <- { value: 2, done: false }
+console.log(sequence.next()) // <- { value: 3, done: false }
+console.log(sequence.next()) // <- { value: 5, done: false }
+console.log(sequence.next()) // <- { value: 8, done: false }
+console.log(sequence.next()) // <- { value: 13, done: false }
+console.log(sequence.next()) // <- { value: 21, done: false }
+----
+
+Let's reiterate. An iterator should return an object with a `next` method: generator functions do just that. The `next` method should return objects with a `{ value, done }` shape: generator functions do that too. What happens if we change the `fibonacci` iterable to use a generator function for its `Symbol.iterator` property? As it turns out, it just works.
+
+The following example shows the iterable `fibonacci` object using a generator function for its iterator. Note how that iterator has the exact same contents as the `fibonacci` generator function we saw earlier. We can use `yield`, `yield*`, and all of the semantics found in generator functions hold.
+
+[source,javascript]
+----
+const fibonacci = {
+  * [Symbol.iterator]() {
+    let previous = 0
+    let current = 1
+    while (true) {
+      yield current
+      const next = current + previous
+      previous = current
+      current = next
+    }
+  }
+}
+const g = fibonacci[Symbol.iterator]()
+console.log(g.next()) // <- { value: 1, done: false }
+console.log(g.next()) // <- { value: 1, done: false }
+console.log(g.next()) // <- { value: 2, done: false }
+console.log(g.next()) // <- { value: 3, done: false }
+console.log(g.next()) // <- { value: 5, done: false }
+console.log(g.next()) // <- { value: 8, done: false }
+console.log(g.next()) // <- { value: 13, done: false }
+console.log(g.next()) // <- { value: 21, done: false }
+----
+
+Meanwhile, the iterable protocol also holds up. To verify that you might use a construct like `for..of`, instead of manually creating the generator object. The following example uses `for..of` and introduces a circuit breaker to prevent an infinite loop from crashing the program.
+
+[source,javascript]
+----
+for (const value of fibonacci) {
+  console.log(value)
+  if (value > 20) {
+    break
+  }
+}
+// <- 1
+// <- 1
+// <- 2
+// <- 3
+// <- 5
+// <- 8
+// <- 13
+// <- 21
+----
 
 We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into `async` / `await`, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this chapter.
 
@@ -1994,7 +2144,7 @@ function spawn(generator) {
 
     // run the first step
     step(() => g.next())
-    // ...
+    // …
   })
 }
 ----
@@ -2005,7 +2155,7 @@ The first thing that happens in the `step` function is calling the `nextFn` func
 ----
 function step(nextFn) {
   const next = runNext(nextFx)
-  // ...
+  // …
 }
 
 function runNext(nextFn) {

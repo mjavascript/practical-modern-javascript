@@ -40,7 +40,7 @@ const proxy = new Proxy(target, handler)
 proxy.numbers = [1, 1, 2, 3, 5, 8, 13]
 proxy.numbers
 // 'Get on property "numbers"'
-// <- 123
+// <- [1, 1, 2, 3, 5, 8, 13]
 proxy['something-else']
 // 'Get on property "something-else"'
 // <- undefined

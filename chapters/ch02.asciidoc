@@ -28,7 +28,7 @@ Sometimes we declare objects with one or more properties whose values are refere
 ----
 var listeners = []
 function listen() {}
-var api = {
+var events = {
   listeners: listeners,
   listen: listen
 }
@@ -40,15 +40,15 @@ Whenever you find yourself in this situation, you can omit the property value an
 ----
 var listeners = []
 function listen() {}
-var api = { listeners, listen }
+var events = { listeners, listen }
 ----
 
-As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without dilluting its meaning. In the following snippet I re-implemented part of `localStorage`, a browser API for persistent storage, as an in-memory polyfill. If it weren't for the shorthand syntax, the `api` object would be more verbose to type out.
+As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without dilluting its meaning. In the following snippet I re-implemented part of `localStorage`, a browser API for persistent storage, as an in-memory ponyfill. If it weren't for the shorthand syntax, the `storage` object would be more verbose to type out.
 
 [source,javascript]
 ----
 var store = {}
-var api = { getItem,  setItem, clear }
+var storage = { getItem,  setItem, clear }
 function getItem(key) {
   return key in store ? store[key] : null
 }
@@ -748,7 +748,7 @@ function splitDate(date) {
   var rdate = /(\d+).(\d+).(\d+)/
   return rdate.exec(date)
 }
-var [, year, month, day] = splitDate('2015-11-06')
+var [ , year, month, day] = splitDate('2015-11-06')
 ----
 
 You'll want to be careful when the regular expression doesn't match, as that returns `null`. Perhaps a better approach would be to test for the failure case before destructuring, as shown in the following bit of code.

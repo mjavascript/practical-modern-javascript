@@ -246,7 +246,7 @@ console.log([...map])
 // <- [[1, 'one'], [2, 'two'], [3, 'three']]
 ----
 
-In the following piece of code we've combined several new features in ES6: `Map`, the `for..of` loop, `let` variables, and template literals.
+In the following piece of code we've combined several new features in ES6: `Map`, the `for..of` loop, `let` variables, and a template literal.
 
 [source,javascript]
 ----
@@ -353,12 +353,12 @@ function customThing(el) {
   return api
 }
 function storeInMap(el, api) {
-  const entry = { el: el, api: api }
+  const entry = { el, api }
   map.push(entry)
   return entry
 }
 function findByElement(el) {
-  for (const index = 0; index < map.length; index++) {
+  for (let index = 0; index < map.length; index++) {
     if (map[index].el === el) {
       return map[index].api
     }
