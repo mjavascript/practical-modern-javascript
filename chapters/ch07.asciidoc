@@ -1731,7 +1731,7 @@ rcharacter.test('\t') // <- true
 rcharacter.test('\n') // <- true
 ----
 
-The `dotAll` proposalfootnote:[You can find the `dotAll` flag proposal document at: https://mjavascript.com/out/regexp-dotall.] (stage 1) adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
+The `dotAll` proposalfootnote:[You can find the `dotAll` flag proposal document at: https://mjavascript.com/out/regexp-dotall.] (stage 3) adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
 
 [source,javascript]
 ----
@@ -1838,7 +1838,7 @@ console.log(addressMatcher.next().value)
 // <- ['placeholder', 'Enter your business address']
 ----
 
-The `String#matchAll` proposalfootnote:[You can find the String#matchAll proposal document at: https://mjavascript.com/out/string-matchall.] introduces a new method for the string prototype which would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` object as opposed to just the `captures` in the example above. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the sequence.
+The `String#matchAll` proposalfootnote:[You can find the String#matchAll proposal document at: https://mjavascript.com/out/string-matchall.] (in stage 1 at the time of this writing) introduces a new method for the string prototype which would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` object as opposed to just the `captures` in the example above. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the sequence.
 
 [source,javascript]
 ----
