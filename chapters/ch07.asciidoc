@@ -1502,9 +1502,7 @@ rdot.test('\n') // <- false
 rdot.test('\u{1d11e}') // <- true
 ----
 
-When the `u` flag is set, similar Unicode awareness improvements can be found in quantifiers and character classes, both of which treat each Unicode code point as a single symbol, instead of matching on the first code unit only. Insensitive case matching with the `i` flag performs Unicode case folding when the `u` flag is set as well, which is used tonormalize code points in both the input string and the regular expression.
-
-For more details around the `u` flag in regular expressions, read this piece by Mathias Bynens titled "Unicode-aware regular expressions in ECMAScript 6 by Mathias Bynens": https://mjavascript.com/out/regexp-unicode.
+When the `u` flag is set, similar Unicode awareness improvements can be found in quantifiers and character classes, both of which treat each Unicode code point as a single symbol, instead of matching on the first code unit only. Insensitive case matching with the `i` flag performs Unicode case folding when the `u` flag is set as well, which is used to normalize code points in both the input string and the regular expression.footnote:[For more details around the `u` flag in regular expressions, read the following piece, titled "Unicode-aware regular expressions in ECMAScript 6 by Mathias Bynens": https://mjavascript.com/out/regexp-unicode, from Mathias Bynens.]
 
 ==== 7.4.3 Named Capture Groups
 
@@ -1733,7 +1731,7 @@ rcharacter.test('\t') // <- true
 rcharacter.test('\n') // <- true
 ----
 
-The `dotAll` proposalfootnote:[You can find the "'dotAll' flag proposal document at: https://mjavascript.com/out/regexp-dotall.] (stage 1) adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
+The `dotAll` proposalfootnote:[You can find the `dotAll` flag proposal document at: https://mjavascript.com/out/regexp-dotall.] (stage 1) adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
 
 [source,javascript]
 ----
