@@ -1482,7 +1482,7 @@ The `u` flag introduces support for Unicode code point escapes, like the `\u{1f4
 // <- true
 ----
 
-Without the `u` flag, the `.` pattern matches any BMP symbol except for line terminators. The following example shows `U+1D11E MUSICAL SYMBOL G CLEF`, an astral symbol that wouldn't match the dot pattern in plain regular expressions.
+Without the `u` flag, the `.` pattern matches any BMP symbol except for line terminators. The following example tests `U+1D11E MUSICAL SYMBOL G CLEF`, an astral symbol that doesn't match the dot pattern in plain regular expressions.
 
 [source,javascript]
 ----
