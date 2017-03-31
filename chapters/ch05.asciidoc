@@ -357,10 +357,10 @@ function storeInMap(el, api) {
   map.push(entry)
   return entry
 }
-function findByElement(el) {
-  for (let index = 0; index < map.length; index++) {
-    if (map[index].el === el) {
-      return map[index].api
+function findByElement(query) {
+  for (const { el, api } of map) {
+    if (el === query) {
+      return api
     }
   }
 }
