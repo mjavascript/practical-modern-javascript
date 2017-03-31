@@ -715,7 +715,7 @@ Math.hypot(1, 2, 3)
 // <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
 ----
 
-We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.footnote:[You can go deeper into functional Array methods by reading my "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.]
+We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.footnote:[You can go deeper into functional `Array` methods by reading the following "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.]
 
 [source,javascript]
 ----
