@@ -1166,7 +1166,6 @@ console.log(g.next())
 
 
 
-
 ==== 4.3.3 A Reasonable Use Case for Generators
 
 
