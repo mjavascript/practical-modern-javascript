@@ -1743,7 +1743,7 @@ console.log(sequence.next()) // <- { value: 13, done: false }
 console.log(sequence.next()) // <- { value: 21, done: false }
 ----
 
-Let's reiterate. An iterator should return an object with a `next` method: generator functions do just that. The `next` method should return objects with a `{ value, done }` shape: generator functions do that too. What happens if we change the `fibonacci` iterable to use a generator function for its `Symbol.iterator` property? As it turns out, it just works.
+Let's reiterate. An iterable should return an object with a `next` method: generator functions do just that. The `next` method should return objects with a `{ value, done }` shape: generator functions do that too. What happens if we change the `fibonacci` iterable to use a generator function for its `Symbol.iterator` property? As it turns out, it just works.
 
 The following example shows the iterable `fibonacci` object using a generator function for its iterator. Note how that iterator has the exact same contents as the `fibonacci` generator function we saw earlier. We can use `yield`, `yield*`, and all of the semantics found in generator functions hold.
 
