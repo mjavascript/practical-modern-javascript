@@ -1159,296 +1159,343 @@ console.log(g.next())
 // <- { done: true }
 ----
 
+==== 4.3.3 Mixing Generators Into Iterables
 
+Let's do a quick recap of generators. Generator functions return generator objects when invoked. A generator object has a `next` method, which returns the next element in the sequence. The `next` method returns objects with a `{ value, done }` shape.
 
-
-
-
-
-
-==== 4.3.3 A Reasonable Use Case for Generators
-
-
-
-
-..
-
-
-
-
-
+The following example shows an infinite fibonacci number generator. We then instantiate a generator object and read the first eight values in the sequence.
 
 [source,javascript]
 ----
-function* concatenate(...lists) {
-  for (const list of lists) {
-    yield* list
-  }
-}
-[...concatenate([1, 2], [3, 4], [5], [6])]
-----
-
-
-
-
-
-
-Moving onto a more practical example, let's write a magic 8-ball generator where we'll put that sort of message-passing into action.
-
-
-
-
-
-
-
-
-==== 4.3.3 Coding a Magic 8-ball Generator
-
-A magic 8-ball consists of an interface that, when asked a question, returns a vague, random answer, as a result. The following function returns an answer at random, out of a pool of ten possible values.
-
-[source,javascript]
-----
-const answers = [
-  'It is certain',
-  'Yes definitely',
-  'Most likely',
-  'Yes',
-  'Ask again later',
-  'Better not tell you now',
-  'Cannot predict now',
-  'Don’t count on it',
-  'My sources say no',
-  'Very doubtful'
-]
-function answer() {
-  return answers[Math.floor(Math.random() * answers.length)]
-}
-----
-
-Now that we're able to randomly generate vague answers, we can use a generator function to define an infinite sequence of answers. Here, again, I'm using a template literal to embed an arbitrary JavaScript expression, the `answer()` function call, in the yielded string.
-
-[source,javascript]
-----
-function* ball() {
+function* fibonacci() {
+  let previous = 0
+  let current = 1
   while (true) {
-    yield `[a] ${ answer() }`
+    yield current
+    const next = current + previous
+    previous = current
+    current = next
+  }
+}
+const g = fibonacci()
+console.log(g.next()) // <- { value: 1, done: false }
+console.log(g.next()) // <- { value: 1, done: false }
+console.log(g.next()) // <- { value: 2, done: false }
+console.log(g.next()) // <- { value: 3, done: false }
+console.log(g.next()) // <- { value: 5, done: false }
+console.log(g.next()) // <- { value: 8, done: false }
+console.log(g.next()) // <- { value: 13, done: false }
+console.log(g.next()) // <- { value: 21, done: false }
+----
+
+Iterables follow a similar pattern. They enforce a contract that dictates we should return an object with a `next` method. That method should return sequence elements following a `{ value, done }` shape. The following example shows a `fibonacci` iterable that's a rough equivalent of the generator we were just looking at.
+
+[source,javascript]
+----
+const fibonacci = {
+  [Symbol.iterator]() {
+    let previous = 0
+    let current = 1
+    return {
+      next() {
+        const value = current
+        const next = current + previous
+        previous = current
+        current = next
+        return { value, done: false }
+      }
+    }
+  }
+}
+const sequence = fibonacci[Symbol.iterator]()
+console.log(sequence.next()) // <- { value: 1, done: false }
+console.log(sequence.next()) // <- { value: 1, done: false }
+console.log(sequence.next()) // <- { value: 2, done: false }
+console.log(sequence.next()) // <- { value: 3, done: false }
+console.log(sequence.next()) // <- { value: 5, done: false }
+console.log(sequence.next()) // <- { value: 8, done: false }
+console.log(sequence.next()) // <- { value: 13, done: false }
+console.log(sequence.next()) // <- { value: 21, done: false }
+----
+
+Let's reiterate. An iterable should return an object with a `next` method: generator functions do just that. The `next` method should return objects with a `{ value, done }` shape: generator functions do that too. What happens if we change the `fibonacci` iterable to use a generator function for its `Symbol.iterator` property? As it turns out, it just works.
+
+The following example shows the iterable `fibonacci` object using a generator function to define how it will be iterated. Note how that iterable has the exact same contents as the `fibonacci` generator function we saw earlier. We can use `yield`, `yield*`, and all of the semantics found in generator functions hold.
+
+[source,javascript]
+----
+const fibonacci = {
+  * [Symbol.iterator]() {
+    let previous = 0
+    let current = 1
+    while (true) {
+      yield current
+      const next = current + previous
+      previous = current
+      current = next
+    }
+  }
+}
+const g = fibonacci[Symbol.iterator]()
+console.log(g.next()) // <- { value: 1, done: false }
+console.log(g.next()) // <- { value: 1, done: false }
+console.log(g.next()) // <- { value: 2, done: false }
+console.log(g.next()) // <- { value: 3, done: false }
+console.log(g.next()) // <- { value: 5, done: false }
+console.log(g.next()) // <- { value: 8, done: false }
+console.log(g.next()) // <- { value: 13, done: false }
+console.log(g.next()) // <- { value: 21, done: false }
+----
+
+Meanwhile, the iterable protocol also holds up. To verify that you might use a construct like `for..of`, instead of manually creating the generator object. The following example uses `for..of` and introduces a circuit breaker to prevent an infinite loop from crashing the program.
+
+[source,javascript]
+----
+for (const value of fibonacci) {
+  console.log(value)
+  if (value > 20) {
+    break
+  }
+}
+// <- 1
+// <- 1
+// <- 2
+// <- 3
+// <- 5
+// <- 8
+// <- 13
+// <- 21
+----
+
+Moving onto more practical examples, let's see how generators can help us iterate tree data structures concisely.
+
+==== 4.3.4 Tree Traversal Using Generators
+
+Algorithms to work with tree structures can be tricky to understand, often involving recursion. Consider the following bit of code, where we define a `Node` class which can hold a `value` and an arbitrary amount of child nodes.
+
+[source,javascript]
+----
+class Node {
+  constructor(value, ...children) {
+    this.value = value
+    this.children = children
   }
 }
 ----
 
-Each step of the sequence would contain one of the vague answers, generated at random.
+Trees can be traversed using depth-first search, where we always try to go deeper into the tree structure, and when we can't we move to the next children on the list. In the following tree structure, a depth-first search algorithm would traverse the tree visiting the nodes following the `1, 2, 3, 4, 5, 6, 7, 8, 9, 10` order.
 
 [source,javascript]
 ----
-const g = ball()
-g.next()
-// <- { value: '[a] Better not tell you now', done: false }
-g.next()
-// <- { value: '[a] Most likely', done: false }
+const root = new Node(1,
+  new Node(2),
+  new Node(3,
+    new Node(4,
+      new Node(5,
+        new Node(6)
+      ),
+      new Node(7)
+    )
+  ),
+  new Node(8,
+    new Node(9),
+    new Node(10)
+  )
+)
 ----
 
-The generator is blindly producing answers even though we're not passing in any questions. We could make a couple of changes to the `ball` generator so that it prints questions as you read values out of the sequence.
-
-Interestingly, `yield` expressions are not just used to produce output from the generator when calling `g.next`, but can also be used when the generator needs input. Any value passed to the `g.next` method will be passed into the generator as the result of the `yield` expression.
+One way of implementing depth-first traversal for our tree would be using a generator function which yields the current node's value, and then iterates over its children yielding every item in their sequences using the `yield*` operator as a way of composing the recursive component of the iterator.
 
 [source,javascript]
 ----
-function* ball() {
-  while (true) {
-    const question = yield `[a] ${ answer() }`
-    console.log(`[q] ${ question }`)
+function* depthFirst(node) {
+  yield node.value
+  for (const child of node.children) {
+    yield* depthFirst(child)
   }
 }
+console.log([...depthFirst(root)])
+// <- [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ----
 
-The next piece of code shows how we can use the `ball` generator to ask questions, have them printed, and then print out the answers. Note how we discard the first result from `g.next()`. That's because the first call to `.next` enters the generator and there's no `yield` expression waiting to capture the `value` from `g.next(value)`.
+A slightly different way of declaring the traversal algorithm would be to make the `Node` class iterable using the `depthFirst` generator. The following piece of code also takes advantage that `child` is a `Node` class -- and thus an iterable -- using `yield*` in order to yield the iterable sequence for that `child` as part of the sequence for its parent node.
 
 [source,javascript]
 ----
-const g = ball()
-g.next()
-console.log(g.next('Will JavaScript fall out of grace?').value)
-// <- '[q] Will JavaScript fall out of grace?'
-// <- '[a] My sources say no'
-console.log(g.next('How do you know that?').value)
-// <- '[q] How do you know that?'
-// <- '[a] Concentrate and ask again'
+class Node {
+  constructor(value, ...children) {
+    this.value = value
+    this.children = children
+  }
+  * [Symbol.iterator]() {
+    yield this.value
+    for (const child of this.children) {
+      yield* child
+    }
+  }
+}
+console.log([...root])
+// <- [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ----
 
-As a consumer of the `ball` generator, the first call to `g.next` doesn't seem something you should need to do. Similarly, using `g.next` to pull sequence values out of a generator and pass input into the generator doesn't seem like a responsibility that should befall the consumer of your generator code. If we flipped responsibilities around, by writing the looping code and having the consumer of a piece of code create a generator function, the resulting code would be more pleasant to both read and write.
-
-==== 4.3.4 Consuming Generator Functions for Flexibility
-
-In the previous section our 8-ball was a generator function, while the user code using the 8-ball was in charge of looping over the generator's sequence. Now, we'll be writing the questions in a generator function that gets passed to a method, which loops over the generator we provide and answers each question at a time.
-
-At first, you might think that writing code like this is unconventional, but most libraries built around generators work in fact have their users write generators, while retaining control of their iteration. Starting with the API you wish you could use is an excellent way to come up with a great API. This is something we missed in the previous section and `ball` turned out to be pretty cumbersome to use, having to manually call `g.next`, using `.value` to pull out sequence items, not to mention the initial `g.next` call.
-
-The following bit of code could be used as an example of how we'd like `ball` to work. The consumer provides a generator function that yields questions. Answers are printed one at a time, alongside questions, to the console.
+If we wanted to change traversal to a breadth-first algorithm, we could change the iterator into an algorithm like the one in the following piece of code. Here, we use a first-in first-out queue to keep a buffer of nodes we haven't visited yet. In each step of the iteration, starting with the `root` node, we print the current node's `value` and push its children onto the queue. Children are always added to the end of the queue, but we pull items from the beginning of the queue. That means we'll always go through all the nodes at any given depth before going deeper into the tree structure.
 
 [source,javascript]
 ----
-ball(function* questions() {
-  yield 'Will JavaScript fall out of grace?'
-  yield 'How do you know that?'
+class Node {
+  constructor(value, ...children) {
+    this.value = value
+    this.children = children
+  }
+  * [Symbol.iterator]() {
+    const queue = [this]
+    while (queue.length) {
+      const node = queue.shift()
+      yield node.value
+      queue.push(...node.children)
+    }
+  }
+}
+console.log([...root])
+// <- [1, 2, 3, 8, 4, 9, 10, 5, 7, 6]
+----
+
+Generators are useful due to their expressiveness, while the iterator protocol allows us to define a sequence we can iterate at our own pace, which comes in handy when a tree has thousands of nodes and we need to throttle iteration for performance reasons.
+
+==== 4.3.5 Consuming Generator Functions for Flexibility
+
+Thus far in the chapter we've talked about generators in terms of constructing a consumable sequence. Generators can also be presented as an interface to a piece of code which decides how the generator function is to be iterated over.
+
+In this section, we'll be writing a generator function that gets passed to a method, which loops over the generator consuming elements of its sequence. Even though you might think that writing code like this is unconventional at first, most libraries built around generators have their users write the generators while the library retains control over the iteration.
+
+The following bit of code could be used as an example of how we'd like `modelProvider` to work. The consumer provides a generator function that yields crumbs to different parts of a model, getting back the relevant part of the model each time. A generator object can pass results back to the generator function by way of `g.next(result)`. When we do this, a `yield` expression evaluates to the `result` produced by the generator object.
+
+[source,javascript]
+----
+modelProvider(function* () {
+  const items = yield 'cart.items'
+  const item = items.reduce(
+    (left, right) => left.price > right.price ? left : right
+  )
+  const details = yield `products.${ item.id }`
+  console.log(details)
 })
-// <- '[q] Will JavaScript fall out of grace?'
-// <- '[a] Yes'
-// <- '[q] How do you know that?'
-// <- '[a] It is certain'
 ----
 
-Whenever a question is yielded by the user-provided generator, execution in the generator function is suspended until the iterator calls `g.next` again, even allowing `g.next` to be called asynchronously. The following iteration of the `ball` function iterates over the `questions` generator until its sequence is exhausted, using a synchronous `for..of` loop that calls `g.next` on your behalf at every turn of the loop. Our `ball` implementation becomes even simpler than before, and the interface for consumers -- who now only need to provide a generator that yields questions -- is simplified as well.
+Whenever a resource is yielded by the user-provided generator, execution in the generator function is suspended until the iterator calls `g.next` again, which may even happen asynchronously behind the scenes. The next code snippet implements a `modelProvider` function which iterates over `paths` yielded by the generator. Note also how we're passing `data` to `g.next()`.
 
 [source,javascript]
 ----
-function ball(questions) {
-  for (const question of questions()) {
-    console.log(`[q] ${ question }`)
-    console.log(`[a] ${ answer() }`)
+const model = {
+  cart: {
+    items: [item1, …, itemN]
+  },
+  products: {
+    product1: { … },
+    productN: { … }
   }
 }
-----
-
-One trade-off that you might've noticed is that `ball` is no longer iterable and offers little control to the consumer: it has become very opinionated. The generator now only relays the questions, and the iterator prints everything to the console. A potential fix could be to turn `ball` into a generator function as well, where we `yield` question/answer tuples instead of printing them to the `console` directly, as shown in the following piece of code.
-
-[source,javascript]
-----
-function* ball(questions) {
-  for (const question of questions()) {
-    yield [
-      `[q] ${ question }`,
-      `[a] ${ answer() }`
-    ]
-  }
-}
-----
-
-The consumer of `ball` can now pass in a generator function with their questions, and get back an iterable generator object consisting of `[q,a]` pairs. Destructuring allows you to effortlessly consume the tuples in that sequence which you can then print to the `console`, push onto an array, or further compose with other generator functions such as `take` from section 4.2.2, which allowed us to lazily take only the first few items in an iterable sequence.
-
-[source,javascript]
-----
-function* questions() {
-  yield 'Will JavaScript fall out of grace?'
-  yield 'How do you know that?'
-}
-for (const [q,a] of ball(questions)) {
-  console.log(q)
-  console.log(a)
-}
-----
-
-When we compare the API in the previous section with the one we've just created, it becomes quite clear that the latter is superior in terms of usability, composability, extensibility, and even readability. Writing maintainable and usable components is a hard-to-master art, but the focus should always be in designing a pleasant API first and then working your way into the implementation from there.
-
-Yet another benefit of asking consumers to provide a generator function is that providing them with the `yield` keyword opens up a world of possibilities where execution in their code may be suspended while your iterator performs an asynchronous operation in between `g.next` calls. Let's explore asynchronous uses of generators in the next section.
-
-==== 4.3.5 Dealing with Asynchronous Flows
-
-Staying on the subject of our magic 8-ball, and going back to the example where we call `ball` with a user-provided `questions` generator, let's consider what would change about our code if the answers were to be provided asynchronously. The beauty of generators is that if the way we iterate over the questions were to become asynchronous, the generator wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch the answers to the questions, and all it'd take would be to ask a service for the answer to the current question, return that value via an intermediary `yield` statement or in some other way, and then call `g.next` on the `questions` generator object.
-
-Let's assume we're back at the following usage of `ball`.
-
-[source,javascript]
-----
-ball(function* questions() {
-  yield 'Will JavaScript fall out of grace?'
-  yield 'How do you know that?'
-})
-----
-
-We'll be using `fetch` to make requests for each HTTP resource -- which, as you may recall, returns a `Promise`. Note that in an asynchronous scenario we can no longer use `for..of`, as we now need to rely on manually calling `g.next` ourselves, while `for..of` only supports synchronous loops.
-
-The next code snippet sends an HTTP request for each question and then prints the answer alongside them.
-
-[source,javascript]
-----
-function ball(questions) {
-  const g = questions()
-  ask()
-  function ask() {
-    const question = g.next()
-    if (question.done) {
+function modelProvider(paths) {
+  const g = paths()
+  pull()
+  function pull(data) {
+    const { value, done } = g.next(data)
+    if (done) {
       return
     }
-    fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
-      .then(response => response.text())
-      .then(answer => {
-        console.log(`[q] ${ question.value }`)
-        console.log(`[a] ${ answer }`)
-        ask()
-      })
+    const crumbs = value.split('.')
+    const data = crumbs.reduce(followCrumbs, model)
+    pull(data)
   }
+}
+function followCrumbs(data, crumb) {
+  if (!data || !data.hasOwnProperty(crumb)) {
+    return null
+  }
+  return data[crumb]
 }
 ----
 
-The problem when taking this approach is that we're back at the case where the consumer didn't have control over how answers are used. To solve that, we could use the `g.next(value)` message-passing feature that we discussed in section 4.3.3 as a way of forwarding answers to the user-provided generator.
+The largest benefit of asking consumers to provide a generator function is that providing them with the `yield` keyword opens up a world of possibilities where execution in their code may be suspended while the iterator performs an asynchronous operation in between `g.next` calls. Let's explore more asynchronous uses of generators in the next section.
+
+==== 4.3.6 Dealing with Asynchronous Flows
+
+Going back to the example where we call `modelProvider` with a user-provided generator, let's consider what would change about our code if the model parts were to be provided asynchronously. The beauty of generators is that if the way we iterate over the sequence of paths were to become asynchronous, the user-provided function wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch a piece of the model, and all it'd take would be to ask a service for the answer to the current path, return that value via an intermediary `yield` statement or in some other way, and then call `g.next` on the generator object.
+
+Let's assume we're back at the following usage of `modelProvider`.
 
 [source,javascript]
 ----
-function ball(questions) {
-  const g = questions()
-  ask()
-  function ask() {
-    const question = g.next()
-    if (question.done) {
-      return
-    }
-    fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
-      .then(response => response.text())
-      .then(answer => question = g.next(answer))
-      .then(ask)
-  }
-}
-----
-
-The user-provided generator would have to change, slightly. The answers would now be provided as the result when evaluating `yield` expressions, and you could print those results to the `console` as part of a template literal.
-
-[source,javascript]
-----
-ball(function* questions() {
-  console.log(`[a-1] ${ yield 'Will JavaScript fall out of grace?' }`)
-  console.log(`[a-2] ${ yield 'How do you know that?' }`)
+modelProvider(function* () {
+  const items = yield 'cart.items'
+  const item = items.reduce(
+    (left, right) => left.price > right.price ? left : right
+  )
+  const details = yield `products.${ item.id }`
+  console.log(details)
 })
 ----
 
-Always keep in mind that while a `yield` expression is being evaluated, execution of the generator function is paused until the next item in the sequence -- the next question, in our example -- is requested to the iterator. In this sense, code in a generator function looks and feels as if it were synchronous, even though `yield` pauses execution in the generator until `g.next` resumes execution.
+We'll be using `fetch` to make requests for each HTTP resource -- which, as you may recall, returns a `Promise`. Note that given an asynchronous scenario we can't use `for..of` to go over the sequence, which is limited to synchronous loops.
+
+The next code snippet sends an HTTP request for each query to the model, and the server is now in charge of producing the relevant bits of the model, without the client having to keep any state other than the relevant user authentication bits, such as cookies.
+
+[source,javascript]
+----
+function modelProvider(paths) {
+  const g = paths()
+  pull()
+  function pull(data) {
+    const { value, done } = g.next(data)
+    if (done) {
+      return
+    }
+    fetch(`/model?query=${ encodeURIComponent(value) }`)
+      .then(response => response.json())
+      .then(data => pull(data))
+  }
+}
+----
+
+Always keep in mind that, while a `yield` expression is being evaluated, execution of the generator function is paused until the next item in the sequence -- the next query for the model, in our example -- is requested to the iterator. In this sense, code in a generator function looks and feels as if it were synchronous, even though `yield` pauses execution in the generator until `g.next` resumes execution.
 
 While generators let us write asynchronous code that appears synchronous, this introduces an inconvenience. How do we handle errors that arise in the iteration? If an HTTP request fails, for instance, how do we notify the generator and then handle the error notification in the generator function?
 
-==== 4.3.6 Throwing Errors at a Generator
+==== 4.3.7 Throwing Errors at a Generator
 
-Before shifting our thinking into user-provided generators, where they retain control of seemingly-synchronous functions thanks to `yield` and suspension, we would've been hard pressed to find a user case for `g.throw`, a method found on generator objects that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between `yield` expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to `throw` that error into the generator.
+Before shifting our thinking into user-provided generators, where they retain control of seemingly-synchronous functions thanks to `yield` and suspension, we would've been hard pressed to find a use case for `g.throw`, a method that can be used to report errors which take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between `yield` expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to `throw` that error into the generator.
 
-In the case of our magic 8-ball, the iterator may experience network issues -- or a malformed HTTP response -- and fail to answer a question. In the snippet of code below, I've modified the `fetch` step by adding an error callback that will be executed if parsing fails in `response.text()`, in which case we'll throw the exception at the generator function.
+In the case of `modelProvider`, the iterator may experience network issues -- or a malformed HTTP response -- and fail to provide a piece of the model. In the snippet of code below, the `fetch` step was modified by adding an error callback that will be executed if parsing fails in `response.json()`, in which case we'll throw the exception at the generator function.
 
 [source,javascript]
 ----
-fetch(`/ask?q=${ encodeURIComponent(question.value) }`)
-  .then(response => response.text())
-  .then(answer => question = g.next(answer), err => g.throw(err))
-  .then(ask)
+fetch(`/model?query=${ encodeURIComponent(value) }`)
+  .then(response => response.json())
+  .then(data => pull(data))
+  .catch(err => g.throw(err))
 ----
 
 When `g.next` is called, execution in generator code is unsuspended. The `g.throw` method also unsuspends the generator, but it causes an exception to be thrown at the location of the `yield` expression. An unhandled exception in a generator would stop iteration by preventing other `yield` expressions from being reachable. Generator code could wrap `yield` expressions in `try`/`catch` blocks to gracefully manage exceptions forwarded by iteration code -- as shown in the following code snippet. This would allow subsequent `yield` expressions to be reached, suspending the generator and putting the iterator in charge once again.
 
 [source,javascript]
 ----
-ball(function* questions() {
+modelProvider(function* () {
   try {
-    console.log(`[a-1] ${ yield 'Will JavaScript fall out of grace?' }`)
+    console.log('these items are in the cart:', yield 'cart.items')
   } catch (e) {
-    console.error('[a-1] Oops!', e)
+    console.error('uh oh, failed to fetch model.cart.items!', e)
   }
   try {
-    console.log(`[a-2] ${ yield 'How do you know that?' }`)
+    console.log(`these are our products: ${ yield 'products' }`)
   } catch (e) {
-    console.error('[a-2] Oops!', e)
+    console.error('uh oh, failed to fetch model.products!', e)
   }
 })
 ----
 
 Even though generator functions allow us to suspend execution and then resume asynchronously, we can use the same error handling semantics -- `try`, `catch`, and `throw` -- as with regular functions. Having the ability to use `try`/`catch` blocks in generator code lets us treat the code as if it were synchronous, even when there's HTTP requests sitting behind `yield` expressions, in iterator code.
 
-==== 4.3.7 Returning on Behalf of a Generator
+==== 4.3.8 Returning on Behalf of a Generator
 
 Besides `g.next` and `g.throw`, generator objects have one more method at their disposal to determine how a generator sequence is iterated: `g.return(value)`. This method unsuspends the generator function and executes `return value` at the location of `yield`, typically ending the sequence being iterated by the generator object. This is no different to what would occur if the generator function actually had a `return` statement in it.
 
@@ -1541,7 +1588,7 @@ Due to the confusing nature of the differences between `yield` expressions and `
 
 In the following section, we'll build an iterator that leverages differences in `yield` versus `return` to perform both input and output based on the same generator function.
 
-==== 4.3.8 Asynchronous I/O Using Generators
+==== 4.3.9 Asynchronous I/O Using Generators
 
 The following piece of code shows a self-describing generator function where we indicate input sources and an output destination. This hypothetical method could be used to pull product information from the yielded endpoints, which could then be saved to the returned endpoint. An interesting aspect of this interface is that as a user you don't have to spend any time figuring out how to read and write information. You merely determine the sources and destination, and the underlying implementation figures out the rest.
 
@@ -1683,114 +1730,6 @@ function saveProducts(productList) {
 ----
 
 As you may have noticed, the implementation doesn't hardcode any important aspects of the operation, which means you could use the inputs and output pattern in a generic way as long as you have zero or more inputs you want to pipe into one output. The consumer ends up with an elegant-looking method that's easy to understand -- they `yield` input stores and `return` an output store. Furthermore, our use of promises makes it easy to concatenate this operation with others. This way, we're keeping a potential tangle of conditional statements and flow control mechanisms in check, by abstracting away flow control into the iteration mechanism under the `saveProducts` method.
-
-==== 4.3.9 Mixing Generators Into Iterators
-
-Let's do a quick recap of generators. Generator functions return generator objects when invoked. A generator object has a `next` method, which returns the next element in the sequence. The `next` method returns objects with a `{ value, done }` shape.
-
-The following example shows an infinite fibonacci number generator. We then instantiate a generator object and read the first eight values in the sequence.
-
-[source,javascript]
-----
-function* fibonacci() {
-  let previous = 0
-  let current = 1
-  while (true) {
-    yield current
-    const next = current + previous
-    previous = current
-    current = next
-  }
-}
-const g = fibonacci()
-console.log(g.next()) // <- { value: 1, done: false }
-console.log(g.next()) // <- { value: 1, done: false }
-console.log(g.next()) // <- { value: 2, done: false }
-console.log(g.next()) // <- { value: 3, done: false }
-console.log(g.next()) // <- { value: 5, done: false }
-console.log(g.next()) // <- { value: 8, done: false }
-console.log(g.next()) // <- { value: 13, done: false }
-console.log(g.next()) // <- { value: 21, done: false }
-----
-
-Iterators follow a similar pattern. They enforce a contract that dictates we should return an object with a `next` method. That method should return sequence elements following a `{ value, done }` shape. The following example shows a `fibonacci` iterable that's a rough equivalent of the generator we were just looking at.
-
-[source,javascript]
-----
-const fibonacci = {
-  [Symbol.iterator]() {
-    let previous = 0
-    let current = 1
-    return {
-      next() {
-        const value = current
-        const next = current + previous
-        previous = current
-        current = next
-        return { value, done: false }
-      }
-    }
-  }
-}
-const sequence = fibonacci[Symbol.iterator]()
-console.log(sequence.next()) // <- { value: 1, done: false }
-console.log(sequence.next()) // <- { value: 1, done: false }
-console.log(sequence.next()) // <- { value: 2, done: false }
-console.log(sequence.next()) // <- { value: 3, done: false }
-console.log(sequence.next()) // <- { value: 5, done: false }
-console.log(sequence.next()) // <- { value: 8, done: false }
-console.log(sequence.next()) // <- { value: 13, done: false }
-console.log(sequence.next()) // <- { value: 21, done: false }
-----
-
-Let's reiterate. An iterable should return an object with a `next` method: generator functions do just that. The `next` method should return objects with a `{ value, done }` shape: generator functions do that too. What happens if we change the `fibonacci` iterable to use a generator function for its `Symbol.iterator` property? As it turns out, it just works.
-
-The following example shows the iterable `fibonacci` object using a generator function for its iterator. Note how that iterator has the exact same contents as the `fibonacci` generator function we saw earlier. We can use `yield`, `yield*`, and all of the semantics found in generator functions hold.
-
-[source,javascript]
-----
-const fibonacci = {
-  * [Symbol.iterator]() {
-    let previous = 0
-    let current = 1
-    while (true) {
-      yield current
-      const next = current + previous
-      previous = current
-      current = next
-    }
-  }
-}
-const g = fibonacci[Symbol.iterator]()
-console.log(g.next()) // <- { value: 1, done: false }
-console.log(g.next()) // <- { value: 1, done: false }
-console.log(g.next()) // <- { value: 2, done: false }
-console.log(g.next()) // <- { value: 3, done: false }
-console.log(g.next()) // <- { value: 5, done: false }
-console.log(g.next()) // <- { value: 8, done: false }
-console.log(g.next()) // <- { value: 13, done: false }
-console.log(g.next()) // <- { value: 21, done: false }
-----
-
-Meanwhile, the iterable protocol also holds up. To verify that you might use a construct like `for..of`, instead of manually creating the generator object. The following example uses `for..of` and introduces a circuit breaker to prevent an infinite loop from crashing the program.
-
-[source,javascript]
-----
-for (const value of fibonacci) {
-  console.log(value)
-  if (value > 20) {
-    break
-  }
-}
-// <- 1
-// <- 1
-// <- 2
-// <- 3
-// <- 5
-// <- 8
-// <- 13
-// <- 21
-----
 
 We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into `async` / `await`, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this chapter.
 
@@ -2253,6 +2192,30 @@ exercise().then(result => console.log(result))
 ----
 
 Async functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the `spawn` function used to iterate over the sequence of yielded expressions, and `yield` becomes `await`.
+
+Another way of thinking of async functions is in terms of promises. Consider the following example, where we have an async function which awaits for a promise that's the result of a function call, and then awaits on mapping every user through a function. How would you translate it, in terms of promises?
+
+[source,javascript]
+----
+async function getUserProfiles() {
+  const users = await findAllUsers()
+  const models = await Promise.all(users.map(toUserModel))
+  const profiles = models.map(model => model.profile)
+  return profiles
+}
+----
+
+The following snippet has a rough equivalent of the `getUserProfiles` async function. Note how, for the most part, we can change `await` statements into chained promises while moving variable declarations in the async function into reactions on each of those promises, as needed. Given async functions always return a `Promise`, we leave that unchanged in this case, but we'd have to remember to mentally assign a return value of `Promise.resolve(result)` to any async function we want to translate into promises in our heads.
+
+[source,javascript]
+----
+function getUserProfiles() {
+  const userPromise = findAllUsers()
+  const modelPromise = userPromise.then(users => Promise.all(users.map(toUserModel)))
+  const profilePromise = modelPromise.then(models => models.map(model => model.profile))
+  return profilePromise
+}
+----
 
 Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows together.
 

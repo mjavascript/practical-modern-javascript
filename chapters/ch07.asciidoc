@@ -1486,7 +1486,7 @@ Without the `u` flag, the `.` pattern matches any BMP symbol except for line ter
 
 [source,javascript]
 ----
-const rdot = /./
+const rdot = /^.$/
 rdot.test('a') // <- true
 rdot.test('\n') // <- false
 rdot.test('\u{1d11e}') // <- false
@@ -1496,7 +1496,7 @@ When using the `u` flag, Unicode symbols that aren't on the BMP are matched as w
 
 [source,javascript]
 ----
-const rdot = /./u
+const rdot = /^.$/u
 rdot.test('a') // <- true
 rdot.test('\n') // <- false
 rdot.test('\u{1d11e}') // <- true
@@ -1538,7 +1538,7 @@ While array destructuring in the previous example hid our code's reliance on mag
 ----
 function parseKeyValuePair(input) {
   const rattribute = /(?<key>[a-z]+)(?:=|\sis\s)(?<value>[a-z]+)/
-  const { group } = rattribute.exec(input)
+  const { groups } = rattribute.exec(input)
   return groups
 }
 parseKeyValuePair('strong=true') // <- { key: 'strong', value: 'true' }
@@ -1697,7 +1697,7 @@ On the other hand, a negative lookbehind could be used to match numbers that are
 
 [source,javascript]
 ----
-function getDollarAmount(input) {
+function getNonDollarAmount(input) {
   const rnumbers = /^(?<!\$)(?<amount>\d+(?:\.\d+)?)$/
   const match = rnumbers.exec(input)
   if (match === null) {
@@ -1705,8 +1705,8 @@ function getDollarAmount(input) {
   }
   return match.groups.amount
 }
-getDollarAmount('$12.34') // <- null
-getDollarAmount('€12.34') // <- '12.34'
+getNonDollarAmount('$12.34') // <- null
+getNonDollarAmount('€12.34') // <- '12.34'
 ----
 
 ==== 7.4.6 A New `/s` "`dotAll`" Flag
