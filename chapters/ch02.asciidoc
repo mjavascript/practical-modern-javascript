@@ -924,7 +924,7 @@ function print(...list) {
   console.log(list)
 }
 print(1, ...[2, 3], 4, ...[5])
-// <- ['1', '2', '3', '4', '5']
+// <- [1, 2, 3, 4, 5]
 ----
 
 Another limitation of `.apply` is that combining it with the `new` keyword, when instantiating an object, becomes very verbose. Here's an example of combining `new` and `.apply` to create a `Date` object. Ignore for a moment that months in JavaScript dates are zero-based, turning `11` into December, and consider how much of the following line of code is spent bending the language in our favor, just to instantiate a `Date` object.
