@@ -1595,8 +1595,8 @@ The following piece of code shows a self-describing generator function where we 
 [source,javascript]
 ----
 saveProducts(function* () {
-  yield '/products/javascript-application-design'
-  yield '/products/modular-es6'
+  yield '/products/modern-javascript'
+  yield '/products/mastering-modular-javascript'
   return '/wishlists/books'
 })
 ----
@@ -1606,8 +1606,8 @@ As a bonus, we'll have `saveProducts` return a promise that's fulfilled after th
 [source,javascript]
 ----
 saveProducts(function* () {
-  const p1 = yield '/products/javascript-application-design'
-  const p2 = yield '/products/modular-es6'
+  const p2 = yield '/products/modern-javascript'
+  const p2 = yield '/products/mastering-modular-javascript'
   return '/wishlists/books'
 }).then(response => {
   // continue after storing the product list
@@ -1619,8 +1619,8 @@ Conditional logic could be used to allow `saveProducts` to target a user's shopp
 [source,javascript]
 ----
 saveProducts(function* () {
-  yield '/products/javascript-application-design'
-  yield '/products/modular-es6'
+  yield '/products/modern-javascript'
+  yield '/products/mastering-modular-javascript'
   if (addToCart) {
     return '/cart'
   }
