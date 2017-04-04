@@ -220,9 +220,13 @@ const p2 = p1.then(x => { throw new Error('failed') })
 const p3 = p2.catch(err => console.error(err))
 ----
 
-Here is another situation where it might help you to think of promises as a tree-like data structure. In the following illustration it becomes obvious that, given the error originates in the `p2` node, we couldn't notice it by attaching a rejection reaction to `p1`.
+Here is another situation where it might help you to think of promises as a tree-like data structure. In the following illustration it becomes clear that, given the error originates in the `p2` node, we couldn't notice it by attaching a rejection reaction to `p1`.
 
-[illustration that depicts p1/p2/p3 as-is vs p3 being p1.then]
+image::../images/c04g02-promise-split-chain.png["The p3 rejection handler in this example won't be able to catch the failure in p2's reaction, since it reacts to p1 instead of p2."]
+
+In order for the reaction to handle the rejection in `p2`, we'd have to attach the reaction to `p2` instead.
+
+image::../images/c04g03-promise-serial-chain.png["In this example, p3 reacts to p2. This enables p3 to handle the rejection that arises in p2."]
 
 We've established that the promise you attach your reactions onto is important, as it determines what errors it can capture and what errors it can not. It's also worth noting that as long as an error remains uncaught in a promise chain, a rejection handler will be able to capture it. In the following example we've introduced an intermediary `.then` call in between `p2`, where the error originated; and `p4`, where we attach the rejection reaction. When `p2` settles with a rejection, `p3` becomes settled with a rejection as it depends on `p2` directly. When `p3` settles with a rejection, the rejection handler in `p4` fires.
 
@@ -302,7 +306,7 @@ Here is an enumeration of what is going on as that piece of code is executed.
 
 You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structurefootnote:[I wrote an online visualization tool called Promisees where you can see the tree structure underlying a Promise chain: https://mjavascript.com/out/promisees.].
 
-image::../images/c04g02-promise-chain.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
+image::../images/c04g04-promise-chain.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
 
 It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches, and so on.
 
@@ -432,7 +436,79 @@ Promise
 
 Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in section 4.1.3, when a `.catch` reaction executes without errors and doesn't return a rejected promise either, it will fulfill, following `.then` reactions.
 
-==== 4.1.5 Leveraging `Promise.all` and `Promise.race`
+==== 4.1.5 `Promise#finally` Proposal
+
+There's a TC39 proposalfootnote:[This proposal is in stage 2 at the time of this writing. You can find the proposal draft at: https://mjavascript.com/out/proposal-promise-finally.] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
+
+We can think of the following bit of code as a rough ponyfill for `Promise#finally`. We pass the reaction callback to `p.then` as both a fulfillment reaction and a rejection reaction.
+
+[source,javascript]
+----
+function finally(p, fn) {
+  return p.then(
+    fn,
+    fn
+  )
+}
+----
+
+There are a few semantic differences involved. For one, reactions passed to `Promise#finally` don't receive any arguments, since the promise could've settled as either a fulfillment value or a rejection reason. Typically, `Promise#finally` variants in user-land are used for use cases such as hiding a loading spinner that was shown before a `fetch` request and other cleanup, where we don't need access to the promise's settlement value. The following snippet has an updated ponyfill which doesn't pass any arguments to either reaction.
+
+[source,javascript]
+----
+function finally(p, fn) {
+  return p.then(
+    () => fn(),
+    () => fn()
+  )
+}
+----
+
+Reactions passed to `Promise#finally` resolve to the result of the parent promise.
+
+[source,javascript]
+----
+const p1 = Promise.resolve('value')
+const p2 = p1.finally(() => {})
+const p3 = p2.then(data => console.log(data))
+// <- 'value'
+----
+
+This is unlike `p.then(fn, fn)` which would produce a new fulfillment value unless it's explicitly forwarded in the reaction, as shown next.
+
+[source,javascript]
+----
+const p1 = Promise.resolve('value')
+const p2 = p1.then(() => {}, () => {})
+const p3 = p2.then(data => console.log(data))
+// <- undefined
+----
+
+The following code listing has a complete ponyfill for `Promise#finally`.
+
+[source,javascript]
+----
+function finally(p, fn) {
+  return p.then(
+    result => resolve(fn()).then(() => result),
+    err => resolve(fn()).then(() => Promise.reject(err))
+  )
+}
+----
+
+Note that if the reaction passed to `Promise#finally` is rejected or throws, then the promise returned by `Promise#finally` will settle with that rejection reason, as shown next.
+
+[source,javascript]
+----
+const p1 = Promise.resolve('value')
+const p2 = p1.finally(() => Promise.reject('oops'))
+const p3 = p2.catch(err => console.log(err))
+// <- 'oops'
+----
+
+As we can observe after carefully reading the code for our ponyfill, if either reaction results in an exception being thrown then the promise would be rejected. At the same time, returning a rejected promise via `Promise.reject` or some other means would imply `resove(fn())` results in a rejected promise, which won't follow the `.then` reactions used to return the original settlement value of the promise we're calling `.finally` on.
+
+==== 4.1.6 Leveraging `Promise.all` and `Promise.race`
 
 When writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There's also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excell at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API methods: `Promise.all` and `Promise.race`.
 
@@ -734,7 +810,7 @@ This sort of abstraction of complexity into another function often helps keep co
 ====
 Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem, there is no way of knowing whether the sequence is infinite or not in code.
 
-image::../images/c04g03-halting-problem.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
+image::../images/c04g05-halting-problem.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
 
 You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While `for..of` won't run into the problem unless there's no escape condition, using mechanisms such as spread or `Array.from` would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
 ====
