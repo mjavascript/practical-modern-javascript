@@ -304,7 +304,7 @@ Here is an enumeration of what is going on as that piece of code is executed.
 8. The `p3` promise from `p2.catch` is fulfilled, because it doesn't produce an error or result in a rejected promise
 9. Because `p3` was fulfilled, the `p3.catch` is never followed. The `p3.then` branch would've been used instead
 
-You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structurefootnote:[I wrote an online visualization tool called Promisees where you can see the tree structure underlying a Promise chain: https://mjavascript.com/out/promisees.].
+You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structurefootnoteref:[promisees,I wrote an online visualization tool called Promisees where you can see the tree structure underlying a Promise chain: https://mjavascript.com/out/promisees.].
 
 image::../images/c04g04-promise-chain.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
 
@@ -438,7 +438,7 @@ Note that you can transform data in rejection branches as well. Keep in mind tha
 
 ==== 4.1.5 `Promise#finally` Proposal
 
-There's a TC39 proposalfootnote:[This proposal is in stage 2 at the time of this writing. You can find the proposal draft at: https://mjavascript.com/out/proposal-promise-finally.] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
+There's a TC39 proposalfootnoteref:[proposal-promise-finally,This proposal is in stage 2 at the time of this writing. You can find the proposal draft at: https://mjavascript.com/out/proposal-promise-finally.] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
 
 We can think of the following bit of code as a rough ponyfill for `Promise#finally`. We pass the reaction callback to `p.then` as both a fulfillment reaction and a rejection reaction.
 

@@ -175,7 +175,7 @@ Number.isFinite('10')
 // <- false, because '10' is not a number
 ----
 
-Creating a ponyfillfootnote:[Like polyfills, ponyfills are user-land implementations of features that aren't available in every JavaScript runtime. While polyfills try to patch the runtime environment so that it behaves as if the feature was indeed available on the runtime, ponyfills implement the missing functionality as standalone modules that don't pollute the runtime environment. This has the benefit of not breaking expectations third party libraries (that don't know about your polyfill) may have about the environment. You can learn more about the distinction at: https://mjavascript.com/out/ponyfills.] for `Number.isFinite` would involve returning `false` for non-numeric values, effectively turning off the type-casting feature, and then calling `isFinite` on the input value.
+Creating a ponyfillfootnoteref:[ponyfills,Like polyfills, ponyfills are user-land implementations of features that aren't available in every JavaScript runtime. While polyfills try to patch the runtime environment so that it behaves as if the feature was indeed available on the runtime, ponyfills implement the missing functionality as standalone modules that don't pollute the runtime environment. This has the benefit of not breaking expectations third party libraries (that don't know about your polyfill) may have about the environment. You can learn more about the distinction at: https://mjavascript.com/out/ponyfills.] for `Number.isFinite` would involve returning `false` for non-numeric values, effectively turning off the type-casting feature, and then calling `isFinite` on the input value.
 
 [source,javascript]
 ----
@@ -351,7 +351,7 @@ Using floating point representation, not every integer can be represented precis
 
 ==== 7.1.8 `Number.MAX_SAFE_INTEGER` and `Number.MIN_SAFE_INTEGER`
 
-This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standardfootnote:[IEEE 754 is the Floating Point Standard. On Wikipedia: https://mjavascript.com/out/floating-point.], for that matter. The next bit of code shows exactly how large `Number.MAX_SAFE_INTEGER` is.
+This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standardfootnoteref:[floating-point,IEEE 754 is the Floating Point Standard. On Wikipedia: https://mjavascript.com/out/floating-point.], for that matter. The next bit of code shows exactly how large `Number.MAX_SAFE_INTEGER` is.
 
 [source,javascript]
 ----
@@ -405,7 +405,7 @@ Number.isSafeInteger(Number.MAX_SAFE_INTEGER) // <- true
 Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1) // <- false
 ----
 
-When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operandsfootnote:[Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://mjavascript.com/out/math-axel.]. One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of `left`, `right`, and the result of `left op right` is, thus, necessary to verify that we can indeed trust the result.
+When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operandsfootnoteref:[math-axel,Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://mjavascript.com/out/math-axel.]. One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of `left`, `right`, and the result of `left op right` is, thus, necessary to verify that we can indeed trust the result.
 
 In the following example both operands are within bounds, but the result is incorrect.
 
@@ -715,7 +715,7 @@ Math.hypot(1, 2, 3)
 // <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
 ----
 
-We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.footnote:[You can go deeper into functional `Array` methods by reading the following "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.]
+We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.footnoteref:[native-arrays,You can go deeper into functional `Array` methods by reading the following "Fun with Native Arrays" article: https://mjavascript.com/out/native-arrays.]
 
 [source,javascript]
 ----
@@ -961,7 +961,7 @@ Non-numeric values are coerced into numbers.
 // <- 'hahaha', because Number('3') is 3
 ----
 
-Values in the `(-1, 0)` range are rounded to `-0` becase `count` is passed through `ToInteger`, as documented by the specificationfootnote:[`String#repeat` in ECMAScript 6 Specification, section 21.1.3.13: https://mjavascript.com/out/array-repeat.]. That step in the specification dictates that `count` be casted with a formula like the one in the next code snippet.
+Values in the `(-1, 0)` range are rounded to `-0` becase `count` is passed through `ToInteger`, as documented by the specificationfootnoteref:[array-repeat,`String#repeat` in ECMAScript 6 Specification, section 21.1.3.13: https://mjavascript.com/out/array-repeat.]. That step in the specification dictates that `count` be casted with a formula like the one in the next code snippet.
 
 [source,javascript]
 ----
@@ -1072,7 +1072,7 @@ Let's switch protocols and learn about Unicode.
 
 ==== 7.3.6 Unicode
 
-JavaScript strings are represented using UTF-16 code unitsfootnote:[Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the `[U+0000, U+FFFF]` range -- also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the `'\u3456'` syntax. You could also represent code units in the `[U+0000, U+0255]` range using the `\x00..\xff` notation. For instance, `'\xbb'` represents `'»'`, the `U+00BB` code point, as you can also verify by doing `String.fromCharCode(0xbb)`.
+JavaScript strings are represented using UTF-16 code unitsfootnoteref:[unicode-encodings,Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the `[U+0000, U+FFFF]` range -- also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the `'\u3456'` syntax. You could also represent code units in the `[U+0000, U+0255]` range using the `\x00..\xff` notation. For instance, `'\xbb'` represents `'»'`, the `U+00BB` code point, as you can also verify by doing `String.fromCharCode(0xbb)`.
 
 For code points beyond `U+FFFF`, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji `'🐎'` code point is represented with the `'\ud83d\udc0e'` contiguous code units. In ES6 notation you can also represent code points using the `'\u{1f40e}'` notation (that example is also the horse emoji).
 
@@ -1185,7 +1185,7 @@ As Unicode expert Mathias Bynens points out, splitting by code points isn't enou
 
 ==== 7.3.8 A Proposal to Split Grapheme Segments
 
-Multiple code points that combine into a single visual glyph are getting more common.footnote:[Emoji popularize this with glyphs sometimes made up of four code points. See https://mjavascript.com/out/emoji for a list of emoji made up of several code points.] There is a new proposal in the works (currently in stage 2) that may settle the matter of iterating over grapheme clusters once and for all. It introduces an `Intl.Segmenter` built-in, which can be used to split a string into an iterable sequence.
+Multiple code points that combine into a single visual glyph are getting more common.footnoteref:[emoji,Emoji popularize this with glyphs sometimes made up of four code points. See https://mjavascript.com/out/emoji for a list of emoji made up of several code points.] There is a new proposal in the works (currently in stage 2) that may settle the matter of iterating over grapheme clusters once and for all. It introduces an `Intl.Segmenter` built-in, which can be used to split a string into an iterable sequence.
 
 To use the `Segmenter` API, we start by creating an instance of `Intl.Segmenter` specifying a locale and the granularity level we want: per grapheme, word, sentence or line. The segmenter instance can be used to produce an iterator for any given string, splitting it by the specified `granularity`. Note that the segmenting algorithm may vary depending on the locale, which is why it is a part of the API.
 
@@ -1502,7 +1502,7 @@ rdot.test('\n') // <- false
 rdot.test('\u{1d11e}') // <- true
 ----
 
-When the `u` flag is set, similar Unicode awareness improvements can be found in quantifiers and character classes, both of which treat each Unicode code point as a single symbol, instead of matching on the first code unit only. Insensitive case matching with the `i` flag performs Unicode case folding when the `u` flag is set as well, which is used to normalize code points in both the input string and the regular expression.footnote:[For more details around the `u` flag in regular expressions, read the following piece, titled "Unicode-aware regular expressions in ECMAScript 6 by Mathias Bynens": https://mjavascript.com/out/regexp-unicode, from Mathias Bynens.]
+When the `u` flag is set, similar Unicode awareness improvements can be found in quantifiers and character classes, both of which treat each Unicode code point as a single symbol, instead of matching on the first code unit only. Insensitive case matching with the `i` flag performs Unicode case folding when the `u` flag is set as well, which is used to normalize code points in both the input string and the regular expression.footnoteref:[regexp-unicode,For more details around the `u` flag in regular expressions, read the following piece, titled "Unicode-aware regular expressions in ECMAScript 6 by Mathias Bynens": https://mjavascript.com/out/regexp-unicode, from Mathias Bynens.]
 
 ==== 7.4.3 Named Capture Groups
 
@@ -1532,7 +1532,7 @@ parseKeyValuePair('strong is true') // <- { key: 'strong', value: 'true' }
 parseKeyValuePair('flexible=too') // <- { key: 'flexible', value: 'too' }
 ----
 
-While array destructuring in the previous example hid our code's reliance on magic array indices, the fact remains that matches are placed in an ordered array regardless. The named capture groups proposalfootnote:[You can find the named capture groups proposal document at: https://mjavascript.com/out/regexp-named-groups.] (in stage 3 at the time of this writing) adds syntax like `(?<groupName>)` where we can name capturing groups, which are then returned in a `groups` property of the returned match object. The `groups` property can then be destructured from the resulting object when calling `RegExp#exec` or `String#match`.
+While array destructuring in the previous example hid our code's reliance on magic array indices, the fact remains that matches are placed in an ordered array regardless. The named capture groups proposalfootnoteref:[regexp-named-groups,You can find the named capture groups proposal document at: https://mjavascript.com/out/regexp-named-groups.] (in stage 3 at the time of this writing) adds syntax like `(?<groupName>)` where we can name capturing groups, which are then returned in a `groups` property of the returned match object. The `groups` property can then be destructured from the resulting object when calling `RegExp#exec` or `String#match`.
 
 [source,javascript]
 ----
@@ -1601,7 +1601,7 @@ americanDateToHungarianFormat('06/09/1988') // <- '1988-09-06'
 
 ==== 7.4.4 Unicode Property Escapes
 
-The proposed Unicode property escapesfootnote:[You can find the Unicode property escapes proposal document at: https://mjavascript.com/out/unicode-property-escapes.] (currently in stage 3) are a new kind of escape sequence that's available in regular expressions marked with the `u` flag. This proposal adds a escape in the form of `\p{LoneUnicodePropertyNameOrValue}` for binary Unicode properties and `\p{UnicodePropertyName=UnicodePropertyValue}` for non-binary Unicode properties. In addition, `\P` is the negated version of a `\p` escape sequence.
+The proposed Unicode property escapesfootnoteref:[unicode-property-escapes,You can find the Unicode property escapes proposal document at: https://mjavascript.com/out/unicode-property-escapes.] (currently in stage 3) are a new kind of escape sequence that's available in regular expressions marked with the `u` flag. This proposal adds a escape in the form of `\p{LoneUnicodePropertyNameOrValue}` for binary Unicode properties and `\p{UnicodePropertyName=UnicodePropertyValue}` for non-binary Unicode properties. In addition, `\P` is the negated version of a `\p` escape sequence.
 
 The Unicode standard defines properties for every symbol. Armed with these properties, one may make advanced queries about Unicode characters. For example, symbols in the greek alphabet have a `Script` property set to `Greek`. We could use the new escapes to match any greek Unicode symbol.
 
@@ -1677,7 +1677,7 @@ getNonJavaScriptFilename('index.js') // <- null
 getNonJavaScriptFilename('index.php') // <- 'index'
 ----
 
-The proposal for lookbehindfootnote:[You can find the lookbehind assertions proposal document at: https://mjavascript.com/out/regexp-lookbehind.] (stage 3) introduces positive and negative lookbehind assertions, denoted with `(?<=…)` and `(?<!…)` respectively. These assertions can be used to ensure a pattern we want to match is or isn't preceded by another given pattern. The following snippet uses a positive lookbehind to match the digits in dollar amounts, but not for amounts in euros.
+The proposal for lookbehindfootnoteref:[regexp-lookbehind,You can find the lookbehind assertions proposal document at: https://mjavascript.com/out/regexp-lookbehind.] (stage 3) introduces positive and negative lookbehind assertions, denoted with `(?<=…)` and `(?<!…)` respectively. These assertions can be used to ensure a pattern we want to match is or isn't preceded by another given pattern. The following snippet uses a positive lookbehind to match the digits in dollar amounts, but not for amounts in euros.
 
 [source,javascript]
 ----
@@ -1731,7 +1731,7 @@ rcharacter.test('\t') // <- true
 rcharacter.test('\n') // <- true
 ----
 
-The `dotAll` proposalfootnote:[You can find the `dotAll` flag proposal document at: https://mjavascript.com/out/regexp-dotall.] (stage 3) adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
+The `dotAll` proposalfootnoteref:[regexp-dotall,You can find the `dotAll` flag proposal document at: https://mjavascript.com/out/regexp-dotall.] (stage 3) adds an `s` flag which changes the behavior of `.` in JavaScript regular expressions to match any single character.
 
 [source,javascript]
 ----
@@ -1838,7 +1838,7 @@ console.log(addressMatcher.next().value)
 // <- ['placeholder', 'Enter your business address']
 ----
 
-The `String#matchAll` proposalfootnote:[You can find the `String#matchAll` proposal document at: https://mjavascript.com/out/string-matchall.] (in stage 1 at the time of this writing) introduces a new method for the string prototype which would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` object as opposed to just the `captures` in the example above. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the sequence.
+The `String#matchAll` proposalfootnoteref:[string-matchall,You can find the `String#matchAll` proposal document at: https://mjavascript.com/out/string-matchall.] (in stage 1 at the time of this writing) introduces a new method for the string prototype which would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` object as opposed to just the `captures` in the example above. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the sequence.
 
 [source,javascript]
 ----
