@@ -727,7 +727,7 @@ function getCoordinates() {
 var { x, y } = getCoordinates()
 ----
 
-The case for default option values bears repeating. Imagine you have a `random` function which produces random integers between a `min` and a `max` value, and that it should default to values between 1 and 10. This is particularly interesting as an alternative to named parameters in other languages like Python and C#. This pattern, where you're able to define default values for options and then let consumers override them individually, offers great flexibility.
+The case for default option values bears repeating. Imagine you have a `random` function which produces random integers between a `min` and a `max` value, and that it should default to values between 1 and 10. This is particularly interesting as an alternative to named parameters in languages with strong typing features, such as Python and C#. This pattern, where you're able to define default values for options and then let consumers override them individually, offers great flexibility.
 
 [source,javascript]
 ----
