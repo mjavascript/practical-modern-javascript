@@ -5,8 +5,8 @@
   "files": [
     "sections/cover.html",
     "sections/toc.html",
-    "sections/foreword.html",
-    "sections/preface.html",
+    "sections/foreword.asciidoc",
+    "sections/preface.asciidoc",
     "chapters/ch01.asciidoc",
     "chapters/ch02.asciidoc",
     "chapters/ch03.asciidoc",
