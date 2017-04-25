@@ -1,0 +1,20 @@
+[foreword]
+== Foreword
+
+When I created JavaScript in 1995 at Netscape, I had no definite idea that it would become the most widely used programming language on the Internet. I did know that I had very little time to get it into “minimum viable shipping” state, and so I made it extensible and mutable from global object on down, even to base-level meta-object protocol hooks (e.g., `toString` and `valueOf`, styled after Java’s methods of the same names).
+
+Yet in spite of its ongoing evolution and still-rising popularity, JavaScript always benefits from an incremental and careful teaching approach that puts first things first. I think this follows inevitably from the hurried design and intentional extensibility. I overloaded two kernel elements, functions and objects, so that programmers could use them in various ways as general workalikes for individual tools in a larger Swiss army knife. This meant that students would need to learn which tool was best to use for a specific task, and how precisely to wield that particular blade.
+
+Netscape was a whirlwind for me, and I think for anyone there from early 1995 on. It was rushing toward an Initial Public Offering predicated on competing with Microsoft via the infamous “Netscape + Java kills Windows” formula repeated by Marc Andreessen on the IPO roadshow that year. Java was the big-brother or “Batman” programming language to little-brother, “Robin the boy hostage” sidekick “scripting language,” JavaScript.
+
+But I knew while I was writing the first version (code-named “Mocha”) that JavaScript and not Java would be integrated deeply with the Netscape browser and the document object model I created at the same time. There was no way across the Netscape/Sun organizational boundary, or the browser/JVM code bases, to embed Java other than as a plugin.
+
+So I did have a vague sense that JavaScript would either succeed over time and do well, or else fade quickly in the shadow of something else. I remember telling my friend and cubicle-mate Jeff Weinstein, when he asked me what I’d be doing in 20 years, that it would be “JavaScript or bust.” Even then I felt a sense of deep obligation to JavaScript’s users that was inherent in the “two-blade Swiss army knife” design I had chosen under the dual constraints of extremely short schedule and “make it look like Java” management edict.
+
+The Modular JavaScript Book Series fulfills my hope for an incremental and straightforward pedagogy, starting with easily applicable code examples and scaling through design patterns to entire module-based applications. This series nicely covers best testing practices and winning techniques for deploying JavaScript applications. It is another jewel in O’Reilly’s crown of books on JavaScript.
+
+I am delighted to support Nicolás' endeavor because his book looks exactly like what people who are coming to JavaScript with fresh eyes need. I first met Nicolás at a dinner in Paris and got to know him a bit there, and over time online. His pragmatism combined with empathy for newcomers to the language and a great sense of humor convinced me to review this book in draft form. The finished work is easy-to-digest and fun. I encourage you to dive in, to discover and embrace JavaScript, and to contribute to developing a better Web for everyone.
+
+--- Brendan Eich
+Inventor of JavaScript
+CEO and co-founder of Brave Software
