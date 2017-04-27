@@ -1,7 +1,41 @@
 [preface]
 == Preface
 
-..
+Back in 1988, when I was using FrontPage for all my web development needs at school, if someone had told me that I'd end up working on the web for a living, I would've probably chuckled. JavaScript has grown along with us in all the years since, and it's hard to imagine how the web could've thrived without it. Bit by bit, this book will give you a comprehensive picture of the modern JavaScript landscape.
+
+=== Who Should Read This Book
+
+This book is meant for web developers, enthusiasts and professionals with a working knowledge of plain JavaScript. These developers and anyone looking to further their understanding of the JavaScript language shall benefit from reading Modern JavaScript.
+
+=== Why Modern JavaScript?
+
+The goal of this book is to provide an approachable way of learning the latest developments in JavaScript: ES6 and later. ES6 was a huge update to the language, and it came out around the same time as a streamlined specification development process. Around this time I wrote quite a few blog posts about the different features in ES6, which became a bit popular. There are quite a few other books on ES6 out there, but they're a little different from what I had in mind for a book on ES6 and beyond. This book tries to explain features in detail without getting caught up in the specification, its implementation details, or unlikely corner cases that would almost certainly need to be researched online if happened upon.
+
+Instead of extreme thoroughness, the book places its utmost focus in the learning process, having sorted its material in such an incremental way that you don't have to scan ahead in the book for the definition of something else. Armed with practical examples, Modern JavaScript goes beyond ES6 to capture the changes to the language since June 2015 -- when the ES6 specification was finalized -- including async functions, object destructuring, dynamic imports, `Promise#finally`, and async generators.
+
+Lastly, this book has the goal of establishing a baseline we can take for granted in the rest of the Modular JavaScript series. After having learned the latest language features in this first book, we'll be all set to discuss modular design, testing, and deployment, without having to diverge into language features whenever they're used in a code example. This incremental and modular approach is meant to be pervasive across the series, each book, each chapter, and each section.
+
+=== How is This Book Organized?
+
+In the first chapter, we open with an introduction to JavaScript and its standards development process, how it has evolved over the years, where it is now, and where it's going. You'll also get a short introduction to Babel and ESLint, modern tools that can aid us in the process of discovering modern JavaScript.
+
+The second chapter covers all of the absolutely essential changes in ES6, including arrow functions, destructuring, `let` and `const`, template literals, and a few other syntax embellishments.
+
+In the third chapter we'll discuss the new `class` syntax for declaring object prototypes, a new primitive type known as `Symbol`, and a few new `Object` methods.
+
+Chapter four goes over all of the new ways we can deal with flow control starting in ES6. We discuss Promises, iterators, generators, and async functions in great detail and with heaps of accompanying examples, uncovering the synergistic properties between all the different techniques. You won't only learn how to use these flow control techniques but how to best reason about them so that they truly simplify your code.
+
+The fifth chapter describes the new collection built-ins found in ES6, which we can use to create object maps and unique sets. You'll find usage examples for each of these collection types.
+
+The subject of chapter six is the new `Proxy` and `Reflect` built-ins. We'll learn all about how we can use proxies and the reasons why we need to be careful when choosing to do so.
+
+Chapter seven is dedicated to the rest of built-in improvements that can be found in ES6. Particularly around `Array`, `Math`, numbers, strings, Unicode and regular expressions.
+
+The eighth chapter is devoted to native JavaScript Modules and, briefly, the history that lead to their inception. We'll then discuss their syntax implications at length.
+
+The ninth and last chapter -- dubbed "Practical Considerations" -- is somewhat unconventional for books about programming languages. Rather than spreading my personal views throughout the book, I condensed them into the last chapter. Here you'll find reasoning behind how to decide when to use which kind of variable declaration or string literal quotation mark, advice on handling asynchronous code flows and whether using classes or proxies is a good idea, and a few more nuggets of insight.
+
+For those of you who already somewhat familiar with ES6 and comfortable jumping around the pages in a book, I recommend reading chapter four in detail, as you should find the insight into flow control most valuable. The seventh and eighth are also a must, since they provide details around the areas of ES6 that are less often discussed in the open. The last chapter will indubitably -- regardless of whether you agree with the views expressed therein -- challenge you to think deeply about what works and what doesn't in the context of JavaScript applications written under the wild new world order that is Modern JavaScript.
 
 === Conventions Used in This Book
 
@@ -11,77 +45,50 @@ _Italic_:: Indicates new terms, URLs, email addresses, filenames, and file exten
 
 +Constant width+:: Used for program listings, as well as within paragraphs to refer to program elements such as variable or function names, databases, data types, environment variables, statements, and keywords.
 
-**`Constant width bold`**:: Shows commands or other text that should be typed literally by the user.
-
-_++Constant width italic++_:: Shows text that should be replaced with user-supplied values or by values determined by context.
-
-
 [TIP]
 ====
-This element signifies a tip or suggestion.
-====
-
-[NOTE]
-====
-This element signifies a general note.
+This icon signifies a tip, suggestion, or general note.
 ====
 
 [WARNING]
 ====
-This element indicates a warning or caution.
+This icon indicates a warning or caution.
 ====
-
-=== Using Code Examples
-++++
-<!--PROD: Please reach out to author to find out if they will be uploading code examples to oreilly.com or their own site (e.g., GitHub). If there is no code download, delete this whole section. If there is, when you email digidist with the link, let them know what you filled in for title_title (should be as close to book title as possible, i.e., learning_python_2e). This info will determine where digidist loads the files.-->
-++++
-
-Supplemental material (code examples, exercises, etc.) is available for download at link:$$https://github.com/oreillymedia/title_title$$[].
-
-This book is here to help you get your job done. In general, if example code is offered with this book, you may use it in your programs and documentation. You do not need to contact us for permission unless you’re reproducing a significant portion of the code. For example, writing a program that uses several chunks of code from this book does not require permission. Selling or distributing a CD-ROM of examples from O’Reilly books does require permission. Answering a question by citing this book and quoting example code does not require permission. Incorporating a significant amount of example code from this book into your product’s documentation does require permission.
-
-We appreciate, but do not require, attribution. An attribution usually includes the title, author, publisher, and ISBN. For example: “_Book Title_ by Some Author (O’Reilly). Copyright 2012 Some Copyright Holder, 978-0-596-xxxx-x.”
-
-If you feel your use of code examples falls outside fair use or the permission given above, feel free to contact us at pass:[<a class="email" href="mailto:permissions@oreilly.com"><em>permissions@oreilly.com</em></a>].
 
 === Safari® Books Online
 
 [role = "safarienabled"]
 [NOTE]
 ====
-pass:[<a href="http://safaribooksonline.com" class="orm:hideurl:ital"><em class="hyperlink">Safari Books Online</em></a>] is an on-demand digital library that delivers expert pass:[<a href="https://www.safaribooksonline.com/explore/" class="orm:hideurl">content</a>] in both book and video form from the world&#8217;s leading authors in technology and business.
+pass:[<ulink role="orm:hideurl:ital" url="http://my.safaribooksonline.com/?portal=oreilly">Safari Books Online</ulink>] is an on-demand digital library that delivers expert pass:[<ulink role="orm:hideurl" url="http://www.safaribooksonline.com/content">content</ulink>] in both book and video form from the world&#8217;s leading authors in technology and business.
 ====
 
 Technology professionals, software developers, web designers, and business and creative professionals use Safari Books Online as their primary resource for research, problem solving, learning, and certification training.
 
-++++
-<p>Safari Books Online offers a range of <a href="https://www.safaribooksonline.com/pricing/" class="orm:hideurl">plans and pricing</a> for <a href="https://www.safaribooksonline.com/enterprise/" class="orm:hideurl">enterprise</a>, <a href="https://www.safaribooksonline.com/government/" class="orm:hideurl">government</a>, <a href="https://www.safaribooksonline.com/academic-public-library/" class="orm:hideurl">education</a>, and individuals.</p>
-
-<p>Members have access to thousands of books, training videos, and prepublication manuscripts in one fully searchable database from publishers like O&#8217;Reilly Media, Prentice Hall Professional, Addison-Wesley Professional, Microsoft Press, Sams, Que, Peachpit Press, Focal Press, Cisco Press, John Wiley &amp; Sons, Syngress, Morgan Kaufmann, IBM Redbooks, Packt, Adobe Press, FT Press, Apress, Manning, New Riders, McGraw-Hill, Jones &amp; Bartlett, Course Technology, and hundreds <a href="https://www.safaribooksonline.com/our-library/" class="orm:hideurl">more</a>. For more information about Safari Books Online, please visit us <a class="orm:hideurl">online</a>.</p>
-++++
+Safari Books Online offers a range of pass:[<ulink role="orm:hideurl" url="http://www.safaribooksonline.com/subscriptions">product mixes</ulink>] and pricing programs for pass:[<ulink role="orm:hideurl" url="http://www.safaribooksonline.com/organizations-teams">organizations</ulink>], pass:[<ulink role="orm:hideurl" url="http://www.safaribooksonline.com/government">government agencies</ulink>], and pass:[<ulink role="orm:hideurl" url="http://www.safaribooksonline.com/individuals">individuals</ulink>]. Subscribers have access to thousands of books, training videos, and prepublication manuscripts in one fully searchable database from publishers like O’Reilly Media, Prentice Hall Professional, Addison-Wesley Professional, Microsoft Press, Sams, Que, Peachpit Press, Focal Press, Cisco Press, John Wiley & Sons, Syngress, Morgan Kaufmann, IBM Redbooks, Packt, Adobe Press, FT Press, Apress, Manning, New Riders, McGraw-Hill, Jones & Bartlett, Course Technology, and dozens pass:[<ulink role="orm:hideurl" url="http://www.safaribooksonline.com/publishers">more</ulink>]. For more information about Safari Books Online, please visit us pass:[<ulink role="orm:hideurl" url="http://www.safaribooksonline.com/">online</ulink>].
 
 === How to Contact Us
 
 Please address comments and questions concerning this book to the publisher:
 
 ++++
-<ul class="simplelist">
-  <li>O’Reilly Media, Inc.</li>
-  <li>1005 Gravenstein Highway North</li>
-  <li>Sebastopol, CA 95472</li>
-  <li>800-998-9938 (in the United States or Canada)</li>
-  <li>707-829-0515 (international or local)</li>
-  <li>707-829-0104 (fax)</li>
-</ul>
+<simplelist>
+<member>O’Reilly Media, Inc.</member>
+<member>1005 Gravenstein Highway North</member>
+<member>Sebastopol, CA 95472</member>
+<member>800-998-9938 (in the United States or Canada)</member>
+<member>707-829-0515 (international or local)</member>
+<member>707-829-0104 (fax)</member>
+</simplelist>
 ++++
 
 We have a web page for this book, where we list errata, examples, and any additional information. You can access this page at link:$$http://www.oreilly.com/catalog/<catalog page>$$[].
 
 ++++
-<!--Don't forget to update the link above.-->
+<remark>Don't forget to update the link above.</remark>
 ++++
 
-To comment or ask technical questions about this book, send email to pass:[<a class="email" href="mailto:bookquestions@oreilly.com"><em>bookquestions@oreilly.com</em></a>].
+To comment or ask technical questions about this book, send email to pass:[<email>bookquestions@oreilly.com</email>].
 
 For more information about our books, courses, conferences, and news, see our website at link:$$http://www.oreilly.com$$[].
 
@@ -93,6 +100,10 @@ Watch us on YouTube: link:$$http://www.youtube.com/oreillymedia$$[]
 
 === Acknowledgments
 
-++++
-<!--Fill in...-->
-++++
+Like virtually every human task ever carried out, Modern JavaScript was made possible only by building upon the work of others. I want to thank Nan Barber, my editor at O'Reilly, for her fantastic support along the ride of writing this book. Ally MacDonald, another editor at O'Reilly, helped me out in the early days of the project and is the foremost reason why Modular JavaScript became a book series, as she helped me conjure up a modular approach to teaching JavaScript.
+
+This book had a phenomenal ensemble of technical reviewers. Many of these folks are on TC39, the technical committee devoted to pushing JavaScript forward, and it's deeply humbling that they gave up some of their time to help future-proof this book. As always, Mathias Bynens (ex-Opera) proved instrumental to proofing everything in the book with regards to Unicode standards and held my work to a high degree of consistency in terms of code snippets. Kent C. Dodds (TC39, PayPal) ingeniously offered video reviews where he identified weak spots and helped improve the book. Jordan Harband (TC39, Airbnb) came through with deep technical commentary about many of the JavaScript features discussed in the book, and along with Alex Russell (TC39, Google) helped me iron out the history of JavaScript and its standards body for the first chapter. Ingvar Stepanyan (Cloudflare) was also a sharp eye in identifying code issues and pinpointed mistakes around low-level aspects of the specification. Brian Terlson (TC39 editor, Microsoft) also helped out with timelines and details around TC39. Rod Vagg (Node.js) provided insight that lead to better code examples and more consistent code style throughout the book.
+
+Brendan Eich (TC39, Brave CEO) provided a trove of insight into the early days of JavaScript and TC39, which proved essential to the development of the first chapter. And naturally, if not for him, you wouldn't be holding this book in your hands.
+
+Lastly, I'd like to thank my wife, Marianela, for her sacrifices and putting up with me through the development of the first book in a long series. Marian, I couldn't do this without you!
