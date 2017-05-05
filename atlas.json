@@ -1,7 +1,5 @@
 {
-  "name": "oreillymedia/modular-es6",
-  "branches": ["master"],
-  "export_formats": ["html"],
+  "branch": "master",
   "files": [
     "sections/cover.html",
     "sections/toc.html",
@@ -50,8 +48,15 @@
       "consolidated": false
     }
   },
-  "theme": "oreillymedia/animal_theme",
+  "theme": "oreillymedia/animal_theme_sass",
   "title": "Practical ES6",
+  "name": "oreillymedia/modular-es6",
+  "branches": [
+    "master"
+  ],
+  "export_formats": [
+    "html"
+  ],
   "templating": false,
   "print_isbn13": "",
   "lang": "en",
