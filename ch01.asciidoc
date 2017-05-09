@@ -98,7 +98,7 @@ console.log(double(3))
 
 To the right of the source code we've entered, you'll see the transpiled ES5 equivalent. As you update your source code, the transpiled result is also updated in real-time.
 
-image::../images/c01g01-babel-repl.png["Babel REPL"]
+image::images/c01g01-babel-repl.png["Babel REPL"]
 
 The Babel REPL is an effective companion as a way of trying out some of the features introduced in this book. However, note that Babel doesn't transpile new built-ins, such as `Symbol`, `Proxy` and `WeakMap`. Those references are instead left untouched, and it's up to the runtime executing the Babel output to provide those built-ins. If we want to support runtimes that haven't yet implemented these built-ins, we could import the `babel-polyfill` package in our code.
 
@@ -283,7 +283,7 @@ if(false){}
 
 When we run the `lint` script, ESLint describes everything that's wrong with the file.
 
-image::../images/c01g02-eslint-cli.png["Validating a piece of source code through ESLint."]
+image::images/c01g02-eslint-cli.png["Validating a piece of source code through ESLint."]
 
 ESLint is able to fix most style problems automatically if we pass in a `--fix` flag. Add the following script to your `package.json`.
 

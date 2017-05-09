@@ -90,7 +90,7 @@ console.log(html)
 
 The following screenshot shows our tiny application in action.
 
-image::../images/c08g01-grocery-item.png["Printing an item for our grocery shopping list"]
+image::images/c08g01-grocery-item.png["Printing an item for our grocery shopping list"]
 
 The next template we'll make renders the grocery list itself. It receives an array of items, and renders each of them by reusing the `item.js` template from the previous code snippet.
 
@@ -122,7 +122,7 @@ console.log(html)
 
 The following screenshot shows our updated application in all its glory.
 
-image::../images/c08g02-grocery-list.png["Printing a grocery shopping list"]
+image::images/c08g02-grocery-list.png["Printing a grocery shopping list"]
 
 In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a `model` object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the `item.js` templating function, and joining their HTML representations with newlines.
 
@@ -155,7 +155,7 @@ console.log(render('list', [{
 }]))
 ----
 
-image::../images/c08g03-dynamic-render.png["Printing different views through a normalized render function."]
+image::images/c08g03-dynamic-render.png["Printing different views through a normalized render function."]
 
 Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. In the next few sections we'll look at `export` and `import` statements, and learn how ESM is compatible with CJS.
 

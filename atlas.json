@@ -1,19 +1,19 @@
 {
   "branch": "master",
   "files": [
-    "sections/cover.html",
-    "sections/toc.html",
-    "sections/foreword.asciidoc",
-    "sections/preface.asciidoc",
-    "chapters/ch01.asciidoc",
-    "chapters/ch02.asciidoc",
-    "chapters/ch03.asciidoc",
-    "chapters/ch04.asciidoc",
-    "chapters/ch05.asciidoc",
-    "chapters/ch06.asciidoc",
-    "chapters/ch07.asciidoc",
-    "chapters/ch08.asciidoc",
-    "chapters/ch09.asciidoc"
+    "cover.html",
+    "toc.html",
+    "foreword.asciidoc",
+    "preface.asciidoc",
+    "ch01.asciidoc",
+    "ch02.asciidoc",
+    "ch03.asciidoc",
+    "ch04.asciidoc",
+    "ch05.asciidoc",
+    "ch06.asciidoc",
+    "ch07.asciidoc",
+    "ch08.asciidoc",
+    "ch09.asciidoc"
   ],
   "formats": {
     "pdf": {
