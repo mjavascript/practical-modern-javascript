@@ -15,7 +15,9 @@
     "ch07.asciidoc",
     "ch08.asciidoc",
     "ch09.asciidoc",
-    "ix.html"
+    "ix.html",
+    "author_bio.html",
+    "colo.html"
   ],
   "formats": {
     "pdf": {
