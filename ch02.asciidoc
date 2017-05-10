@@ -1,4 +1,4 @@
-[[ecmascript6-essentials]]
+[[es6-essentials]]
 == ES6 Essentials
 
 The sixth edition of the language comes with a plethora of non-breaking syntax improvements, most of which we'll tackle throughout this chapter. Many of these changes are syntactic sugar; that is, they could be represented in ES5, albeit using more complicated pieces of code. There are also changes that aren't merely syntactic sugar but a completely different way of declaring variables using `let` and `const`, as we'll see toward the end of the chapter.

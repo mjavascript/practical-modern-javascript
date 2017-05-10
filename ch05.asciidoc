@@ -1,4 +1,4 @@
-[[leveraging-es-collections]]
+[[leveraging-ecmascript-collections]]
 == Leveraging ECMAScript Collections
 
 JavaScript data structures are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map npm package names to their metadata, as shown next.
