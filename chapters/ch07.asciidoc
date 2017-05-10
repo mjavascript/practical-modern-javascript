@@ -1,4 +1,4 @@
-[[built-in-improvements]]
+[[built-in-improvements-in-es6]]
 == Built-in Improvements in ES6
 
 Thus far in the book, we've discussed entirely new language syntax, such as property value shorthands, arrow functions, destructuring, or generators; and entirely new built-ins, such as `WeakMap`, `Proxy`, or `Symbol`. This chapter, on the other hand, is mostly devoted to existing built-ins that were improved in ES6. These improvements consist mostly of new instance methods, properties, and utility methods.
