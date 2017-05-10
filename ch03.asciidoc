@@ -878,4 +878,67 @@ Changing the prototype of an object is, by the nature of how modern JavaScript e
 ____
 ====
 
+=== 3.4 Decorators
+
+Decorators are, as most things programming, definitely not a new concept. They pattern is fairly commonplace in modern programming languages: you have attributes in C#, they're called annotations in Java, there's decorators in Python, and the list goes on. There's a JavaScript decorators proposalfootnoteref:[decorators,You can find the proposal draft online at: https://mjavascript.com/out/decorators.] in the works. It is currently sitting at stage 2 of the TC39 process.
+
+==== 3.4.1 A Primer on JavaScript Decorators
+
+The syntax for JavaScript decorators is fairly similar to that of Python decorators. JavaScript decorators may be applied to classes and any statically-defined properties, such as those found on an object literal declaration or in a `class` declaration -- even if they are `get` accessors, `set` accessors, or `static` properties.
+
+The proposal defines a decorator as an `@` followed by a sequence of dotted identifiersfootnoteref:[no-dynamic-access, Accessing properties via `[]` notation is disallowed due to the difficulty it would present when disambiguating grammar at the compiler level.] and an optional argument list. Here's a few examples.
+
+- `@decorators.frozen` is a valid decorator
+- `@decorators.frozen(true)` is a valid decorator
+- `@decorators().frozen()` is a syntax error
+- `@decorators['frozen']` is a syntax error
+
+Zero or more decorators can be attached to `class` declarations and class members.
+
+[source,javascript]
+----
+@inanimate
+class Car {}
+
+@expensive
+@speed('fast')
+class Lamborghini extends Car {}
+
+class View {
+  @throttle(200) // reconcile once every 200ms at most
+  reconcile() {}
+}
+----
+
+Decorators are implemented by way of functions. Member decorator functions take a member descriptor and return a member descriptor.
+
+In the following example we define a `readonly` member decorator function which makes decorated members non-writable.
+
+[source,javascript]
+----
+function readonly(member) {
+  member.descriptor.writable = false
+}
+----
+
+Class decorator functions take a `target`, which is the class constructor being decorated; a `heritage` parameter, containing the parent class when the decorated class extends another class; and a `members` array, with a list of member descriptors for the class being decorated.
+
+We could implement a class-wide `readonlyMembers` decorator by reusing the `readonly member decorator on each member descriptor for a decorated class, as shown next.
+
+[source,javascript]
+----
+function readonlyMembers(target, heritage, members) {
+  members.forEach(member => readonly(member))
+}
+----
+
+==== 3.4.2 Stacking Decorators and a Warning about Immutability
+
+With all the fluff around immutability you may be tempted to return a new property descriptor from your decorators, without modifying the original descriptor. While well-intentioned, this may have an undesired effect, as it is possible to decorate the same `class` or class member several times.
+
+If any decorators in a piece of code returned an entirely new `descriptor` without taking into consideration the `descriptor` parameter they receive, they'd effectively lose all the decoration that took place before the different descriptor was returned.
+
+We should be careful to write decorators that take into account the supplied `descriptor`: modify it directly or create one that's based on the `descriptor` that's provided to you.
+
+
 In the following chapter we'll look at more features coming in ES6 and how they can be used to iterate over any JavaScript objects, as well as how to master flow control using promises and generators.
