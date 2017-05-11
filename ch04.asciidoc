@@ -113,7 +113,7 @@ When we chain promises, we need to understand that `p1.then(r1).then(r2)` create
 
 Figuring out the tree-like nature of promises is the key to unlocking a deep understanding of how promises behave. To this end, I've created an online tool called Promisees you can use to play around with promise chains while visualizing the tree structure they leave behind.
 
-image::images/c04g01-promisees.png["Promisees lets you write a piece of code and visualize how the underlying graph evolves as promises are settled in fulfillment or rejection."]
+image::images/pmjs_04in01.png["Promisees lets you write a piece of code and visualize how the underlying graph evolves as promises are settled in fulfillment or rejection."]
 
 You can find Promisees at https://mjavascript.com/out/promisees.
 ====
@@ -222,11 +222,11 @@ const p3 = p2.catch(err => console.error(err))
 
 Here is another situation where it might help you to think of promises as a tree-like data structure. In the following illustration it becomes clear that, given the error originates in the `p2` node, we couldn't notice it by attaching a rejection reaction to `p1`.
 
-image::images/c04g02-promise-split-chain.png["The p3 rejection handler in this example won't be able to catch the failure in p2's reaction, since it reacts to p1 instead of p2."]
+image::images/pmjs_04in02.png["The p3 rejection handler in this example won't be able to catch the failure in p2's reaction, since it reacts to p1 instead of p2."]
 
 In order for the reaction to handle the rejection in `p2`, we'd have to attach the reaction to `p2` instead.
 
-image::images/c04g03-promise-serial-chain.png["In this example, p3 reacts to p2. This enables p3 to handle the rejection that arises in p2."]
+image::images/pmjs_04in03.png["In this example, p3 reacts to p2. This enables p3 to handle the rejection that arises in p2."]
 
 We've established that the promise you attach your reactions onto is important, as it determines what errors it can capture and what errors it can not. It's also worth noting that as long as an error remains uncaught in a promise chain, a rejection handler will be able to capture it. In the following example we've introduced an intermediary `.then` call in between `p2`, where the error originated; and `p4`, where we attach the rejection reaction. When `p2` settles with a rejection, `p3` becomes settled with a rejection as it depends on `p2` directly. When `p3` settles with a rejection, the rejection handler in `p4` fires.
 
@@ -306,7 +306,7 @@ Here is an enumeration of what is going on as that piece of code is executed.
 
 You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structurefootnoteref:[promisees,I wrote an online visualization tool called Promisees where you can see the tree structure underlying a Promise chain: https://mjavascript.com/out/promisees.].
 
-image::images/c04g04-promise-chain.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
+image::images/pmjs_04in04.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
 
 It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches, and so on.
 
@@ -810,7 +810,7 @@ This sort of abstraction of complexity into another function often helps keep co
 ====
 Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem, there is no way of knowing whether the sequence is infinite or not in code.
 
-image::images/c04g05-halting-problem.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
+image::images/pmjs_04in05.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
 
 You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While `for..of` won't run into the problem unless there's no escape condition, using mechanisms such as spread or `Array.from` would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
 ====
