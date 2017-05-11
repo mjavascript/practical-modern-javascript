@@ -1,4 +1,4 @@
-[foreword]
+[preface]
 == Foreword
 
 When I created JavaScript in 1995 at Netscape, I had no definite idea that it would become the most widely used programming language on the Internet. I did know that I had very little time to get it into “minimum viable shipping” state, and so I made it extensible and mutable from global object on down, even to base-level meta-object protocol hooks (e.g., `toString` and `valueOf`, styled after Java’s methods of the same names).
