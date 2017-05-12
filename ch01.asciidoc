@@ -1,3 +1,4 @@
+[role="pagenumrestart"]
 [[ecmascript-and-the-future-of-javascript]]
 == ECMAScript and the Future of JavaScript
 
