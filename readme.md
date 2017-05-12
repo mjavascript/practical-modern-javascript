@@ -87,8 +87,8 @@ Nicolás Bevacqua © 2016-2017. Creative Commons. Details at [ponyfoo.com/licens
 [tweet]: https://ponyfoo.com/s/modular-javascript-tweet "Send out a tweet promoting the Modular JavaScript launch"
 [announcement]: https://ponyfoo.com/s/modular-javascript-launch "Announcing Practical Modern JavaScript and the Modular JavaScript Book Series"
 [campaign]: https://ponyfoo.com/s/modular-javascript-indiegogo "Indiegogo campaign for Modular JavaScript: A Pragmatic JS Book Series"
-[toc]: https://ponyfoo.com/s/practical-es6-read "Practical Modern JavaScript Table of Contents"
-[contrib]: https://ponyfoo.com/s/practical-es6-repo-contrib "mjavascript/practical-es6 on GitHub"
-[er]: https://ponyfoo.com/s/practical-es6-early-release "Modular JavaScript: Practical Modern JavaScript"
+[toc]: https://ponyfoo.com/s/practical-modern-javascript-read "Practical Modern JavaScript Table of Contents"
+[contrib]: https://ponyfoo.com/s/practical-modern-javascript-repo-contrib "mjavascript/practical-modern-javascript on GitHub"
+[er]: https://ponyfoo.com/s/practical-modern-javascript-early-release "Modular JavaScript: Practical Modern JavaScript"
 [cover]: https://i.imgur.com/saRiGkb.png
 [coverlink]: https://mjavascript.com "Let’s improve our collective understanding of writing robust, well-tested, modular JavaScript code."
