@@ -53,15 +53,8 @@
       "consolidated": false
     }
   },
-  "theme": "oreillymedia/animal_theme_sass",
+  "theme": "oreillymedia/animal_theme",
   "title": "Practical Modern JavaScript",
-  "name": "oreillymedia/modular-es6",
-  "branches": [
-    "master"
-  ],
-  "export_formats": [
-    "html"
-  ],
   "templating": false,
   "print_isbn13": "9781491943533",
   "lang": "en",

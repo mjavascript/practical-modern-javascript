@@ -1,12 +1,12 @@
 [![The Modular JavaScript book series glowing over the desktop of an eager learner.][cover]][coverlink]
 
-# Practical ES6
+# Practical Modern JavaScript
 
-> A Practical Dive into ES6 and Maintainable JavaScript Modules 🏊
+> Dive into ES6 and the future of JavaScript 🏊
 
-[<img align='right' src='https://i.imgur.com/721YHrg.png' />][campaign]
+[<img align='right' src='https://i.imgur.com/GbTcDuV.png' />][campaign]
 
-Modular JavaScript is a book series with the mission of improving our collective understanding of writing robust, well-tested, modular JavaScript code. Practical ES6 is the first book in the series, and it discusses ES6 features in detail. Practical ES6 includes hundreds of real-world use cases for the new language features, as well as detailed explanations of what works and what hasn’t when it comes to leveraging ES6 in the wild.
+Modular JavaScript is a book series with the mission of improving our collective understanding of writing robust, well-tested, modular JavaScript code. Practical Modern JavaScript is the first book in the series, and it discusses ES6 features in detail. Practical Modern JavaScript includes hundreds of real-world use cases for the new language features, as well as detailed explanations of what works and what hasn’t when it comes to leveraging ES6 in the wild.
 
 🗞 **Start** with the [book launch announcement][announcement] on *Pony Foo*  
 💳 **Participate** in the [crowdfunding campaign][campaign] on *Indiegogo*  
@@ -18,7 +18,7 @@ Modular JavaScript is a book series with the mission of improving our collective
 
 This book focuses on two aspects of JavaScript development: modularity and ES6 features. You’ll learn how to tackle application development by following a scale-out approach. As pieces of your codebase grow too big, you can break them up into smaller modules.
 
-## Practical ES6 is Free to Read!
+## Practical Modern JavaScript is Free to Read!
 
 The book is publicly available in HTML format and **free forever**. Each book chapter is styled similarly to how Pony Foo blog posts _— such as the [book series launch announcement][announcement] —_ are styled, which makes for a fairly enjoyable read as far as HTML books go.
 
@@ -26,7 +26,7 @@ The book is publicly available in HTML format and **free forever**. Each book ch
 
 *Every book in the series will be distributed in this way.*
 
-> The free-to-read version of Practical ES6 is subject to [the same license][license] as the rest of the content I publish on Pony Foo: [*Creative Commons Attribution-NonCommercial-ShareAlike*][license].
+> The free-to-read version of Practical Modern JavaScript is subject to [the same license][license] as the rest of the content I publish on Pony Foo: [*Creative Commons Attribution-NonCommercial-ShareAlike*][license].
 
 It took me a bit of time but I've managed to get the `git` repository to trigger builds on the O'Reilly build server. The build server then pings back to ponyfoo.com, letting the site know when a build is ready. Lastly, Pony Foo finally downloads the updated HTML files for the web version. Luckily I developed the code in such a way that I will be able to share HTML versions of other books in the series effortlessly.
 
@@ -85,10 +85,10 @@ Nicolás Bevacqua © 2016-2017. Creative Commons. Details at [ponyfoo.com/licens
 [license]: https://ponyfoo.com/license "Licensing Terms on Pony Foo"
 [clap]: https://ponyfoo.com/s/modular-javascript-thunderclap "Back the Thunderclap campaign!"
 [tweet]: https://ponyfoo.com/s/modular-javascript-tweet "Send out a tweet promoting the Modular JavaScript launch"
-[announcement]: https://ponyfoo.com/s/modular-javascript-launch "Announcing Practical ES6 and the Modular JavaScript Book Series"
+[announcement]: https://ponyfoo.com/s/modular-javascript-launch "Announcing Practical Modern JavaScript and the Modular JavaScript Book Series"
 [campaign]: https://ponyfoo.com/s/modular-javascript-indiegogo "Indiegogo campaign for Modular JavaScript: A Pragmatic JS Book Series"
-[toc]: https://ponyfoo.com/s/practical-es6-read "Practical ES6: A Practical Dive into ES6 and Maintainable JavaScript Modules"
+[toc]: https://ponyfoo.com/s/practical-es6-read "Practical Modern JavaScript Table of Contents"
 [contrib]: https://ponyfoo.com/s/practical-es6-repo-contrib "mjavascript/practical-es6 on GitHub"
-[er]: https://ponyfoo.com/s/practical-es6-early-release "Modular JavaScript: Practical ES6"
+[er]: https://ponyfoo.com/s/practical-es6-early-release "Modular JavaScript: Practical Modern JavaScript"
 [cover]: https://i.imgur.com/saRiGkb.png
 [coverlink]: https://mjavascript.com "Let’s improve our collective understanding of writing robust, well-tested, modular JavaScript code."
