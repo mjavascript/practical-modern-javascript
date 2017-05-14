@@ -72,23 +72,23 @@ For more information, please visit pass:[<a href="http://oreilly.com/safari" cla
 Please address comments and questions concerning this book to the publisher:
 
 ++++
-<simplelist>
-<member>O’Reilly Media, Inc.</member>
-<member>1005 Gravenstein Highway North</member>
-<member>Sebastopol, CA 95472</member>
-<member>800-998-9938 (in the United States or Canada)</member>
-<member>707-829-0515 (international or local)</member>
-<member>707-829-0104 (fax)</member>
-</simplelist>
+<ul class="simplelist">
+  <li>O’Reilly Media, Inc.</li>
+  <li>1005 Gravenstein Highway North</li>
+  <li>Sebastopol, CA 95472</li>
+  <li>800-998-9938 (in the United States or Canada)</li>
+  <li>707-829-0515 (international or local)</li>
+  <li>707-829-0104 (fax)</li>
+</ul>
 ++++
 
 We have a web page for this book, where we list errata, examples, and any additional information. You can access this page at link:$$http://www.oreilly.com/catalog/<catalog page>$$[].
 
 ++++
-<remark>Don't forget to update the link above.</remark>
+<!--Don't forget to update the link above.-->
 ++++
 
-To comment or ask technical questions about this book, send email to pass:[<email>bookquestions@oreilly.com</email>].
+To comment or ask technical questions about this book, send email to pass:[<a class="email" href="mailto:bookquestions@oreilly.com"><em>bookquestions@oreilly.com</em></a>].
 
 For more information about our books, courses, conferences, and news, see our website at link:$$http://www.oreilly.com$$[].
 
