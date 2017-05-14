@@ -531,7 +531,7 @@ A code realm is any JavaScript execution context, such as the page your applicat
 
 There's two methods that interact with the runtime-wide global symbol registry: `Symbol.for` and `Symbol.keyFor`. What do they do?
 
-===== Getting symbols with `Symbol.for(key)`
+===== Getting symbols with Symbol.for(key)
 
 The `Symbol.for(key)` method looks up `key` in the runtime-wide symbol registry. If a symbol with the provided `key` exists in the global registry, that symbol is returned. If no symbol with that `key` is found in the registry, one is created and added to the registry under the provided `key`. That's to say, `Symbol.for(key)` is idempotent: it looks for a symbol under a `key`, creates one if it didn't already exist, and then returns the symbol.
 
@@ -546,7 +546,7 @@ console.log(example === Symbol.for('example'))
 
 The global symbol registry keeps track of symbols by their `key`. Note that the `key` will also be used as a `description` when the symbols that go into the registry are created. Considering these symbols are global on a runtime-wide level, you might want to prefix symbol keys in the global registry with a value that identifies your library or component, mitigating potential name clashes.
 
-===== Using `Symbol.keyFor(symbol)` to retrieve symbol keys
+===== Using Symbol.keyFor(symbol) to retrieve symbol keys
 
 Given a symbol `symbol`, `Symbol.keyFor(symbol)` returns the `key` that was associated with `symbol` when the symbol was added to the global registry. The next example shows how we can grab a the `key` for a `symbol` using `Symbol.keyFor`.
 
@@ -818,7 +818,7 @@ const { name, type, ...meta } = {
 
 We dive deeper into object rest and spread in <<practical-considerations>>.
 
-==== 3.3.2 Comparing objects with `Object.is`
+==== 3.3.2 Comparing objects with Object.is
 
 The `Object.is` method is a slightly different version of the strict equality comparison operator, `===`. For the most part, `Object.is(a, b)` is equal to `a === b`. There are two differences: the case of `NaN` and the case of `-0` and `+0`. This algorithm is referred to as `SameValue` in the ECMAScript specification.
 
@@ -844,7 +844,7 @@ Object.is(-0, +0)
 
 These differences may not seem like much, but dealing with `NaN` has always been cumbersome because of its special quirks, such as `typeof NaN` being `'number'` and it not being equal to itself.
 
-==== 3.3.3 `Object.setPrototypeOf`
+==== 3.3.3 Object.setPrototypeOf
 
 The `Object.setPrototypeOf` method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__` which is a legacy feature.
 

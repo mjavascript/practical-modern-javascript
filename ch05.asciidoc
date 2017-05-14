@@ -466,7 +466,7 @@ map.has(date)
 // <- false
 ----
 
-==== 5.2.1 Is `WeakMap` A Worse `Map`?
+==== 5.2.1 Is WeakMap A Worse Map?
 
 The distinction which makes `WeakMap` worth the trouble is in its name. Given that `WeakMap` holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as `WeakMap` keys. This is in contrast with `Map` which holds strong object references, preventing `Map` keys and values from being garbage collected.
 

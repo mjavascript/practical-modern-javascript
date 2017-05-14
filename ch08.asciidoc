@@ -185,7 +185,7 @@ In the ES6 module system, strict mode is turned on by default. Strict mode is a 
 
 Let's now dive into the `export` statement.
 
-==== 8.2.2 `export` Statements
+==== 8.2.2 export Statements
 
 In CommonJS modules, you export values by exposing them on `module.exports`. You can expose anything from a value type to an object, an array, or a function, as seen in the next few code snippets.
 
@@ -393,7 +393,7 @@ export { default as counter } from './counter.js'
 
 We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to `import` statements, which can be used to consume other modules.
 
-==== 8.2.3 `import` Statements
+==== 8.2.3 import Statements
 
 We can load a module from another one using `import` statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
@@ -489,7 +489,7 @@ console.log(counter) // <- 2
 
 Lastly, there are also namespace imports.
 
-===== Wildcard `import` statements
+===== Wildcard import statements
 
 We can import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the `*` must be followed by an alias where all the bindings will be placed. If there was a `default` export, it'll be placed in the namespace binding as well.
 
@@ -501,7 +501,7 @@ counter.increment()
 console.log(counter.default) // <- 2
 ----
 
-==== 8.2.4 Dynamic `import()`
+==== 8.2.4 Dynamic import()
 
 At the time of this writing, a proposal for dynamic `import()`​footnoteref:[dynamic-import,You can find the proposal specification draft here: https://mjavascript.com/out/dynamic-import.] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike `import` statements, which are statically analyzed and linked, `import()` loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
 

@@ -437,7 +437,7 @@ Promise
 
 Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in <<creating_a_promise_from_scratch>>, when a `.catch` reaction executes without errors and doesn't return a rejected promise either, it will fulfill, following `.then` reactions.
 
-==== 4.1.5 `Promise#finally` Proposal
+==== 4.1.5 Promise#finally Proposal
 
 There's a TC39 proposalfootnoteref:[proposal-promise-finally,This proposal is in stage 2 at the time of this writing. You can find the proposal draft at: https://mjavascript.com/out/proposal-promise-finally.] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
 
@@ -509,7 +509,7 @@ const p3 = p2.catch(err => console.log(err))
 
 As we can observe after carefully reading the code for our ponyfill, if either reaction results in an exception being thrown then the promise would be rejected. At the same time, returning a rejected promise via `Promise.reject` or some other means would imply `resove(fn())` results in a rejected promise, which won't follow the `.then` reactions used to return the original settlement value of the promise we're calling `.finally` on.
 
-==== 4.1.6 Leveraging `Promise.all` and `Promise.race`
+==== 4.1.6 Leveraging Promise.all and Promise.race
 
 When writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There's also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excell at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API methods: `Promise.all` and `Promise.race`.
 
@@ -1918,7 +1918,7 @@ Besides involving an unintuitive syntax into the mix, your iterator code will be
 
 A better alternative would be to use an async function.
 
-==== 4.4.2 Using `async` / `await`
+==== 4.4.2 Using async / await
 
 Async functions let us take a promise-based implementation and take advantage of the synchronous-looking generator style. A huge benefit in this approach is that you won't have to change the original `getRandomArticle` at all: as long as it returns a promise it can be awaited.
 
