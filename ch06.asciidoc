@@ -82,6 +82,7 @@ proxy._secret
 
 To the keen observer, it may be apparent that disallowing access to certain properties through the proxy becomes most useful when creating a proxy with clearly defined access rules for the underlying `target` object, and exposing that proxy instead of the `target` object. That way you can still access the underlying object freely, but consumers are forced to go through the proxy and play by its rules, putting you in control of exactly how they can interact with the object. This wasn't possible before proxies were introduced in ES6.
 
+[[trapping_set_accessors]]
 ==== 6.1.2 Trapping `set` accessors
 
 As the counterpart of `get` traps, `set` traps can intercept property assignment. Suppose we wanted to prevent assignment on properties starting with an underscore. We could replicate the `get` trap we implemented earlier to block assignment as well.
@@ -301,7 +302,7 @@ Throwing an error is quite final, and it certainly doesn't help in those cases w
 
 It's often best to indicate that the property is not `in` the object, by returning `false` instead of throwing. A fall-through case where you return the result of the `key in target` expression is a good default case to have.
 
-Going back to the getter/setter example in section 6.1.2, we'll want to return `false` for properties in the prefixed property space and use the default for all other properties. This will keep our inaccessible properties well hidden from unwanted visitors.
+Going back to the getter/setter example in <<trapping_set_accessors>>, we'll want to return `false` for properties in the prefixed property space and use the default for all other properties. This will keep our inaccessible properties well hidden from unwanted visitors.
 
 [source,javascript]
 ----
@@ -355,7 +356,7 @@ console.log(proxy.hasOwnProperty('_secret'))
 // <- true
 ----
 
-The `getOwnPropertyDescriptor` trap in section 6.4.1 offers a solution that's able to intercept `Object#hasOwnProperty` as well.
+The `getOwnPropertyDescriptor` trap in <<getownpropertydescriptor_trap>> offers a solution that's able to intercept `Object#hasOwnProperty` as well.
 
 ==== 6.3.2 `deleteProperty` Trap
 
@@ -463,7 +464,7 @@ console.log(Object.getOwnPropertyDescriptor(pizza, 'extraCheese'))
 
 The `handler.defineProperty` trap can be used to intercept properties being defined. Note that this trap intercepts the declarative `pizza.extraCheese = false` property declaration flavor as well as `Object.defineProperty` calls. As arguments for the trap, you get the `target` object, the property `key` and the `descriptor`.
 
-The next example prevents the addition of any properties added through the `proxy`. When the handler returns false, the property declaration fails loudly with an exception under strict mode, and silently without an exception when we're in sloppy mode. Strict mode is superior to sloppy mode due to its performance gains and hardened semantics. It is also the default mode in ES6 modules, as we'll see in chapter 8. For those reasons, we'll assume strict mode in all the code examples.
+The next example prevents the addition of any properties added through the `proxy`. When the handler returns false, the property declaration fails loudly with an exception under strict mode, and silently without an exception when we're in sloppy mode. Strict mode is superior to sloppy mode due to its performance gains and hardened semantics. It is also the default mode in ES6 modules, as we'll see in <<javascript-modules>>. For those reasons, we'll assume strict mode in all the code examples.
 
 [source,javascript]
 ----
@@ -609,6 +610,7 @@ We were able to hide properties prefixed with `_` from key enumeration while lea
 
 For the most part, the traps that we discussed so far have to do with property access and manipulation. Up next is the last trap we'll cover that's related to property access. Every other trap in this section has to do with the object we are proxying itself, instead of its properties.
 
+[[getownpropertydescriptor_trap]]
 ==== 6.4.1 `getOwnPropertyDescriptor` Trap
 
 The `getOwnPropertyDescriptor` trap is triggered when querying an object for the property descriptor for some `key`. It should return a property descriptor or `undefined` when the property doesn't exist. There is also the option of throwing an exception, aborting the operation entirely.

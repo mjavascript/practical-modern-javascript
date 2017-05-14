@@ -341,7 +341,7 @@ Let's move onto `Symbol`. While not an iteration or flow control mechanism, lear
 
 === 3.2 Symbols
 
-Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in section 4.2.
+Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in <<iterator_protocol_and_iterable_protocol>>.
 
 There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the `Symbol` built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
 
@@ -458,7 +458,7 @@ function createCalendar(el) {
 }
 ----
 
-There is an ES6 built-in -- the `WeakMap` -- that can be used to uniquely map objects to other objects without using arrays nor placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in chapter 5, alongside other ES6 collection built-ins.
+There is an ES6 built-in -- the `WeakMap` -- that can be used to uniquely map objects to other objects without using arrays nor placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in <<leveraging-es-collections>>, alongside other ES6 collection built-ins.
 
 ===== Defining Protocols through Symbols
 
@@ -659,11 +659,11 @@ One of the most useful well-known symbols is `Symbol.iterator`, used by a few di
 
 === 3.3 Object Built-in Improvements
 
-While we've already addressed syntax enhancements coming to object literals in chapter 2, there's a few new static methods available to the `Object` built-in which we haven't addressed yet. It's time to take a look at what these methods bring to the table.
+While we've already addressed syntax enhancements coming to object literals in <<ecmascript6-essentials>>, there's a few new static methods available to the `Object` built-in which we haven't addressed yet. It's time to take a look at what these methods bring to the table.
 
 We've already looked at `Object.getOwnPropertySymbols`, but let's also take a look at `Object.assign`, `Object.is`, and `Object.setPrototypeOf`.
 
-==== 3.3.1 Extending objects with `Object.assign`
+[[extending_objects_with_object_assign]]==== 3.3.1 Extending objects with `Object.assign`
 
 The need to provide default values for a configuration object is not at all uncommon. Typically, libraries and well-designed component interfaces come with sensible defaults that cater to the most frequented use cases.
 
@@ -816,7 +816,7 @@ const { name, type, ...meta } = {
 // <- meta = { color: 'orange' }
 ----
 
-We dive deeper into object rest and spread in chapter 9.
+We dive deeper into object rest and spread in <<practical-considerations>>.
 
 ==== 3.3.2 Comparing objects with `Object.is`
 

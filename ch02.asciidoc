@@ -203,6 +203,7 @@ var emitter = {
 
 Arrow functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave semantically.
 
+[[arrow_functions]]
 === 2.2 Arrow Functions
 
 In JavaScript you typically declare functions using code like the following, where you have a name, a list of parameters, and a function body.
@@ -870,7 +871,7 @@ console.log(all)
 // <- [1, 2, 3, 4, 5, 6, 7]
 ----
 
-Note that the spread operator isn't limited to arrays and `arguments`. The spread operator can be used with any iterable object. Iterable is a protocol in ES6 that allows you to turn any object into something that can be iterated over. We'll research the iterable protocol in chapter 4.
+Note that the spread operator isn't limited to arrays and `arguments`. The spread operator can be used with any iterable object. Iterable is a protocol in ES6 that allows you to turn any object into something that can be iterated over. We'll research the iterable protocol in <<iteration-and-flow-control>>.
 
 .Shifting and Spreading
 ****
@@ -954,6 +955,7 @@ The following table summarizes the use cases we've discussed for the spread oper
 |`new` and `apply`|`new (Date.bind.apply(Date, [null,2015,31,8]))`| `new Date(...[2015,31,8])`
 |=======
 
+[[template_literals]]
 === 2.5 Template Literals
 
 Template literals are a vast improvement upon regular JavaScript strings. Instead of using single or double quotes, template literals are declared using backticks, as shown next.
@@ -1497,4 +1499,4 @@ If we choose to default to using `const` and use `let` for variables that need t
 
 On the counterside, `var` is a more complex declaration because it is hard to use in code branches due to function scoping rules, it allows reassignment, and it can be accessed before the declaration statement is reached. The `var` statement is inferior to `const` and `let`, which do less, and is thus less prominent in modern JavaScript codebases.
 
-Throughout this book, we'll follow the practice of using `const` by default and `let` when reassignment is desirable. You can learn more about the rationale behind this choice in chapter 9.
+Throughout this book, we'll follow the practice of using `const` by default and `let` when reassignment is desirable. You can learn more about the rationale behind this choice in <<practical-considerations>>.

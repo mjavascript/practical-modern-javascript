@@ -1,7 +1,7 @@
 [[iteration-and-flow-control]]
 == Iteration and Flow Control
 
-Having covered the essential aspects of ES6 in chapter 2, and symbols in chapter 3, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn towards the end of the chapter.
+Having covered the essential aspects of ES6 in <<ecmascript6-essentials>>, and symbols in <<classes-symbols-and-symbols>>, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn towards the end of the chapter.
 
 To kick off the chapter, we'll start by discussing promises. Promises have existed in user-land for a long time, but they're a native part of the language starting in ES6.
 
@@ -99,7 +99,7 @@ fetch('/items')
   })
 ----
 
-Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in. Moreover, events are better suited to handle streams of values, making them somewhat inappropriate in for this particular use case. Section 9.7 discusses proper asynchronous code flow design in more detail, expanding on which kinds of constructs are better suited for which kinds of code flows.
+Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in. Moreover, events are better suited to handle streams of values, making them somewhat inappropriate in for this particular use case. <<asynchronous_code_flows>> discusses proper asynchronous code flow design in more detail, expanding on which kinds of constructs are better suited for which kinds of code flows.
 ****
 
 When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the `.on` method attach the event listener and then returning the event emitter itself. Promises are different. The `.then` and `.catch` methods return a new promise every time. That's important because chaining can have wildly different results depending on where you append a `.then` or a `.catch` call onto.
@@ -143,7 +143,7 @@ Promise
 // <- 123
 ----
 
-When a `p` promise is fulfilled, reactions registered with `p.then` are executed. When a `p` promise is rejected, reactions registered with `p.catch` are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, a `Promise`, a thenable, or `throw` an error. Thenables are objects considered promise-like that can be casted into a `Promise` using `Promise.resolve` as observed in section 4.1.3.
+When a `p` promise is fulfilled, reactions registered with `p.then` are executed. When a `p` promise is rejected, reactions registered with `p.catch` are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, a `Promise`, a thenable, or `throw` an error. Thenables are objects considered promise-like that can be casted into a `Promise` using `Promise.resolve` as observed in <<creating_a_promise_from_scratch>>.
 
 A reaction may return a value, which would cause the promise returned by `.then` to become fulfilled with that value. In this sense, promises can be chained to transform the fulfillment value of the previous promise over and over, as shown in the following snippet of code.
 
@@ -310,6 +310,7 @@ image::images/pmjs_04in04.png["Promisees can help us visualize how the fetch pro
 
 It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches, and so on.
 
+[[creating_a_promise_from_scratch]]
 ==== 4.1.3 Creating a Promise From Scratch
 
 We already know that promises can be created using a function such as `fetch`, `Promise.resolve`, `Promise.reject`, or the `Promise` constructor function. We've already used `fetch` extensively to create promises in previous examples. Let's take a more nuanced look at the other three ways we can create a promise.
@@ -434,7 +435,7 @@ Promise
   // <- [2, 4, 6]
 ----
 
-Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in section 4.1.3, when a `.catch` reaction executes without errors and doesn't return a rejected promise either, it will fulfill, following `.then` reactions.
+Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in <<creating_a_promise_from_scratch>>, when a `.catch` reaction executes without errors and doesn't return a rejected promise either, it will fulfill, following `.then` reactions.
 
 ==== 4.1.5 `Promise#finally` Proposal
 
@@ -598,6 +599,7 @@ Promise
   .catch(err => console.log(err))
 ----
 
+[[iterator_protocol_and_iterable_protocol]]
 === 4.2 Iterator Protocol and Iterable Protocol
 
 JavaScript gets two new protocols in ES6: iterators and iterables. These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into lazyness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
@@ -606,7 +608,7 @@ JavaScript gets two new protocols in ES6: iterators and iterables. These two pro
 
 Any object can adhere to the iterable protocol by assigning a function to the `Symbol.iterator` property for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to `Symbol.iterator`, is called once.
 
-The spread operator was first introduced in chapter 2, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
+The spread operator was first introduced in <<ecmascript6-essentials>>, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
 
 [source,javascript]
 ----
@@ -702,6 +704,7 @@ for (const element of $('li')) {
 
 Iterable sequences aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that topic and its implications.
 
+[[infinite_sequences]]
 ==== 4.2.2 Infinite Sequences
 
 Iterators are lazy in nature. Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the lazyness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
@@ -819,7 +822,7 @@ Besides the technical implications of creating iterable objects, lets go over a 
 
 ==== 4.2.3 Iterating Object Maps as Key-Value Pairs
 
-There's an abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudo-arrays that are meant to be iterated, the random number generator we came up with in section 4.2.2, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
+There's an abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudo-arrays that are meant to be iterated, the random number generator we came up with in <<infinite_sequences>>, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
 
 Oftentimes, JavaScript objects are used to represent a map between string keys and arbitrary values. In the next snippet, as an example, we have a map of color names and hexadecimal RGB representations of that color. There are cases when you'd welcome the ability to effortlessly looping over the different color names, hexadecimal representations, or key-value pairs.
 
@@ -1041,7 +1044,7 @@ console.log([...playlist(shuffleSongs(['a', 'b']), 3)])
 
 Iterators are an important tool in ES6 that help us not only to decouple code but also to come up with constructs that were previously harder to implement, such as the ability of dealing with a sequence of songs indistinctly -- regardless of whether the sequence is finite or infinite. This indifference is, in part, what makes writing code leveraging the iterator protocol more elegant. It also makes it risky to cast an unknown iterable into an array (with, say, the `...` spread operator), as you're risking crashing your program due to an infinite loop.
 
-Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in section 4.2.2, while also allowing for a few more interesting use cases.
+Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in <<infinite_sequences>>, while also allowing for a few more interesting use cases.
 
 === 4.3 Generator Functions and Generator Objects
 
@@ -2297,7 +2300,7 @@ Noting that async functions are syntactic sugar on top of generators and promise
 
 === 4.5 Asynchronous Iteration
 
-As explained in section 4.2, You may recall how iterators leverage `Symbol.iterator` as an interface to define how an object is to be iterated.
+As explained in <<iterator_protocol_and_iterable_protocol>>, You may recall how iterators leverage `Symbol.iterator` as an interface to define how an object is to be iterated.
 
 [source,javascript]
 ----
@@ -2420,4 +2423,4 @@ async function process() {
 process()
 ----
 
-As highlighted in section 4.2.2, it's important to break out of this kinds of sequences, in order to avoid infinite loops.
+As highlighted in <<infinite_sequences>>, it's important to break out of this kinds of sequences, in order to avoid infinite loops.

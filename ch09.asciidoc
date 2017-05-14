@@ -229,7 +229,7 @@ When it comes to quotes, `'` and `"` are more likely to be necessary when writin
 `Alfred's cat suit is "slick".`
 ----
 
-As we've discovered in chapter 2, there's also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multi-line support, expression interpolation, or reduced escaping.
+As we've discovered in <<ecmascript6-essentials>>, there's also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multi-line support, expression interpolation, or reduced escaping.
 
 The combination of all of these features, warrants considering template literals as the default string flavor over single or double quoted strings. There's a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
 
@@ -282,7 +282,7 @@ const alfred = { `suit kind`: `cat` }
 
 Object property keys accept value types which are then casted into plain strings, but template literals aren't value types, and thus it's not possible to use them as property keys.
 
-As you might recall from chapter 2, ES6 introduces computed property names, as seen in the following code snippet. In a computed property key we can use any expression we want to produce the desired property key, including template literals.
+As you might recall from <<ecmascript6-essentials>>, ES6 introduces computed property names, as seen in the following code snippet. In a computed property key we can use any expression we want to produce the desired property key, including template literals.
 
 [source,javascript]
 ----
@@ -323,7 +323,7 @@ Strict mode directives have to be single or double quoted strings. As of this wr
 
 Lastly, it could be argued that turning an existing codebase from single quoted strings to template literals would be error prone and a waste of time that could be otherwise used to develop features or fix bugs.
 
-Fortunately, we have `eslint` at our disposal, as discussed in chapter 1. To switch our codebase to backticks by default, we can set up an `.eslintrc.json` configuration similar to the one in the following piece of code. Note how we turn the `quotes` rule into an error unless the code uses backticks.
+Fortunately, we have `eslint` at our disposal, as discussed in <<ecmascript-and-the-future-of-javascript>>. To switch our codebase to backticks by default, we can set up an `.eslintrc.json` configuration similar to the one in the following piece of code. Note how we turn the `quotes` rule into an error unless the code uses backticks.
 
 [source,json]
 ----
@@ -360,7 +360,7 @@ In conclusion, there are trade-offs to consider when using template literals. Yo
 
 === 9.3 Shorthand Notation and Object Destructuring
 
-Chapter 2 introduced us to the concept of shorthand notation. Whenever we want to introduce a property and there's a binding by the same name in scope, we can avoid repetition.
+<<ecmascript-and-the-future-of-javascript>> introduced us to the concept of shorthand notation. Whenever we want to introduce a property and there's a binding by the same name in scope, we can avoid repetition.
 
 [source,javascript]
 ----
@@ -536,7 +536,7 @@ administrators.concat(moderators)
 [...administrators, ...moderators, bob]
 ----
 
-Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in section `3.3.1` allows us to merge objects onto a new object. Consider the following snippet where we programatically create a new object comprised of base `defaults`, user-provided `options`, and some important override property that prevails over previous properties.
+Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in <<extending_objects_with_object_assign>> allows us to merge objects onto a new object. Consider the following snippet where we programatically create a new object comprised of base `defaults`, user-provided `options`, and some important override property that prevails over previous properties.
 
 [source,javascript]
 ----
@@ -595,7 +595,7 @@ const castHealingSpell = player => ({
 })
 ----
 
-As we explained in chapter 3, we can use object rest properties while destructuring objects. Among other uses, such as listing unknown properties, object rest can be used to create a shallow copy of an object.
+As we explained in <<classes-symbols-and-symbols>>, we can use object rest properties while destructuring objects. Among other uses, such as listing unknown properties, object rest can be used to create a shallow copy of an object.
 
 In the next snippet, we'll look at three of the simplest ways in which we can create a shallow copy of an object in JavaScript. The first one uses `Object.assign`, assigning every property of `source` to an empty object that's then returned; the second example uses object spread and is equivalent to using `Object.assign`, but a bit more gentle on the eyes; the last example relies on destructuring the rest parameter.
 
@@ -698,7 +698,7 @@ console.log(sum())
 // <- ReferenceError: sum is not defined
 ----
 
-Arrow functions, introduced in section 2.2 of this book, are similar to function expressions. The syntax is made shorter by dropping the `function` keyword. In arrow functions, parenthesis around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
+Arrow functions, introduced in <<arrow_functions>> of this book, are similar to function expressions. The syntax is made shorter by dropping the `function` keyword. In arrow functions, parenthesis around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
 
 The following snippet shows an arrow function explicitly returning an expression in a block statement, one that implicitly returns the expression, one that drops the parenthesis around its only parameter, and one that uses a block statement but doesn't return a value.
 
@@ -928,9 +928,10 @@ Abstractions are costly. Once an abstraction is in place, it is often hard to go
 
 When we prefer boring code, patterns flourish gradually and naturally. Once a pattern emerges, then we can decide whether an abstraction is warranted and refactor our code fittingly. A time-honed well-placed abstraction is likely to cover more use cases than it might have covered if we had gone for an abstraction as soon as we had two or three functionally comparable pieces of code.
 
+[[asynchronous_code_flows]]
 === 9.7 Asynchronous Code Flows
 
-In chapter 4 we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, promises, generators, async functions, and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
+In <<iteration-and-flow-control>> we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, promises, generators, async functions, and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
 
 Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
 
