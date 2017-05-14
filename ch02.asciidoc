@@ -1429,7 +1429,7 @@ console.log(people)
 
 Note that creating a `const` variable doesn't mean that the assigned value becomes immutable. This is a common source of confusion, and it is strongly recommended that you pay attention when reading the following warning.
 
-.Variables declared using `const` are not immutable.
+.Variables declared using const are not immutable.
 [WARNING]
 ====
 Using `const` only means that the variable will always have a reference to the same object or primitive value, because that reference can't change. The reference itself is immutable, but the value held by the variable does not become immutable.

@@ -1128,7 +1128,7 @@ for (const number of numbers()) {
 }
 ----
 
-.Using `yield*` to delegate sequence generation
+.Using yield* to delegate sequence generation
 ****
 Generator functions can use `yield*` to delegate to a generator object or any other iterable object.
 

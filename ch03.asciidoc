@@ -697,7 +697,7 @@ function md(input, options) {
 }
 ----
 
-.Understanding the `target` of `Object.assign`
+.Understanding the `target` of Object.assign
 [WARNING]
 ====
 The `Object.assign` function mutates its first argument. It's signature is `(target, ...sources)`. Every source is applied onto the target object, source by source and property by property.
