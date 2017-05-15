@@ -15,6 +15,10 @@
 <!-- Do add border div for figure images in cookbook series -->
 <xsl:param name="figure.border.div" select="1"/>
 
+<!-- Generate separate footnote-call markers, so that we don't
+       need to rely on AH counters to do footnote numbering -->
+<xsl:param name="process.footnote.callouts.only" select="1"/>
+
 <!-- ***************** COOKBOOK PARAMS ***************** -->
 <!-- *************** Overrides param.xsl *************** -->
 
@@ -27,7 +31,7 @@
 <!-- ***************** LABEL HANDLING ***************** -->
 <!-- ************* Overrides common.xsl *************** -->
 
-  <!-- Logic for processing sect1 headings with labels-->
+  <!-- Logic for processing sect1 headings with labels (including section numbers) -->
   <xsl:template match="h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))]/h:h1" mode="process-heading">
     <xsl:param name="autogenerate.labels" select="$autogenerate.labels"/>
     <!-- Labeled element is typically the parent element of the heading (e.g., <section> or <figure>) -->
@@ -47,7 +51,7 @@
     </xsl:element>
   </xsl:template>
 
-  <!-- Logic for processing sect2 headings with labels-->
+  <!-- Logic for processing sect2 headings with labels (including section numbers) -->
   <xsl:template match="h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect2' and not(contains(@class, 'orm:non-recipe'))]/h:h2" mode="process-heading">
     <xsl:param name="autogenerate.labels" select="$autogenerate.labels"/>
     <!-- Labeled element is typically the parent element of the heading (e.g., <section> or <figure>) -->
@@ -67,7 +71,7 @@
     </xsl:element>
   </xsl:template>
 
-  <!-- Label handling -->
+  <!-- Creating the sect1 labels (read: creating the X.X section numbering) -->
   <xsl:template match="h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))]" mode="label.markup">
     <xsl:variable name="current-node" select="."/>
     <!-- BEGIN COOKBOOK OVERRIDE -->
@@ -109,7 +113,7 @@
     <!-- END COOKBOOK OVERRIDE -->
   </xsl:template>
   
-  <!-- Label handling for sect2s -->
+  <!-- Creating the sect2 labels (read: creating the X.X.X section numbering) -->
   <xsl:template match="h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect2' and not(contains(@class, 'orm:non-recipe'))]" mode="label.markup">
     <!-- END OVERRIDE -->
     <xsl:variable name="current-node" select="."/>
@@ -252,7 +256,7 @@
 <!-- ***************** TOC HANDLING ***************** -->
 <!-- ************* Overrides tocgen.xsl ************* -->
 
-  <xsl:template match="h:section[not(@data-type = 'dedication' or @data-type = 'titlepage' or @data-type = 'toc' or @data-type = 'colophon' or @data-type = 'copyright-page' or @data-type = 'halftitlepage')]|h:div[@data-type='part']" mode="tocgen">
+<xsl:template match="h:section[not(@data-type = 'dedication' or @data-type = 'titlepage' or @data-type = 'toc' or @data-type = 'colophon' or @data-type = 'copyright-page' or @data-type = 'halftitlepage')]|h:div[@data-type='part']" mode="tocgen">
     <xsl:param name="toc.section.depth" select="$toc.section.depth"/>
     <xsl:choose>
       <!-- Don't output entry for section elements at a level that is greater than specified $toc.section.depth -->
@@ -309,41 +313,6 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$text"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-<!-- New cutting-edge footnote handling to avoid bugs with AH counters, potentially to be merged into core HTMLBook stylesheets:
-       Instead of using ::footnote-call to do CSS generated content, superscripted footnote markers are added at location of footnote tag.
-       Then ::footnote-marker is used with attr(data-footnote-marker) (which unfortunately is not supported by ::footnote-call) -->
-  <xsl:template match="h:span[@data-type='footnote']">
-    <xsl:param name="footnote.reset.numbering.at.chapter.level" select="$footnote.reset.numbering.at.chapter.level"/>
-    <xsl:param name="process.footnotes" select="$process.footnotes"/>
-    <xsl:choose>
-      <xsl:when test="($process.footnotes = 1) or ancestor::h:table">
-	<xsl:apply-templates select="." mode="footnote.marker">
-	  <xsl:with-param name="footnote.reset.numbering.at.chapter.level" select="$footnote.reset.numbering.at.chapter.level"/>
-	</xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-	<a class="footnote-call">
-	  <xsl:attribute name="href">
-	    <xsl:call-template name="href.target"/>
-	  </xsl:attribute>
-	  <xsl:apply-templates select="." mode="footnote.number"/>
-	</a>
-	<xsl:copy>
-	  <xsl:apply-templates select="@*[not(local-name() = 'id')]"/>
-	  <xsl:attribute name="id">
-	    <xsl:call-template name="object.id"/>
-	  </xsl:attribute>
-	  <xsl:attribute name="data-footnote-marker">
-	    <xsl:apply-templates select="." mode="footnote.number">
-	      <xsl:with-param name="footnote.reset.numbering.at.chapter.level" select="$footnote.reset.numbering.at.chapter.level"/>
-	    </xsl:apply-templates>
-	  </xsl:attribute>
-	  <xsl:apply-templates/>
-	</xsl:copy>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
