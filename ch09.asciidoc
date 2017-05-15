@@ -7,7 +7,7 @@ Reconciling all of these new features with our existing ES5 knowledge may seem l
 
 We'll take a look at a few different features, the use cases where they shine, and the situations where we might be better off using features that were already available in the language. Let's go case by case.
 
-=== 9.1 Variable Declarations
+=== Variable Declarations
 
 When developing software, most of our time is spent reading code, instead of writing it. ES6 offers `let` and `const` as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
 
@@ -182,7 +182,7 @@ function getCompletionText(progress) {
 }
 ----
 
-=== 9.2 Template Literals
+=== Template Literals
 
 For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multi-line string was also a hassle, as was escaping single or double quotes -- depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
 
@@ -358,7 +358,7 @@ Once we run the following command, we're ready to start experimenting with a cod
 
 In conclusion, there are trade-offs to consider when using template literals. You're invited to experiment with the backtick-first approach and gauge its merits. Always prefer convenience, over convention, over configuration.
 
-=== 9.3 Shorthand Notation and Object Destructuring
+=== Shorthand Notation and Object Destructuring
 
 <<ecmascript-and-the-future-of-javascript>> introduced us to the concept of shorthand notation. Whenever we want to introduce a property and there's a binding by the same name in scope, we can avoid repetition.
 
@@ -489,7 +489,7 @@ const description = `${ name } is a grocery item`
 
 Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dillute value, because of increased repetition in the destructuring statement. In short, destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not that many host references being removed.
 
-=== 9.4 Rest and Spread
+=== Rest and Spread
 
 Matches for regular expressions are represented as an array. The matched portion of the input is placed in the first position, while each captured group is placed in subsequent elements in the array. Often, we are interested in specific captures such as the first one.
 
@@ -622,7 +622,7 @@ In the following bit of code, we map a list of people to a list of `person` mode
 people.map(({ name, ssn, ...person }) => person)
 ----
 
-=== 9.5 Savoring Function Flavors
+=== Savoring Function Flavors
 
 JavaScript already offered a number of ways in which we can declare functions before ES6.
 
@@ -806,7 +806,7 @@ pistol.trigger()
 
 As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, require several lines of code nor involve recursion, then consider an arrow function.
 
-=== 9.6 Classes and Proxies
+=== Classes and Proxies
 
 Most modern programming languages have classes in one form or another. JavaScript classes are syntactic sugar on top of prototypal inheritance. Using classes turns prototypes more idiomatic and easier for tools to statically analyze.
 
@@ -929,7 +929,7 @@ Abstractions are costly. Once an abstraction is in place, it is often hard to go
 When we prefer boring code, patterns flourish gradually and naturally. Once a pattern emerges, then we can decide whether an abstraction is warranted and refactor our code fittingly. A time-honed well-placed abstraction is likely to cover more use cases than it might have covered if we had gone for an abstraction as soon as we had two or three functionally comparable pieces of code.
 
 [[asynchronous_code_flows]]
-=== 9.7 Asynchronous Code Flows
+=== Asynchronous Code Flows
 
 In <<iteration-and-flow-control>> we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, promises, generators, async functions, and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
 
@@ -1035,7 +1035,7 @@ Once again, this leads us to critical thinking. New language features aren't alw
 
 When we don't spend at least some of our time on figuring out what feature or flow style is the most appropriate for the code we're writing, we risk treating every problem as a nail because all we have is a hammer. Picking the right tool for the problem at hand is even more important than being a stickler for conventions and hard rules.
 
-=== 9.8 Complexity Creep, Abstractions and Conventions
+=== Complexity Creep, Abstractions and Conventions
 
 Picking the right abstractions is hard: we want to reduce complexity in our code flows by introducing complexity that's hidden away behind the constructs we use. Async functions borrow their foundation from generators. Generator objects are iterable. Async iterators use promises. Iterators are implemented using symbols. Promises use callbacks.
 

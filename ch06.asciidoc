@@ -3,7 +3,7 @@
 
 Proxies are an interesting and powerful feature in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a `Proxy` to determine the desired behavior whenever the properties of an underlying `target` object are accessed. A `handler` object can be used to configure traps for your `Proxy`, which define and restrict how the underlying object is accessed, as we'll see in a bit.
 
-=== 6.1 Getting Started with Proxy
+=== Getting Started with Proxy
 
 By default, proxies don't do much -- in fact they don't do anything. If you don't provide any configuration, your proxy will just work as a pass-through to the `target` object, also known as a "no-op forwarding proxy" meaning that all operations on the proxy object defer to the underlying object.
 
@@ -23,7 +23,7 @@ console.log(proxy.somethingElse)
 
 We can make the proxy object a bit more interesting by adding traps. Traps allow you to intercept interactions with `target` in several different ways, as long as those interactions happen through the `proxy` object. For instance, we could use a `get` trap to log every attempt to pull a value out of a property in `target`, or a `set` trap to prevent certain properties from being written to. Let's kick things off by learning more about `get` traps.
 
-==== 6.1.1 Trapping get accessors
+==== Trapping get accessors
 
 The proxy in the following code listing is able to track any and every property access event because it has a `handler.get` trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor.
 
@@ -83,7 +83,7 @@ proxy._secret
 To the keen observer, it may be apparent that disallowing access to certain properties through the proxy becomes most useful when creating a proxy with clearly defined access rules for the underlying `target` object, and exposing that proxy instead of the `target` object. That way you can still access the underlying object freely, but consumers are forced to go through the proxy and play by its rules, putting you in control of exactly how they can interact with the object. This wasn't possible before proxies were introduced in ES6.
 
 [[trapping_set_accessors]]
-==== 6.1.2 Trapping set accessors
+==== Trapping set accessors
 
 As the counterpart of `get` traps, `set` traps can intercept property assignment. Suppose we wanted to prevent assignment on properties starting with an underscore. We could replicate the `get` trap we implemented earlier to block assignment as well.
 
@@ -184,7 +184,7 @@ const proxy = concealWithPrefix(target)
 
 You might be tempted to argue that you could achieve the same behavior in ES5 simply by using variables privately scoped to the `concealWithPrefix` function, without the need for the `Proxy` itself. The difference is that proxies allow you to "privatize" property access dynamically. Without relying on `Proxy`, you couldn't mark every property that starts with an underscore as private. You could use `Object.freeze`​footnoteref:[object-freeze,The `Object.freeze` method prevents adding new properties, removing existing ones, and modifying property value references. Note that it doesn't make the values themselves immutable: their properties can still change provided `Object.freeze` isn't called on those objects as well.] on the object, but then you wouldn't be able to modify the property references yourself, either. Or you could define get and set accessors for every property, but then again you wouldn't be able to block access on every single property, only the ones you explicitly configured getters and setters for.
 
-==== 6.1.3 Schema Validation with Proxies
+==== Schema Validation with Proxies
 
 Sometimes we have an object with user input that we want to validate against a schema, a model of how that input is supposed to be structured, what properties it should have, what types those properties should be, and how those properties should be filled. We'd like to verify that a `customer` email field contains an email address, a numeric `cost` field contains a number, and a required `name` field isn't missing.
 
@@ -239,7 +239,7 @@ console.log(person.age)
 
 While proxies offer previously-unavailable granular control over what a consumer can and cannot do with an object, as defined by access rules defined by the implementor, there's also a harsher variant of proxies that allows us to completely shut off access to `target` whenever we deem it necessary: revocable proxies.
 
-=== 6.2 Revocable Proxies
+=== Revocable Proxies
 
 Revocable proxies offer more fine-grained control than plain `Proxy` objects. The API is a bit different in that there is no `new` keyword involved, as opposed to `new Proxy(target, handler)`; and a `{ proxy, revoke }` object is returned, instead of just the `proxy` object being returned. Once `revoke()` is called, the `proxy` will throw an error on any operation.
 
@@ -284,13 +284,13 @@ function revokeStorage(proxy) {
 
 Given that `revoke` is available on the same scope where your `handler` traps are defined, you could set up unforgiving access rules such that if a consumer attempts to access a private property more than once you revoke their `proxy` access entirely.
 
-=== 6.3 Proxy Trap Handlers
+=== Proxy Trap Handlers
 
 Perhaps the most interesting aspect of proxies is how you can use them to intercept just about any interaction with the `target` object -- not only plain `get` or `set` operations.
 
 We've already covered `get`, which traps property access; and `set`, which traps property assignment. Next up we'll discuss the different kinds of traps you can set up.
 
-==== 6.3.1 has Trap
+==== has Trap
 
 We can use `handler.has` to conceal any property you want when it comes to the `in` operator. In the `set` trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the `proxy` to figure out whether these properties exist. There are three alternatives here.
 
@@ -358,7 +358,7 @@ console.log(proxy.hasOwnProperty('_secret'))
 
 The `getOwnPropertyDescriptor` trap in <<getownpropertydescriptor_trap>> offers a solution that's able to intercept `Object#hasOwnProperty` as well.
 
-==== 6.3.2 deleteProperty Trap
+==== deleteProperty Trap
 
 Setting a property to `undefined` clears its value, but the property is still part of the object. Using the `delete` operator on a property with code like `delete cat.furBall` means that the `furBall` property will be completely gone from the `cat` object.
 
@@ -427,7 +427,7 @@ delete proxy._secret
 
 Consumers interacting with `target` through the `proxy` can no longer delete properties in the `_secret` property space. That's one less thing to worry about!
 
-==== 6.3.3 defineProperty Trap
+==== defineProperty Trap
 
 The `Object.defineProperty` function -- introduced in ES5 -- can be used to add new properties to a `target` object, using a property `key` and a property `descriptor`. For the most part, `Object.defineProperty(target, key, descriptor)` is used in two kinds of situations.
 
@@ -511,7 +511,7 @@ The `proxy` object is safely hiding `_secret` properties behind a trap that guar
 
 There's one more trap that can help conceal `_secret` properties.
 
-==== 6.3.4 ownKeys Trap
+==== ownKeys Trap
 
 The `handler.ownKeys` method may be used to return an `Array` of properties that will be used as a result for `Reflect.ownKeys()`. It should include all properties of `target`: enumerable, non-enumerable, and symbols as well. A default implementation, as always, could pass throught to the reflection method on the proxied `target` object.
 
@@ -606,12 +606,12 @@ for (const key of Object.getOwnPropertySymbols(proxy)) {
 
 We were able to hide properties prefixed with `_` from key enumeration while leaving symbols and other properties unaffected. What's more, there's no need to repeat ourselves in several trap handlers: a single `ownKeys` trap took care of all different enumeration methods. The only caveat is that we need to be careful about handling `Symbol` property keys.
 
-=== 6.4 Advanced Proxy Traps
+=== Advanced Proxy Traps
 
 For the most part, the traps that we discussed so far have to do with property access and manipulation. Up next is the last trap we'll cover that's related to property access. Every other trap in this section has to do with the object we are proxying itself, instead of its properties.
 
 [[getownpropertydescriptor_trap]]
-==== 6.4.1 getOwnPropertyDescriptor Trap
+==== getOwnPropertyDescriptor Trap
 
 The `getOwnPropertyDescriptor` trap is triggered when querying an object for the property descriptor for some `key`. It should return a property descriptor or `undefined` when the property doesn't exist. There is also the option of throwing an exception, aborting the operation entirely.
 
@@ -675,7 +675,7 @@ When you're trying to hide things, it's best to have them try and behave as if t
 
 When debugging concerns outweight security concerns, you should at least consider the `throw` statement. In any case, it's important to understand your use case in order to figure out the optimal and least surprising behavior for a given component.
 
-==== 6.4.2 apply Trap
+==== apply Trap
 
 The `apply` trap is quite interesting, it's specifically tailored to work with functions. When the proxied `target` function is invoked, the `apply` trap is triggered. All of the statements in the following code sample would go through the `apply` trap in your proxy `handler` object.
 
@@ -825,7 +825,7 @@ We haven't used an `apply` trap for the `selfish` examples, which illustrates th
 
 Up to what point is the abstraction justifiable over a few `.bind` statements in the `constructor` of a class object? These are hard questions that always depend on context, but they must be considered when designing a component system so that, in the process of adding abstraction layers meant to help you avoid repeating yourself, you don't add complexity for complexity's sake.
 
-==== 6.4.3 construct Trap
+==== construct Trap
 
 The `construct` trap intercepts uses of the `new` operator. In the following code sample, we implement a custom `construct` trap that behaves identically to the `construct` trap. We use the spread operator, in combination with the `new` keyword, so that we can pass any arguments to the `Target` constructor.
 
@@ -889,7 +889,7 @@ proxy.hello()
 
 Note that arrow functions can't be used as constructors, and thus we can't use the `construct` trap on them. Let's move onto the last few traps.
 
-==== 6.4.4 getPrototypeOf Trap
+==== getPrototypeOf Trap
 
 We can use the `handler.getPrototypeOf` method as a trap for all of the following operations.
 
@@ -952,7 +952,7 @@ console.log(proxy)
 
 Conversely to the `getPrototypeOf` trap, there's `setPrototypeOf`.
 
-==== 6.4.5 setPrototypeOf Trap
+==== setPrototypeOf Trap
 
 There is an `Object.setPrototypeOf` method in ES6 that can be used to change the prototype of an object into a reference to another object. It's considered the proper way of setting the prototype, as opposed to setting the special `__proto__` property, which is a feature that's supported in most browsers but was deprecated in ES6.
 
@@ -995,7 +995,7 @@ proxy.setPrototypeOf(proxy, base)
 
 In these cases, it's best to fail with an exception so that consumers can understand what is going on. By explicitly disallowing prototype changes, the consumer can start looking elsewhere. If we didn't throw an exception, the consumer could still eventually learn that the prototype isn't changing through debugging. You might as well save them from that pain!
 
-==== 6.4.6 preventExtensions Trap
+==== preventExtensions Trap
 
 You can use `handler.preventExtensions` to trap the `Object.preventExtensions` method introduced in ES5. When extensions are prevented on an object, new properties can't be added any longer: the object can't be extended.
 
@@ -1041,7 +1041,7 @@ console.log(Object.isExtensible(proxy))
 // <- false
 ----
 
-==== 6.4.7 isExtensible Trap
+==== isExtensible Trap
 
 An extensible object is an object that you can add new properties to, an object you can extend.
 

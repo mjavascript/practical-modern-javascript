@@ -5,7 +5,7 @@ The sixth edition of the language comes with a plethora of non-breaking syntax i
 
 Object literals get a few syntax changes in ES6, and they're a good place to start.
 
-=== 2.1 Object Literals
+=== Object Literals
 
 An object literal is any object declaration using the `{}` shorthand syntax, such as the following example.
 
@@ -20,7 +20,7 @@ var book = {
 
 ES6 brings a few improvements to object literal syntax: property value shorthands, computed property names, and method definitions. Let's go through them and describe their use cases as well.
 
-==== 2.1.1 Property Value Shorthands
+==== Property Value Shorthands
 
 Sometimes we declare objects with one or more properties whose values are references to variables by the same name. For example we might have a `listeners` collection, and in order to assign it to a property called `listeners` of an object literal, we have to repeat its name. The following snippet has a typical example where we have an object literal declaration with a couple of these repetitive properties.
 
@@ -62,7 +62,7 @@ function clear() {
 
 That's the first of many ES6 features that are aimed towards reducing complexity in the code you have to maintain. Once you get used to the syntax, you'll notice that code readability and developer productivity get boosts as well.
 
-==== 2.1.2 Computed Property Names
+==== Computed Property Names
 
 Sometimes you have to declare objects that contain properties with names based on variables or other JavaScript expressions, as shown in the following piece of code written in ES5. For this example, assume that `expertise` is provided to you as a function parameter, and is not a value you know beforehand.
 
@@ -153,7 +153,7 @@ function getEnvelope(type, description) {
 
 The last enhancement coming to object literals is about functions.
 
-==== 2.1.3 Method Definitions
+==== Method Definitions
 
 Typically, you can declare methods on an object by adding properties to it. In the next snippet we're creating an small event emitter which supports multiple kinds of events. It comes with an `emitter#on` method that can be used to register event listeners, and an `emitter#emit` method that can be used to raise events.
 
@@ -204,7 +204,7 @@ var emitter = {
 Arrow functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave semantically.
 
 [[arrow_functions]]
-=== 2.2 Arrow Functions
+=== Arrow Functions
 
 In JavaScript you typically declare functions using code like the following, where you have a name, a list of parameters, and a function body.
 
@@ -237,7 +237,7 @@ While arrow functions look very similar to your typical anonymous function, they
 
 Let's dig into their semantic differences with traditional functions, the many ways to declare an arrow function, and practical use cases.
 
-==== 2.2.1 Lexical Scoping
+==== Lexical Scoping
 
 In the body of an arrow function, `this`, `arguments` and `super` point to the containing scope, since arrow functions don't create a new scope. Consider the following example. We have a `timer` object with a `seconds` counter and a `start` method defined using the syntax we've learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of elapsed `seconds`.
 
@@ -290,7 +290,7 @@ In this case, the `arguments` object refers to the context of the `puzzle` funct
 
 I've mentioned there's several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the others way to represent an arrow function?
 
-==== 2.2.2 Arrow Function Flavors
+==== Arrow Function Flavors
 
 Let's look one more time at the arrow function syntax we've learned so far.
 
@@ -364,7 +364,7 @@ Wrapping the expression in parenthesis fixes these issues, because the compiler 
 
 Now that you understand arrow functions, let's ponder about their merits and where they might be a good fit.
 
-==== 2.2.3 Merits and Use Cases
+==== Merits and Use Cases
 
 As a rule of thumb, you shouldn't blindly adopt ES6 features wherever you can. Instead, it's best to reason about each case individually and see whether adopting the new feature actually improves code readibility and maintainability. ES6 features are not strictly better than what we had all along, and it's a bad idea to treat them as such.
 
@@ -395,11 +395,11 @@ Arrow functions are neat when it comes to defining anonymous functions that shou
 // <- 8
 ----
 
-=== 2.3 Assignment Destructuring
+=== Assignment Destructuring
 
 This is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in `function` parameter lists. Let's go step by step, starting with objects.
 
-==== 2.3.1 Destructuring Objects
+==== Destructuring Objects
 
 Imagine you had a program with some comic book characters, Bruce Wayne being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman.
 
@@ -544,7 +544,7 @@ This flavor of destructuring is probably the least useful, as `characterBoots = 
 
 That's it, as far as objects go, in terms of destructuring. What about arrays?
 
-==== 2.3.2 Destructuring Arrays
+==== Destructuring Arrays
 
 The syntax for destructuring arrays is similar to that of objects. The following example shows a `coordinates` object that's destructured into two variables: `x` and `y`. Note how the notation uses square brackets instead of curly braces, this denotes we're using array destructuring instead of object destructuring. Instead of having to sprinkle your code with implementation details like `x = coordinates[0]`, with destructuring you can convey your meaning clearly and without explicitly referencing the indices, naming the values instead.
 
@@ -598,7 +598,7 @@ var right = 7
 
 The last area of destructuring we'll be covering is function parameters.
 
-==== 2.3.3 Function Parameter Defaults
+==== Function Parameter Defaults
 
 Function parameters in ES6 enjoy the ability of specifying default values as well. The following example defines a default `exponent` with the most commonly used value.
 
@@ -651,7 +651,7 @@ carFactory({ make: 2000 })
 
 We can mix function parameter default values with destructuring, and get the best of both worlds.
 
-==== 2.3.4 Function Parameter Destructuring
+==== Function Parameter Destructuring
 
 A better approach than merely providing a default value might be to destructure `options` entirely, providing default values for each property, individually, within the destructuring pattern. This approach also lets you reference each option without going through an `options` object, but you lose the ability to reference `options` directly, which might represent an issue in some situations.
 
@@ -716,7 +716,7 @@ getCarProductModel(car)
 
 Besides default values and filling an `options` object, let's explore what else destructuring is good at.
 
-==== 2.3.5 Use Cases for Destructuring
+==== Use Cases for Destructuring
 
 Whenever there's a function that returns an object or an array, destructuring makes it much terser to interact with. The following example shows a function that returns an object with some coordinates, where we grab only the ones we're interested in: `x` and `y`. We're avoiding an intermediate `point` variable declaration that often gets in the way without adding a lot of value to the readability of your code.
 
@@ -765,7 +765,7 @@ var [, year, month, day] = matches
 
 Let's turn our attention to spread and rest operators next.
 
-=== 2.4 Rest Parameters and Spread Operator
+=== Rest Parameters and Spread Operator
 
 Before ES6, interacting with an arbitrary amount of function parameters was complicated. You had to use `arguments`, which isn't an array but has a `length` property. Usually you'd end up casting the `arguments` object into an actual array using `Array#slice.call`, and going from there, as shown in the following snippet.
 
@@ -781,7 +781,7 @@ join('first', 'second', 'third')
 
 ES6 has a better solution to the problem, and that's rest parameters.
 
-==== 2.4.1 Rest Parameters
+==== Rest Parameters
 
 You can now precede the last parameter in any JavaScript function with three dots, converting it into an special "rest parameter". When the rest parameter is the only parameter in a function, it gets all arguments passed to the function: it works just like the `.slice` solution we saw earlier, but you avoid the need for a complicated construct like `arguments`, and it's specified in the parameter list.
 
@@ -830,7 +830,7 @@ console.log(sumAll(1, 2, 5))
 
 Next up we have the spread operator. It's also denoted with three dots, but it serves a slightly different purpose.
 
-==== 2.4.2 Spread Operator
+==== Spread Operator
 
 The spread operator can be used to cast any iterable object into an array. Spreading effectively expands an expression onto a target such as an array literal or a function call. The following example uses `...arguments` to cast function parameters into an array literal.
 
@@ -956,7 +956,7 @@ The following table summarizes the use cases we've discussed for the spread oper
 |=======
 
 [[template_literals]]
-=== 2.5 Template Literals
+=== Template Literals
 
 Template literals are a vast improvement upon regular JavaScript strings. Instead of using single or double quotes, template literals are declared using backticks, as shown next.
 
@@ -974,7 +974,7 @@ var text = `I'm "amazed" at these opportunities!`
 
 One of the most appealing features of template literals is their ability to interpolate JavaScript expressions.
 
-==== 2.5.1 String Interpolation
+==== String Interpolation
 
 With template literals, you're able to interpolate any JavaScript expressions inside your templates. When the template literal expression is reached, it's evaluated and you get back the compiled result. The following example interpolates a `name` variable into a template literal.
 
@@ -1014,7 +1014,7 @@ You could even nest template literals, as they are also valid JavaScript express
 
 Another perk of template literals is their multiline string representation support.
 
-==== 2.5.2 Multiline Template Literals
+==== Multiline Template Literals
 
 Before template literals, if you wanted to represent strings in multiple lines of JavaScript, you had to resort to escaping, concatenation, arrays, or even ellaborate hacks using comments. The following snippet summarizes some of the most common ways multiline string representations prior to ES6.
 
@@ -1124,7 +1124,7 @@ function unindent(text) {
 
 Sometimes, it might be a good idea to pre-process the results of interpolated expressions before inserting them into your templates. For these advanced kinds of use cases, it's possible to use another feature of template literals called tagged templates.
 
-==== 2.5.3 Tagged Templates
+==== Tagged Templates
 
 By default, JavaScript interprets `\` as an escape character with special meaning. For example, `\n` is interpreted as a newline, `\u00f1` is interpreted as `ñ`, etcetera. You could avoid these rules using the `String.raw` tagged template. The next snippet shows a template literal using `String.raw` which prevents `\n` from being interpreted as a newline.
 
@@ -1210,7 +1210,7 @@ console.log(html)
 
 Phew, that malicious `<iframe>` almost got us. Rounding out ES6 syntax changes, we have the `let` and `const` statements.
 
-=== 2.6 Let and Const Statements
+=== Let and Const Statements
 
 The `let` statement is one of the most well-known features in ES6. It works like a `var` statement, but it has different scoping rules.
 
@@ -1245,7 +1245,7 @@ function isItTwo(value) {
 
 Whether we like it or not, hoisting is more confusing than having block-scoped variables would be. Block scoping works on the curly braces level, rather than the function level.
 
-==== 2.6.1 Block Scoping and Let Statements
+==== Block Scoping and Let Statements
 
 Instead of having to declare a new `function` if we want a deeper scoping level, block scoping allows you to just leverage existing code branches like those in `if`, `for`, or `while` statements; you could also create new `{}` blocks arbitrarily. As you may or may not know, the JavaScript language allows us to create an indiscriminate number of blocks, just because we want to.
 
@@ -1324,7 +1324,7 @@ printNumbers()
 
 One more thing of note about `let` is a concept called the "Temporal Dead Zone".
 
-==== 2.6.2 Temporal Dead Zone
+==== Temporal Dead Zone
 
 In so many words: if you have code such as the following code snippet, it'll throw. Once execution enters a scope, and until a `let` statement is reached, attempting to access the variable for said `let` statement will throw. This is known as the Temporal Dead Zone (TDZ).
 
@@ -1391,7 +1391,7 @@ The whole point of the TDZ is to make it easier to catch errors where accessing 
 
 We made it through the temporal dead zone! It's now time to cover `const`, a similar statement to `let` but with a few major differences.
 
-==== 2.6.3 Const Statements
+==== Const Statements
 
 The `const` statement is block scoped like `let`, and it follows TDZ semantics as well. In fact, TDZ semantics were implemented because of `const`, and then TDZ was also applied to `let` for consistency. The reason why `const` needed TDZ semantics is that it would otherwise have been possible to assign a value to a hoisted `const` variable before reaching the `const` declaration, meaning that the declaration itself would throw. The temporal dead zone defines a solution that solves the problem of making `const` assignment possible only at declaration time, helps avoid potential issues when using `let`, and also makes it easy to eventually implement other features that benefit from TDZ semantics.
 
@@ -1467,7 +1467,7 @@ frozen.push('Water')
 
 Let's take a moment to discuss the merits of `const` and `let`.
 
-==== 2.6.4 Merits of Const and Let
+==== Merits of Const and Let
 
 New features should never be used for the sake of using new features. ES6 features should be used where they genuinely improve code readability and maintainability. The `let` statement is able to, in many cases, simplify pieces of code where you'd otherwise declare `var` statements at the top of a function just so that hoisting doesn't produce unexpected results. Using the `let` statement you'd be able to place your declarations at the top of a code block, instead of the top of the whole function, reducing the latency in mental trips to the top of the scope.
 

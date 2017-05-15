@@ -6,7 +6,7 @@ JavaScript has gone from being a 1995 marketing ploy to gain a tactical advantag
 
 How did JavaScript get here, and where is it going next?
 
-=== 1.1 A Brief History of JavaScript Standards
+=== A Brief History of JavaScript Standards
 
 Back in 1995, Netscape envisioned a dynamic web beyond what HTML could offer. Brendan Eich was initially brought into Netscape to develop a language that was functionally akin to Scheme, but for the browser. Once he joined, he learned that upper management wanted it to look like Java and a deal to that effect was already underway.
 
@@ -43,7 +43,7 @@ In parallel with the ES6 effort, in 2012 the WHATWG (a standards body interested
 The sixth edition is a significant milestone in the history of JavaScript. Besides the dozens of new features, ES6 marks a key inflection point where ECMAScript would become a rolling standard.
 
 [[ecmascript_as_a_rolling_standard]]
-=== 1.2 ECMAScript as a Rolling Standard
+=== ECMAScript as a Rolling Standard
 
 Having spent ten years without observing significant change to the language specification after ES3, and four years for ES6 to materialize, it was clear the TC39 process needed to improve. The revision process used to be deadline-driven. Any delay in arriving at consensus would cause long wait periods between revisions, which lead to feature creep, causing more delays. Minor revisions were delayed by large additions to the specification, and large additions faced pressure to finalize so that the revision would be pushed through avoiding further delays.
 
@@ -67,7 +67,7 @@ New releases of the specification are expected to be published every year from n
 
 The streamlined proposal process combined with the yearly cut into standardization translates into a more consistent publication process, and it also means specification revision numbers are becoming less important. The focus is now on proposal stagesfootnoteref:[tc39-proposals], and we can expect references to specific revisions of the ECMAScript standard to become more uncommon.
 
-=== 1.3 Browser Support and Complementary Tooling
+=== Browser Support and Complementary Tooling
 
 A stage 3 candidate recommendation proposal is most likely to make it into the specification in the next cut, provided two independent implementations land in JavaScript engines. Effectively, stage 3 proposals are considered safe to use in real-world applications, be it through an experimental engine implementation, a polyfill, or using a compiler. Stage 2 and earlier proposals are also used in the wild by JavaScript developers, tightening the feedback loop between implementors and consumers.
 
@@ -81,7 +81,7 @@ The same applies to ES7 and beyond. As new versions of the language specificatio
 
 Let's talk about how you can use Babel in as part of your workflow.
 
-==== 1.3.1 Introduction to the Babel transpiler
+==== Introduction to the Babel transpiler
 
 Babel can compile modern JavaScript code using ES6 features into ES5. It produces human-readable code, making it more welcoming when we don't have a firm grasp on all of the new features we're using.
 
@@ -216,7 +216,7 @@ console.log(double(3))
 
 Let's jump into a different kind of tool, the `eslint` code linter, which can help us establish a code quality baseline for our applications.
 
-==== 1.3.2 Code Quality and Consistency with ESLint
+==== Code Quality and Consistency with ESLint
 
 As we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
 
@@ -318,7 +318,7 @@ A similar kind of tool can be found in `prettier`, which can be used to automati
 
 Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of JavaScript.
 
-=== 1.4 Feature Themes in ES6
+=== Feature Themes in ES6
 
 ES6 is big: the language specification went from 258 pages in ES5.1 to over double that amount in ES6, at 566 pages. Each change to the specification falls in some of a few different categories:
 
@@ -342,7 +342,7 @@ We are getting a new module system that's native to JavaScript. After going over
 
 Due to the sheer amount of changes introduced by ES6, it's hard to reconcile its new features with our pre-existing knowledge of JavaScript. We'll spend all of <<practical-considerations>> analyzing the merits and importance of different individual features in ES6, so that you have a practical grounding upon which you can start experimenting with ES6 right away.
 
-=== 1.5 Future of JavaScript
+=== Future of JavaScript
 
 The JavaScript language has evolved from its humble beginnings in 1995, to the formidable language it is today. While ES6 is a great step forward, it's not the finish line. Given we can expect new specification updates every year, it's important to learn how to stay up to date with the specification.
 

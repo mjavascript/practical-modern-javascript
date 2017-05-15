@@ -83,11 +83,11 @@ When it comes to using non-string keys, though, we hit a hard limit in ES5 code.
 
 Let's plunge into their practical usage and inner workings.
 
-=== 5.1 Using ES6 Maps
+=== Using ES6 Maps
 
 ES6 introduces built-in collections, such as `Map`, meant to alleviate implementation of patterns such as those we outlined earlier when building our own hash-map from scratch. `Map` is a key/value data structure in ES6 that more naturally and efficiently lends itself to creating maps in JavaScript without the need for object literals.
 
-==== 5.1.1 First Look into ES6 Maps
+==== First Look into ES6 Maps
 
 Here's how what we had earlier would have looked like when using ES6 maps. As you can see, the implementation details we've had to come up with for our custom ES5 hash-map are already built into `Map`, vastly simplifying our use case.
 
@@ -333,7 +333,7 @@ map.forEach((value, key) => console.log(key, value))
 
 Earlier, we brought up the ability of providing arbitrary object references as the key to a `Map` entry. Let's go into a concrete use case for that API.
 
-==== 5.1.2 Hash-Maps and the DOM
+==== Hash-Maps and the DOM
 
 In ES5, whenever we wanted to associate a DOM element with an API object connecting that element with some library, we had to implement a verbose and slow pattern such as the one in the following code listing. That code returns an API object with a few methods associated to a given DOM element, allowing us to put DOM elements on a map from which we can later retrieve the API object for a DOM element.
 
@@ -421,7 +421,7 @@ function customThing(el) {
 
 Maps aren't the only kind of built-in collection in ES6, there's also `WeakMap`, `Set`, and `WeakSet`. Let's proceed by digging into `WeakMap`.
 
-=== 5.2 Understanding and Using WeakMap
+=== Understanding and Using WeakMap
 
 For the most part, you can think of `WeakMap` as a subset of `Map`. The `WeakMap` collection has a reduced API surface with less affordances than what we could find in `Map`. Collections created using `WeakMap` are not iterable like `Map`, meaning there is no iterable protocol in `WeakMap`, no `WeakMap#entries`, no `WeakMap#keys`, no `WeakMap#values`, no `WeakMap#forEach` and no `WeakMap#clear` methods.
 
@@ -466,7 +466,7 @@ map.has(date)
 // <- false
 ----
 
-==== 5.2.1 Is WeakMap A Worse Map?
+==== Is WeakMap A Worse Map?
 
 The distinction which makes `WeakMap` worth the trouble is in its name. Given that `WeakMap` holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as `WeakMap` keys. This is in contrast with `Map` which holds strong object references, preventing `Map` keys and values from being garbage collected.
 
@@ -476,7 +476,7 @@ Keeping data about DOM elements that should be released from memory when they're
 
 In so many words, then: no, `WeakMap` is definitely not worse than `Map` -- they just cater to different use cases.
 
-=== 5.3 Sets in ES6
+=== Sets in ES6
 
 The `Set` built-in is a new collection type in ES6 used to represent a grouping of values. In several aspects, `Set` is similar to `Map`.
 
@@ -567,7 +567,7 @@ console.log(set.keys === set.values)
 // <- true
 ----
 
-=== 5.4 ES6 WeakSets
+=== ES6 WeakSets
 
 In a similar fashion to `Map` and `WeakMap`, `WeakSet` is the weak version of `Set` that can't be iterated over. The values in a `WeakSet` must be unique object references. If nothing else is referencing a `value` found in a `WeakSet`, it'll be subject to garbage collection.
 
