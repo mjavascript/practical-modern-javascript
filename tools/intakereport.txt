@@ -1,12 +1,12 @@
-Title: Modular ES6
-ISBN: xxxxxxxxxxxx
-JIRA #: [ FILL IN ]
+Title: Practical Modern JavaScript
+ISBN: 9781491943533
+JIRA #: DCPSPROD-1516
 
 
 Stylesheet: animal_theme_sass
 Toolchain: Atlas 2
 
-Atlas URL: https://atlas.oreilly.com/oreillymedia/[ FILL IN ATLAS BOOK ID ]
+Atlas URL: :
 
 Incoming format: [FILL IN]
 Outgoing format: HTMLBook
@@ -46,7 +46,8 @@ Notes from Tools:
 
 ** PROD: Add any authors to project that need to be added.
 ** Syntax highlighting: applied to [ FILL IN ] out of [ FILL IN ] code listings.
-
+** I added custom XSL to generate numbers for section headings and removed the hard-coded numbers from the text source. Xrefs aren't yet showing the section numbers, and I'll need to modify the custom XSL to make them work.
+** TODO: Take care of characters missing from PDF builds.
 ** Please let Tools know ASAP if there are any other global problems for which we can help automate a fix.
 
 
