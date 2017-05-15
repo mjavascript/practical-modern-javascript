@@ -6,24 +6,22 @@ JIRA #: DCPSPROD-1516
 Stylesheet: animal_theme_sass
 Toolchain: Atlas 2
 
-Atlas URL: :
+Atlas URL: https://atlas.oreilly.com/oreillymedia/practical-modern-javascript/
 
-Incoming format: [FILL IN]
-Outgoing format: HTMLBook
+Incoming format: AsciiDoc
+Outgoing format: AsciiDoc
 
-Preliminary pagecount: TOTAL  [ FILL IN / With or without figs? ]
+Preliminary pagecount: 318 (with figs)
   
-Is this project in Early Release? [FILL IN YES/NO]
+Is this project in Early Release? Yes
 
 Resources
 =========
 
-** Figs: Illustrations [ FILL IN: has posted the figs / is still working on the figs]. 
-   10 total. (10 are informal; 0 are inline.)
+** Figs: Illustrations has posted the figs for all but the inline emojis, which I've requested in the DCPSPROD illustrations ticket.
+   13 total. (10 are informal; 3 are inline.)
 
    Once the figs are processed on /work, you'll need to add them to the book's repo.
-
-   A report mapping original figure file names to their new names can be found in the tools folder for this project as figure_renaming_report.tsv.
 
 ** Intake Report:
    (Git repo) tools/intakereport.txt
@@ -45,15 +43,29 @@ Notes from Tools:
 =================
 
 ** PROD: Add any authors to project that need to be added.
-** Syntax highlighting: applied to [ FILL IN ] out of [ FILL IN ] code listings.
-** I added custom XSL to generate numbers for section headings and removed the hard-coded numbers from the text source. Xrefs aren't yet showing the section numbers, and I'll need to modify the custom XSL to make them work.
-** TODO: Take care of characters missing from PDF builds.
+** Syntax highlighting: applied to 739 out of 741 code listings.
+** I added custom XSL to generate numbers for section headings and removed the hard-coded numbers from the text source. Xrefs aren't yet showing the section numbers, and xrefs in the PDF also aren't showing the page numbers for they sections being referenced. I'll need to modify the custom XSL to make the xrefs work as they should, and that fix has a ticket in Desk #75056.
+** Ron addressed emojis the author wanted to use in code blocks by making images from the Twitter emoji set, as requested by the author. There's CSS styling these emojis in ebook and PDF formats.
 ** Please let Tools know ASAP if there are any other global problems for which we can help automate a fix.
 
 
 Notes at arrival in production:
 ==================
 
+Techbook
+
+ISBN: 9781491943533
+Page count: 200
+Source Files: https://atlas.oreilly.com/oreillymedia/modular-es6 [See new location above.--Matt]
+Editor name: Nan Barber
+Acquisitions Editor: Ally MacDonald
+Interior design: 6x9, oreillymedia/animal_theme_6x9
+Prod ed: Mel
+Is this sponsored? No
+Special release constraints: None
+
+*Notes for Production*
+* This book's title and subtitle will be changed shortly, so Design will be changing the cover. The internal files, however, are ready for intake.
 
 
 ==================
@@ -61,5 +73,5 @@ Notes at arrival in production:
 Please let me know about any other issues.
 
 Thanks,
-[ FILL IN ]
+Matt
 
