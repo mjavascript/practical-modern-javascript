@@ -664,7 +664,7 @@ While we've already addressed syntax enhancements coming to object literals in <
 We've already looked at `Object.getOwnPropertySymbols`, but let's also take a look at `Object.assign`, `Object.is`, and `Object.setPrototypeOf`.
 
 [[extending_objects_with_object_assign]]
-==== Extending objects with `Object.assign`
+==== Extending objects with Object.assign
 
 The need to provide default values for a configuration object is not at all uncommon. Typically, libraries and well-designed component interfaces come with sensible defaults that cater to the most frequented use cases.
 
