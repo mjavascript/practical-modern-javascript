@@ -1,1 +1,6 @@
-/* Add your custom CSS styles for the MOBI here */
+/* emoji handling (STYL-952) */
+pre > img { 
+  margin: 0 0 -0.25em;
+  padding: 0;
+  height: 1em;
+}
