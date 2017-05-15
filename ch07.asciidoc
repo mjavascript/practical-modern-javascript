@@ -1082,44 +1082,40 @@ Note that the internal representation hasn't changed, so there's still two code 
 
 The `'\ud83d\udc0e\ud83d\udc71\u2764'` string, found in the next code snippet, evaluates to a few emoji.
 
-[source,javascript]
-----
-'\ud83d\udc0e\ud83d\udc71\u2764'
-// <- '🐎👱❤'
-----
+++++
+<pre data-type="programlisting" data-code-language="javascript">'\ud83d\udc0e\ud83d\udc71\u2764'
+// &lt;- '<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>'</pre>
+++++
 
 While that string consists of 5 code units, we know that the length should really be 3 -- as there's only 3 emoji.
 
-[source,javascript]
-----
-'\ud83d\udc0e\ud83d\udc71\u2764'.length
-// <- 5
-'🐎👱❤'.length
-// <- 5, still
-----
+++++
+<pre data-type="programlisting" data-code-language="javascript">'\ud83d\udc0e\ud83d\udc71\u2764'.length
+// &lt;- 5
+'<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>'.length
+// &lt;- 5, still</pre>
+++++
 
 Counting code points before ES6 was tricky, as the language didn't make an effort to help in the Unicode department. Take for instance `Object.keys`, as seen in the following code snippet. It returns five keys for our 3-emoji string, because those 3 code points use 5 code units in total.
 
-[source,javascript]
-----
-Object.keys('🐎👱❤')
-// <- ['0', '1', '2', '3', '4']
-----
+++++
+<pre data-type="programlisting" data-code-language="javascript">Object.keys('<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>')
+// &lt;- ['0', '1', '2', '3', '4']</pre>
+++++
 
 If we now consider a `for` loop, we can observe more clearly how this is a problem. In the following example, we wanted to extract each individual emoji from the `text` string, but we got each code unit instead of the code points they form.
 
-[source,javascript]
-----
-const text = '🐎👱❤'
-for (let i = 0; i < text.length; i++) {
+++++
+<pre data-type="programlisting" data-code-language="javascript">const text = '<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>'
+for (let i = 0; i &lt; text.length; i++) {
   console.log(text[i])
-  // <- '\ud83d'
-  // <- '\udc0e'
-  // <- '\ud83d'
-  // <- '\udc71'
-  // <- '\u2764'
-}
-----
+  // &lt;- '\ud83d'
+  // &lt;- '\udc0e'
+  // &lt;- '\ud83d'
+  // &lt;- '\udc71'
+  // &lt;- '\u2764'
+}</pre>
+++++
 
 Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the string iterator to go over code points, even when those code points are made of surrogate pairs.
 
@@ -1127,25 +1123,23 @@ Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the s
 
 Given the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
 
-[source,javascript]
-----
-for (const codePoint of '🐎👱❤') {
+++++
+<pre data-type="programlisting" data-code-language="javascript">for (const codePoint of '<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>') {
   console.log(codePoint)
-  // <- '🐎'
-  // <- '👱'
-  // <- '❤'
-}
-----
+  // &lt;- '<img src="images/1f40e.svg"/>'
+  // &lt;- '<img src="images/1f471.svg"/>'
+  // &lt;- '<img src="images/2764.svg"/>'
+}</pre>
+++++
 
 Measuring the length of a string in terms of code points, as we saw earlier, is impossible with `String#length`, because it counts code units instead. We can, however, use an iterator to split the string into its code points, like we did in the `for..of` example.
 
 We could use the spread operator, which relies on the iterator protocol, to split an string into an array made up of its conforming code points and then pull that array's `length`, getting the correct code point count, as seen next.
 
-[source,javascript]
-----
-[...'🐎👱❤'].length
-// <- 3
-----
+++++
+<pre data-type="programlisting" data-code-language="javascript">[...'<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>'].length
+// &lt;- 3</pre>
+++++
 
 Keep in mind that splitting strings into code points isn't enough if you want to be 100% precise about string length. Take for instance the combining overline Unicode code unit, represented with `\u0305`. On its own, this code unit is just an overline, as shown below.
 
@@ -1210,7 +1204,7 @@ Let's look at more Unicode-related methods introduced in ES6.
 
 ==== String#codePointAt
 
-We can use `String#codePointAt` to get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo `'🐎👱❤'` string.
+We can use `String#codePointAt` to get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo `'pass:[<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>]'` string.
 
 [source,javascript]
 ----
@@ -1258,61 +1252,57 @@ const text = '\ud83d\udc0e\ud83d\udc71\u2764'
 
 We could wrap those base-16 values in `'\u{codePoint}'` and voilá: you'd get the emoji values once again.
 
-[source,javascript]
-----
-'\u{1f40e}'
-// <- '🐎'
+++++
+<pre data-type="programlisting" data-code-language="javascript">'\u{1f40e}'
+// &lt;- '<img src="images/1f40e.svg"/>'
 '\u{1f471}'
-// <- '👱'
+// &lt;- '<img src="images/1f471.svg"/>'
 '\u{2764}'
-// <- '❤'
-----
+// &lt;- '<img src="images/2764.svg"/>'</pre>
+</section>
+++++
 
 ==== String.fromCodePoint
 
 This method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
 
-[source,javascript]
-----
-String.fromCodePoint(0x1f40e)
-// <- '🐎'
+++++
+<pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
+// &lt;- '<img src="images/1f40e.svg"/>'
 String.fromCodePoint(0x1f471)
-// <- '👱'
+// &lt;- '<img src="images/1f471.svg"/>'
 String.fromCodePoint(0x2764)
-// <- '❤'
-----
+// &lt;- '<img src="images/2764.svg"/>'</pre>
+++++
 
 You can just as well use plain base-10 literals and achieve the same results.
 
-[source,javascript]
-----
-String.fromCodePoint(128014)
-// <- '🐎'
+++++
+<pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(128014)
+// &lt;- '<img src="images/1f40e.svg"/>'
 String.fromCodePoint(128113)
-// <- '👱'
+// &lt;- '<img src="images/1f471.svg"/>'
 String.fromCodePoint(10084)
-// <- '❤'
-----
+// &lt;- '<img src="images/2764.svg"/>'</pre>
+++++
 
 You can pass in as many code points as you'd like to `String.fromCodePoint`.
 
-[source,javascript]
-----
-String.fromCodePoint(0x1f40e, 0x1f471, 0x2764)
-// <- '🐎👱❤'
-----
+++++
+<pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e, 0x1f471, 0x2764)
+// &lt;- '<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>'</pre>
+++++
 
 As an exercise in futility, we could map a string to their numeric representation of code points, and back to the code points themselves.
 
-[source,javascript]
-----
-const text = '\ud83d\udc0e\ud83d\udc71\u2764'
+++++
+<pre data-type="programlisting" data-code-language="javascript">const text = '\ud83d\udc0e\ud83d\udc71\u2764'
 [...text]
-  .map(cp => cp.codePointAt(0))
-  .map(cp => String.fromCodePoint(cp))
+  .map(cp =&gt; cp.codePointAt(0))
+  .map(cp =&gt; String.fromCodePoint(cp))
   .join('')
-// <- '🐎👱❤'
-----
+// &lt;- '<img src="images/1f40e.svg"/><img src="images/1f471.svg"/><img src="images/2764.svg"/>'</pre>
+++++
 
 Reversing an string has potential to cause issues as well.
 
@@ -1331,12 +1321,11 @@ text.split('').reverse().map(cp => cp.codePointAt(0))
 
 The problem is that we're reversing individual code units, while we'd have to reverse code points for a correct solution. If, instead, we were to use the spread operator to split the string by its code points, and then reversed that, the code points would be preserved and the string would be properly reversed.
 
-[source,javascript]
-----
-const text = '\ud83d\udc0e\ud83d\udc71\u2764'
+++++
+<pre data-type="programlisting" data-code-language="javascript">const text = '\ud83d\udc0e\ud83d\udc71\u2764'
 [...text].reverse().join('')
-// <- '❤👱🐎'
-----
+// &lt;- '<img src="images/2764.svg"/><img src="images/1f471.svg"/><img src="images/1f40e.svg"/>'</pre>
+++++
 
 This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clustersfootnoteref:[unicode-problem].
 
@@ -1470,19 +1459,17 @@ Using an escape sequence for an unreserved character such as `a` in a regular ex
 
 The following example attempts to embed the horse emoji in a regular expression by way of the `\u{1f40e}` notation which ES6 introduced for strings like `'\u{1f40e}'`, but the regular expression fails to match against the horse emoji. Without the `u` flag, the `\u{…}` pattern is interpreted as having an unnecessarily escaped `u` character followed by the rest of the sequence.
 
-[source,javascript]
-----
-/\u{1f40e}/.test('🐎') // <- false
-/\u{1f40e}/.test('u{1f40e}') // <- true
-----
+++++
+<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/.test('<img src="images/1f40e.svg"/>') // &lt;- false
+/\u{1f40e}/.test('u{1f40e}') // &lt;- true</pre>
+++++
 
 The `u` flag introduces support for Unicode code point escapes, like the `\u{1f40e}` horse emoji, within regular expressions.
 
-[source,javascript]
-----
-/\u{1f40e}/u.test('🐎')
-// <- true
-----
+++++
+<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/u.test('<img src="images/1f40e.svg"/>')
+// &lt;- true</pre>
+++++
 
 Without the `u` flag, the `.` pattern matches any BMP symbol except for line terminators. The following example tests `U+1D11E MUSICAL SYMBOL G CLEF`, an astral symbol that doesn't match the dot pattern in plain regular expressions.
 
