@@ -3,7 +3,7 @@
 /*--------Put Your Custom CSS Rules Below--------*/
 
 /* Font fallback for characters not represented in standard monospace */
-pre, code { font-family: UbuntuMono, monospace, ArialUnicodeMS }
+pre, code { font-family: UbuntuMono, monospace, ArialUnicodeMS, Symbola }
 
 /* emoji handling (STYL-952) */
 pre > img { 
