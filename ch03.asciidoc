@@ -1094,7 +1094,7 @@ function commandProperty(writeLevel, readLevel = writeLevel) {
 }
 ----
 
-A `Dog` class could have as many command properties as we deemed necessary, and each would be listed behind a symbol property. To find the command properties for any given object, all we'd have to do is use the following function, which retrieves the list from the symbol property, and offers a default value of +[]+. We always return a copy of the original list to prevent consumers from accidentally making changes to it.
+A `Dog` class could have as many command properties as we deemed necessary, and each would be listed behind a symbol property. To find the command properties for any given class, all we'd have to do is use the following function, which retrieves a list of command properties from the symbol property, and offers a default value of +[]+. We always return a copy of the original list to prevent consumers from accidentally making changes to it.
 
 [source,javascript]
 ----
