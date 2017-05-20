@@ -1098,12 +1098,12 @@ A `Dog` class could have as many command properties as we deemed necessary, and 
 
 [source,javascript]
 ----
-function getCommandProperties(target) {
+function getCommandProperties(ctor) {
   const symbol = Symbol.for('commandProperties')
-  const properties = target[symbol] || []
+  const properties = ctor[symbol] || []
   return [...properties]
 }
-getCommandProperties(dog)
+getCommandProperties(Dog)
 // <- [{ key: 'name', readLevel: 'game-master', writeLevel: 'game-master' }]
 ----
 
