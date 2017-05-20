@@ -976,25 +976,43 @@ class View {
 }
 ----
 
-Decorators are implemented by way of functions. Member decorator functions take a member descriptor and return a member descriptor.
+Decorators are implemented by way of functions. Member decorator functions take a member descriptor and return a member descriptor. Member descriptors are similar to property descriptors, but with a different shape. The following bit of code has the member descriptor interface, as defined by the decorators proposal. An optional `finisher` function receives the class constructor, allowing us to perform operations related to the class whose property is being decorated.
 
-In the following example we define a `readonly` member decorator function which makes decorated members non-writable.
-
-[source,javascript]
+[source]
 ----
-function readonly(member) {
-  member.descriptor.writable = false
+interface MemberDesciptor {
+  kind: "Property"
+  key: string,
+  isStatic: boolean,
+  descriptor: PropertyDescriptor,
+  extras?: MemberDescriptor[]
+  finisher?: (constructor): void;
 }
 ----
 
-Class decorator functions take a `target`, which is the class constructor being decorated; a `heritage` parameter, containing the parent class when the decorated class extends another class; and a `members` array, with a list of member descriptors for the class being decorated.
+In the following example we define a `readonly` member decorator function which makes decorated members non-writable. Taking advantage of the object rest parameter and object spread, we modify the property descriptor to be non-writable while keeping the rest of the member descriptor unchanged.
+
+[source,javascript]
+----
+function readonly({ descriptor, ...rest }) {
+  return {
+    ...rest,
+    descriptor: {
+      ...descriptor,
+      writable: false
+    }
+  }
+}
+----
+
+Class decorator functions take a `ctor`, which is the class constructor being decorated; a `heritage` parameter, containing the parent class when the decorated class extends another class; and a `members` array, with a list of member descriptors for the class being decorated.
 
 We could implement a class-wide `readonlyMembers` decorator by reusing the `readonly member decorator on each member descriptor for a decorated class, as shown next.
 
 [source,javascript]
 ----
-function readonlyMembers(target, heritage, members) {
-  members.forEach(member => readonly(member))
+function readonlyMembers(ctor, heritage, members) {
+  return members.map(member => readonly(member))
 }
 ----
 
@@ -1004,4 +1022,89 @@ With all the fluff around immutability you may be tempted to return a new proper
 
 If any decorators in a piece of code returned an entirely new `descriptor` without taking into consideration the `descriptor` parameter they receive, they'd effectively lose all the decoration that took place before the different descriptor was returned.
 
-We should be careful to write decorators that take into account the supplied `descriptor`: modify it directly or create one that's based on the `descriptor` that's provided to you.
+We should be careful to write decorators that take into account the supplied `descriptor`. ALways create one that's based on the original `descriptor` that's provided as a parameter.
+
+==== 3.4.3 Use Case By Example: Attributes in C#
+
+A long time ago, I was first getting acquainted with C# by way of an Ultima Onlinefootnoteref:[uo,Ultima Online is a decades-old fantasy role playing game based on the Ultima universe.] server emulator written in open-source C# code -- RunUO. RunUO was one of the most beautiful codebases I've ever worked with, and it was written in C# to boot.
+
+They distributed the server software as an executable and a series of `.cs` files. The `runuo` executable would compile those `.cs` scripts at runtime and dynamically mix them into the application. The result was that you didn't need the Visual Studio IDE (nor `msbuild`), or anything other than just enough programming knowledge to edit one of the "scripts" in those `.cs` files. All of the above made RunUO the perfect learning environment for the newcomer developer.
+
+RunUO relied heavily in reflection. They made significant efforts to be customizable by players who were not necessarily invested in programming but were nevertheless interested in changing a few details of the game, such as how much damage a Dragon's fire breath inflicts or how often they shot fireballs. Great developer experience was a big part of their philosophy, and you could create a new kind of `Dragon` just by copying one of the monster files, changing it to inherit from the `Dragon` class, and overriding a few properties to change its color hue, its damage output, and so on.
+
+Just as they made it easy to create new monsters, -- or "non-player characters" (NPC) in gaming slang -- they also relied in reflection to provide functionality to in-game administrators. Administrators could run an in-game command and click on an item or a moster to visualize or change properties without ever leaving the game.
+
+image::../images/c04g01-promisees.png["Modifying properties for a RunUO item in-game from the Ultima Online client."]
+
+Not every property in a class is meant to be accessible in-game, though. Some properties are only meant for internal use, or not meant to be modified at runtime. RunUO had a `CommandPropertyAttribute` decoratorfootnoteref:[runuo-attributes,You can find the definition of `CommandPropertyAttribute` for RunUO here: https://mjavascript.com/out/runuo-attributes.] which definied that the property could be modified in-game and where you could also specify the access level required to read and write that property. This decorator was used extensively throughout the RunUO codebasefootnoteref:[runuo-commandprops,Their use is widespread throughout the codebase, marking over 200 properties in the RunUO core alone: https://mjavascript.com/out/runuo-commandprops.].
+
+The `PlayerMobile` class, which governed how a player's character works, is a great place to look at these attributes. `PlayerMobile` have several properties that are accessible in-gamefootnoteref:[runuo-playermobile,You can find quite a few usage examples of `CommandProperty` attribute in the `PlayerMobile.cs` class: https://mjavascript.com/out/runuo-playermobile.] to administrators and moderators. Here are a couple of getters and setters, but only the first one has the `CommandProperty` attribute -- making that property accessible to Game Masters in-game.
+
+[source,csharp]
+----
+[CommandProperty(AccessLevel.GameMaster)]
+public int Profession
+{
+  get{ return m_Profession }
+  set{ m_Profession = value }
+}
+
+public int StepsTaken
+{
+  get{ return m_StepsTaken }
+  set{ m_StepsTaken = value }
+}
+----
+
+One interesting difference between C# attributes and JavaScript decorators is that reflection in C# allows us to pull all custom attributes from an object using `MemberInfo#getCustomAttributes`. RunUO leverages that method to pull up information about each property that should be accessible in-game when displaying the dialog that lets an administrator view or modify an in-game object's properties.
+
+==== 3.4.4 Marking Properties in JavaScript
+
+In JavaScript, there's no such thing -- not in the existing proposal draft, at least -- to get the custom attributes on a property. That said, JavaScript is a highly dynamic language, and creating this sort of "labels" wouldn't be much of a hassle. Decorating a `Dog` with a "command property" wouldn't be all that different from RunUO and C#.
+
+[source,javascript]
+----
+class Dog {
+  @commandProperty('game-master')
+  name;
+}
+----
+
+The `commandProperty` function would need to be a little more sophisticated than its C# counterpart. Given that there is no reflection around JavaScript decoratorsfootnote:[Reflection around JavaScript decorators is not being considered for JavaScript at this time, as it'd involve engines keeping more metadata in memory. We can, however, use symbols and lists to get around the need for native reflection.], we could use a runtime-wide symbol to keep around an array of command properties for any given class.
+
+[source,javascript]
+----
+function commandProperty(writeLevel, readLevel = writeLevel) {
+  return ({ key, ...rest }) => ({
+    key,
+    ...rest,
+    finisher(ctor) {
+      const symbol = Symbol.for('commandProperties')
+      const commandPropertyDescriptor = {
+        key,
+        readLevel,
+        writeLevel
+      }
+      if (!ctor[symbol]) {
+        ctor[symbol] = []
+      }
+      ctor[symbol].push(commandPropertyDescriptor)
+    }
+  })
+}
+----
+
+A `Dog` class could have as many command properties as we deemed necessary, and each would be listed behind a symbol property. To find the command properties for any given object, all we'd have to do is use the following function, which retrieves the list from the symbol property, and offers a default value of +[]+. We always return a copy of the original list to prevent consumers from accidentally making changes to it.
+
+[source,javascript]
+----
+function getCommandProperties(target) {
+  const symbol = Symbol.for('commandProperties')
+  const properties = target[symbol] || []
+  return [...properties]
+}
+getCommandProperties(dog)
+// <- [{ key: 'name', readLevel: 'game-master', writeLevel: 'game-master' }]
+----
+
+We could then iterate over known safe command properties and render a way of modifying those during runtime, through a simple UI. Instead of maintaining long lists of properties that can be modified, relying on some sort of heuristics bound to break from time to time, or using some sort of restrictive naming convention, decorators are the cleanliest way to implement a protocol where we mark properties as special for some particular use case.
