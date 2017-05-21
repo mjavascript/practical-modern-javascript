@@ -707,7 +707,7 @@ When we destructure everything up front, it's easy to spot when input doesn't ad
 [source,javascript]
 ----
 var getCarProductModel = ({ brand, make, model }) => ({
-  sku: brand + ':' make + ':' + model,
+  sku: brand + ':' + make + ':' + model,
   brand,
   make,
   model
