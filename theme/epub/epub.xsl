@@ -192,61 +192,68 @@
     </xsl:choose>
   </xsl:template>
 
-<!-- ***************** XREF HANDLING ***************** -->
-<!-- ************* Overrides xrefgen.xsl ************* -->
+  <!-- ***************** Custom xref handling ************  -->
+  <!-- Overrides xrefgen.xsl -->
 
-  <xsl:template match="h:a[@data-type='xref']" mode="class.value">
-    <xsl:param name="class" select="@class"/>
-    <xsl:param name="xref.elements.pagenum.in.class" select="$xref.elements.pagenum.in.class"/>
-    <xsl:param name="xref.target"/>
+  <!-- Custom xrefs to numbered sections -->
+  <xsl:template match="h:section[@data-type='sect1']" mode="xref-to">
+    <xsl:param name="referrer"/>
+    <xsl:param name="xrefstyle"/>
+    <xsl:param name="verbose" select="1"/>
     <xsl:choose>
-      <!-- BEGIN COOKBOOK OVERRIDE -->
-      <!-- If there's an xref target, process that to determine whether a pagenum value should be added to the class -->
-      <!-- No pagenum class for Recipe targets -->
-      <xsl:when test="$xref.target[not(self::h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))] and ancestor::h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))])]">
-	<!-- END COOKBOOK OVERRIDE -->
-	<xsl:variable name="xref.target.semantic.name">
-	  <xsl:call-template name="semantic-name">
-	    <xsl:with-param name="node" select="$xref.target"/>
-	  </xsl:call-template>
-	</xsl:variable>
-	<xsl:if test="$class != ''">
-	  <xsl:value-of select="$class"/>
-	</xsl:if>
-	<!-- Check if target semantic name is in list of XREF elements containing pagenum -->
-	<!-- ToDo: Consider modularizing logic into separate function if needed for reuse elsewhere -->
-	<xsl:variable name="space-delimited-pagenum-elements" select="concat(' ', normalize-space($xref.elements.pagenum.in.class), ' ')"/>
-	<xsl:variable name="substring-before-target-name" select="substring-before($space-delimited-pagenum-elements, $xref.target.semantic.name)"/>
-	<xsl:variable name="substring-after-target-name" select="substring-after($space-delimited-pagenum-elements, $xref.target.semantic.name)"/>
-	<!-- Make sure a match is both preceded and followed by a space -->
-	<xsl:if test="substring($substring-after-target-name, 1, 1) and
-		      substring($substring-before-target-name, string-length($substring-before-target-name), 1)">
-	  <xsl:if test="$class != ''"><xsl:text> </xsl:text></xsl:if>
-	  <xsl:text>pagenum</xsl:text>
-	</xsl:if>
+      <xsl:when test="h:h1">
+        <xsl:apply-templates select="." mode="object.xref.markup">
+          <xsl:with-param name="purpose" select="'xref'"/>
+          <!-- BEGIN OVERRIDE -->
+          <xsl:with-param name="xrefstyle" select="'template: Section %n, &#x201c;%t,&#x201d;'"/>
+          <!-- END OVERRIDE -->
+          <xsl:with-param name="referrer" select="$referrer"/>
+          <xsl:with-param name="verbose" select="$verbose"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-	<xsl:if test="$class != ''">
-	  <xsl:value-of select="$class"/>
-	</xsl:if>
+        <!-- Otherwise, throw warning, and print out ??? -->
+        <xsl:call-template name="log-message">
+          <xsl:with-param name="type" select="'WARNING'"/>
+          <xsl:with-param name="message">
+            <xsl:text>Cannot output gentext for XREF to section (id:</xsl:text>
+            <xsl:value-of select="@id"/>
+            <xsl:text>)</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>???</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
-  <!-- Custom XREF style for XREFs to recipes -->
-  <xsl:template match="h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe')) and ancestor::h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]]" mode="xref-to">
+  <xsl:template match="h:section[@data-type='sect2']" mode="xref-to">
     <xsl:param name="referrer"/>
     <xsl:param name="xrefstyle"/>
     <xsl:param name="verbose" select="1"/>
-    
-    <xsl:apply-templates select="." mode="object.xref.markup">
-      <xsl:with-param name="purpose" select="'xref'"/>
-      <!-- BEGIN COOKBOOK OVERRIDE -->
-      <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
-      <!-- END COOKBOOK OVERRIDE -->
-      <xsl:with-param name="referrer" select="$referrer"/>
-      <xsl:with-param name="verbose" select="$verbose"/>
-    </xsl:apply-templates>
+    <xsl:choose>
+      <xsl:when test="h:h2">
+        <xsl:apply-templates select="." mode="object.xref.markup">
+          <xsl:with-param name="purpose" select="'xref'"/>
+          <!-- BEGIN OVERRIDE -->
+          <xsl:with-param name="xrefstyle" select="'template: Section %n, &#x201c;%t,&#x201d;'"/>
+          <!-- END OVERRIDE -->
+          <xsl:with-param name="referrer" select="$referrer"/>
+          <xsl:with-param name="verbose" select="$verbose"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Otherwise, throw warning, and print out ??? -->
+        <xsl:call-template name="log-message">
+          <xsl:with-param name="type" select="'WARNING'"/>
+          <xsl:with-param name="message">
+            <xsl:text>Cannot output gentext for XREF to section (id:</xsl:text>
+            <xsl:value-of select="@id"/>
+            <xsl:text>)</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>???</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 <!-- ***************** TOC HANDLING ***************** -->
