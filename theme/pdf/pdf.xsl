@@ -200,12 +200,12 @@
   <!-- Overrides xrefgen.xsl -->
 
   <!-- Custom xrefs to numbered sections -->
-  <xsl:template match="h:section[@data-type='sect1']" mode="xref-to">
+  <xsl:template match="h:section[@data-type='sect1' or @data-type='sect2']" mode="xref-to">
     <xsl:param name="referrer"/>
     <xsl:param name="xrefstyle"/>
     <xsl:param name="verbose" select="1"/>
     <xsl:choose>
-      <xsl:when test="h:h1">
+      <xsl:when test="(section[@data-type='sect1']/h:h1 or section[data-type='sect2']/h:h2)">
         <xsl:apply-templates select="." mode="object.xref.markup">
           <xsl:with-param name="purpose" select="'xref'"/>
           <!-- BEGIN OVERRIDE -->
@@ -222,36 +222,7 @@
           <xsl:with-param name="message">
             <xsl:text>Cannot output gentext for XREF to section (id:</xsl:text>
             <xsl:value-of select="@id"/>
-          </xsl:with-param>
-        </xsl:call-template>
-        <xsl:text>???</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <!-- Custom xrefs to numbered sections -->
-  <xsl:template match="h:section[@data-type='sect2']" mode="xref-to">
-    <xsl:param name="referrer"/>
-    <xsl:param name="xrefstyle"/>
-    <xsl:param name="verbose" select="1"/>
-    <xsl:choose>
-      <xsl:when test="h:h2">
-        <xsl:apply-templates select="." mode="object.xref.markup">
-          <xsl:with-param name="purpose" select="'xref'"/>
-          <!-- BEGIN OVERRIDE -->
-          <xsl:with-param name="xrefstyle" select="'template: &ldquo;%n %t&rdquo;'"/>
-          <!-- END OVERRIDE -->
-          <xsl:with-param name="referrer" select="$referrer"/>
-          <xsl:with-param name="verbose" select="$verbose"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- Otherwise, throw warning, and print out ??? -->
-        <xsl:call-template name="log-message">
-          <xsl:with-param name="type" select="'WARNING'"/>
-          <xsl:with-param name="message">
-            <xsl:text>Cannot output gentext for XREF to section (id:</xsl:text>
-            <xsl:value-of select="@id"/>
+            <xsl:text>)</xsl:text>
           </xsl:with-param>
         </xsl:call-template>
         <xsl:text>???</xsl:text>
