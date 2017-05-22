@@ -205,7 +205,7 @@
     <xsl:param name="xrefstyle"/>
     <xsl:param name="verbose" select="1"/>
     <xsl:choose>
-      <xsl:when test="(section[@data-type='sect1']/h:h1 or section[data-type='sect2']/h:h2)">
+      <xsl:when test="(h:section[@data-type='sect1']/h:h1 or h:section[data-type='sect2']/h:h2)">
         <xsl:apply-templates select="." mode="object.xref.markup">
           <xsl:with-param name="purpose" select="'xref'"/>
           <!-- BEGIN OVERRIDE -->
