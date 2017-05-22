@@ -52,7 +52,7 @@
   </xsl:template>
 
   <!-- Logic for processing sect2 headings with labels (including section numbers) -->
-  <xsl:template match="h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect2' and not(contains(@class, 'orm:non-recipe'))]/h:h2" mode="process-heading">
+  <xsl:template match="h:section[@data-type='sect2']/h:h2" mode="process-heading">
     <xsl:param name="autogenerate.labels" select="$autogenerate.labels"/>
     <!-- Labeled element is typically the parent element of the heading (e.g., <section> or <figure>) -->
     <xsl:param name="labeled-element" select="(parent::h:header/parent::*|parent::*[not(self::h:header)])[1]"/>
@@ -72,7 +72,7 @@
   </xsl:template>
 
   <!-- Creating the sect1 labels (read: creating the X.X section numbering) -->
-  <xsl:template match="h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))]" mode="label.markup">
+  <xsl:template match="h:section[@data-type='sect1']" mode="label.markup">
     <xsl:variable name="current-node" select="."/>
     <!-- BEGIN COOKBOOK OVERRIDE -->
     <!-- Recipes should always be labeled with ancestor chapter -->
@@ -106,7 +106,7 @@
     </xsl:variable>
     
     <xsl:variable name="recipe.level">
-      <xsl:value-of select="count(preceding-sibling::h:section[@data-type='sect1'][not(@class='orm:non-recipe')]) + (1 - $chap.has.intro - $is.numbered)"/>
+      <xsl:value-of select="count(preceding-sibling::h:section[@data-type='sect1']) + (1 - $chap.has.intro - $is.numbered)"/>
     </xsl:variable>
     <xsl:number format="1" value="$recipe.level"/>
 
@@ -114,7 +114,7 @@
   </xsl:template>
   
   <!-- Creating the sect2 labels (read: creating the X.X.X section numbering) -->
-  <xsl:template match="h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect2' and not(contains(@class, 'orm:non-recipe'))]" mode="label.markup">
+  <xsl:template match="h:section[@data-type='sect2']" mode="label.markup">
     <!-- END OVERRIDE -->
     <xsl:variable name="current-node" select="."/>
     <!-- BEGIN COOKBOOK OVERRIDE -->
@@ -149,7 +149,7 @@
     </xsl:variable>
     
     <xsl:variable name="sect1.recipe.level">
-      <xsl:value-of select="count(../preceding-sibling::h:section[@data-type='sect1'][not(@class='orm:non-recipe')]) + (1 - $chap.has.intro - $is.numbered)"/>
+      <xsl:value-of select="count(../preceding-sibling::h:section[@data-type='sect1']) + (1 - $chap.has.intro - $is.numbered)"/>
     </xsl:variable>
     <xsl:number format="1" value="$sect1.recipe.level"/>
     <xsl:text>.</xsl:text>
@@ -196,22 +196,38 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- Custom xref handling -->
+  <!-- ***************** Custom xref handling ************  -->
   <!-- Overrides xrefgen.xsl -->
 
   <!-- Testing selector to make custom xrefs to sections -->
-    <xsl:template match="h:section[@data-type='sect1']" mode="xref-to">
-      <!-- Otherwise, throw warning, and print out ??? -->
-      <xsl:call-template name="log-message">
-        <xsl:with-param name="type" select="'WARNING'"/>
-        <xsl:with-param name="message">
-          <xsl:text>Cannot output gentext for XREF to refentry (id:</xsl:text>
-          <xsl:value-of select="@id"/>
-          <xsl:text>) that does not contain an element with class of refname</xsl:text>
-        </xsl:with-param>
-      </xsl:call-template>
-      <xsl:text>???</xsl:text>
-    </xsl:template>
+  <xsl:template match="h:section[@data-type='sect1']" mode="xref-to">
+    <xsl:param name="referrer"/>
+    <xsl:param name="xrefstyle"/>
+    <xsl:param name="verbose" select="1"/>
+    <xsl:choose>
+      <xsl:when test="h:h1">
+        <xsl:apply-templates select="." mode="object.xref.markup">
+          <xsl:with-param name="purpose" select="'xref'"/>
+          <!-- BEGIN OVERRIDE -->
+          <xsl:with-param name="xrefstyle" select="'template: %n%t'"/>
+          <!-- END OVERRIDE -->
+          <xsl:with-param name="referrer" select="$referrer"/>
+          <xsl:with-param name="verbose" select="$verbose"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Otherwise, throw warning, and print out ??? -->
+        <xsl:call-template name="log-message">
+          <xsl:with-param name="type" select="'WARNING'"/>
+          <xsl:with-param name="message">
+            <xsl:text>Cannot output gentext for XREF to section (id:</xsl:text>
+            <xsl:value-of select="@id"/>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>???</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 <!-- ***************** TOC HANDLING ***************** -->
 <!-- ************* Overrides tocgen.xsl ************* -->
