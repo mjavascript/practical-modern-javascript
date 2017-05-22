@@ -200,7 +200,7 @@
   <!-- Overrides xrefgen.xsl -->
 
   <!-- Custom xrefs to numbered sections -->
-  <xsl:template match="h:section[@data-type='sect1'] or h:section[@data-type='sect2']" mode="xref-to">
+  <xsl:template match="h:section[@data-type='sect1' or @data-type='sect2']" mode="xref-to">
     <xsl:param name="referrer"/>
     <xsl:param name="xrefstyle"/>
     <xsl:param name="verbose" select="1"/>
