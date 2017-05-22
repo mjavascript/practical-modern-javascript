@@ -199,8 +199,8 @@
   <!-- ***************** Custom xref handling ************  -->
   <!-- Overrides xrefgen.xsl -->
 
-  <!-- Testing selector to make custom xrefs to sections -->
-  <xsl:template match="h:section[@data-type='sect1']" mode="xref-to">
+  <!-- Custom xrefs to numbered sections -->
+  <xsl:template match="h:section[@data-type='sect1'] or h:section[@data-type='sect2']" mode="xref-to">
     <xsl:param name="referrer"/>
     <xsl:param name="xrefstyle"/>
     <xsl:param name="verbose" select="1"/>
@@ -209,7 +209,7 @@
         <xsl:apply-templates select="." mode="object.xref.markup">
           <xsl:with-param name="purpose" select="'xref'"/>
           <!-- BEGIN OVERRIDE -->
-          <xsl:with-param name="xrefstyle" select="'template: %n %t'"/>
+          <xsl:with-param name="xrefstyle" select="'template: &quot;%n %t&quot;'"/>
           <!-- END OVERRIDE -->
           <xsl:with-param name="referrer" select="$referrer"/>
           <xsl:with-param name="verbose" select="$verbose"/>
