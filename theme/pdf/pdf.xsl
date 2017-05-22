@@ -209,7 +209,7 @@
         <xsl:apply-templates select="." mode="object.xref.markup">
           <xsl:with-param name="purpose" select="'xref'"/>
           <!-- BEGIN OVERRIDE -->
-          <xsl:with-param name="xrefstyle" select="'template: %n%t'"/>
+          <xsl:with-param name="xrefstyle" select="'template: %n %t'"/>
           <!-- END OVERRIDE -->
           <xsl:with-param name="referrer" select="$referrer"/>
           <xsl:with-param name="verbose" select="$verbose"/>
