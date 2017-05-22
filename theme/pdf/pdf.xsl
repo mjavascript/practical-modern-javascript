@@ -196,6 +196,23 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- Custom xref handling -->
+  <!-- Overrides xrefgen.xsl -->
+
+  <!-- Testing selector to make custom xrefs to sections -->
+    <xsl:template match="h:section[@data-type='sect1']" mode="xref-to">
+      <!-- Otherwise, throw warning, and print out ??? -->
+      <xsl:call-template name="log-message">
+        <xsl:with-param name="type" select="'WARNING'"/>
+        <xsl:with-param name="message">
+          <xsl:text>Cannot output gentext for XREF to refentry (id:</xsl:text>
+          <xsl:value-of select="@id"/>
+          <xsl:text>) that does not contain an element with class of refname</xsl:text>
+        </xsl:with-param>
+      </xsl:call-template>
+      <xsl:text>???</xsl:text>
+    </xsl:template>
+
 <!-- ***************** TOC HANDLING ***************** -->
 <!-- ************* Overrides tocgen.xsl ************* -->
 
