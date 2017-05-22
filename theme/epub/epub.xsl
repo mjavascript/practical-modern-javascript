@@ -205,7 +205,7 @@
         <xsl:apply-templates select="." mode="object.xref.markup">
           <xsl:with-param name="purpose" select="'xref'"/>
           <!-- BEGIN OVERRIDE -->
-          <xsl:with-param name="xrefstyle" select="'template: Section %n, &#x201c;%t,&#x201d;'"/>
+          <xsl:with-param name="xrefstyle" select="'template: Section %n: %t'"/>
           <!-- END OVERRIDE -->
           <xsl:with-param name="referrer" select="$referrer"/>
           <xsl:with-param name="verbose" select="$verbose"/>
@@ -235,7 +235,7 @@
         <xsl:apply-templates select="." mode="object.xref.markup">
           <xsl:with-param name="purpose" select="'xref'"/>
           <!-- BEGIN OVERRIDE -->
-          <xsl:with-param name="xrefstyle" select="'template: Section %n, &#x201c;%t,&#x201d;'"/>
+          <xsl:with-param name="xrefstyle" select="'template: Section %n: %t'"/>
           <!-- END OVERRIDE -->
           <xsl:with-param name="referrer" select="$referrer"/>
           <xsl:with-param name="verbose" select="$verbose"/>
