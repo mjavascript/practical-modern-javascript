@@ -467,7 +467,7 @@ When we have two properties to destructure (or two references to one property), 
 
 [source,javascript]
 ----
-const summary = `This is a summary for ${ model.units }x  ${ model.name }`
+const summary = `This is a summary for ${ model.units }x ${ model.name }`
 ----
 
 Destructuring does help in this case. It reduces the character count in the `summary` declaration statement, and it explicitly announces the `model` properties we're going to be using.
@@ -475,7 +475,7 @@ Destructuring does help in this case. It reduces the character count in the `sum
 [source,javascript]
 ----
 const { name, units } = model
-const summary = `This is a summary for ${ units }x  ${ name }`
+const summary = `This is a summary for ${ units }x ${ name }`
 ----
 
 If we have two references to the same property, similar conditions apply. In the next example, we have one less reference to `model` and one more reference to `name` than we'd have without destructuring. This case could go either way, although the value in explicitly declaring the future usage of `name` could be incentive enough to warrant destructuring.
