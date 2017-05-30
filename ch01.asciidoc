@@ -292,7 +292,7 @@ When we run the `lint` script, ESLint describes everything that's wrong with the
 .The eslint tool is a great way to keep your code free of syntax errors and, optionally, inconsistent coding style
 image::images/pmjs_01in02.png["Validating a piece of source code through ESLint."]
 
-ESLint is able to fix most style problems automatically if we pass in a `--fix` flag. Add the following script to your `package.json`.
+ESLint is able to fix most style problems automatically if we pass in a `--fix` flag. Add the following script to your _package.json_.
 
 [source,json]
 ----
