@@ -248,7 +248,7 @@ Next, we need to configure ESLint. Since we installed `eslint` as a local depend
 ? What format do you want your config file to be in? JSON
 ----
 
-Besides individual rules, `eslint` allows us to extend predefined sets of rules, which are packaged up as Node.js modules. This is useful when sharing configuration across multiple projects, and even across a community. After picking Standard, we'll notice that ESLint adds a few dependencies to `package.json`, namely the packages that define the predefined Standard ruleset; and then creates a configuration file, named `.eslintrc.json`, with the following contents.
+Besides individual rules, `eslint` allows us to extend predefined sets of rules, which are packaged up as Node.js modules. This is useful when sharing configuration across multiple projects, and even across a community. After picking Standard, we'll notice that ESLint adds a few dependencies to _package.json_, namely the packages that define the predefined Standard ruleset; and then creates a configuration file, named _.eslintrc.json_, with the following contents.
 
 [source,json]
 ----
@@ -261,7 +261,7 @@ Besides individual rules, `eslint` allows us to extend predefined sets of rules,
 }
 ----
 
-Referencing the `node_modules/.bin` directory, an implementation detail of how npm works, is far from ideal. While we used it when initializing our ESLint configuration, we shouldn't keep this reference around nor type it out whenever we lint our codebase. To solve this problem, we'll add the `lint` script in the next code snippet to our `package.json`.
+Referencing the __node_modules/.bin__ directory, an implementation detail of how npm works, is far from ideal. While we used it when initializing our ESLint configuration, we shouldn't keep this reference around nor type it out whenever we lint our codebase. To solve this problem, we'll add the `lint` script in the next code snippet to our _package.json_.
 
 [source,json]
 ----
