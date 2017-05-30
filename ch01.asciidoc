@@ -199,7 +199,7 @@ If you execute `npm run build` in your terminal now, you'll note that a _dist/ex
 }
 ----
 
-The `env` preset, which we had installed earlier via `npm`, adds a series of plugins to Babel that transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our _example.js_ file into ES5 code. The `env` Babel preset works by convention, enabling Babel transformation plugins according to feature support in the latest browsers. This preset is configurable, meaning we can decide how far back we want to cover browser support. The more browsers we support, the larger our transpiled bundle. The less browsers we support, the less customers we can satisfy. As always, research is of the essence to identify what the correct configuration for the Babel `env` preset is. By default, every transform is enabled, providing broad runtime support.
+The `env` preset, which we had installed earlier via `npm`, adds a series of plugins to Babel that transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our _example.js_ file into ES5 code. The `env` Babel preset works by convention, enabling Babel transformation plugins according to feature support in the latest browsers. This preset is configurable, meaning we can decide how far back we want to cover browser support. The more browsers we support, the larger our transpiled bundle. The fewer browsers we support, the fewer customers we can satisfy. As always, research is of the essence to identify what the correct configuration for the Babel `env` preset is. By default, every transform is enabled, providing broad runtime support.
 
 Once we run our build script again, we'll observe that the output is now valid ES5 code.
 
@@ -237,7 +237,7 @@ ESLint is a modern linter that packs several plugins, sporting different rules, 
 npm install eslint@3 --save-dev
 ----
 
-Next, we need to configure ESLint. Since we installed `eslint` as a local dependency, we'll find its command-line tool in `node_modules/.bin`. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standardfootnoteref:[linters,Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's code base. The Airbnb style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.], then pick JSON format for the configuration file.
+Next, we need to configure ESLint. Since we installed `eslint` as a local dependency, we'll find its command-line tool in _node_modules/.bin_. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standard,footnoteref:[linters,Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's code base. The Airbnb style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.] then pick JSON format for the configuration file.
 
 [source,shell]
 ----
