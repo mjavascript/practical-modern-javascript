@@ -19,7 +19,7 @@ Lastly, this book has the goal of establishing a baseline we can take for grante
 
 In <<ecmascript-and-the-future-of-javascript>>, we open with an introduction to JavaScript and its standards development process, how it has evolved over the years, where it is now, and where it's going. You'll also get a short introduction to Babel and ESLint, modern tools that can aid us in the process of discovering modern JavaScript.
 
-The second chapter covers all of the absolutely essential changes in ES6, including arrow functions, destructuring, `let` and `const`, template literals, and a few other syntax embellishments.
+<<ecmascript6-essentials>> covers all of the absolutely essential changes in ES6, including arrow functions, destructuring, `let` and `const`, template literals, and a few other syntax embellishments.
 
 In the third chapter we'll discuss the new `class` syntax for declaring object prototypes, a new primitive type known as `Symbol`, and a few new `Object` methods.
 
