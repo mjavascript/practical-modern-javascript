@@ -190,7 +190,7 @@ Together with the packages we've installed in the previous step, a minimal _pack
 Any commands enumerated in the `scripts` object can be executed through `npm run <name>`, which temporarily modifies the `$PATH` environment variable so that we can run the command-line executables found in `babel-cli` without installing `babel-cli` globally on our system.
 ====
 
-If you execute `npm run build` in your terminal now, you'll note that a `dist/example.js` file is created. The output file will be identical to our original file, because Babel doesn't make assumptions, and we have to configure it first. Create a `.babelrc` file next to `package.json`, and write the following JSON in it.
+If you execute `npm run build` in your terminal now, you'll note that a _dist/example.js_ file is created. The output file will be identical to our original file, because Babel doesn't make assumptions, and we have to configure it first. Create a `.babelrc` file next to `package.json`, and write the following JSON in it.
 
 [source,json]
 ----
