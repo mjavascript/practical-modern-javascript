@@ -87,7 +87,7 @@ Babel can compile modern JavaScript code that relies on ES6 features into ES5. I
 
 The online https://mjavascript.com/out/babel-repl[Babel REPL (Read-Evaluate-Print Loop)] is an excellent way of jumping right into learning ES6, without any of the hassle of installing Node.js, the `babel` CLI, and manually compiling source code. You can find the REPL at: .
 
-The REPL provides us with a source code input area that gets automatically compiled in real-time. We can see the compiled code to the right of our source code.
+The REPL provides us with a source code input area that gets automatically compiled in real time. We can see the compiled code to the right of our source code.
 
 Let's write some code into the REPL. You can use the following code snippet to get started.
 
@@ -100,6 +100,8 @@ console.log(double(3))
 
 To the right of the source code we've entered, you'll see the transpiled ES5 equivalent. As you update your source code, the transpiled result is also updated in real-time.
 
+[[fig0101]]
+.The online Babel REPL in action—a great way to dive right into an interactive ES6 session
 image::images/pmjs_01in01.png["Babel REPL"]
 
 The Babel REPL is an effective companion as a way of trying out some of the features introduced in this book. However, note that Babel doesn't transpile new built-ins, such as `Symbol`, `Proxy` and `WeakMap`. Those references are instead left untouched, and it's up to the runtime executing the Babel output to provide those built-ins. If we want to support runtimes that haven't yet implemented these built-ins, we could import the `babel-polyfill` package in our code.
