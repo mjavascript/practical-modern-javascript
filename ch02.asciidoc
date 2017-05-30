@@ -60,11 +60,11 @@ function clear() {
 }
 ----
 
-That's the first of many ES6 features that are aimed towards reducing complexity in the code you have to maintain. Once you get used to the syntax, you'll notice that code readability and developer productivity get boosts as well.
+That's the first of many ES6 features that are aimed toward reducing complexity in the code you have to maintain. Once you get used to the syntax, you'll notice that code readability and developer productivity get boosts as well.
 
 ==== Computed Property Names
 
-Sometimes you have to declare objects that contain properties with names based on variables or other JavaScript expressions, as shown in the following piece of code written in ES5. For this example, assume that `expertise` is provided to you as a function parameter, and is not a value you know beforehand.
+Sometimes you have to declare objects that contain properties with names based on variables or other JavaScript expressions, as shown in the following piece of code written in ES5. For this example, assume that `expertise` is provided to you as a function parameter, and is not a value you know beforehand:
 
 [source,javascript]
 ----
@@ -79,7 +79,7 @@ person[expertise] = {
 }
 ----
 
-Object literals in ES6 aren't constrained to declarations with static names. With computed property names, you can wrap any expression in square brackets, and use that as the property name. When the declaration is reached, your expression is evaluated and used as the property name. The following example shows how the piece of code we just saw could declare the person object in a single step, without having to resort to a second statement adding the person's `expertise`.
+Object literals in ES6 aren't constrained to declarations with static names. With computed property names, you can wrap any expression in square brackets, and use that as the property name. When the declaration is reached, your expression is evaluated and used as the property name. The following example shows how the piece of code we just saw could declare the +person+ object in a single step, without having to resort to a second statement adding the person's `expertise`.
 
 [source,javascript]
 ----
@@ -126,7 +126,7 @@ var groceries = {
 }
 ----
 
-Another case may be whenever a function receives a parameter that it should then use to build out an object. In ES5 code, you'd need to allocate a variable declaring an object literal, then add the dynamic property, and then return the object. The following example shows exactly that, when creating an envelope that could later be used for AJAX messages which follow a convention: they have an `error` property with a description when something goes wrong, and a `success` property when things turn out okay.
+Another case may be whenever a function receives a parameter that it should then use to build out an object. In ES5 code, you'd need to allocate a variable declaring an object literal, then add the dynamic property, and then return the object. The following example shows exactly that, when creating an envelope that could later be used for AJAX messages that follow a convention: they have an `error` property with a description when something goes wrong, and a `success` property when things turn out okay:
 
 [source,javascript]
 ----
@@ -139,7 +139,7 @@ function getEnvelope(type, description) {
 }
 ----
 
-Computed property names help us write the same function more concisely, using a single statement.
+Computed property names help us write the same function more concisely, using a single statement:
 
 [source,javascript]
 ----
@@ -155,7 +155,7 @@ The last enhancement coming to object literals is about functions.
 
 ==== Method Definitions
 
-Typically, you can declare methods on an object by adding properties to it. In the next snippet we're creating an small event emitter which supports multiple kinds of events. It comes with an `emitter#on` method that can be used to register event listeners, and an `emitter#emit` method that can be used to raise events.
+Typically, you can declare methods on an object by adding properties to it. In the next snippet, we're creating an small event emitter that supports multiple kinds of events. It comes with an `emitter#on` method that can be used to register event listeners, and an `emitter#emit` method that can be used to raise events:
 
 [source,javascript]
 ----
@@ -239,7 +239,7 @@ Let's dig into their semantic differences with traditional functions, the many w
 
 ==== Lexical Scoping
 
-In the body of an arrow function, `this`, `arguments` and `super` point to the containing scope, since arrow functions don't create a new scope. Consider the following example. We have a `timer` object with a `seconds` counter and a `start` method defined using the syntax we've learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of elapsed `seconds`.
+In the body of an arrow function, `this`, `arguments`, and `super` point to the containing scope, since arrow functions don't create a new scope. Consider the following example. We have a `timer` object with a `seconds` counter and a `start` method defined using the syntax we learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of elapsed `seconds`:
 
 [source,javascript]
 ----
@@ -288,11 +288,11 @@ puzzle('a', 'b', 'c')(1, 2, 3)
 
 In this case, the `arguments` object refers to the context of the `puzzle` function, because arrow functions don't create a closure. For this reason, the printed arguments will be `'a', 'b', 'c'`.
 
-I've mentioned there's several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the others way to represent an arrow function?
+I've mentioned there are several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the other ways to represent an arrow function?
 
 ==== Arrow Function Flavors
 
-Let's look one more time at the arrow function syntax we've learned so far.
+Let's look one more time at the arrow function syntax we've learned so far:
 
 [source,javascript]
 ----
@@ -301,7 +301,7 @@ var example = (parameters) => {
 }
 ----
 
-An arrow function with exactly one parameter can omit the parenthesis. This is optional. It's useful when passing the arrow function to another method, as it reduces the amount of parenthesis involved, making it easier for some humans to parse the code.
+An arrow function with exactly one parameter can omit the parentheses. This is optional. It's useful when passing the arrow function to another method, as it reduces the amount of parentheses involved, making it easier for some humans to parse the code:
 
 [source,javascript]
 ----
@@ -310,14 +310,14 @@ var double = value => {
 }
 ----
 
-Arrow functions are heavily used for simple functions, such as the `double` function we just saw. The following flavor of arrow functions does away with the function body. Instead, you provide an expression such as `value * 2`. When the function is called, the expression is evaluated and its result is returned. The `return` statement is implicit, and there's no need for curly braces denoting the function body anymore, as you can only use a single expression.
+Arrow functions are heavily used for simple functions, such as the `double` function we just saw. The following flavor of arrow functions does away with the function body. Instead, you provide an expression such as `value * 2`. When the function is called, the expression is evaluated and its result is returned. The `return` statement is implicit, and there's no need for curly braces denoting the function body anymore, as you can only use a single expression:
 
 [source,javascript]
 ----
 var double = (value) => value * 2
 ----
 
-Note that you can combine implicit parenthesis and implicit return, making for concise arrow functions.
+Note that you can combine implicit parentheses and implicit return, making for concise arrow functions:
 
 [source,javascript]
 ----
