@@ -23,7 +23,7 @@ In <<ecmascript-and-the-future-of-javascript>>, we open with an introduction to 
 
 In <<classes-symbols-and-symbols>> we'll discuss the new `class` syntax for declaring object prototypes, a new primitive type known as `Symbol`, and a few new `Object` methods.
 
-Chapter four goes over all of the new ways we can deal with flow control starting in ES6. We discuss Promises, iterators, generators, and async functions in great detail and with heaps of accompanying examples, uncovering the synergistic properties between all the different techniques. You won't only learn how to use these flow control techniques but how to best reason about them so that they truly simplify your code.
+<<iteration-and-flow-control>> goes over all of the new ways we can deal with flow control starting in ES6. We discuss Promises, iterators, generators, and async functions in great detail and with heaps of accompanying examples, uncovering the synergistic properties between all the different techniques. You won't only learn how to use these flow control techniques but how to best reason about them so that they truly simplify your code.
 
 The fifth chapter describes the new collection built-ins found in ES6, which we can use to create object maps and unique sets. You'll find usage examples for each of these collection types.
 
