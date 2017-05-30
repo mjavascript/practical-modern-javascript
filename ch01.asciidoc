@@ -286,7 +286,7 @@ function hello(){
 if(false){}
 ----
 
-When we run the `lint` script, ESLint describes everything that's wrong with the file.
+When we run the `lint` script, ESLint describes everything that's wrong with the file, as shown in <<fig0102>>.
 
 [[fig0102]]
 .The eslint tool is a great way to keep your code free of syntax errors and, optionally, inconsistent coding style
