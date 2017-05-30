@@ -98,25 +98,25 @@ console.log(double(3))
 // <- 6
 ----
 
-To the right of the source code we've entered, you'll see the transpiled ES5 equivalent, as shown in <<fig0101>>. As you update your source code, the transpiled result is also updated in real-time.
+To the right of the source code we've entered, you'll see the transpiled ES5 equivalent, as shown in <<fig0101>>. As you update your source code, the transpiled result is also updated in real time.
 
 [[fig0101]]
 .The online Babel REPL in action—a great way to dive right into an interactive ES6 session
 image::images/pmjs_01in01.png["Babel REPL"]
 
-The Babel REPL is an effective companion as a way of trying out some of the features introduced in this book. However, note that Babel doesn't transpile new built-ins, such as `Symbol`, `Proxy` and `WeakMap`. Those references are instead left untouched, and it's up to the runtime executing the Babel output to provide those built-ins. If we want to support runtimes that haven't yet implemented these built-ins, we could import the `babel-polyfill` package in our code.
+The Babel REPL is an effective companion as a way of trying out some of the features introduced in this book. However, note that Babel doesn't transpile new built-ins, such as `Symbol`, `Proxy`, and `WeakMap`. Those references are instead left untouched, and it's up to the runtime executing the Babel output to provide those built-ins. If we want to support runtimes that haven't yet implemented these built-ins, we could import the `babel-polyfill` package in our code.
 
 In older versions of JavaScript, semantically correct implementations of these features are hard to accomplish or downright impossible. Polyfills may mitigate the problem, but they often can't cover all use cases and thus some compromises need to be made. We need to be careful and test our assumptions before we release transpiled code that relies on built-ins or polyfills into the wild.
 
 Given the situation, it might be best to wait until browsers support new built-ins holistically before we start using them. It is suggested that you consider alternative solutions that don't rely on built-ins. At the same time, it's important to learn about these features, as to not fall behind in our understanding of the JavaScript language.
 
-Modern browsers like Chrome, Firefox and Edge now support a large portion of ES2015 and beyond, making their developer tools useful when we want to take the semantics of a particular feature for a spin, provided it's supported by the browser. When it comes to production-grade applications that rely on modern JavaScript features, a transpilation build-step is advisable so that your application supports a wider array of JavaScript runtimes.
+Modern browsers like Chrome, Firefox, and Edge now support a large portion of ES2015 and beyond, making their developer tools useful when we want to take the semantics of a particular feature for a spin, provided it's supported by the browser. When it comes to production-grade applications that rely on modern JavaScript features, a transpilation build-step is advisable so that your application supports a wider array of JavaScript runtimes.
 
 Besides the REPL, Babel offers a command-line tool written as a Node.js package. You can install it through `npm`, the package manager for Node.
 
 [NOTE]
 ====
-You can download Node.js from its website: https://mjavascript.com/out/node. After installing `node`, you'll also be able to use the `npm` command-line tool in your terminal.
+Download https://mjavascript.com/out/node[Node.js]. After installing `node`, you'll also be able to use the `npm` command-line tool in your terminal.
 ====
 
 Before getting started we'll make a project directory and a `package.json` file, which is a manifest used to describe Node.js applications. We can create the `package.json` file through the `npm` CLI.
