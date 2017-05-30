@@ -133,7 +133,7 @@ npm init --yes
 Passing the `--yes` flag to the `init` command configures _package.json_ using the default values provided by `npm`, instead of asking us any questions.
 ====
 
-Let's also create a file named `example.js`, containing the following bits of ES6 code. Save it to the `babel-setup` directory you've just created, under a `src` sub-directory.
+Let's also create a file named _example.js_, containing the following bits of ES6 code. Save it to the _babel-setup_ directory you've just created, under a _src_ subdirectory.
 
 [source,javascript]
 ----
@@ -152,7 +152,7 @@ npm install babel-preset-env@6 --save-dev
 
 [NOTE]
 ====
-Packages installed by `npm` will be placed in a `node_modules` directory at the project root. We can then access these packages by creating npm scripts or by using `require` statements in our application.
+Packages installed by `npm` will be placed in a __node_modules__ directory at the project root. We can then access these packages by creating npm scripts or by using `require` statements in our application.
 
 Using the `--save-dev` flag will add these packages to our `package.json` manifest as development dependencies, so that when copying our project to new environments we can reinstall every dependency just by running `npm install`.
 
