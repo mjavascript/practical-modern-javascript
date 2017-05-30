@@ -242,7 +242,8 @@ Next, we need to configure ESLint. Since we installed `eslint` as a local depend
 [source,shell]
 ----
 ./node_modules/.bin/eslint --init
-? How would you like to configure ESLint? Use a popular style guide
+? How would you like to configure ESLint? 
+  Use a popular style guide
 ? Which style guide do you want to follow? Standard
 ? What format do you want your config file to be in? JSON
 ----
