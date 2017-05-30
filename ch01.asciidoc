@@ -89,7 +89,7 @@ The online https://mjavascript.com/out/babel-repl[Babel REPL (Read-Evaluate-Prin
 
 The REPL provides us with a source code input area that gets automatically compiled in real time. We can see the compiled code to the right of our source code.
 
-Let's write some code into the REPL. You can use the following code snippet to get started.
+Let's write some code into the REPL. You can use the following code snippet to get started:
 
 [source,javascript]
 ----
@@ -119,7 +119,7 @@ Besides the REPL, Babel offers a command-line tool written as a Node.js package.
 Download https://mjavascript.com/out/node[Node.js]. After installing `node`, you'll also be able to use the `npm` command-line tool in your terminal.
 ====
 
-Before getting started we'll make a project directory and a _package.json_ file, which is a manifest used to describe Node.js applications. We can create the _package.json_ file through the `npm` CLI.
+Before getting started we'll make a project directory and a _package.json_ file, which is a manifest used to describe Node.js applications. We can create the _package.json_ file through the `npm` CLI:
 
 [source,shell]
 ----
@@ -133,7 +133,7 @@ npm init --yes
 Passing the `--yes` flag to the `init` command configures _package.json_ using the default values provided by `npm`, instead of asking us any questions.
 ====
 
-Let's also create a file named _example.js_, containing the following bits of ES6 code. Save it to the _babel-setup_ directory you've just created, under a _src_ subdirectory.
+Let's also create a file named _example.js_, containing the following bits of ES6 code. Save it to the _babel-setup_ directory you've just created, under a _src_ subdirectory:
 
 [source,javascript]
 ----
@@ -142,7 +142,7 @@ console.log(double(3))
 // <- 6
 ----
 
-To install Babel, enter the following couple of commands into your favorite terminal.
+To install Babel, enter the following couple of commands into your favorite terminal:
 
 [source,shell]
 ----
@@ -159,7 +159,7 @@ Using the `--save-dev` flag will add these packages to our _package.json_ manife
 The `@` notation indicates we want to install a specific version of a package. Using `@6` we're telling `npm` to install the latest version of `babel-cli` in the `6.x` range. This preference is handy to future-proof our applications, as it would never install `7.0.0` or later versions, which might contain breaking changes that could not have been foreseen at the time of this writing.
 ====
 
-For the next step, we'll replace the value of the `scripts` property in _package.json_ with the following. The `babel` command-line utility provided by `babel-cli` can take the entire contents of our _src_ directory, compile them into the desired output format, and save the results to a _dist_ directory, while preserving the original directory structure under a different root.
+For the next step, we'll replace the value of the `scripts` property in _package.json_ with the following. The `babel` command-line utility provided by `babel-cli` can take the entire contents of our _src_ directory, compile them into the desired output format, and save the results to a _dist_ directory, while preserving the original directory structure under a different root:
 
 [source,json]
 ----
@@ -170,7 +170,7 @@ For the next step, we'll replace the value of the `scripts` property in _package
 }
 ----
 
-Together with the packages we've installed in the previous step, a minimal _package.json_ file could look like the code in the following snippet.
+Together with the packages we've installed in the previous step, a minimal _package.json_ file could look like the code in the following snippet:
 
 [source,json]
 ----
@@ -237,7 +237,7 @@ ESLint is a modern linter that packs several plugins, sporting different rules, 
 npm install eslint@3 --save-dev
 ----
 
-Next, we need to configure ESLint. Since we installed `eslint` as a local dependency, we'll find its command-line tool in _node_modules/.bin_. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standard,footnoteref:[linters,Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's code base. The Airbnb style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.] then pick JSON format for the configuration file:
+Next, we need to configure ESLint. Since we installed `eslint` as a local dependency, we'll find its command-line tool in _node_modules/.bin_. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standard,footnoteref:[linters,Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's codebase. The Airbnb style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.] then pick JSON format for the configuration file:
 
 [source,shell]
 ----
