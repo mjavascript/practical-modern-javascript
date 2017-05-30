@@ -22,7 +22,7 @@ The first edition of ECMA-262 was released June 1997. A year later, in June 1998
 
 By December 1999 the third edition was published, standardizing  regular expressions, the `switch` statement, `do`/`while`, `try`/`catch`, and `Object#hasOwnProperty`, among a few other changes. Most of these features were already available in the wild through Netscape's JavaScript runtime, SpiderMonkey.
 
-Drafts for an ES4 specification were soon afterwards published by TC39. This early work on ES4 led to JScript​.NET in mid 2000pass:[<span data-type="footnote">You can read the original announcement at the <a href="https://mjavascript.com/out/jscript-net">Microsoft website</a> (July, 2000).] and, eventually, to ActionScript 3 for Flash in 2006.footnoteref:[brendan-devchat,Listen to Brendan Eich in the JavaScript Jabber podcast, talking about the origin of JavaScript: https://mjavascript.com/out/brendan-devchat.]
+Drafts for an ES4 specification were soon afterwards published by TC39. This early work on ES4 led to JScript​.NET in mid 2000pass:[<span data-type="footnote">You can read the original announcement at the <a href="https://mjavascript.com/out/jscript-net">Microsoft website</a> (July, 2000).</span>] and, eventually, to ActionScript 3 for Flash in 2006.footnoteref:[brendan-devchat,Listen to Brendan Eich in the JavaScript Jabber podcast, talking about the origin of JavaScript: https://mjavascript.com/out/brendan-devchat.]
 
 Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. This was a delicate time for web standards: Microsoft had all but monopolized the web and they had little interest in standards development.
 
