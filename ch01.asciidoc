@@ -170,7 +170,7 @@ For the next step, we'll replace the value of the `scripts` property in _package
 }
 ----
 
-Together with the packages we've installed in the previous step, a minimal `package.json` file could look like the code in the following snippet.
+Together with the packages we've installed in the previous step, a minimal _package.json_ file could look like the code in the following snippet.
 
 [source,json]
 ----
