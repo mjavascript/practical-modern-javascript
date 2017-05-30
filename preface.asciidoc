@@ -29,9 +29,9 @@ In <<classes-symbols-and-symbols>> we'll discuss the new `class` syntax for decl
 
 <<managing-property-access-with-proxies>> covers the new `Proxy` and `Reflect` built-ins. We'll learn all about how we can use proxies and the reasons why we need to be careful when choosing to do so.
 
-<<built-in-improvements>> is dedicated to the rest of built-in improvements that can be found in ES6. Particularly around `Array`, `Math`, numbers, strings, Unicode and regular expressions.
+<<built-in-improvements>> is dedicated to the rest of built-in improvements that can be found in ES6. Particularly around `Array`, `Math`, numbers, strings, Unicode, and regular expressions.
 
-The eighth chapter is devoted to native JavaScript Modules and, briefly, the history that lead to their inception. We'll then discuss their syntax implications at length.
+<<javascript-modules>> is devoted to native JavaScript Modules and, briefly, the history that lead to their inception. We'll then discuss their syntax implications at length.
 
 The ninth and last chapter -- dubbed "Practical Considerations" -- is somewhat unconventional for books about programming languages. Rather than spreading my personal views throughout the book, I condensed them into the last chapter. Here you'll find reasoning behind how to decide when to use which kind of variable declaration or string literal quotation mark, advice on handling asynchronous code flows and whether using classes or proxies is a good idea, and a few more nuggets of insight.
 
