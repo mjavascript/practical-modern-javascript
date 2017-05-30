@@ -98,7 +98,7 @@ console.log(double(3))
 // <- 6
 ----
 
-To the right of the source code we've entered, you'll see the transpiled ES5 equivalent. As you update your source code, the transpiled result is also updated in real-time.
+To the right of the source code we've entered, you'll see the transpiled ES5 equivalent, as shown in <<fig0101>>. As you update your source code, the transpiled result is also updated in real-time.
 
 [[fig0101]]
 .The online Babel REPL in action—a great way to dive right into an interactive ES6 session
