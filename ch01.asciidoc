@@ -18,11 +18,11 @@ The language started being standardized under the ECMAScript name (ES) into the 
 
 Disputes by competing implementations, JavaScript by Netscape and JScript by Microsoft, dominated most of the TC39 standards commitee meetings at the time. Even so, the committee was already bearing fruit: backward compatibility was established as a golden rule, bringing about strict equality operators (`===` and `!==`) instead of breaking existing programs that relied on the loose equality comparision algorithm.
 
-The first edition of ECMA-262 was released June, 1997. A year later, in June 1998, the specification was refined under the ISO/IEC 16262 international standard, after much scrutiny from national ISO bodies, and formalized as the second edition.
+The first edition of ECMA-262 was released June 1997. A year later, in June 1998, the specification was refined under the ISO/IEC 16262 international standard, after much scrutiny from national ISO bodies, and formalized as the second edition.
 
-By December 1999 the third edition was published, standardizing  regular expressions, the `switch` statement, `do`/`while`, `try`/`catch` and `Object#hasOwnProperty`, among a few other changes. Most of these features were already available in the wild through Netscape's JavaScript runtime, SpiderMonkey.
+By December 1999 the third edition was published, standardizing  regular expressions, the `switch` statement, `do`/`while`, `try`/`catch`, and `Object#hasOwnProperty`, among a few other changes. Most of these features were already available in the wild through Netscape's JavaScript runtime, SpiderMonkey.
 
-Drafts for an ES4 specification were soon afterwards published by TC39. This early work on ES4 led to JScript​.NET in mid 2000footnoteref:[jscript-net,You can read the original announcement here: https://mjavascript.com/out/jscript-net (July, 2000).] and, eventually, to ActionScript 3 for Flash in 2006footnoteref:[brendan-devchat,Listen to Brendan Eich in the JavaScript Jabber podcast, talking about the origin of JavaScript: https://mjavascript.com/out/brendan-devchat.].
+Drafts for an ES4 specification were soon afterwards published by TC39. This early work on ES4 led to JScript​.NET in mid 2000footnoteref:[jscript-net,You can read the original announcement at the https://mjavascript.com/out/jscript-net[Microsoft website] (July, 2000).] and, eventually, to ActionScript 3 for Flash in 2006footnoteref:[brendan-devchat,Listen to Brendan Eich in the JavaScript Jabber podcast, talking about the origin of JavaScript: https://mjavascript.com/out/brendan-devchat.].
 
 Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. This was a delicate time for web standards: Microsoft had all but monopolized the web and they had little interest in standards development.
 
