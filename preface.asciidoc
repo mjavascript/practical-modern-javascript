@@ -21,7 +21,7 @@ In <<ecmascript-and-the-future-of-javascript>>, we open with an introduction to 
 
 <<ecmascript6-essentials>> covers all of the absolutely essential changes in ES6, including arrow functions, destructuring, `let` and `const`, template literals, and a few other syntax embellishments.
 
-In the third chapter we'll discuss the new `class` syntax for declaring object prototypes, a new primitive type known as `Symbol`, and a few new `Object` methods.
+In <<classes-symbols-and-symbols>> we'll discuss the new `class` syntax for declaring object prototypes, a new primitive type known as `Symbol`, and a few new `Object` methods.
 
 Chapter four goes over all of the new ways we can deal with flow control starting in ES6. We discuss Promises, iterators, generators, and async functions in great detail and with heaps of accompanying examples, uncovering the synergistic properties between all the different techniques. You won't only learn how to use these flow control techniques but how to best reason about them so that they truly simplify your code.
 
