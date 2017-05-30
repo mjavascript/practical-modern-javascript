@@ -26,7 +26,7 @@ Drafts for an ES4 specification were soon afterwards published by TC39. This ear
 
 Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. This was a delicate time for web standards: Microsoft had all but monopolized the web and they had little interest in standards development.
 
-As AOL laid off 50 Netscape employees in 2003footnoteref:[aol-netscape,You can read a news report from July 2003 at: https://mjavascript.com/out/aol-netscape.], the Mozilla Foundation was formed. With over 95% of web browsing market share now in the hands of Microsoft, TC39 was disbanded.
+As AOL laid off 50 Netscape employees in 2003,pass:[<span data-type="footnote">You can read a news report from <a href="https://mjavascript.com/out/aol-netscape"><em>The Mac Observer</em></a>, July 2003.</span>], the Mozilla Foundation was formed. With over 95% of web browsing market share now in the hands of Microsoft, TC39 was disbanded.
 
 It took two years until Brendan, now at Mozilla, had ECMA resurrect work on TC39 by using Firefox's growing market share as leverage to get Microsoft back in the fold. By mid 2005, TC39 started meeting regularly once again. As for ES4, there were plans for introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features. Due to how ambitious the project was, work on ES4 was repeatedly delayed.
 
