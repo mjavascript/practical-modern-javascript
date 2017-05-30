@@ -15,6 +15,7 @@ The Modular JavaScript Book Series fulfills my hope for an incremental and strai
 
 I am delighted to support Nicolás' endeavor because his book looks exactly like what people who are coming to JavaScript with fresh eyes need. I first met Nicolás at a dinner in Paris and got to know him a bit there, and over time online. His pragmatism combined with empathy for newcomers to the language and a great sense of humor convinced me to review this book in draft form. The finished work is easy-to-digest and fun. I encourage you to dive in, to discover and embrace JavaScript, and to contribute to developing a better Web for everyone.
 
---- Brendan Eich
+[role="byline"]
+Brendan Eich
 Inventor of JavaScript
 CEO and co-founder of Brave Software
