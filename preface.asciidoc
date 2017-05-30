@@ -31,9 +31,9 @@ In <<classes-symbols-and-symbols>> we'll discuss the new `class` syntax for decl
 
 <<built-in-improvements>> is dedicated to the rest of built-in improvements that can be found in ES6. Particularly around `Array`, `Math`, numbers, strings, Unicode, and regular expressions.
 
-<<javascript-modules>> is devoted to native JavaScript Modules and, briefly, the history that lead to their inception. We'll then discuss their syntax implications at length.
+<<javascript-modules>> is devoted to native JavaScript Modules and, briefly, the history that led to their inception. We'll then discuss their syntax implications at length.
 
-The ninth and last chapter -- dubbed "Practical Considerations" -- is somewhat unconventional for books about programming languages. Rather than spreading my personal views throughout the book, I condensed them into the last chapter. Here you'll find reasoning behind how to decide when to use which kind of variable declaration or string literal quotation mark, advice on handling asynchronous code flows and whether using classes or proxies is a good idea, and a few more nuggets of insight.
+<<practical-considerations>>—dubbed "Practical Considerations"--is somewhat unconventional for books about programming languages. Rather than spreading my personal views throughout the book, I condensed them into the last chapter. Here you'll find reasoning behind how to decide when to use which kind of variable declaration or string literal quotation mark, advice on handling asynchronous code flows and whether using classes or proxies is a good idea, and a few more nuggets of insight.
 
 For those of you who already somewhat familiar with ES6 and comfortable jumping around the pages in a book, I recommend reading chapter four in detail, as you should find the insight into flow control most valuable. The seventh and eighth are also a must, since they provide details around the areas of ES6 that are less often discussed in the open. The last chapter will indubitably -- regardless of whether you agree with the views expressed therein -- challenge you to think deeply about what works and what doesn't in the context of JavaScript applications written under the wild new world order that is Modern JavaScript.
 
