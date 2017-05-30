@@ -349,7 +349,7 @@ If our attempt at implicitly returning an object literal had more than a single 
 // <- SyntaxError
 ----
 
-Wrapping the expression in parentheses fixes these issues, because the compiler would no longer interpret it as a function block. Instead, the object declaration becomes an expression that evaluates to the object literal we want to return implicitly.
+Wrapping the expression in parentheses fixes these issues, because the compiler would no longer interpret it as a function block. Instead, the object declaration becomes an expression that evaluates to the object literal we want to return implicitly:
 
 [source,javascript]
 ----
@@ -370,7 +370,7 @@ As a rule of thumb, you shouldn't blindly adopt ES6 features wherever you can. I
 
 There are a few situations where arrow functions may not be the best tool. For example, if you have a large function comprised of several lines of code, replacing `function` with `=>` is hardly going to improve your code. Arrow functions are often most effective for short routines, where the `function` keyword and syntax boilerplate make up a significant portion of the function expression.
 
-Properly naming a function adds context to make it easier for humans to interpret them. Arrow functions can't be explicitly named, but they can be named implicitly by assigning them to a variable. In the following example, we assign an arrow function to the `throwError` variable. When calling this function results in an error, the stack trace properly identifies the arrow function as `throwError`.
+Properly naming a function adds context to make it easier for humans to interpret them. Arrow functions can't be explicitly named, but they can be named implicitly by assigning them to a variable. In the following example, we assign an arrow function to the `throwError` variable. When calling this function results in an error, the stack trace properly identifies the arrow function as `throwError`:
 
 [source,javascript]
 ----
@@ -382,7 +382,7 @@ throwError('this is a warning')
   at throwError
 ----
 
-Arrow functions are neat when it comes to defining anonymous functions that should probably be lexically bound anyway, and they can definitely make your code more terse in some situations. They are particularly useful in most functional programming situations such as when using `.map`, `.filter`, or `.reduce` on collections, as shown in the following example.
+Arrow functions are neat when it comes to defining anonymous functions that should probably be lexically bound anyway, and they can definitely make your code more terse in some situations. They are particularly useful in most functional programming situations such as when using `.map`, `.filter`, or `.reduce` on collections, as shown in the following example:
 
 [source,javascript]
 ----
@@ -401,7 +401,7 @@ This is one of the most flexible and expressive features in ES6. It's also one o
 
 ==== Destructuring Objects
 
-Imagine you had a program with some comic book characters, Bruce Wayne being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman.
+Imagine you had a program with some comic book characters, Bruce Wayne being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman:
 
 [source,javascript]
 ----
@@ -416,35 +416,35 @@ var character = {
 }
 ----
 
-If you wanted a `pseudonym` variable referencing `character.pseudonym`, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing `pseudonym` in several places in your codebase and you'd prefer to avoid typing out `character.pseudonym` each time.
+If you wanted a `pseudonym` variable referencing `character.pseudonym`, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing `pseudonym` in several places in your codebase and you'd prefer to avoid typing out `character.pseudonym` each time:
 
 [source,javascript]
 ----
 var pseudonym = character.pseudonym
 ----
 
-With destructuring in assignment, the syntax becomes a bit more clear. As you can see in the next example, you don't have to write `pseudonym` twice, while still clearly conveying intent. The following statement is equivalent to the previous one written in ES5 code.
+With destructuring in assignment, the syntax becomes a bit more clear. As you can see in the next example, you don't have to write `pseudonym` twice, while still clearly conveying intent. The following statement is equivalent to the previous one written in ES5 code:
 
 [source,javascript]
 ----
 var { pseudonym } = character
 ----
 
-Just like you could declare multiple comma-separated variables with a single `var` statement, you can also declare multiple variables within the curly braces of a destructuring expression.
+Just like you could declare multiple comma-separated variables with a single `var` statement, you can also declare multiple variables within the curly braces of a destructuring expression:
 
 [source,javascript]
 ----
 var { pseudonym, name } = character
 ----
 
-In a similar fashion, you could mix and match destructuring with regular variable declarations in the same `var` statement. While this might look a bit confusing at first, it'll be up to any JavaScript coding style guides you follow to determine whether it's appropriate to declare several variables in a single statement. In any case, it goes to show the flexibility offered by destructuring syntax.
+In a similar fashion, you could mix and match destructuring with regular variable declarations in the same `var` statement. While this might look a bit confusing at first, it'll be up to any JavaScript coding style guides you follow to determine whether it's appropriate to declare several variables in a single statement. In any case, it goes to show the flexibility offered by destructuring syntax:
 
 [source,javascript]
 ----
 var { pseudonym } = character, two = 2
 ----
 
-If you want to extract a property named `pseudonym` but would like to declare it as a variable named `alias`, you can use the following destructuring syntax known as aliasing. Note that you can use `alias` or any other valid variable name.
+If you want to extract a property named `pseudonym` but would like to declare it as a variable named `alias`, you can use the following destructuring syntax known as aliasing. Note that you can use `alias` or any other valid variable name:
 
 [source,javascript]
 ----
@@ -453,14 +453,15 @@ console.log(alias)
 // <- 'Batman'
 ----
 
-While aliases don't look any simpler than the ES5 flavor, `alias = character.pseudonym`, they start making sense when you consider the fact that destructuring supports deep structures as in the following example.
+While aliases don't look any simpler than the ES5 flavor, `alias = character.pseudonym`, they start making sense when you consider the fact that destructuring supports deep structures as in the following example:
 
 [source,javascript]
 ----
 var { metadata: { gender } } = character
 ----
 
-In cases like the previous one, where you have deeply nested properties being destructured, you might be able to convey a property name more clearly if you choose an alias. Consider the next snippet, where a property named `code` wouldn't have been as indicative of its contents as `colorCode` could be.
+In cases like the previous one, where you have deeply nested properties being destructured, you might be able to convey a property name more clearly if you choose an alias. Consider the next snippet, where a property named `code` wouldn't have been as indicative of its contents as `colorCode` could be:
+
 [source,javascript]
 ----
 var { metadata: { gender: characterGender } } = character
@@ -468,7 +469,7 @@ var { metadata: { gender: characterGender } } = character
 
 The scenario we just saw repeats itself frequently, because properties are often named in the context of their host object. While `palette.color.code` is perfectly descriptive, `code` on its own could mean a wide variety of things, and aliases such as `colorCode` can help you bring context back into the variable name while still using destructuring.
 
-Whenever you access an mpnexistent property in ES5 notation, you get a value of `undefined`.
+Whenever you access an mpnexistent property in ES5 notation, you get a value of `undefined`:
 
 [source,javascript]
 ----
@@ -546,7 +547,7 @@ That's it, as far as objects go, in terms of destructuring. What about arrays?
 
 ==== Destructuring Arrays
 
-The syntax for destructuring arrays is similar to that of objects. The following example shows a `coordinates` object that's destructured into two variables: `x` and `y`. Note how the notation uses square brackets instead of curly braces, this denotes we're using array destructuring instead of object destructuring. Instead of having to sprinkle your code with implementation details like `x = coordinates[0]`, with destructuring you can convey your meaning clearly and without explicitly referencing the indices, naming the values instead.
+The syntax for destructuring arrays is similar to that of objects. The following example shows a `coordinates` object that's destructured into two variables: `x` and `y`. Note how the notation uses square brackets instead of curly braces; this denotes we're using array destructuring instead of object destructuring. Instead of having to sprinkle your code with implementation details like `x = coordinates[0]`, with destructuring you can convey your meaning clearly and without explicitly referencing the indices, naming the values instead.
 
 [source,javascript]
 ----
