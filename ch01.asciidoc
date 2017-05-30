@@ -274,7 +274,7 @@ Referencing the __node_modules/.bin__ directory, an implementation detail of how
 
 As you might recall from the Babel example, `npm` adds __node_modules__ to the `PATH` when executing scripts. To lint our codebase, we can execute `npm run lint` and npm will find the ESLint CLI embedded deep in the __node_modules__ directory.
 
-Let's consider the following `example.js` file, which is purposely riddled with style issues, to demonstrate what ESLint does.
+Let's consider the following _example.js_ file, which is purposely riddled with style issues, to demonstrate what ESLint does:
 
 [source,javascript]
 ----
