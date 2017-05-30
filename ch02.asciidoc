@@ -1,13 +1,13 @@
 [[ecmascript6-essentials]]
 == ES6 Essentials
 
-The sixth edition of the language comes with a plethora of non-breaking syntax improvements, most of which we'll tackle throughout this chapter. Many of these changes are syntactic sugar, that is: they could be represented in ES5, albeit using more complicated pieces of code. There are also changes that aren't merely syntactic sugar but a completely different way of declaring variables using `let` and `const`, as we'll see towards the end of the chapter.
+The sixth edition of the language comes with a plethora of non-breaking syntax improvements, most of which we'll tackle throughout this chapter. Many of these changes are syntactic sugar; that is, they could be represented in ES5, albeit using more complicated pieces of code. There are also changes that aren't merely syntactic sugar but a completely different way of declaring variables using `let` and `const`, as we'll see toward the end of the chapter.
 
 Object literals get a few syntax changes in ES6, and they're a good place to start.
 
 === Object Literals
 
-An object literal is any object declaration using the `{}` shorthand syntax, such as the following example.
+An object literal is any object declaration using the `{}` shorthand syntax, such as the following example:
 
 [source,javascript]
 ----
@@ -22,7 +22,7 @@ ES6 brings a few improvements to object literal syntax: property value shorthand
 
 ==== Property Value Shorthands
 
-Sometimes we declare objects with one or more properties whose values are references to variables by the same name. For example we might have a `listeners` collection, and in order to assign it to a property called `listeners` of an object literal, we have to repeat its name. The following snippet has a typical example where we have an object literal declaration with a couple of these repetitive properties.
+Sometimes we declare objects with one or more properties whose values are references to variables by the same name. For example, we might have a `listeners` collection, and in order to assign it to a property called `listeners` of an object literal, we have to repeat its name. The following snippet has a typical example where we have an object literal declaration with a couple of these repetitive properties:
 
 [source,javascript]
 ----
@@ -34,7 +34,7 @@ var events = {
 }
 ----
 
-Whenever you find yourself in this situation, you can omit the property value and the colon by taking advantage of the new property value shorthand syntax in ES6. As shown in the following example, the new ES6 syntax makes the assignment implicit.
+Whenever you find yourself in this situation, you can omit the property value and the colon by taking advantage of the new property value shorthand syntax in ES6. As shown in the following example, the new ES6 syntax makes the assignment implicit:
 
 [source,javascript]
 ----
@@ -43,7 +43,7 @@ function listen() {}
 var events = { listeners, listen }
 ----
 
-As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without dilluting its meaning. In the following snippet I re-implemented part of `localStorage`, a browser API for persistent storage, as an in-memory ponyfill. If it weren't for the shorthand syntax, the `storage` object would be more verbose to type out.
+As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without dilluting its meaning. In the following snippet, I reimplemented part of `localStorage`, a browser API for persistent storage, as an in-memory ponyfill. If it weren't for the shorthand syntax, the `storage` object would be more verbose to type out:
 
 [source,javascript]
 ----
