@@ -237,7 +237,7 @@ ESLint is a modern linter that packs several plugins, sporting different rules, 
 npm install eslint@3 --save-dev
 ----
 
-Next, we need to configure ESLint. Since we installed `eslint` as a local dependency, we'll find its command-line tool in _node_modules/.bin_. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standard,footnoteref:[linters,Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's code base. The Airbnb style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.] then pick JSON format for the configuration file.
+Next, we need to configure ESLint. Since we installed `eslint` as a local dependency, we'll find its command-line tool in _node_modules/.bin_. Executing the following command will guide us through configuring ESLint for our project for the first time. To get started, indicate you want to use a popular style guide and choose Standard,footnoteref:[linters,Note that Standard is just a self-proclamation, and not actually standardized in any official capacity. It doesn't really matter which style guide you follow as long as you follow it consistently. Consistency helps reduce confusion while reading a project's code base. The Airbnb style guide is also fairly popular and it doesn't omit semicolons by default, unlike Standard.] then pick JSON format for the configuration file:
 
 [source,shell]
 ----
@@ -248,7 +248,7 @@ Next, we need to configure ESLint. Since we installed `eslint` as a local depend
 ? What format do you want your config file to be in? JSON
 ----
 
-Besides individual rules, `eslint` allows us to extend predefined sets of rules, which are packaged up as Node.js modules. This is useful when sharing configuration across multiple projects, and even across a community. After picking Standard, we'll notice that ESLint adds a few dependencies to _package.json_, namely the packages that define the predefined Standard ruleset; and then creates a configuration file, named _.eslintrc.json_, with the following contents.
+Besides individual rules, `eslint` allows us to extend predefined sets of rules, which are packaged up as Node.js modules. This is useful when sharing configuration across multiple projects, and even across a community. After picking Standard, we'll notice that ESLint adds a few dependencies to _package.json_, namely the packages that define the predefined Standard ruleset; and then creates a configuration file, named _.eslintrc.json_, with the following contents:
 
 [source,json]
 ----
@@ -261,7 +261,7 @@ Besides individual rules, `eslint` allows us to extend predefined sets of rules,
 }
 ----
 
-Referencing the __node_modules/.bin__ directory, an implementation detail of how npm works, is far from ideal. While we used it when initializing our ESLint configuration, we shouldn't keep this reference around nor type it out whenever we lint our codebase. To solve this problem, we'll add the `lint` script in the next code snippet to our _package.json_.
+Referencing the __node_modules/.bin__ directory, an implementation detail of how npm works, is far from ideal. While we used it when initializing our ESLint configuration, we shouldn't keep this reference around nor type it out whenever we lint our codebase. To solve this problem, we'll add the `lint` script in the next code snippet to our _package.json_:
 
 [source,json]
 ----
