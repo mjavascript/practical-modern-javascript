@@ -292,7 +292,7 @@ When we run the `lint` script, ESLint describes everything that's wrong with the
 .The eslint tool is a great way to keep your code free of syntax errors and, optionally, inconsistent coding style
 image::images/pmjs_01in02.png["Validating a piece of source code through ESLint."]
 
-ESLint is able to fix most style problems automatically if we pass in a `--fix` flag. Add the following script to your _package.json_.
+ESLint is able to fix most style problems automatically if we pass in a `--fix` flag. Add the following script to your _package.json_:
 
 [source,json]
 ----
@@ -303,7 +303,7 @@ ESLint is able to fix most style problems automatically if we pass in a `--fix` 
 }
 ----
 
-When we run `lint-fix` we'll only get a pair of errors: `hello` is never used and `false` is a constant condition. Every other error has been fixed in place, resulting in the bit of source code found below. The remaining errors weren't fixed because ESLint avoids making assumptions about our code, and prefers not to incur in semantic changes. In doing so, `--fix` becomes a useful tool to resolve code style wrinkles without risking a broken program as a result.
+When we run `lint-fix` we'll only get a pair of errors: `hello` is never used and `false` is a constant condition. Every other error has been fixed in place, resulting in the following bit of source code. The remaining errors weren't fixed because ESLint avoids making assumptions about our code, and prefers not to incur semantic changes. In doing so, `--fix` becomes a useful tool to resolve code style wrinkles without risking a broken program as a result.
 
 [source,javascript]
 ----
@@ -318,7 +318,7 @@ if (false) {}
 
 [NOTE]
 ====
-A similar kind of tool can be found in `prettier`, which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length. You can find prettier at https://mjavascript.com/out/prettier.
+A similar kind of tool can be found in https://mjavascript.com/out/prettier[`prettier`], which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length. 
 ====
 
 Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of JavaScript.
