@@ -333,7 +333,7 @@ When you need to implicitly return an object literal, you'll need to wrap that o
 var objectFactory = () => ({ modular: 'es6' })
 ----
 
-In the following example, JavaScript interprets the curly braces as the body of our arrow function. Furthermore, `number` is interpreted as a labelpass:[<span data-type="footnote"><a href="https://mjavascript.com/out/label">Labels</a> are used as a way of identifying instructions. Labels can be used by <code>goto</code> statements, to indicate what instruction we should jump to; <code>break</code> statements, to indicate the sequence we want to break out of; and <code>continue</code> statements, to indicate the sequence we want to advance.</span>] and then figures out we have a `value` expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be `undefined`.
+In the following example, JavaScript interprets the curly braces as the body of our arrow function. Furthermore, `number` is interpreted as a labelpass:[<span data-type="footnote"><a href="https://mjavascript.com/out/label">Labels</a> are used as a way of identifying instructions. Labels can be used by <code>goto</code> statements, to indicate what instruction we should jump to; <code>break</code> statements, to indicate the sequence we want to break out of; and <code>continue</code> statements, to indicate the sequence we want to advance.</span>] and then figures out we have a `value` expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be `undefined`:
 
 [source,javascript]
 ----
@@ -341,7 +341,7 @@ In the following example, JavaScript interprets the curly braces as the body of 
 // <- [undefined, undefined, undefined]
 ----
 
-If our attempt at implicitly returning an object literal had more than a single property, then the compiler wouldn't be able to make sense of the second property, and it'd throw a `SyntaxError`.
+If our attempt at implicitly returning an object literal had more than a single property, then the compiler wouldn't be able to make sense of the second property, and it'd throw a `SyntaxError`:
 
 [source,javascript]
 ----
@@ -349,7 +349,7 @@ If our attempt at implicitly returning an object literal had more than a single 
 // <- SyntaxError
 ----
 
-Wrapping the expression in parenthesis fixes these issues, because the compiler would no longer interpret it as a function block. Instead, the object declaration becomes an expression that evaluates to the object literal we want to return implicitly.
+Wrapping the expression in parentheses fixes these issues, because the compiler would no longer interpret it as a function block. Instead, the object declaration becomes an expression that evaluates to the object literal we want to return implicitly.
 
 [source,javascript]
 ----
