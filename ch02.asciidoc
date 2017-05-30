@@ -326,14 +326,14 @@ var double = value => value * 2
 
 .Implicitly Returning Object Literals
 ****
-When you need to implicitly return an object literal, you'll need to wrap that object literal expression in parenthesis. Otherwise, the compiler would interpret your curly braces as the start and the end of the function block.
+When you need to implicitly return an object literal, you'll need to wrap that object literal expression in parentheses. Otherwise, the compiler would interpret your curly braces as the start and the end of the function block.
 
 [source,javascript]
 ----
 var objectFactory = () => ({ modular: 'es6' })
 ----
 
-In the following example, JavaScript interprets the curly braces as the body of our arrow function. Furthermore, `number` is interpreted as a labelfootnoteref:[label,Labels are used as a way of identifying instructions. Labels can be used by `goto` statements, to indicate what instruction we should jump to; `break` statements, to indicate the sequence we want to break out of; and `continue` statements, to indicate the sequence we want to advance. You can learn more about labels at: https://mjavascript.com/out/label.] and then figures out we have a `value` expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be `undefined`.
+In the following example, JavaScript interprets the curly braces as the body of our arrow function. Furthermore, `number` is interpreted as a labelpass:[<span data-type="footnote"><a href="https://mjavascript.com/out/label">Labels</a> are used as a way of identifying instructions. Labels can be used by <code>goto</code> statements, to indicate what instruction we should jump to; <code>break</code> statements, to indicate the sequence we want to break out of; and <code>continue</code> statements, to indicate the sequence we want to advance.</span>] and then figures out we have a `value` expression that doesn't do anything. Since we're in a block and not returning anything, the mapped values will be `undefined`.
 
 [source,javascript]
 ----
