@@ -5,7 +5,7 @@ Proxies are an interesting and powerful feature in ES6 that act as intermediarie
 
 === Getting Started with Proxy
 
-By default, proxies don't do much -- in fact they don't do anything. If you don't provide any configuration, your proxy will just work as a pass-through to the `target` object, also known as a "no-op forwarding proxy" meaning that all operations on the proxy object defer to the underlying object.
+By default, proxies don't do much -- in fact they don't do anything. If you don't provide any configuration, your proxy will just work as a pass-through to the `target` object, also known as a "no-op forwarding proxy," meaning that all operations on the proxy object defer to the underlying object.
 
 In the following piece of code, we create a no-op forwarding `Proxy`. You can observe how by assigning a value to `proxy.exposed`, that value is passed onto `target.exposed`. You could think of proxies as the gatekeepers of their underlying objects: they may allow certain operations to go through and prevent others from passing, but they carefully inspect every single interaction with their underlying objects.
 
@@ -23,9 +23,9 @@ console.log(proxy.somethingElse)
 
 We can make the proxy object a bit more interesting by adding traps. Traps allow you to intercept interactions with `target` in several different ways, as long as those interactions happen through the `proxy` object. For instance, we could use a `get` trap to log every attempt to pull a value out of a property in `target`, or a `set` trap to prevent certain properties from being written to. Let's kick things off by learning more about `get` traps.
 
-==== Trapping get accessors
+==== Trapping get Accessors
 
-The proxy in the following code listing is able to track any and every property access event because it has a `handler.get` trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor.
+The `proxy` in the following code listing is able to track any and every property access event because it has a `handler.get` trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor.
 
 [source,javascript]
 ----
@@ -69,7 +69,7 @@ The `get` trap doesn't necessarily have to return the original `target[key]` val
 const handler = {
   get(target, key) {
     if (key.startsWith('_')) {
-      throw new Error(`Property "${ key }" cannot be read through this proxy.`)
+      throw new Error(`Property "${ key }" is inaccessible.`)
     }
     return Reflect.get(target, key)
   }
@@ -77,13 +77,13 @@ const handler = {
 const target = {}
 const proxy = new Proxy(target, handler)
 proxy._secret
-// <- Uncaught Error: Property "_secret" cannot be read through this proxy.
+// <- Uncaught Error: Property "_secret" is inaccessible.
 ----
 
 To the keen observer, it may be apparent that disallowing access to certain properties through the proxy becomes most useful when creating a proxy with clearly defined access rules for the underlying `target` object, and exposing that proxy instead of the `target` object. That way you can still access the underlying object freely, but consumers are forced to go through the proxy and play by its rules, putting you in control of exactly how they can interact with the object. This wasn't possible before proxies were introduced in ES6.
 
 [[trapping_set_accessors]]
-==== Trapping set accessors
+==== Trapping set Accessors
 
 As the counterpart of `get` traps, `set` traps can intercept property assignment. Suppose we wanted to prevent assignment on properties starting with an underscore. We could replicate the `get` trap we implemented earlier to block assignment as well.
 
@@ -103,7 +103,7 @@ const handler = {
 }
 function invariant(key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+    throw new Error(`Can't ${ action } private "${ key }" property`)
   }
 }
 const target = {}
@@ -118,12 +118,12 @@ proxy.text = 'the great black pony ate your lunch'
 console.log(target.text)
 // <- 'the great black pony ate your lunch'
 proxy._secret
-// <- Error: Invalid attempt to get private "_secret" property
+// <- Error: Can't get private "_secret" property
 proxy._secret = 'invalidate'
-// <- Error: Invalid attempt to set private "_secret" property
+// <- Error: Can't set private "_secret" property
 ----
 
-The object being proxied, `target` in our latest example, should be completely hidden from consumers, so that they are forced to access it exclusively through `proxy`. Preventing direct access to the `target` object means that they will have to obey the access rules defined on the `proxy` object -- such as _"properties prefixed with an underscore are off-limits"_.
+The object being proxied, `target` in our latest example, should be completely hidden from consumers, so that they are forced to access it exclusively through `proxy`. Preventing direct access to the `target` object means that they will have to obey the access rules defined on the `proxy` object -- such as _"properties prefixed with an underscore are off-limits."_
 
 To that end, you could wrap the proxied object in a function and then return the `proxy`.
 
@@ -145,14 +145,14 @@ function proxied() {
 }
 function invariant(key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+    throw new Error(`Can't ${ action } private "${ key }" property`)
   }
 }
 ----
 
 Usage stays the same, except that now access to `target` is completely governed by `proxy` and its mischievous traps. At this point, any `_secret` properties in `target` are completely inaccessible through the proxy, and since `target` can't be accessed directly from outside the `proxied` function, they're sealed off from consumers for good.
 
-A general purpose approach would be to offer a proxying function that takes an `original` object and returns a proxy. You can then call that function whenever you're about to expose a public API, as shown in the following code block. The `concealWithPrefix` function wraps the `original` object in a `Proxy` where properties prefixed with a `prefix` value (or `_` if none is provided) can't be accessed.
+A general-purpose approach would be to offer a proxying function that takes an `original` object and returns a proxy. You can then call that function whenever you're about to expose a public API, as shown in the following code block. The `concealWithPrefix` function wraps the `original` object in a `Proxy` where properties prefixed with a `prefix` value (or `_` if none is provided) can't be accessed.
 
 [source,javascript]
 ----
@@ -170,7 +170,7 @@ function concealWithPrefix(original, prefix='_') {
   return new Proxy(original, handler)
   function invariant(key, action) {
     if (key.startsWith(prefix)) {
-      throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+      throw new Error(`Can't ${ action } private "${ key }" property`)
     }
   }
 }
@@ -188,7 +188,7 @@ You might be tempted to argue that you could achieve the same behavior in ES5 si
 
 Sometimes we have an object with user input that we want to validate against a schema, a model of how that input is supposed to be structured, what properties it should have, what types those properties should be, and how those properties should be filled. We'd like to verify that a `customer` email field contains an email address, a numeric `cost` field contains a number, and a required `name` field isn't missing.
 
-There is a number of ways in which you could do schema validation. You could use a validation function that throws errors if an invalid value is found on the object, but you'd have to ensure the object is off limits once you've deemed it valid. You could validate each property individually, but you'd have to remember to validate them whenever they're changed. You could also use a `Proxy`. By providing consumers with a `Proxy` to the actual model object, you'd ensure that the object never enters an invalid state, as an exception would be thrown otherwise.
+There are a number of ways in which you could do schema validation. You could use a validation function that throws errors if an invalid value is found on the object, but you'd have to ensure the object is off limits once you've deemed it valid. You could validate each property individually, but you'd have to remember to validate them whenever they're changed. You could also use a `Proxy`. By providing consumers with a `Proxy` to the actual model object, you'd ensure that the object never enters an invalid state, as an exception would be thrown otherwise.
 
 Another aspect of schema validation via `Proxy` is that it helps you separate validation concerns from the `target` object, where validation occurs sometimes in the wild. The `target` object would stay as a plain JavaScript object, meaning that while you give consumers a validating proxy, you keep an untainted version of the data that's always valid, as guaranteed by the proxy.
 
@@ -237,7 +237,7 @@ console.log(person.age)
 // <- 28
 ----
 
-While proxies offer previously-unavailable granular control over what a consumer can and cannot do with an object, as defined by access rules defined by the implementor, there's also a harsher variant of proxies that allows us to completely shut off access to `target` whenever we deem it necessary: revocable proxies.
+While proxies offer previously unavailable granular control over what a consumer can and cannot do with an object, as defined by access rules defined by the implementor, there's also a harsher variant of proxies that allows us to completely shut off access to `target` whenever we deem it necessary: revocable proxies.
 
 === Revocable Proxies
 
@@ -260,7 +260,7 @@ console.log(proxy.isUsable)
 // <- TypeError: illegal operation attempted on a revoked proxy
 ----
 
-This type of `Proxy` is particularly useful because you can completely cut off access to the `proxy` granted to a consumer. You could expose a revocable `Proxy` and keep around the `revoke` method, perhaps in a `WeakMap` collection. When it becomes clear that the consumer shouldn't have access to `target` anymore, -- not even through `proxy` -- you `.revoke()` their access rights.
+This type of `Proxy` is particularly useful because you can completely cut off access to the `proxy` granted to a consumer. You could expose a revocable `Proxy` and keep around the `revoke` method, perhaps in a `WeakMap` collection. When it becomes clear that the consumer shouldn't have access to `target` anymore -- not even through `proxy` -- you `.revoke()` their access rights.
 
 The following example shows two functions. The `getStorage` function can be used to get proxied access into `storage`, and it keeps a reference to the `revoke` function for the returned `proxy` object. Whenever we want to cut off access to `storage` for a given `proxy`, `revokeStorage` will call its associated `revoke` function and remove the entry from the `WeakMap`. Note that making both functions accessible to the same set of consumers won't pose security concerns: once access through a proxy has been revoked, it can't be restored.
 
@@ -292,7 +292,7 @@ We've already covered `get`, which traps property access; and `set`, which traps
 
 ==== has Trap
 
-We can use `handler.has` to conceal any property you want when it comes to the `in` operator. In the `set` trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the `proxy` to figure out whether these properties exist. There are three alternatives here.
+We can use `handler.has` to conceal any property you want when it comes to the `in` operator. In the `set` trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the `proxy` to figure out whether these properties exist. There are three alternatives here:
 
 - Do nothing, in which case `key in proxy` falls through to `Reflect.has(target, key)`, the equivalent of `key in target`
 - Return `true` or `false` regardless of whether `key` is or is not present in `target`
@@ -324,7 +324,7 @@ const handler = {
 }
 function invariant(key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+    throw new Error(`Can't ${ action } private "${ key }" property`)
   }
 }
 ----
@@ -346,7 +346,7 @@ console.log('_secret' in target)
 // <- true
 ----
 
-We could've thrown an exception instead. That would be useful in situations where attempts to access properties in the private space is seen as a mistake that would've resulted in an invalid state, rather than as a security concern in code that aims to be embedded into third party websites.
+We could've thrown an exception instead. That would be useful in situations where attempts to access properties in the private space is seen as a mistake that would've resulted in an invalid state, rather than as a security concern in code that aims to be embedded into third-party websites.
 
 Note that if we wanted to prevent `Object#hasOwnProperty` from finding properties in the private space, the `has` trap won't help.
 
@@ -408,7 +408,7 @@ const handler = {
 }
 function invariant(key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+    throw new Error(`Can't ${ action } private "${ key }" property`)
   }
 }
 ----
@@ -422,23 +422,23 @@ const proxy = new Proxy(target, handler)
 console.log('_secret' in proxy)
 // <- true
 delete proxy._secret
-// <- Error: Invalid attempt to delete private "_secret" property
+// <- Error: Can't delete private "_secret" property
 ----
 
 Consumers interacting with `target` through the `proxy` can no longer delete properties in the `_secret` property space. That's one less thing to worry about!
 
 ==== defineProperty Trap
 
-The `Object.defineProperty` function -- introduced in ES5 -- can be used to add new properties to a `target` object, using a property `key` and a property `descriptor`. For the most part, `Object.defineProperty(target, key, descriptor)` is used in two kinds of situations.
+The `Object.defineProperty` function -- introduced in ES5 -- can be used to add new properties to a `target` object, using a property `key` and a property `descriptor`. For the most part, `Object.defineProperty(target, key, descriptor)` is used in two kinds of situations:
 
 1. When we need to ensure cross-browser support of getters and setters
 2. When we want to define a custom property accessor
 
 Properties added by hand are read-write, they are deletable, and they are enumerable.
 
-Properties added through `Object.defineProperty`, in contrast, default to being read-only, non-deletable, and non-enumerable. By default, the property is akin to bindings declared using the `const` statement in that it's read-only, but that doesn't make it immutable.
+Properties added through `Object.defineProperty`, in contrast, default to being read-only, nondeletable, and nonenumerable. By default, the property is akin to bindings declared using the `const` statement in that it's read-only, but that doesn't make it immutable.
 
-When creating properties through `defineProperty`, you can customize the following aspects of the property descriptor.
+When creating properties through `defineProperty`, you can customize the following aspects of the property descriptor:
 
 - `configurable = false` disables most changes to the property descriptor and makes the property undeletable
 - `enumerable = false` hides the property from `for..in` loops and `Object.keys`
@@ -447,9 +447,9 @@ When creating properties through `defineProperty`, you can customize the followi
 - `get = undefined` is a method that acts as the getter for the property
 - `set = undefined` is a method that receives the new `value` and updates the property's `value`
 
-Note that you'll have to choose between configuring the `value` and `writable` pair or `get` and `set` pair. When choosing the former you're configuring a data descriptor. You get a data descriptor when creating plain properties, such as in `pizza.topping = 'ham'`, too. In that case, `topping` has a `value` and it may or may not be `writable`. If you pick the second pair of options, you're creating an accessor descriptor which is entirely defined by the methods you can use to `get()` or `set(value)` for the property.
+Note that you'll have to choose between configuring the `value` and `writable` pair or `get` and `set` pair. When choosing the former you're configuring a data descriptor. You get a data descriptor when creating plain properties, such as in `pizza.topping = 'ham'`, too. In that case, `topping` has a `value` and it may or may not be `writable`. If you pick the second pair of options, you're creating an accessor descriptor that is entirely defined by the methods you can use to `get()` or `set(value)` for the property.
 
-The following code sample shows how property descriptors can be completely different depending on whether we use the declarative option or go through the programmatic API. We use `Object.getOwnPropertyDescriptor`, which receives a `target` object` and a property `key`, to pull the object descriptor for properties we create.
+The following code sample shows how property descriptors can be completely different depending on whether we use the declarative option or go through the programmatic API. We use `Object.getOwnPropertyDescriptor`, which receives a `target` object and a property `key`, to pull the object descriptor for properties we create.
 
 [source,javascript]
 ----
@@ -457,12 +457,24 @@ const pizza = {}
 pizza.topping = 'ham'
 Object.defineProperty(pizza, 'extraCheese', { value: true })
 console.log(Object.getOwnPropertyDescriptor(pizza, 'topping'))
-// <- { value: 'ham', writable: true, enumerable: true, configurable: true }
-console.log(Object.getOwnPropertyDescriptor(pizza, 'extraCheese'))
-// <- { value: true, writable: false, enumerable: false, configurable: false }
+// {
+//   value: 'ham',
+//   writable: true,
+//   enumerable: true,
+//   configurable: true
+// }
+console.log(
+  Object.getOwnPropertyDescriptor(pizza, 'extraCheese')
+)
+// {
+//   value: true,
+//   writable: false,
+//   enumerable: false,
+//   configurable: false
+// }
 ----
 
-The `handler.defineProperty` trap can be used to intercept properties being defined. Note that this trap intercepts the declarative `pizza.extraCheese = false` property declaration flavor as well as `Object.defineProperty` calls. As arguments for the trap, you get the `target` object, the property `key` and the `descriptor`.
+The `handler.defineProperty` trap can be used to intercept properties being defined. Note that this trap intercepts the declarative `pizza.extraCheese = false` property declaration flavor as well as `Object.defineProperty` calls. As arguments for the trap, you get the `target` object, the property `key`, and the `descriptor`.
 
 The next example prevents the addition of any properties added through the `proxy`. When the handler returns false, the property declaration fails loudly with an exception under strict mode, and silently without an exception when we're in sloppy mode. Strict mode is superior to sloppy mode due to its performance gains and hardened semantics. It is also the default mode in ES6 modules, as we'll see in <<javascript-modules>>. For those reasons, we'll assume strict mode in all the code examples.
 
@@ -476,7 +488,7 @@ const handler = {
 const target = {}
 const proxy = new Proxy(target, handler)
 proxy.extraCheese = false
-// <- TypeError: 'defineProperty' on proxy: trap returned false for property 'extraCheese'
+// <- TypeError: 'defineProperty' on proxy: trap returned false
 ----
 
 If we go back to the prefixed properties use case, we could add a `defineProperty` trap to prevent the creation of private properties through the proxy. In the following example we will `throw` on attempts to define a property in the private prefixed space by reusing the `invariant` function.
@@ -491,7 +503,7 @@ const handler = {
 }
 function invariant(key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+    throw new Error(`Can't ${ action } private "${ key }" property`)
   }
 }
 ----
@@ -504,7 +516,7 @@ const target = {}
 const proxy = new Proxy(target, handler)
 proxy.topping = 'cheese'
 proxy._secretIngredient = 'salsa'
-// <- Error: Invalid attempt to define private "_secretIngredient" property
+// <- Error: Can't define private "_secretIngredient" property
 ----
 
 The `proxy` object is safely hiding `_secret` properties behind a trap that guards them from definition through either `proxy[key] = value` or `Object.defineProperty(proxy, key, { value })`. If we factor in the previous traps we saw, we could prevent `_secret` properties from being read, written, queried, and created.
@@ -513,7 +525,7 @@ There's one more trap that can help conceal `_secret` properties.
 
 ==== ownKeys Trap
 
-The `handler.ownKeys` method may be used to return an `Array` of properties that will be used as a result for `Reflect.ownKeys()`. It should include all properties of `target`: enumerable, non-enumerable, and symbols as well. A default implementation, as always, could pass throught to the reflection method on the proxied `target` object.
+The `handler.ownKeys` method may be used to return an `Array` of properties that will be used as a result for `Reflect.ownKeys()`. It should include all properties of `target`: enumerable, non-enumerable, and symbols as well. A default implementation, as always, could pass through to the reflection method on the proxied `target` object.
 
 [source,javascript]
 ----
@@ -543,13 +555,13 @@ for (const key of Object.keys(proxy)) {
 }
 ----
 
-Do note that the `ownKeys` interceptor is used during all of the following operations.
+Do note that the `ownKeys` interceptor is used during all of the following operations:
 
-- `Reflect.ownKeys()` return every own key on the object
-- `Object.getOwnPropertyNames()` returns only non-symbol properties
+- `Reflect.ownKeys()` returns every own key on the object
+- `Object.getOwnPropertyNames()` returns only nonsymbol properties
 - `Object.getOwnPropertySymbols()` returns only symbol properties
-- `Object.keys()` returns only non-symbol enumerable properties
-- `for..in` returns only non-symbol enumerable properties
+- `Object.keys()` returns only nonsymbol enumerable properties
+- `for..in` returns only nonsymbol enumerable properties
 
 In the use case where we want to shut off access to a prefixed property space, we could take the output of `Reflect.ownKeys(target)` and filter off of that. That'd be the same approach that methods such as `Object.getOwnPropertySymbols` follow internally.
 
@@ -570,7 +582,7 @@ const handler = {
 }
 ----
 
-If we now used the `handler` in the snippet above to pull the object keys, we'll only find the properties in the public, non-prefixed space. Note how the `Symbol` isn't being returned either. That's because `Object.keys` filters out `Symbol` property keys before returning its result.
+If we now used the `handler` in the preceding snippet to pull the object keys, we'll only find the properties in the public, nonprefixed space. Note how the `Symbol` isn't being returned either. That's because `Object.keys` filters out `Symbol` property keys before returning its result.
 
 [source,javascript]
 ----
@@ -627,16 +639,16 @@ const handler = {
 }
 function invariant(key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Invalid attempt to ${ action } private "${ key }" property`)
+    throw new Error(`Can't ${ action } private "${ key }" property`)
   }
 }
 const target = {}
 const proxy = new Proxy(target, handler)
 Reflect.getOwnPropertyDescriptor(proxy, '_secret')
-// <- Error: Invalid attempt to get property descriptor for private "_secret" property
+// <- Error: Can't get property descriptor for private "_secret" property
 ----
 
-One problem with this approach might be that you're effectively telling external consumers that they're unauthorized to access prefixed properties. It might be best to conceal them entirely by returning `undefined`. That way, private properties will behave no differently than properties that are truly absent from the `target` object. The following example shows how `Object.getOwnPropertyDescriptor` returns `undefined` for an inexistent `dressing` property, and how it does the same for a `_secret` property. Existing properties that aren't in the private property space produce their property descriptors as usual.
+One problem with this approach might be that you're effectively telling external consumers that they're unauthorized to access prefixed properties. It might be best to conceal them entirely by returning `undefined`. That way, private properties will behave no differently than properties that are truly absent from the `target` object. The following example shows how `Object.getOwnPropertyDescriptor` returns `undefined` for an nonexistent `dressing` property, and how it does the same for a `_secret` property. Existing properties that aren't in the private property space produce their property descriptors as usual.
 
 [source,javascript]
 ----
@@ -658,7 +670,12 @@ console.log(Object.getOwnPropertyDescriptor(proxy, 'dressing'))
 console.log(Object.getOwnPropertyDescriptor(proxy, '_secret'))
 // <- undefined
 console.log(Object.getOwnPropertyDescriptor(proxy, 'topping'))
-// <- { value: 'mozzarella', writable: true, enumerable: true, configurable: true }
+// {
+//   value: 'mozzarella',
+//   writable: true,
+//   enumerable: true,
+//   configurable: true
+// }
 ----
 
 The `getOwnPropertyDescriptor` trap is able to intercept the implementation of `Object#hasOwnProperty`, which relies on property descriptors to check whether a property exists.
@@ -671,13 +688,13 @@ console.log(proxy.hasOwnProperty('_secret'))
 // <- false
 ----
 
-When you're trying to hide things, it's best to have them try and behave as if they fell in some other category than the category they're actually in, thus concealing their behavior and passing it off for something else. Throwing, however, sends the wrong message when we want to conceal something: why does a property throw instead of return `undefined`? It must exist but be inaccessible. This is not unlike situations in HTTP API design where we might prefer to return "404 Not Found" responses for sensitive resources, such as an administration back end, when the user is unauthorized to access them, instead of the technically correct "401 Unauthorized" status code.
+When you're trying to hide things, it's best to have them try and behave as if they fell in some other category than the category they're actually in, thus concealing their behavior and passing it off for something else. Throwing, however, sends the wrong message when we want to conceal something: why does a property throw instead of return `undefined`? It must exist but be inaccessible. This is not unlike situations in HTTP API design where we might prefer to return "404 Not Found" responses for sensitive resources, such as an administration backend, when the user is unauthorized to access them, instead of the technically correct "401 Unauthorized" status code.
 
 When debugging concerns outweight security concerns, you should at least consider the `throw` statement. In any case, it's important to understand your use case in order to figure out the optimal and least surprising behavior for a given component.
 
 ==== apply Trap
 
-The `apply` trap is quite interesting, it's specifically tailored to work with functions. When the proxied `target` function is invoked, the `apply` trap is triggered. All of the statements in the following code sample would go through the `apply` trap in your proxy `handler` object.
+The `apply` trap is quite interesting; it's specifically tailored to work with functions. When the proxied `target` function is invoked, the `apply` trap is triggered. All of the statements in the following code sample would go through the `apply` trap in your proxy `handler` object.
 
 [source,javascript]
 ----
@@ -688,7 +705,7 @@ proxy.apply(null, ['cats', 'dogs'])
 Reflect.apply(proxy, null, ['cat', 'dogs'])
 ----
 
-The `apply` trap receives three arguments.
+The `apply` trap receives three arguments:
 
 - `target` is the function being proxied
 - `ctx` is the context passed as `this` to `target` when applying a call
@@ -707,7 +724,7 @@ const handler = {
 
 Besides being able to log all parameters of every function call for `proxy`, this trap could also be used to add extra parameters or to modify the results of a function call. All of these examples would work without changing the underlying `target` function, which makes the trap reusable across any functions that need the extra functionality.
 
-The example below proxies a `sum` function through a `twice` trap handler that doubles the results of `sum` without affecting the code around it other than using the `proxy` instead of the `sum` function directly.
+The following example proxies a `sum` function through a `twice` trap handler that doubles the results of `sum` without affecting the code around it other than using the `proxy` instead of the `sum` function directly.
 
 [source,javascript]
 ----
@@ -891,7 +908,7 @@ Note that arrow functions can't be used as constructors, and thus we can't use t
 
 ==== getPrototypeOf Trap
 
-We can use the `handler.getPrototypeOf` method as a trap for all of the following operations.
+We can use the `handler.getPrototypeOf` method as a trap for all of the following operations:
 
 - `Object#__proto__` property
 - `Object#isPrototypeOf` method
@@ -899,7 +916,7 @@ We can use the `handler.getPrototypeOf` method as a trap for all of the followin
 - `Reflect.getPrototypeOf` method
 - `instanceof` operator
 
-This traps is quite powerful, as it allows us to dynamically determine the reported underlying prototype for an object.
+This trap is quite powerful, as it allows us to dynamically determine the reported underlying prototype for an object.
 
 You could, for instance, use this trap to make an object pretend it's an `Array` when accessed through the proxy. The following example does exactly that, by returning `Array.prototype` as the prototype of proxied objects. Note that `instanceof` indeed returns `true` when asked if our plain object is an `Array`.
 
@@ -922,7 +939,7 @@ console.log(proxy.push)
 // <- undefined
 ----
 
-Naturally, we can keep patching the `proxy` until we get the behavior we want. In this case, we may want to use a `get` trap to mix the `Array.prototype` with the actual back-end `target`. Whenever a property isn't found on the `target`, we'll use reflection again to look the property up on `Array.prototype` as well. As it turns out, this behavior is good enough to be able to leverage `Array`'s methods.
+Naturally, we can keep patching the `proxy` until we get the behavior we want. In this case, we may want to use a `get` trap to mix the `Array.prototype` with the actual backend `target`. Whenever a property isn't found on the `target`, we'll use reflection again to look the property up on `Array.prototype` as well. As it turns out, this behavior is good enough to be able to leverage `Array`'s methods.
 
 [source,javascript]
 ----
@@ -956,9 +973,9 @@ Conversely to the `getPrototypeOf` trap, there's `setPrototypeOf`.
 
 There is an `Object.setPrototypeOf` method in ES6 that can be used to change the prototype of an object into a reference to another object. It's considered the proper way of setting the prototype, as opposed to setting the special `__proto__` property, which is a feature that's supported in most browsers but was deprecated in ES6.
 
-Deprecation means that browser vendors are discouraging the use of `__proto__`. In other contexts, deprecation also means that the feature might be removed in the future. The web platform, however, doesn't break backwards compatibility, and `__proto__` is unlikely to ever be removed. That being said, deprecation also means you're discouraged from using the feature. Thus, using `Object.setPrototypeOf` method is preferrable than changing `__proto__` when we want to modify the underlying prototype for an object.
+Deprecation means that browser vendors are discouraging the use of `__proto__`. In other contexts, deprecation also means that the feature might be removed in the future. The web platform, however, doesn't break backward compatibility, and `__proto__` is unlikely to ever be removed. That being said, deprecation also means you're discouraged from using the feature. Thus, using the `Object.setPrototypeOf` method is preferable to changing `__proto__` when we want to modify the underlying prototype for an object.
 
-You can use `handler.setPrototypeOf` to set up a trap for `Object.setPrototypeOf`. The snippet of code shown below doesn't alter the default behavior of changing a prototype into `base`. Note that, for completeness, there is a `Reflect.setPrototypeOf` method that's equivalent to `Object.setPrototypeOf`.
+You can use `handler.setPrototypeOf` to set up a trap for `Object.setPrototypeOf`. The following snippet of code doesn't alter the default behavior of changing a prototype into `base`. Note that, for completeness, there is a `Reflect.setPrototypeOf` method that's equivalent to `Object.setPrototypeOf`.
 
 [source,javascript]
 ----
@@ -977,7 +994,7 @@ console.log(proxy.prototype === base)
 
 There are several use cases for `setPrototypeOf` traps. You could have an empty method body, in which case the trap would sink calls to `Object.setPrototypeOf` into a no-op: an operation where nothing occurs. You could `throw` an exception making the failure explicit, if you deem the new prototype to be invalid or you want to prevent consumers from changing the prototype of the proxied object.
 
-You could implement a trap like the following, which mitigates security concerns in a proxy that might be passed away to third party code, as a way of limiting access to the underlying `Target`. That way, consumers of `proxy` would be unable to modify the prototype of the underlying object.
+You could implement a trap like the following, which mitigates security concerns in a proxy that might be passed away to third-party code, as a way of limiting access to the underlying `Target`. That way, consumers of `proxy` would be unable to modify the prototype of the underlying object.
 
 [source,javascript]
 ----
@@ -1049,7 +1066,7 @@ The `handler.isExtensible` method can be used for logging or auditing calls to `
 
 While this trap is nearly useless other than for auditing purposes, you could also throw an error within the handler if you don't want consumers to know whether the underlying object is extensible or not.
 
-As we've learned over the last few pages, there's a myriad of use cases for proxies. We can use `Proxy` for all of the following, and that's just the tip of the iceberg.
+As we've learned over the last few pages, there are myriad use cases for proxies. We can use `Proxy` for all of the following, and that's just the tip of the iceberg:
 
 - Add validation rules on plain old JavaScript objects, and enforce them
 - Keep track of every interaction that goes through a proxy

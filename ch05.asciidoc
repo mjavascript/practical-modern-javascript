@@ -17,12 +17,12 @@ set('dragula', { description: 'Drag and drop' })
 set('woofmark', { description: 'Markdown and WYSIWYG editor' })
 ----
 
-There's several problems with this approach, outlined below.
+There are several problems with this approach, outlined here:
 
 - Security issues where user-provided keys like `__proto__`, `toString`, or anything in `Object.prototype` break expectations and make interaction with this kind of hash-map data structures more cumbersome
 - When iterating using `for..in` we need to rely on `Object#hasOwnProperty` to make sure properties aren't inherited
 - Iteration over list items with `Object.keys(registry).forEach` is also verbose
-- Keys are limited to strings, making it hard to create hash-maps where you'd like to index values by DOM elements or other non-string references
+- Keys are limited to strings, making it hard to create hash-maps where you'd like to index values by DOM elements or other nonstring references
 
 The first problem could be fixed using a prefix, and being careful to always get or set values in the hash-map through functions that add those prefixes, to avoid mistakes.
 
@@ -79,7 +79,7 @@ registry[Symbol.iterator] = () => {
 console.log([...registry])
 ----
 
-When it comes to using non-string keys, though, we hit a hard limit in ES5 code. Luckily for us, though, ES6 collections provide us with an even better solution. ES6 collections don't have key-naming issues, and they facilitate collection behaviors, like the iterator we've implemented on our custom hash-map, out the box. At the same time, ES6 collections allow arbitrary keys, and aren't limited to string keys like regular JavaScript objects.
+When it comes to using nonstring keys, though, we hit a hard limit in ES5 code. Luckily for us, though, ES6 collections provide us with an even better solution. ES6 collections don't have key-naming issues, and they facilitate collection behaviors, like the iterator we've implemented on our custom hash-map, out the box. At the same time, ES6 collections allow arbitrary keys, and aren't limited to string keys like regular JavaScript objects.
 
 Let's plunge into their practical usage and inner workings.
 
@@ -110,7 +110,7 @@ map.has('jquery')
 // <- false
 ----
 
-Earlier, we pointed out that maps don't cast keys the way traditional objects do. This is typically an advantage, but you need to keep in mind that they won't be treated the same when querying the map, either. The following example uses the `Map` constructor which takes an iterable of key value pairs and then illustrates how maps don't cast their keys to strings.
+Earlier, we pointed out that maps don't cast keys the way traditional objects do. This is typically an advantage, but you need to keep in mind that they won't be treated the same when querying the map, either. The following example uses the `Map` constructor, which takes an iterable of key/value pairs and then illustrates how maps don't cast their keys to strings.
 
 [source,javascript]
 ----
@@ -167,7 +167,7 @@ map.size
 // <- 0
 ----
 
-You're able to use arbitrary objects when choosing map keys: you're not limited to using primitive values like symbols, numbers, or strings. Instead, you can use functions, objects, dates -- and even DOM elements, too. Keys won't be casted to strings as we observe with plain JavaScript objects, but instead their references are preserved.
+You're able to use arbitrary objects when choosing map keys: you're not limited to using primitive values like symbols, numbers, or strings. Instead, you can use functions, objects, dates -- and even DOM elements, too. Keys won't be cast to strings as we observe with plain JavaScript objects, but instead their references are preserved.
 
 [source,javascript]
 ----
@@ -227,7 +227,7 @@ const items = [
 const map = new Map(items)
 ----
 
-Creating a copy of a map is even easier: you feed the map you want to copy into a new map's constructor, and get a copy back. There isn't a special `new Map(Map)` overload. Instead, we take advantage that map implements the iterable protocol and also consumes iterables when constructing a new map. The following code snippet demonstrates how simple that is.
+Creating a copy of a map is even easier: you feed the map you want to copy into a new map's constructor, and get a copy back. There isn't a special `new Map(Map)` overload. Instead, we take advantage that `map` implements the iterable protocol and also consumes iterables when constructing a new map. The following code snippet demonstrates how simple that is.
 
 [source,javascript]
 ----
@@ -262,7 +262,7 @@ for (const [key, value] of map) {
 }
 ----
 
-Even though map items are accessed through programmatic API, their keys are unique, just like with hash-maps. Setting a key over and over again will only overwrite its value. The following code snippet demonstrates how writing the `'a'` item over and over again results in a map containing only a single item.
+Even though map items are accessed through a programmatic API, their keys are unique, just like with hash-maps. Setting a key over and over again will only overwrite its value. The following code snippet demonstrates how writing the `'a'` item over and over again results in a map containing only a single item.
 
 [source,javascript]
 ----
@@ -291,7 +291,7 @@ console.log([...map])
 // <- [[NaN, 'two'], [0, 'four']]
 ----
 
-When you iterate over a `Map`, you are actually looping over its `.entries()`. That means that you don't need to explicitly iterate over `.entries()`. It'll be done on your behalf anyways: `map[Symbol.iterator]` points to `map.entries`. The `.entries()` method returns an iterator for the key/value pairs in the map.
+When you iterate over a `Map`, you are actually looping over its `.entries()`. That means that you don't need to explicitly iterate over `.entries()`. It'll be done on your behalf anyway: `map[Symbol.iterator]` points to `map.entries`. The `.entries()` method returns an iterator for the key/value pairs in the map.
 
 [source,javascript]
 ----
@@ -299,7 +299,7 @@ console.log(map[Symbol.iterator] === map.entries)
 // <- true
 ----
 
-There are two other `Map` iterators you can leverage: `.keys()` and `.values()`. The first enumerates keys in a map while the second enumerates values, as opposed to `.entries()` which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
+There are two other `Map` iterators you can leverage: `.keys()` and `.values()`. The first enumerates keys in a map while the second enumerates values, as opposed to `.entries()`, which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
 
 [source,javascript]
 ----
@@ -314,7 +314,7 @@ console.log([...map.entries()])
 
 Map entries are always iterated in insertion order. This contrasts with `Object.keys`, which is specified to follow an arbitrary order. Although, in practice, insertion order is typically preserved by JavaScript engines regardless of the specification.
 
-Maps have a `.forEach` method that's equivalent in behavior to that in ES5 `Array` objects. The signature is `(value, key, map)`, where `value` and `key` correspond to the current item in the iteration, while `map` is the map being iterated. Once again, keys do not get casted into strings in the case of `Map`, as demonstrated below.
+Maps have a `.forEach` method that's equivalent in behavior to that in ES5 `Array` objects. The signature is `(value, key, map)`, where `value` and `key` correspond to the current item in the iteration, while `map` is the map being iterated. Once again, keys do not get cast into strings in the case of `Map`, as demonstrated here.
 
 [source,javascript]
 ----
@@ -441,7 +441,7 @@ In exchange for having a more limited feature set, `WeakMap` key references are 
 
 In that sense, a `WeakMap` is most useful when the component maintaining it doesn't own the mapped objects, but wants to assign its own information to them without modifying the original objects or their lifecycle; letting memory be reclaimed when, for example, a DOM node is removed from the document.
 
-To initialize a `WeakMap`, you are able to provide an iterable through the constructor. This should be a list of key value pairs, just like with `Map`.
+To initialize a `WeakMap`, you are able to provide an iterable through the constructor. This should be a list of key/value pairs, just like with `Map`.
 
 [source,javascript]
 ----
@@ -466,9 +466,9 @@ map.has(date)
 // <- false
 ----
 
-==== Is WeakMap A Worse Map?
+==== Is WeakMap a Worse Map?
 
-The distinction which makes `WeakMap` worth the trouble is in its name. Given that `WeakMap` holds references to its keys weakly, those object are subject to garbage collection if there are no other references to them other than as `WeakMap` keys. This is in contrast with `Map` which holds strong object references, preventing `Map` keys and values from being garbage collected.
+The distinction that makes `WeakMap` worth the trouble is in its name. Given that `WeakMap` holds references to its keys weakly, those objects are subject to garbage collection if there are no other references to them other than as `WeakMap` keys. This is in contrast with `Map`, which holds strong object references, preventing `Map` keys and values from being garbage collected.
 
 Correspondingly, use cases for `WeakMap` revolve around the need to specify metadata or extend an object while still being able to garbage collect that object if there are no other references to it. A perfect example might be the underlying implementation for `process.on('unhandledRejection')` in Node.js, which uses a `WeakMap` to keep track of rejected promises that weren't dealt with yet. By using `WeakMap`, the implementation prevents memory leaks because the `WeakMap` won't be grabbing onto the state related to those promises strongly. In this case, we have a simple map that weakly holds onto state, but is flexible enough to handle entries being removed from the map when promises are no longer referenced anywhere else.
 
@@ -478,7 +478,7 @@ In so many words, then: no, `WeakMap` is definitely not worse than `Map` -- they
 
 === Sets in ES6
 
-The `Set` built-in is a new collection type in ES6 used to represent a grouping of values. In several aspects, `Set` is similar to `Map`.
+The `Set` built-in is a new collection type in ES6 used to represent a grouping of values. In several aspects, `Set` is similar to `Map`:
 
 - `Set` is also iterable
 - `Set` constructor also accepts an iterable
@@ -488,7 +488,7 @@ The `Set` built-in is a new collection type in ES6 used to represent a grouping 
 - `NaN` equals `NaN` when it comes to `Set` too
 - All of `.keys`, `.values`, `.entries`, `.forEach`, `.has`, `.delete`, and `.clear`
 
-At the same time, sets are different from `Map` in a few key ways. Sets don't hold key value pairs, there's only one dimension. You can think of sets as being similar to arrays where every element is distinct from each other.
+At the same time, sets are different from `Map` in a few key ways. Sets don't hold key/value pairs; there's only one dimension. You can think of sets as being similar to arrays where every element is distinct from each other.
 
 There isn't a `.get` method in `Set`. A `set.get(value)` method would be redundant: if you already have the `value` then there isn't anything else to get, as that's the only dimension. If we wanted to check for whether the `value` is in the set, there's `set.has(value)` to fulfill that role.
 
@@ -500,7 +500,7 @@ const set = new Set()
 set.add({ an: 'example' })
 ----
 
-Sets are iterable, but unlike maps you only iterate over values, not key value pairs. The following example demonstrates how sets can be spread over an array using the spread operator and creating a single dimensional list.
+Sets are iterable, but unlike maps you only iterate over values, not key/value pairs. The following example demonstrates how sets can be spread over an array using the spread operator and creating a single dimensional list.
 
 [source,javascript]
 ----
@@ -544,7 +544,7 @@ console.log([...set.entries()])
 
 The `Set#entries` method is consistent with `Map#entries`, which returns an iterator of `[key, value]` pairs. Using `Set#entries` as the default iterator for `Set` collections wouldn't be valuable, since it's used in `for..of`, when spreading a `set`, and in `Array.from`. In all of those cases, you probably want to iterate over a sequence of values in the set, but not a sequence of `[value, value]` pairs.
 
-As demonstrated next, the default `Set` iterator uses `Set#values`, as opposed to `Map` which defined its iterator as `Map#entries`.
+As demonstrated next, the default `Set` iterator uses `Set#values`, as opposed to `Map`, which defined its iterator as `Map#entries`.
 
 [source,javascript]
 ----
@@ -607,7 +607,7 @@ class Car {
   }
   fuelUp() {
     if (!cars.has(this)) {
-      throw new TypeError('Car#fuelUp called on incompatible object!')
+      throw new TypeError('Car#fuelUp called on a non-Car!')
     }
   }
 }
@@ -634,7 +634,7 @@ listOwnProperties({
 // <- sum: (a, b) => a + b
 ----
 
-One way to do it would be by keeping a list of `seen` references in a `WeakSet`, so that we don't need to worry about non-linear lookups. We use a `WeakSet` instead of a `Set` because we don't need any of the extra features that can be found in a `Set`.
+One way to do it would be by keeping a list of `seen` references in a `WeakSet`, so that we don't need to worry about nonlinear lookups. We use a `WeakSet` instead of a `Set` because we don't need any of the extra features that can be found in a `Set`.
 
 [source,javascript]
 ----
@@ -646,8 +646,13 @@ function listOwnProperties(input) {
 
     function printOrRecurse(key) {
       const value = source[key]
-      const prefix = lastPrefix ? `${ lastPrefix }.${ key }` : key
-      const shouldRecur = isObject(value) || Array.isArray(value)
+      const prefix = lastPrefix 
+        ? `${ lastPrefix }.${ key }` 
+          : key
+      const shouldRecur = (
+        isObject(value) ||
+        Array.isArray(value)
+      )
       if (shouldRecur) {
         if (!seen.has(value)) {
           seen.add(value)
