@@ -1076,7 +1076,7 @@ Let's switch protocols and learn about Unicode.
 
 JavaScript strings are represented using UTF-16 code unitsfootnoteref:[unicode-encodings,Learn more about UCS-2, UCS-4, UTF-16 and UTF-32 here: https://mjavascript.com/out/unicode-encodings.]. Each code unit can be used to represent a code point in the `[U+0000, U+FFFF]` range -- also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the `'\u3456'` syntax. You could also represent code units in the `[U+0000, U+0255]` range using the `\x00..\xff` notation. For instance, `'\xbb'` represents `'»'`, the `U+00BB` code point, as you can also verify by doing `String.fromCharCode(0xbb)`.
 
-For code points beyond `U+FFFF`, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji pass:[<code>'<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" />'</code>] code point is represented with the `'\ud83d\udc0e'` contiguous code units. In ES6 notation you can also represent code points using the `'\u{1f40e}'` notation (that example is also the horse emoji).
+For code points beyond `U+FFFF`, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji pass:[<code>'<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" />'</code>] code point is represented with the `'\ud83d\udc0e'` contiguous code units. In ES6 notation you can also represent code points using the `'\u{1f40e}'` notation (that example is also the horse emoji).
 
 Note that the internal representation hasn't changed, so there's still two code units behind that single code point. In fact, `'\u{1f40e}'.length` evaluates to `2`, one for each code unit.
 
@@ -1084,7 +1084,7 @@ The `'\ud83d\udc0e\ud83d\udc71\u2764'` string, found in the next code snippet, e
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">'\ud83d\udc0e\ud83d\udc71\u2764'
-// &lt;- '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
+// &lt;- '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
 While that string consists of 5 code units, we know that the length should really be 3 -- as there's only 3 emoji.
@@ -1092,21 +1092,21 @@ While that string consists of 5 code units, we know that the length should reall
 ++++
 <pre data-type="programlisting" data-code-language="javascript">'\ud83d\udc0e\ud83d\udc71\u2764'.length
 // &lt;- 5
-'<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'.length
+'<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'.length
 // &lt;- 5, still</pre>
 ++++
 
 Counting code points before ES6 was tricky, as the language didn't make an effort to help in the Unicode department. Take for instance `Object.keys`, as seen in the following code snippet. It returns five keys for our 3-emoji string, because those 3 code points use 5 code units in total.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">Object.keys('<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />')
+<pre data-type="programlisting" data-code-language="javascript">Object.keys('<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />')
 // &lt;- ['0', '1', '2', '3', '4']</pre>
 ++++
 
 If we now consider a `for` loop, we can observe more clearly how this is a problem. In the following example, we wanted to extract each individual emoji from the `text` string, but we got each code unit instead of the code points they form.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">const text = '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'
+<pre data-type="programlisting" data-code-language="javascript">const text = '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'
 for (let i = 0; i &lt; text.length; i++) {
   console.log(text[i])
   // &lt;- '\ud83d'
@@ -1124,11 +1124,11 @@ Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the s
 Given the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">for (const codePoint of '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />') {
+<pre data-type="programlisting" data-code-language="javascript">for (const codePoint of '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />') {
   console.log(codePoint)
-  // &lt;- '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" />'
-  // &lt;- '<img src="images/1f471.png" alt="👱" data-emoji-embed="👱" />'
-  // &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'
+  // &lt;- '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" />'
+  // &lt;- '<img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" />'
+  // &lt;- '<img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'
 }</pre>
 ++++
 
@@ -1137,7 +1137,7 @@ Measuring the length of a string in terms of code points, as we saw earlier, is 
 We could use the spread operator, which relies on the iterator protocol, to split an string into an array made up of its conforming code points and then pull that array's `length`, getting the correct code point count, as seen next.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">[...'<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'].length
+<pre data-type="programlisting" data-code-language="javascript">[...'<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'].length
 // &lt;- 3</pre>
 ++++
 
@@ -1204,7 +1204,7 @@ Let's look at more Unicode-related methods introduced in ES6.
 
 ==== String#codePointAt
 
-We can use `String#codePointAt` to get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo `'pass:[<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />]'` string.
+We can use `String#codePointAt` to get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the example below we print the code points for each of the three emoji in our demo `'pass:[<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />]'` string.
 
 [source,javascript]
 ----
@@ -1254,11 +1254,11 @@ We could wrap those base-16 values in `'\u{codePoint}'` and voilá: you'd get th
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">'\u{1f40e}'
-// &lt;- '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" />'
+// &lt;- '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" />'
 '\u{1f471}'
-// &lt;- '<img src="images/1f471.png" alt="👱" data-emoji-embed="👱" />'
+// &lt;- '<img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" />'
 '\u{2764}'
-// &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
+// &lt;- '<img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
 ==== String.fromCodePoint
@@ -1267,29 +1267,29 @@ This method takes in a number and returns a code point. Note how I can use the `
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
-// &lt;- '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" />'
+// &lt;- '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" />'
 String.fromCodePoint(0x1f471)
-// &lt;- '<img src="images/1f471.png" alt="👱" data-emoji-embed="👱" />'
+// &lt;- '<img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" />'
 String.fromCodePoint(0x2764)
-// &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
+// &lt;- '<img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
 You can just as well use plain base-10 literals and achieve the same results.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(128014)
-// &lt;- '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" />'
+// &lt;- '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" />'
 String.fromCodePoint(128113)
-// &lt;- '<img src="images/1f471.png" alt="👱" data-emoji-embed="👱" />'
+// &lt;- '<img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" />'
 String.fromCodePoint(10084)
-// &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
+// &lt;- '<img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
 You can pass in as many code points as you'd like to `String.fromCodePoint`.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e, 0x1f471, 0x2764)
-// &lt;- '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
+// &lt;- '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
 As an exercise in futility, we could map a string to their numeric representation of code points, and back to the code points themselves.
@@ -1300,7 +1300,7 @@ As an exercise in futility, we could map a string to their numeric representatio
   .map(cp =&gt; cp.codePointAt(0))
   .map(cp =&gt; String.fromCodePoint(cp))
   .join('')
-// &lt;- '<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
+// &lt;- '<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
 Reversing an string has potential to cause issues as well.
@@ -1323,7 +1323,7 @@ The problem is that we're reversing individual code units, while we'd have to re
 ++++
 <pre data-type="programlisting" data-code-language="javascript">const text = '\ud83d\udc0e\ud83d\udc71\u2764'
 [...text].reverse().join('')
-// &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" /><img src="images/1f471.png" alt="👱" data-emoji-embed="👱" /><img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" />'</pre>
+// &lt;- '<img src="images/2764.png" style="width: 16px" alt="❤️" data-emoji-embed="❤️" /><img src="images/1f471.png" style="width: 16px" alt="👱" data-emoji-embed="👱" /><img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" />'</pre>
 ++++
 
 This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clustersfootnoteref:[unicode-problem].
@@ -1459,14 +1459,14 @@ Using an escape sequence for an unreserved character such as `a` in a regular ex
 The following example attempts to embed the horse emoji in a regular expression by way of the `\u{1f40e}` notation which ES6 introduced for strings like `'\u{1f40e}'`, but the regular expression fails to match against the horse emoji. Without the `u` flag, the `\u{…}` pattern is interpreted as having an unnecessarily escaped `u` character followed by the rest of the sequence.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/.test('<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" />') // &lt;- false
+<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/.test('<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" />') // &lt;- false
 /\u{1f40e}/.test('u{1f40e}') // &lt;- true</pre>
 ++++
 
 The `u` flag introduces support for Unicode code point escapes, like the `\u{1f40e}` horse emoji, within regular expressions.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/u.test('<img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎" />')
+<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/u.test('<img src="images/1f40e.png" style="width: 16px" alt="🐎" data-emoji-embed="🐎" />')
 // &lt;- true</pre>
 ++++
 
