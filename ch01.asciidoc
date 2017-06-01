@@ -47,13 +47,13 @@ The sixth edition is a significant milestone in the history of JavaScript. Besid
 
 Having spent ten years without observing significant change to the language specification after ES3, and four years for ES6 to materialize, it was clear the TC39 process needed to improve. The revision process used to be deadline-driven. Any delay in arriving at consensus would cause long wait periods between revisions, which lead to feature creep, causing more delays. Minor revisions were delayed by large additions to the specification, and large additions faced pressure to finalize so that the revision would be pushed through avoiding further delays.
 
-Since ES6 came out, TC39 has streamlinedpass:[<span data-type="footnote">Check out the presentation, <a href="https://mjavascript.com/out/tc39-improvement">"Post-ES6 Spec Process"</a>, from September 2013 that led to the streamlined proposal revisioning process here.</span>] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using ecmarkup (an HTML superset used to format ECMAScript specifications) and GitHub Pull Requests, greatly increasing the number of proposalspass:[<span data-type="footnote">Check out all of the <a href="https://mjavascript.com/out/tc39-proposals">proposals being considered by TC39</a>.<span>] being created as well as external participation by nonmembers. The new flow is continuous and, thus, more transparent: while previously you'd have to download a Word doc or its PDF version from a web page, the latest draft of the https://mjavascript.com/out/spec-draft[specification] is now always available.
+Since ES6 came out, TC39 has streamlinedpass:[<span data-type="footnote">Check out the presentation, <a href="https://mjavascript.com/out/tc39-improvement">"Post-ES6 Spec Process"</a>, from September 2013 that led to the streamlined proposal revisioning process here.</span>] its proposal revisioning process and adjusted it to meet modern expectations: the need to iterate more often and consistently, and to democratize specification development. At this point, TC39 moved from an ancient Word-based flow to using ecmarkup (an HTML superset used to format ECMAScript specifications) and GitHub Pull Requests, greatly increasing the number of proposalspass:[<span data-type="footnote">Check out all of the <a href="https://mjavascript.com/out/tc39-proposals">proposals being considered by TC39</a>.</span>] being created as well as external participation by nonmembers. The new flow is continuous and, thus, more transparent: while previously you'd have to download a Word doc or its PDF version from a web page, the latest draft of the https://mjavascript.com/out/spec-draft[specification] is now always available.
 
 Firefox, Chrome, Edge, Safari, and Node.js all offer over 95% compliance of the ES6 specification,pass:[<span data-type="footnote">Check out this detailed table reporting <a href="https://mjavascript.com/out/es6-compat">ES6 compatibility across browsers</a>.</span>] but we’ve been able to use the features as they came out in each of these browsers rather than having to wait until the flip of a switch when their implementation of ES6 was 100% finalized.
 
 The new process involves four different maturity stages.pass:[<span data-type="footnote">Take a look at the <a href="https://mjavascript.com/out/tc39-process">TC39 proposal process documentation</a>.</span>] The more mature a proposal is, the more likely it is to eventually make it into the specification.
 
-Any discussion, idea, or proposal for a change or addition that has not yet been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0), but only TC39 members can create strawman proposals. At the time of this writing, there are over a dozen active strawman proposals.pass:[<span data-type="footnote">You can track <a href="https://mjavascript.com/out/tc39-stage0">strawman proposals</a>.<span>]
+Any discussion, idea, or proposal for a change or addition that has not yet been submitted as a formal proposal is considered to be an aspirational "strawman" proposal (stage 0), but only TC39 members can create strawman proposals. At the time of this writing, there are over a dozen active strawman proposals.pass:[<span data-type="footnote">You can track <a href="https://mjavascript.com/out/tc39-stage0">strawman proposals</a>.</span>]
 
 At stage 1 a proposal is formalized and expected to address cross-cutting concerns, interactions with other proposals, and implementation concerns. Proposals at this stage should identify a discrete problem and offer a concrete solution to the problem. A stage 1 proposal often includes a high level API description, illustrative usage examples, and a discussion of internal semantics and algorithms. Stage 1 proposals are likely to change significantly as they make their way through the process.
 
@@ -242,7 +242,7 @@ Next, we need to configure ESLint. Since we installed `eslint` as a local depend
 [source,shell]
 ----
 ./node_modules/.bin/eslint --init
-? How would you like to configure ESLint? 
+? How would you like to configure ESLint?
   Use a popular style guide
 ? Which style guide do you want to follow? Standard
 ? What format do you want your config file to be in? JSON
@@ -318,7 +318,7 @@ if (false) {}
 
 [NOTE]
 ====
-A similar kind of tool can be found in https://mjavascript.com/out/prettier[`prettier`], which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length. 
+A similar kind of tool can be found in https://mjavascript.com/out/prettier[`prettier`], which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length.
 ====
 
 Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of JavaScript.
