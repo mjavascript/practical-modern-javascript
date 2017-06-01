@@ -44,7 +44,7 @@ console.log(parseInt('012', 10))
 // <- 12
 ----
 
-When ES5 came around, the default radix in `parseInt` changed, from `8` to `10`. It was still recommended you specified a `radix` for backwards compatibility purposes. If you wanted to parse strings as octal values, you could explicitly pass in a radix of `8` as the second argument.
+When ES5 came around, the default radix in `parseInt` changed, from `8` to `10`. It was still recommended that you specified a `radix` for backward compatibility purposes. If you wanted to parse strings as octal values, you could explicitly pass in a radix of `8` as the second argument.
 
 [source,javascript]
 ----
@@ -69,7 +69,7 @@ console.log(0x0ff) // <- 255
 console.log(0xf00) // <- 3840
 ----
 
-Besides these minor syntax changes where octal and binary literals were introduced, a few methods were added to `Number` in ES6. The first four `Number` methods that we'll be discussing -- `Number.isNaN`, `Number.isFinite`, `Number.parseInt`, and `Number.parseFloat` -- already existed as functions in the global namespace. In addition, the methods in `Number` are slightly different in that they don't coerce non-numeric values into numbers before producing a result.
+Besides these minor syntax changes where octal and binary literals were introduced, a few methods were added to `Number` in ES6. The first four `Number` methods that we'll be discussing -- `Number.isNaN`, `Number.isFinite`, `Number.parseInt`, and `Number.parseFloat` -- already existed as functions in the global namespace. In addition, the methods in `Number` are slightly different in that they don't coerce nonnumeric values into numbers before producing a result.
 
 ==== Number.isNaN
 
@@ -91,17 +91,18 @@ Number.isNaN('a hundred' / 'two')
 // <- true, 'a hundred' / 'two' is NaN, NaN is NaN
 ----
 
-The `isNaN` method, in contrast, casts non-numeric values passed to it before evaluating them against `NaN`. This results in significantly different return values. In the following example, each alternative produces different results because `isNaN`, unlike `Number.isNaN`, casts the `value` passed to it through `Number` first.
+The `isNaN` method, in contrast, casts nonnumeric values passed to it before evaluating them against `NaN`. This results in significantly different return values. In the following example, each alternative produces different results because `isNaN`, unlike `Number.isNaN`, casts the `value` passed to it through `Number` first.
 
 [source,javascript]
 ----
 isNaN('a hundred')
 // <- true, because Number('a hundred') is NaN
 isNaN(new Date())
-// <- false, because Number(new Date()) uses Date#valueOf, which returns a unix timestamp
+// <- false, because Number(new Date()) uses Date#valueOf,
+//    which returns a unix timestamp
 ----
 
-`Number.isNaN` is more precise than its global counterpart, because it doesn't involve casting. There's still a few reasons why `Number.isNaN` can be a source of confusion.
+`Number.isNaN` is more precise than its global counterpart, because it doesn't involve casting. There are still a few reasons why `Number.isNaN` can be a source of confusion.
 
 First off, `isNaN` casts input through `Number(value)` before comparison, while `Number.isNaN` doesn't. Neither `Number.isNaN` nor `isNaN` answer the "is this not a number?" question, but instead they answer whether `value` -- or `Number(value)` -- is `NaN`.
 
@@ -114,7 +115,7 @@ function isNumber(value) {
 }
 ----
 
-You can use that method to figure out whether a `value` is a number or not. In the next snippet there's a few examples of how `isNumber` works.
+You can use that method to figure out whether a `value` is a number or not. In the next snippet there are a few examples of how `isNumber` works.
 
 [source,javascript]
 ----
@@ -130,11 +131,11 @@ isNumber(new Date())
 // <- false
 ----
 
-There is a function, that was already in the language, that somewhat resembles our custom `isNumber` function: `isFinite`.
+There is a function, which was already in the language, that somewhat resembles our custom `isNumber` function: `isFinite`.
 
 ==== Number.isFinite
 
-The rarely-promoted `isFinite` method has been available since ES3. It returns a boolean value indicating whether the provided `value` matches none of: `Infinity`, `-Infinity`, and `NaN`.
+The rarely promoted `isFinite` method has been available since ES3. It returns a boolean value indicating whether the provided `value` matches none of: `Infinity`, `-Infinity`, and `NaN`.
 
 The `isFinite` method coerces values through `Number(value)`, while `Number.isFinite` doesn't. This means that values that can be coerced into non-`NaN` numbers will be considered finite numbers by `isNumber` -- even though they aren't explicit numbers.
 
@@ -176,7 +177,7 @@ Number.isFinite('10')
 // <- false, because '10' is not a number
 ----
 
-Creating a ponyfillfootnoteref:[ponyfills,Like polyfills, ponyfills are user-land implementations of features that aren't available in every JavaScript runtime. While polyfills try to patch the runtime environment so that it behaves as if the feature was indeed available on the runtime, ponyfills implement the missing functionality as standalone modules that don't pollute the runtime environment. This has the benefit of not breaking expectations third party libraries (that don't know about your polyfill) may have about the environment. You can learn more about the distinction at: https://mjavascript.com/out/ponyfills.] for `Number.isFinite` would involve returning `false` for non-numeric values, effectively turning off the type-casting feature, and then calling `isFinite` on the input value.
+Creating a ponyfillfootnoteref:[ponyfills,Like polyfills, ponyfills are user-land implementations of features that aren't available in every JavaScript runtime. While polyfills try to patch the runtime environment so that it behaves as if the feature was indeed available on the runtime, ponyfills implement the missing functionality as standalone modules that don't pollute the runtime environment. This has the benefit of not breaking expectations third-party libraries (that don't know about your polyfill) may have about the environment. You can learn more about the distinction at https://mjavascript.com/out/ponyfills.] for `Number.isFinite` would involve returning `false` for nonnumeric values, effectively turning off the type-casting feature, and then calling `isFinite` on the input value.
 
 [source,javascript]
 ----
@@ -205,7 +206,7 @@ parseInt('0xf00', 16)
 // <- 3840
 ----
 
-If you provided another `radix`, `parseInt` would bail after the first non-digit character.
+If you provided another `radix`, `parseInt` would bail after the first nondigit character.
 
 [source,javascript]
 ----
@@ -287,7 +288,7 @@ function numberIsInteger(value) {
 }
 ----
 
-Next up we'll dive into floating point arithmetic, which is well-documented as having interesting corner cases.
+Next up we'll dive into floating-point arithmetic, which is well-documented as having interesting corner cases.
 
 ==== Number.EPSILON
 
@@ -301,7 +302,7 @@ Number.EPSILON.toFixed(20)
 // <- '0.00000000000000022204'
 ----
 
-Let's take a look at the canonical example of floating point arithmetic.
+Let's take a look at the canonical example of floating-point arithmetic.
 
 [source,javascript]
 ----
@@ -321,7 +322,7 @@ What's the margin of error in this operation? Let's move the operands around and
 // <- '0.00000000000000005551'
 ----
 
-We could use `Number.EPSILON` to figure out whether the difference is small enough to be negligible, `Number.EPSILON` denotes a safe margin of error for floating point arithmetic rounding operations.
+We could use `Number.EPSILON` to figure out whether the difference is small enough to be negligible; `Number.EPSILON` denotes a safe margin of error for floating-point arithmetic rounding operations.
 
 [source,javascript]
 ----
@@ -329,7 +330,7 @@ We could use `Number.EPSILON` to figure out whether the difference is small enou
 // <- true
 ----
 
-The following piece of code can be used to figure out out whether the result of a floating point operation is within the expected margin of error. We use `Math.abs`, because that way the order of `left` and `right` won't matter. In other words, `withinMarginOfError(left, right)` will produce the same result as `withinMarginOfError(right, left)`.
+The following piece of code can be used to figure out whether the result of a floating-point operation is within the expected margin of error. We use `Math.abs`, because that way the order of `left` and `right` won't matter. In other words, `withinMarginOfError(left, right)` will produce the same result as `withinMarginOfError(right, left)`.
 
 [source,javascript]
 ----
@@ -348,11 +349,11 @@ withinMarginOfError(0.2 + 0.2, 0.3)
 // <- false
 ----
 
-Using floating point representation, not every integer can be represented precisely.
+Using floating-point representation, not every integer can be represented precisely.
 
 ==== Number.MAX_SAFE_INTEGER and Number.MIN_SAFE_INTEGER
 
-This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standardfootnoteref:[floating-point,IEEE 754 is the Floating Point Standard. On Wikipedia: https://mjavascript.com/out/floating-point.], for that matter. The next bit of code shows exactly how large `Number.MAX_SAFE_INTEGER` is.
+This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standard,footnoteref:[floating-point,IEEE 754 is the Floating Point Standard. On Wikipedia: https://mjavascript.com/out/floating-point.] for that matter. The next bit of code shows exactly how large `Number.MAX_SAFE_INTEGER` is.
 
 [source,javascript]
 ----
@@ -406,7 +407,7 @@ Number.isSafeInteger(Number.MAX_SAFE_INTEGER) // <- true
 Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1) // <- false
 ----
 
-When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operandsfootnoteref:[math-axel,Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://mjavascript.com/out/math-axel.]. One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of `left`, `right`, and the result of `left op right` is, thus, necessary to verify that we can indeed trust the result.
+When we want to verify if the result of an operation is within bounds, we must verify not only the result but also both operands.footnoteref:[math-axel,Dr. Axel Rauschmayer points this out in an article titled "New number and Math features in ES6": https://mjavascript.com/out/math-axel.] One -- or both -- of the operands may be out of bounds, while the result is within bounds but incorrect. Similarly, the result may be out of bounds even if both operands are within bounds. Checking all of `left`, `right`, and the result of `left op right` is, thus, necessary to verify that we can indeed trust the result.
 
 In the following example both operands are within bounds, but the result is incorrect.
 
@@ -472,7 +473,7 @@ Number.isSafeInteger(9007199254740995 - 9007199254740993)
 // <- 4, should be 2
 ----
 
-We can conclude that the only safe way to assert whether an operation produces correct output is with a utility function such as the one below. If we can't ascertain that the operation and both operands are within bounds, then the result may be inaccurate, and that's a problem. It's best to `throw` in those situations and have a way to error-correct, but that's specific to your programs. The important part is to actually catch these kinds of difficult bugs to deal with.
+We can conclude that the only safe way to assert whether an operation produces correct output is with a utility function such as the one shown next. If we can't ascertain that the operation and both operands are within bounds, then the result may be inaccurate, and that's a problem. It's best to `throw` in those situations and have a way to error-correct, but that's specific to your programs. The important part is to actually catch these kinds of difficult bugs to deal with.
 
 [source,javascript]
 ----
@@ -485,7 +486,7 @@ function safeOp(result, ...operands) {
 }
 ----
 
-You could use `safeOp` to ensure all operands, including the `result` are safely within bounds.
+You could use `safeOp` to ensure all operands, including the `result`, are safely within bounds.
 
 [source,javascript]
 ----
@@ -495,7 +496,11 @@ safeOp(9007199254740993 + 990, 9007199254740993, 990)
 // <- RangeError: Operation cannot be trusted!
 safeOp(9007199254740993 - 990, 9007199254740993, 990)
 // <- RangeError: Operation cannot be trusted!
-safeOp(9007199254740993 - 9007199254740995, 9007199254740993, 9007199254740995)
+safeOp(
+  9007199254740993 - 9007199254740995,
+  9007199254740993,
+  9007199254740995
+)
 // <- RangeError: Operation cannot be trusted!
 safeOp(1 + 2, 1, 2)
 // <- 3
@@ -506,7 +511,7 @@ That's all there is when it comes to `Number`, but we're not done with arithmeti
 [[math_section]]
 === Math
 
-ES6 introduces heaps of new static methods to the `Math` built-in. Some of them were specifically engineered towards making it easier to compile C into JavaScript, and you'll seldom need them for day-to-day JavaScript application development. Others are complements to the existing rounding, exponentiation, and trigonometry API surface.
+ES6 introduces heaps of new static methods to the `Math` built-in. Some of them were specifically engineered toward making it easier to compile C into JavaScript, and you'll seldom need them for day-to-day JavaScript application development. Others are complements to the existing rounding, exponentiation, and trigonometry API surface.
 
 Let's get right to it.
 
@@ -539,7 +544,7 @@ Math.trunc(-13.58) // <- -13
 Math.trunc(-0.1234) // <- -0
 Math.trunc(NaN) // <- NaN
 Math.trunc('one') // <- NaN, because Number('one') is NaN
-Math.trunc('123.456') // <- 123, because Number('123.456') is 123.456
+Math.trunc('123.456') // <- 123,: Number('123.456') is 123.456
 ----
 
 Creating a simple ponyfill for `Math.trunc` would involve checking whether the value is greater than zero and applying one of `Math.floor` or `Math.ceil`, as shown in the following code snippet.
@@ -553,7 +558,7 @@ function mathTrunc(value) {
 
 ==== Math.cbrt
 
-The `Math.cbrt` method is short for "cubic root", similarly to how `Math.sqrt` is short for "square root". The following snippet has a few usage examples.
+The `Math.cbrt` method is short for "cubic root," similarly to how `Math.sqrt` is short for "square root." The following snippet has a few usage examples.
 
 [source,javascript]
 ----
@@ -563,7 +568,7 @@ Math.cbrt(8) // <- 2
 Math.cbrt(27) // <- 3
 ----
 
-Note that this method also coerces non-numerical values into numbers.
+Note that this method also coerces nonnumerical values into numbers.
 
 [source,javascript]
 ----
