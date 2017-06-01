@@ -1520,12 +1520,12 @@ parseKeyValuePair('strong is true') // <- { key: 'strong', value: 'true' }
 parseKeyValuePair('flexible=too') // <- { key: 'flexible', value: 'too' }
 ----
 
-While array destructuring in the previous example hid our code's reliance on magic array indices, the fact remains that matches are placed in an ordered array regardless. The named capture groups proposalfootnoteref:[regexp-named-groups,You can find the named capture groups proposal document at: https://mjavascript.com/out/regexp-named-groups.] (in stage 3 at the time of this writing) adds syntax like `(?<groupName>)` where we can name capturing groups, which are then returned in a `groups` property of the returned match object. The `groups` property can then be destructured from the resulting object when calling `RegExp#exec` or `String#match`.
+While array destructuring in the previous example hid our code's reliance on magic array indices, the fact remains that matches are placed in an ordered array regardless. The named capture groups proposalfootnoteref:[regexp-named-groups,You can find the named capture groups proposal document at: https://mjavascript.com/out/regexp-named-groups.] (in stage 3 at the time of this writing) adds syntax like `(?<groupName>)` to Unicode-aware regular expressions, where we can name capturing groups which are then returned in a `groups` property of the returned match object. The `groups` property can then be destructured from the resulting object when calling `RegExp#exec` or `String#match`.
 
 [source,javascript]
 ----
 function parseKeyValuePair(input) {
-  const rattribute = /(?<key>[a-z]+)(?:=|\sis\s)(?<value>[a-z]+)/
+  const rattribute = /(?<key>[a-z]+)(?:=|\sis\s)(?<value>[a-z]+)/u
   const { groups } = rattribute.exec(input)
   return groups
 }
@@ -1550,7 +1550,7 @@ The named capture groups proposal adds support for named backreferences, which r
 [source,javascript]
 ----
 function hasSameUserAndPassword(input) {
-  const rduplicate = /(?<user>[^:]+):\k<user>/
+  const rduplicate = /(?<user>[^:]+):\k<user>/u
   return rduplicate.exec(input) !== null
 }
 hasSameUserAndPassword('root:root') // <- true
@@ -1564,7 +1564,7 @@ Lastly, named groups can be referenced from the replacement passed to `String#re
 [source,javascript]
 ----
 function americanDateToHungarianFormat(input) {
-  const ramerican = /(?<month>\d{2})\/(?<day>\d{2})\/(?<year>\d{4})/
+  const ramerican = /(?<month>\d{2})\/(?<day>\d{2})\/(?<year>\d{4})/u
   const hungarian = input.replace(ramerican, '$<year>-$<month>-$<day>')
   return hungarian
 }
@@ -1577,7 +1577,7 @@ If the second argument to `String#replace` is a function, then the named groups 
 [source,javascript]
 ----
 function americanDateToHungarianFormat(input) {
-  const ramerican = /(?<month>\d{2})\/(?<day>\d{2})\/(?<year>\d{4})/
+  const ramerican = /(?<month>\d{2})\/(?<day>\d{2})\/(?<year>\d{4})/u
   const hungarian = input.replace(ramerican, (match, capture1, capture2, capture3, groups) => {
     const { month, day, year } = groups
     return `${ year }-${ month }-${ day }`
@@ -1638,7 +1638,7 @@ The following example uses a positive lookahead to test whether an input string 
 [source,javascript]
 ----
 function getJavaScriptFilename(input) {
-  const rfile = /^(?<filename>[a-z]+)(?=\.js)\.[a-z]+$/
+  const rfile = /^(?<filename>[a-z]+)(?=\.js)\.[a-z]+$/u
   const match = rfile.exec(input)
   if (match === null) {
     return null
@@ -1654,7 +1654,7 @@ There are also negative lookahead assertions, which are expressed as `(?!…)` a
 [source,javascript]
 ----
 function getNonJavaScriptFilename(input) {
-  const rfile = /^(?<filename>[a-z]+)(?!\.js)\.[a-z]+$/
+  const rfile = /^(?<filename>[a-z]+)(?!\.js)\.[a-z]+$/u
   const match = rfile.exec(input)
   if (match === null) {
     return null
@@ -1670,7 +1670,7 @@ The proposal for lookbehindfootnoteref:[regexp-lookbehind,You can find the lookb
 [source,javascript]
 ----
 function getDollarAmount(input) {
-  const rdollars = /^(?<=\$)(?<amount>\d+(?:\.\d+)?)$/
+  const rdollars = /^(?<=\$)(?<amount>\d+(?:\.\d+)?)$/u
   const match = rdollars.exec(input)
   if (match === null) {
     return null
@@ -1686,7 +1686,7 @@ On the other hand, a negative lookbehind could be used to match numbers that are
 [source,javascript]
 ----
 function getNonDollarAmount(input) {
-  const rnumbers = /^(?<!\$)(?<amount>\d+(?:\.\d+)?)$/
+  const rnumbers = /^(?<!\$)(?<amount>\d+(?:\.\d+)?)$/u
   const match = rnumbers.exec(input)
   if (match === null) {
     return null
@@ -1830,7 +1830,7 @@ The `String#matchAll` proposalfootnoteref:[string-matchall,You can find the `Str
 
 [source,javascript]
 ----
-const rattributes = /(?<key>\w+)="(?<value>[^"]+)"\s/ig
+const rattributes = /(?<key>\w+)="(?<value>[^"]+)"\s/igu
 const email = '<input type="email" placeholder="hello@mjavascript.com" />'
 for (const { groups: { key, value } } of email.matchAll(rattributes)) {
   console.log(`${ key }: ${ value }`)

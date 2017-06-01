@@ -1,4 +1,4 @@
-[[classes-symbols-objects-and-objects]]
+[[classes-symbols-objects-and-decorators]]
 == Classes, Symbols, Objects, and Decorators
 
 Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes, and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript, like strings, booleans, and numbers. They can be used for defining protocols, and in this chapter we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the `Object` built-in in ES6.
