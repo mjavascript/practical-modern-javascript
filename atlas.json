@@ -1,5 +1,6 @@
 {
   "branch": "master",
+  "export_formats": ["html", "pdf"],
   "files": [
     "titlepage.html",
     "copyright.html",
