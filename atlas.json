@@ -53,6 +53,7 @@
       "consolidated": false
     }
   },
+  "name": "oreillymedia/practical-modern-javascript",
   "theme": "oreillymedia/animal_theme",
   "title": "Practical Modern JavaScript",
   "templating": false,
