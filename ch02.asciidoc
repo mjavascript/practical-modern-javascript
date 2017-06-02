@@ -610,7 +610,7 @@ function powerOf(base, exponent = 2) {
 }
 ----
 
-Defaults can be applied to arrow function parameters as well. When we have default values in an arrow function we must wrap the parameter list in parenthesis, even when there's a single parameter.
+Defaults can be applied to arrow function parameters as well. When we have default values in an arrow function we must wrap the parameter list in parentheses, even when there's a single parameter.
 
 [source,javascript]
 ----
@@ -632,7 +632,8 @@ In JavaScript it's not uncommon to provide a function with an `options` object, 
 
 [source,javascript]
 ----
-function carFactory(options = { brand: 'Volkswagen', make: 1999 }) {
+var defaultOptions = { brand: 'Volkswagen', make: 1999 }
+function carFactory(options = defaultOptions) {
   console.log(options.brand)
   console.log(options.make)
 }
@@ -671,7 +672,10 @@ In this case, however, we've once again lost the default value for the case wher
 
 [source,javascript]
 ----
-function carFactory({ brand = 'Volkswagen', make = 1999 } = {}) {
+function carFactory({
+  brand = 'Volkswagen',
+  make = 1999
+} = {}) {
   console.log(brand)
   console.log(make)
 }
@@ -729,7 +733,7 @@ function getCoordinates() {
 var { x, y } = getCoordinates()
 ----
 
-The case for default option values bears repeating. Imagine you have a `random` function which produces random integers between a `min` and a `max` value, and that it should default to values between 1 and 10. This is particularly interesting as an alternative to named parameters in languages with strong typing features, such as Python and C#. This pattern, where you're able to define default values for options and then let consumers override them individually, offers great flexibility.
+The case for default option values bears repeating. Imagine you have a `random` function that produces random integers between a `min` and a `max` value, and that it should default to values between 1 and 10. This is particularly interesting as an alternative to named parameters in languages with strong typing features, such as Python and C#. This pattern, where you're able to define default values for options and then let consumers override them individually, offers great flexibility.
 
 [source,javascript]
 ----
@@ -766,7 +770,7 @@ var [, year, month, day] = matches
 
 Let's turn our attention to spread and rest operators next.
 
-=== Rest Parameters and Spread Operator
+=== Rest Parameter and Spread Operator
 
 Before ES6, interacting with an arbitrary amount of function parameters was complicated. You had to use `arguments`, which isn't an array but has a `length` property. Usually you'd end up casting the `arguments` object into an actual array using `Array#slice.call`, and going from there, as shown in the following snippet.
 
@@ -784,7 +788,7 @@ ES6 has a better solution to the problem, and that's rest parameters.
 
 ==== Rest Parameters
 
-You can now precede the last parameter in any JavaScript function with three dots, converting it into an special "rest parameter". When the rest parameter is the only parameter in a function, it gets all arguments passed to the function: it works just like the `.slice` solution we saw earlier, but you avoid the need for a complicated construct like `arguments`, and it's specified in the parameter list.
+You can now precede the last parameter in any JavaScript function with three dots, converting it into an special "rest parameter." When the rest parameter is the only parameter in a function, it gets all arguments passed to the function: it works just like the `.slice` solution we saw earlier, but you avoid the need for a complicated construct like `arguments`, and it's specified in the parameter list.
 
 [source,javascript]
 ----
@@ -806,16 +810,18 @@ join('; ', 'first', 'second', 'third')
 // <- 'first; second; third'
 ----
 
-Note that arrow functions with a rest parameter must include parenthesis, even when it's the only parameter. Otherwise, a `SyntaxError` would be thrown. The following piece of code is a beautiful example of how combining arrow functions and rest parameters can yield concise functional expressions.
+Note that arrow functions with a rest parameter must include parentheses, even when it's the only parameter. Otherwise, a `SyntaxError` would be thrown. The following piece of code is a beautiful example of how combining arrow functions and rest parameters can yield concise functional expressions.
 
 [source,javascript]
 ----
-var sumAll = (...numbers) => numbers.reduce((total, next) => total + next)
+var sumAll = (...numbers) => numbers.reduce(
+  (total, next) => total + next
+)
 console.log(sumAll(1, 2, 5))
 // <- 8
 ----
 
-Compare that with the ES5 version of the same function. Granted, it's all in the complexity. While terse, the `sumAll` function can be confusing to readers unused to the `.reduce` method, or because it uses two arrow functions. This is a complexity tradeoff that we'll cover in the second part of the book.
+Compare that with the ES5 version of the same function. Granted, it's all in the complexity. While terse, the `sumAll` function can be confusing to readers unused to the `.reduce` method, or because it uses two arrow functions. This is a complexity trade-off that we'll cover in the second part of the book.
 
 [source,javascript]
 ----
@@ -876,7 +882,7 @@ Note that the spread operator isn't limited to arrays and `arguments`. The sprea
 
 .Shifting and Spreading
 ****
-When you want to extract an element or two from the beginning of an array, the common approach is to use `.shift`. While functional, the snippet of code below can be hard to understand at a glance, because it uses `.shift` twice to grab a different item from the beginning of the `list` each time. The focus is, like in many other pre-ES6 situations, placed on getting the language to do what we want.
+When you want to extract an element or two from the beginning of an array, the common approach is to use `.shift`. While functional, the following snippet of code can be hard to understand at a glance, because it uses `.shift` twice to grab a different item from the beginning of the `list` each time. The focus is, like in many other pre-ES6 situations, placed on getting the language to do what we want.
 
 [source,javascript]
 ----
@@ -887,7 +893,7 @@ console.log(first)
 // <- 'a'
 ----
 
-In ES6, you can combine spread with array destructuring. The following piece of code is similar to the one above, except we're using a single line of code, and that single line is more descriptive of what we're doing that repeateadly calling `list.shift()` in the previous example.
+In ES6, you can combine spread with array destructuring. The following piece of code is similar to the preceding one, except we're using a single line of code, and that single line is more descriptive of what we're doing than repeateadly calling `list.shift()` in the previous example.
 
 [source,javascript]
 ----
@@ -899,7 +905,7 @@ console.log(other)
 Using the spread operator you can focus on implementing the functionality you need while the language stays out of the way. Improving expressiveness and decreasing time spent working around language limitations is a common pattern we can observe in ES6 features.
 ****
 
-Before ES6, whenever you had a dynamic list of arguments that need to be applied to a function call, you'd use `.apply`. This is inelegant because `.apply` also takes a context for `this` which, in this scenario, you don't want to concern yourself with.
+Before ES6, whenever you had a dynamic list of arguments that needed to be applied to a function call, you'd use `.apply`. This is inelegant because `.apply` also takes a context for `this`, which, in this scenario, you don't want to concern yourself with.
 
 [source,javascript]
 ----
@@ -949,7 +955,7 @@ The following table summarizes the use cases we've discussed for the spread oper
 
 [options="header"]
 |=======
-|Use Case|ES5|ES6
+|Use case|ES5|ES6
 |Concatenation|`[1, 2].concat(more)`|`[1, 2, ...more]`
 |Push an array onto list|`list.push.apply(list, items)`|`list.push(...items)`
 |Destructuring|`a = list[0], other = list.slice(1)` | `[a, ...other] = list`
@@ -966,7 +972,7 @@ Template literals are a vast improvement upon regular JavaScript strings. Instea
 var text = `This is my first template literal`
 ----
 
-Given that template literals are delimited by backticks, you're now able to declare strings with both `'` and `"` quotation marks in them without having to escape either, as shown below.
+Given that template literals are delimited by backticks, you're now able to declare strings with both `'` and `"` quotation marks in them without having to escape either, as shown here.
 
 [source,javascript]
 ----
@@ -987,7 +993,7 @@ console.log(text)
 // <- 'Hello, Shannon!'
 ----
 
-We've already established that you can use any JavaScript expressions, and not just variables. You can think of each expression in a template literal as defining a variable before the template runs, and then concatenating those value with the rest of the string. However, the code becomes easier to maintain because it doesn't involve manually concatenating strings and JavaScript expressions. The variables you use in those expressions, the functions you call, and so on, should all be available to the current scope.
+We've already established that you can use any JavaScript expressions, and not just variables. You can think of each expression in a template literal as defining a variable before the template runs, and then concatenating each variable with the rest of the string. However, the code becomes easier to maintain because it doesn't involve manually concatenating strings and JavaScript expressions. The variables you use in those expressions, the functions you call, and so on, should all be available to the current scope.
 
 It will be up to your coding style guides to decide how much logic you want to cram into the interpolation expressions. The following code snippet, for example, instantiates a `Date` object and formats it into a human-readable date inside a template literal.
 
@@ -1009,15 +1015,15 @@ You could even nest template literals, as they are also valid JavaScript express
 
 [source,javascript]
 ----
-`This a template literal ${ `with another ${ 'one' } embedded inside it` }`
-// <- 'This a template literal with another one embedded inside it'
+`This template literal ${ `is ${ 'nested' }` }!`
+// <- 'This template literal is nested!'
 ----
 
 Another perk of template literals is their multiline string representation support.
 
 ==== Multiline Template Literals
 
-Before template literals, if you wanted to represent strings in multiple lines of JavaScript, you had to resort to escaping, concatenation, arrays, or even ellaborate hacks using comments. The following snippet summarizes some of the most common ways multiline string representations prior to ES6.
+Before template literals, if you wanted to represent strings in multiple lines of JavaScript, you had to resort to escaping, concatenation, arrays, or even elaborate hacks using comments. The following snippet summarizes some of the most common multiline string representations prior to ES6.
 
 [source,javascript]
 ----
@@ -1038,7 +1044,7 @@ var joined = [
 ].join('\n')
 ----
 
-Under ES6, you could use backticks instead. Template literals support multiline strings by default. Note how there's no `\n` escapes, no concatenation, and no arrays involved.
+Under ES6, you could use backticks instead. Template literals support multiline strings by default. Note how there are no `\n` escapes, no concatenation, and no arrays involved.
 
 [source,javascript]
 ----
@@ -1074,7 +1080,7 @@ var html = `<article>
 </article>`
 ----
 
-The template we've just prepared would produce output like what's shown in the following snippet of code. Note how spacing was preservedfootnoteref:[multi-line-indentation,When using multi-line template literals, spacing isn't preserved automatically. However, in many cases we can provide just enough indentation to make it work. Be wary of indented code blocks which may result in undesired indentation due to our code block being nested.], and how `<li>` tags are properly indented thanks for how we joined them together using a few spaces.
+The template we've just prepared would produce output like what's shown in the following snippet of code. Note how spacing was preserved,footnoteref:[multi-line-indentation,When using multiline template literals, spacing isn't preserved automatically. However, in many cases we can provide just enough indentation to make it work. Be wary of indented code blocks that may result in undesired indentation due to our code block being nested.] and how `<li>` tags are properly indented thanks to how we joined them together using a few spaces.
 
 [source,html]
 ----
@@ -1093,7 +1099,7 @@ The template we've just prepared would produce output like what's shown in the f
 </article>
 ----
 
-A downside when it comes to multi-line template literals is indentation. The following example shows a typically indented piece of code with a template literal contained in a function. While we may have expected no indentation, the string is has four spaces of indentation.
+A downside when it comes to multiline template literals is indentation. The following example shows a typically indented piece of code with a template literal contained in a function. While we may have expected no indentation, the string is has four spaces of indentation.
 
 [source,javascript]
 ----
@@ -1127,20 +1133,20 @@ Sometimes, it might be a good idea to pre-process the results of interpolated ex
 
 ==== Tagged Templates
 
-By default, JavaScript interprets `\` as an escape character with special meaning. For example, `\n` is interpreted as a newline, `\u00f1` is interpreted as `ñ`, etcetera. You could avoid these rules using the `String.raw` tagged template. The next snippet shows a template literal using `String.raw` which prevents `\n` from being interpreted as a newline.
+By default, JavaScript interprets `\` as an escape character with special meaning. For example, `\n` is interpreted as a newline, `\u00f1` is interpreted as `ñ`, etc. You could avoid these rules using the `String.raw` tagged template. The next snippet shows a template literal using `String.raw`, which prevents `\n` from being interpreted as a newline.
 
 [source,javascript]
 ----
-var text = String.raw`The following character "\n" won't result in a new line.
-It'll be escaped.`
+var text = String.raw`"\n" is taken literally.
+It'll be escaped instead of interpreted.`
 console.log(text)
-// The following character "\n" won't result in a new line.
-// It'll be escaped.
+// "\n" is taken literally.
+// It'll be escaped instead of interpreted.
 ----
 
 The `String.raw` prefix we've added to our template literal is a tagged template. It's used to parse the template. Tagged templates receive a parameter with an array containing the static parts of the template, as well as the result of evaluating each expression, each in its own parameter.
 
-As an example, consider how the tagged template literal in the next code snippet.
+As an example, consider the tagged template literal in the next code snippet.
 
 [source,javascript]
 ----
@@ -1151,10 +1157,14 @@ That tagged template expression would, in practice, be translated into the follo
 
 [source,javascript]
 ----
-tag(['Hello, ', '. I am ', ' to meet you!'], 'Maurice', 'thrilled')
+tag(
+  ['Hello, ', '. I am ', ' to meet you!'],
+  'Maurice',
+  'thrilled'
+)
 ----
 
-The template is built by taking each part of the template and placing one of the expressions next to it, until there's no more parts of the template left. It might be hard to interpret the argument list without looking at a potential implementation of the default template literal `tag`, so let's do that.
+The resulting string is built by taking each part of the template and placing one of the expressions next to it, until there are no more parts of the template left. It might be hard to interpret the argument list without looking at a potential implementation of the default template literal `tag`, so let's do that.
 
 The following snippet of code shows a possible implementation of the default `tag`. It provides the same functionality as a template literal does when a tagged template isn't explicitly provided. It reduces the `parts` array into a single value, the result of evaluating the template literal. The result is initialized with the first `part`, and then each other `part` of the template is preceded by one of the `values`. We've used the rest parameter syntax for `...values` in order to make it easier to grab the result of evaluating each expression in the template. We're using an arrow function with an implicit `return` statement, given that its expression is relatively simple.
 
@@ -1183,39 +1193,38 @@ Multiple use cases apply to tagged templates. One possible use case might be to 
 [source,javascript]
 ----
 function upper(parts, ...values) {
-  return parts.reduce(
-    (all, part, index) => all + values[index - 1].toUpperCase() + part
+  return parts.reduce((all, part, index) =>
+  all + values[index - 1].toUpperCase() + part
   )
 }
 var name = 'Maurice'
 var emotion = 'thrilled'
-var text = upper`Hello, ${ name }. I am ${ emotion } to meet you!`
-console.log(text)
+upper`Hello, ${ name }. I am ${ emotion } to meet you!`
 // <- 'Hello MAURICE, I am THRILLED to meet you!'
 ----
 
-A decidedly more useful use case would be to sanitize expressions interpolated into your templates, automatically, using a tagged template. Given a template where all expressions are considered user-input, we could use a hypothetical `sanitize` library to remove HTML tags and similar hazards, preventing cross-site scripting (XSS) attacks where users might inject malicious HTML into our websites.
+A decidedly more useful use case would be to sanitize expressions interpolated into your templates, automatically, using a tagged template. Given a template where all expressions are considered user input, we could use a hypothetical `sanitize` library to remove HTML tags and similar hazards, preventing cross-site scripting (XSS) attacks where users might inject malicious HTML into our websites.
 
 [source,javascript]
 ----
 function sanitized(parts, ...values) {
-  return parts.reduce(
-    (all, part, index) => all + sanitize(values[index - 1]) + part
+  return parts.reduce((all, part, index) =>
+  all + sanitize(values[index - 1]) + part
   )
 }
-var comment = 'A malicious comment<iframe src="http://evil.corp"></iframe>'
+var comment = 'Evil comment<iframe src="http://evil.corp"></iframe>'
 var html = sanitized`<div>${ comment }</div>`
 console.log(html)
-// <- '<div>A malicious comment</div>'
+// <- '<div>Evil comment</div>'
 ----
 
 Phew, that malicious `<iframe>` almost got us. Rounding out ES6 syntax changes, we have the `let` and `const` statements.
 
-=== Let and Const Statements
+=== let and const Statements
 
 The `let` statement is one of the most well-known features in ES6. It works like a `var` statement, but it has different scoping rules.
 
-JavaScript has always had a complicated ruleset when it comes to scoping, driving many programmers crazy when they were first trying to figure out how variables work in JavaScript. Eventually, you discover hoisting, and JavaScript starts making a bit more sense to you. Hoisting means that variables get pulled from anywhere they were declared in user code to the top of their scope. For example, see the code below.
+JavaScript has always had a complicated ruleset when it comes to scoping, driving many programmers crazy when they were first trying to figure out how variables work in JavaScript. Eventually, you discover hoisting, and JavaScript starts making a bit more sense to you. Hoisting means that variables get pulled from anywhere they were declared in user code to the top of their scope. For example, see the following code.
 
 [source,javascript]
 ----
@@ -1246,7 +1255,7 @@ function isItTwo(value) {
 
 Whether we like it or not, hoisting is more confusing than having block-scoped variables would be. Block scoping works on the curly braces level, rather than the function level.
 
-==== Block Scoping and Let Statements
+==== Block Scoping and let Statements
 
 Instead of having to declare a new `function` if we want a deeper scoping level, block scoping allows you to just leverage existing code branches like those in `if`, `for`, or `while` statements; you could also create new `{}` blocks arbitrarily. As you may or may not know, the JavaScript language allows us to create an indiscriminate number of blocks, just because we want to.
 
@@ -1257,14 +1266,14 @@ console.log(deep)
 // <- 'This is available from outer scope.'
 ----
 
-With `var`, because of lexical scoping, one could still access the `deep` variable from outside those blocks, and not get an error. Sometimes it can be very useful to get errors in these situations. Particularly if one or more of the following is true.
+With `var`, because of lexical scoping, one could still access the `deep` variable from outside those blocks, and not get an error. Sometimes it can be very useful to get errors in these situations, particularly if one or more of the following is trueL:
 
 - Accessing the inner variable breaks some sort of encapsulation principle in our code
 - The inner variable doesn't belong in the outer scope at all
 - The block in question has many siblings that would also want to use the same variable name
 - One of the parent blocks already has a variable with the name we need, but the name is still appropriate to use in the inner block
 
-The `let` statement is an alternative to `var`. It follows block scoping rules instead of the default lexical scoping rules. With `var`, the only way of getting a deeper scope is to create a nested function, but with `let` you can just open another pair of curly braces. This means you don't need entirely new functions to get a new scope: a simple `{}` block will do.
+The `let` statement is an alternative to `var`. It follows block scoping rules instead of the default lexical scoping rules. With `var`, the only way of getting a deeper scope is to create a nested function, but with `let` you can just open another pair of curly braces. This means you don't need entirely new functions to get a new scope; a simple `{}` block will do.
 
 [source,javascript]
 ----
@@ -1280,7 +1289,7 @@ let topmost = {}
 // attempts to access innermost here would throw
 ----
 
-One useful aspect of `let` statements is that you can use them when declaring a `for` loop, and variables will be scoped to the contents of the loop, as shown below.
+One useful aspect of `let` statements is that you can use them when declaring a `for` loop, and variables will be scoped to the contents of the loop, as shown next.
 
 [source,javascript]
 ----
@@ -1295,7 +1304,7 @@ console.log(i)
 
 Given `let` variables declared in a loop are scoped to each step in the loop, the bindings would work as expected in combination with an asynchronous function call, as opposed to what we're used to with `var`. Let's look at concrete examples.
 
-First, we'll look at the typical example of how `var` scoping works. The `i` binding is scoped to the `printNumbers` function, and its value increases all the way to `10` as each timeout callback is scheduled. By the time each callbacks run -- one every 100 milliseconds -- `i` has a value of `10` and thus that's what's printed every single time.
+First, we'll look at the typical example of how `var` scoping works. The `i` binding is scoped to the `printNumbers` function, and its value increases all the way to `10` as each timeout callback is scheduled. By the time each callback runs--one every 100 milliseconds--`i` has a value of `10` and thus that's what's printed every single time.
 
 [source,javascript]
 ----
@@ -1323,7 +1332,7 @@ function printNumbers() {
 printNumbers()
 ----
 
-One more thing of note about `let` is a concept called the "Temporal Dead Zone".
+One more thing of note about `let` is a concept called the "Temporal Dead Zone."
 
 ==== Temporal Dead Zone
 
@@ -1390,7 +1399,7 @@ The only tricky part to remember is that it's okay to declare functions that acc
 
 The whole point of the TDZ is to make it easier to catch errors where accessing a variable before it's declared in user code leads to unexpected behavior. This happened a lot before ES6 due both to hoisting and poor coding conventions. In ES6 it's easier to avoid. Keep in mind that hoisting still applies for `let` as well. That means variables will be created when we enter the scope, and the TDZ will be born, but they will be inaccessible until code execution hits the place where the variable was actually declared, at which point we leave the TDZ and are allowed to access the variable.
 
-We made it through the temporal dead zone! It's now time to cover `const`, a similar statement to `let` but with a few major differences.
+We made it through the Temporal Dead Zone! It's now time to cover `const`, a similar statement to `let` but with a few major differences.
 
 ==== Const Statements
 
@@ -1430,7 +1439,7 @@ console.log(people)
 
 Note that creating a `const` variable doesn't mean that the assigned value becomes immutable. This is a common source of confusion, and it is strongly recommended that you pay attention when reading the following warning.
 
-.Variables declared using const are not immutable.
+.Variables Declared Using const Are Not Immutable
 [WARNING]
 ====
 Using `const` only means that the variable will always have a reference to the same object or primitive value, because that reference can't change. The reference itself is immutable, but the value held by the variable does not become immutable.
@@ -1460,19 +1469,22 @@ If our goal was to make the value immutable, then we'd have to use a function su
 
 [source,javascript]
 ----
-const frozen = Object.freeze(['Ice', 'Icicle', 'Ice cube'])
+const frozen = Object.freeze(
+  ['Ice', 'Icicle', 'Ice cube']
+)
 frozen.push('Water')
-// Uncaught TypeError: Can't add property 3, object is not extensible
+// Uncaught TypeError: Can't add property 3
+// object is not extensible
 ----
 ====
 
 Let's take a moment to discuss the merits of `const` and `let`.
 
-==== Merits of Const and Let
+==== Merits of const and let
 
 New features should never be used for the sake of using new features. ES6 features should be used where they genuinely improve code readability and maintainability. The `let` statement is able to, in many cases, simplify pieces of code where you'd otherwise declare `var` statements at the top of a function just so that hoisting doesn't produce unexpected results. Using the `let` statement you'd be able to place your declarations at the top of a code block, instead of the top of the whole function, reducing the latency in mental trips to the top of the scope.
 
-Using the `const` statement is a great way to prevent accidents. The following piece of code is an plausably error prone scenario where we pass of a reference to an `items` variable to a `checklist` function which then returns a `todo` API that in turn interacts with said `items` reference. When the `items` variable is changed to reference another list of items, we're in for a world of hurt: the `todo` API still works with the value `items` used to have, but `items` is referencing something else now.
+Using the `const` statement is a great way to prevent accidents. The following piece of code is a plausibly error-prone scenario where we pass of a reference to an `items` variable to a `checklist` function, which then returns a `todo` API that in turn interacts with said `items` reference. When the `items` variable is changed to reference another list of items, we're in for a world of hurt--the `todo` API still works with the value `items` used to have, but `items` is referencing something else now.
 
 [source,javascript]
 ----
@@ -1496,7 +1508,7 @@ This type of problem is hard to debug because it might take a while until you fi
 
 A similar benefit of using the `const` statement is its ability to visually identify variables that aren't reassigned. The `const` cue signals that the variable binding is read-only and thus we have one less thing to worry about when reading a piece of code.
 
-If we choose to default to using `const` and use `let` for variables that need to be reassigned, all variables will follow the same scoping rules, which makes code easier to reason about. The reason why `const` is sometimes proposed as the "default" variable declaration type, is that it's the one that does the least: `const` prevents reassignment, follows block scoping, and the declared binding can't be accessed before the declaration statement is executed. The `let` statement allows reassignment, but behaves like `const`, so it naturally follows to choose `let` when we're in need for a reassignable variable.
+If we choose to default to using `const` and use `let` for variables that need to be reassigned, all variables will follow the same scoping rules, which makes code easier to reason about. The reason why `const` is sometimes proposed as the "default" variable declaration type is that it's the one that does the least: `const` prevents reassignment, follows block scoping, and the declared binding can't be accessed before the declaration statement is executed. The `let` statement allows reassignment, but behaves like `const`, so it naturally follows to choose `let` when we're in need of a reassignable variable.
 
 On the counterside, `var` is a more complex declaration because it is hard to use in code branches due to function scoping rules, it allows reassignment, and it can be accessed before the declaration statement is reached. The `var` statement is inferior to `const` and `let`, which do less, and is thus less prominent in modern JavaScript codebases.
 
