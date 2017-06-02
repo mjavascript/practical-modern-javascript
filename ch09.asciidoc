@@ -23,7 +23,7 @@ You know all of this just by reading the `const` declaration statement and witho
 
 Constraints such as those offered by `let` and `const` are a powerful way of making code easier to understand. Try to accrue as many of these constraints as possible in the code you write. The more declarative constraints that limit what a piece of code could mean, the easier and faster it is for humans to read, parse, and understand a piece of code in the future.
 
-Granted, there's more rules to a `const` declaration than to a `var` declaration: block-scoped, TDZ, assign at declaration, no reassignment. Whereas `var` statements only signal function scoping. Rule-counting, however, doesn't offer a lot of insight. It is better to weigh these rules in terms of complexity: does the rule add or subtract complexity? In the case of `const`, block scoping means a narrower scope than function scoping, TDZ means that we don't need to scan the scope backwards from the declaration in order to spot usage before declaration, and assignment rules mean that the binding will always preserve the same reference.
+Granted, there are more rules to a `const` declaration than to a `var` declaration: block-scoped, TDZ, assign at declaration, no reassignment, whereas `var` statements only signal function scoping. Rule-counting, however, doesn't offer a lot of insight. It is better to weigh these rules in terms of complexity: does the rule add or subtract complexity? In the case of `const`, block scoping means a narrower scope than function scoping, TDZ means that we don't need to scan the scope backward from the declaration in order to spot usage before declaration, and assignment rules mean that the binding will always preserve the same reference.
 
 The more constrained statements are, the simpler a piece of code becomes. As we add constraints to what a statement might mean, code becomes less unpredictable. This is one of the reasons why statically typed programs are, generally speaking, a bit easier to read than their dynamically typed counterparts. Static typing places a big constraint on the program writer, but it also places a big constraint on how the program can be interpreted, making its code easier to understand.
 
@@ -72,7 +72,7 @@ if (value >= 1024) {
 
 If we were looking to make `prettySize` easier to extend with new units, we could consider implementing a `toLargestUnit` function that computes the `unit` and `value` for any given `input` and its current unit. We could then consume `toLargestUnit` in `prettySize` to return the formatted string.
 
-The following code snippet implements such a function. It relies on a list of supported `units` instead of using a new branch for each unit. When the input `value` is at least `1024` and there's larger units, we divide the input by `1024` and move to the next unit. Then we call `toLargestUnit` with the updated values, which will continue recursively reducing the `value` until it's small enough or we reach the largest unit.
+The following code snippet implements such a function. It relies on a list of supported `units` instead of using a new branch for each unit. When the input `value` is at least `1024` and there are larger units, we divide the input by `1024` and move to the next unit. Then we call `toLargestUnit` with the updated values, which will continue recursively reducing the `value` until it's small enough or we reach the largest unit.
 
 [source,javascript]
 ----
@@ -184,9 +184,9 @@ function getCompletionText(progress) {
 
 === Template Literals
 
-For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multi-line string was also a hassle, as was escaping single or double quotes -- depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
+For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multiline string was also a hassle, as was escaping single or double quotes -- depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
 
-With a template literal, you can use expression interpolation, which enables you to inline variables, function calls or any other arbitrary JavaScript expressions in a string without relying on concatenation.
+With a template literal, you can use expression interpolation, which enables you to inline variables, function calls, or any other arbitrary JavaScript expressions in a string without relying on concatenation.
 
 [source,javascript]
 ----
@@ -194,7 +194,7 @@ With a template literal, you can use expression interpolation, which enables you
 `Hello, ${ name }!` // after
 ----
 
-Multi-line strings as the one shown in the following snippet involve one or more of array concatenation, string concatenation, explicit `\n` line feeds. The code is a typical example for writing an HTML string in the pre-ES6 era.
+Multiline strings such as the one shown in the following snippet involve one or more of array concatenation, string concatenation, or explicit `\n` line feeds. The code is a typical example for writing an HTML string in the pre-ES6 era.
 
 [source,javascript]
 ----
@@ -207,7 +207,7 @@ Multi-line strings as the one shown in the following snippet involve one or more
 '</div>'
 ----
 
-Using template literals, we can avoid all of the extra quotes and concatenation, focusing on the content. The interpolation certainly helps in these kinds of templates, making multi-line strings one of the most useful aspects of template literals.
+Using template literals, we can avoid all of the extra quotes and concatenation, focusing on the content. The interpolation certainly helps in these kinds of templates, making multiline strings one of the most useful aspects of template literals.
 
 [source,javascript]
 ----
@@ -229,9 +229,9 @@ When it comes to quotes, `'` and `"` are more likely to be necessary when writin
 `Alfred's cat suit is "slick".`
 ----
 
-As we've discovered in <<ecmascript6-essentials>>, there's also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multi-line support, expression interpolation, or reduced escaping.
+As we've discovered in <<ecmascript6-essentials>>, there are also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multiline support, expression interpolation, or reduced escaping.
 
-The combination of all of these features, warrants considering template literals as the default string flavor over single or double quoted strings. There's a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
+The combination of all of these features warrants considering template literals as the default string flavor over single- or double-quoted strings. There are a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
 
 Before we begin, let's set a starting point everyone agrees on: using template literals when an expression has to be interpolated in a string is better than using quoted string concatenation.
 
@@ -280,7 +280,7 @@ When it comes to object keys, we're out of luck. Attempting to use a template li
 const alfred = { `suit kind`: `cat` }
 ----
 
-Object property keys accept value types which are then casted into plain strings, but template literals aren't value types, and thus it's not possible to use them as property keys.
+Object property keys accept value types, which are then cast into plain strings, but template literals aren't value types, and thus it's not possible to use them as property keys.
 
 As you might recall from <<ecmascript6-essentials>>, ES6 introduces computed property names, as seen in the following code snippet. In a computed property key we can use any expression we want to produce the desired property key, including template literals.
 
@@ -289,7 +289,7 @@ As you might recall from <<ecmascript6-essentials>>, ES6 introduces computed pro
 const alfred = { [`suit kind`]: `cat` }
 ----
 
-The above is far from ideal due to its verbosity, though, and in these cases it's best to use regular quoted strings.
+The preceding is far from ideal due to its verbosity, though, and in these cases it's best to use regular quoted strings.
 
 As always, the rule is to never take rules such as "template literals are the best option" too literally, and be open to use your best judgement as necessary and break the rules a little bit, if they don't quite fit your use cases, conventions, or view of how an application is best structured. Rules are often presented as such, but what may be a rule to someone need not be a rule to everyone. This is the main reason why modern linters make every rule optional: the rules we use should be enforced, but not every rule may fit every project.
 
@@ -312,7 +312,7 @@ Attempts to import a module using template literals will also result in a syntax
 import { SayHello } from `./World`
 ----
 
-Strict mode directives have to be single or double quoted strings. As of this writing, there's no plan to allow template literals for `'use strict'` directives. The following piece of code does not result in a syntax error, but it also does not enable strict mode. This is the biggest caveat when heavily using template literals.
+Strict mode directives have to be single- or double-quoted strings. As of this writing, there's no plan to allow template literals for `'use strict'` directives. The following piece of code does not result in a syntax error, but it also does not enable strict mode. This is the biggest caveat when heavily using template literals.
 
 [source,javascript]
 ----
@@ -321,9 +321,9 @@ Strict mode directives have to be single or double quoted strings. As of this wr
 `use strict` // nothing happens
 ----
 
-Lastly, it could be argued that turning an existing codebase from single quoted strings to template literals would be error prone and a waste of time that could be otherwise used to develop features or fix bugs.
+Lastly, it could be argued that turning an existing codebase from single-quoted strings to template literals would be error prone and a waste of time that could be otherwise used to develop features or fix bugs.
 
-Fortunately, we have `eslint` at our disposal, as discussed in <<ecmascript-and-the-future-of-javascript>>. To switch our codebase to backticks by default, we can set up an `.eslintrc.json` configuration similar to the one in the following piece of code. Note how we turn the `quotes` rule into an error unless the code uses backticks.
+Fortunately, we have `eslint` at our disposal, as discussed in <<ecmascript-and-the-future-of-javascript>>. To switch our codebase to backticks by default, we can set up an _.eslintrc.json_ configuration similar to the one in the following piece of code. Note how we turn the `quotes` rule into an error unless the code uses backticks.
 
 [source,json]
 ----
@@ -338,7 +338,7 @@ Fortunately, we have `eslint` at our disposal, as discussed in <<ecmascript-and-
 }
 ----
 
-With that in place, we can add a `lint` script to our `package.json`, like the one in the next snippet. The `--fix` flag ensures that any style errors found by the linter, such as using single quotes over backticks, are autocorrected.
+With that in place, we can add a `lint` script to our _package.json_, like the one in the next snippet. The `--fix` flag ensures that any style errors found by the linter, such as using single quotes over backticks, are autocorrected.
 
 [source,json]
 ----
@@ -372,7 +372,7 @@ const tomato = {
 }
 ----
 
-This feature becomes particularly useful in the context of functions and information hiding. In the following example we leverage object destructuring for a few pieces of information from a grocery and return a model that also includes the total price for the items.
+This feature becomes particularly useful in the context of functions and information hiding. In the following example we leverage object destructuring for a few pieces of information from a grocery item and return a model that also includes the total price for the items.
 
 [source,javascript]
 ----
@@ -434,7 +434,8 @@ Destructuring can also help avoid repeating references to the host object when i
 
 [source,javascript]
 ----
-const summary = `${ model.units }x ${ model.name } ($${ model.unitPrice }) = $${ model.totalPrice }`
+const summary = `${ model.units }x ${ model.name }
+($${ model.unitPrice }) = $${ model.totalPrice }`
 // <- '4x Tomato ($1.25) = $5'
 ----
 
@@ -443,10 +444,11 @@ However, there's a trade-off here: we avoid repeating the host object when refer
 [source,javascript]
 ----
 const { name, units, unitPrice, totalPrice } = model
-const summary = `${ units }x ${ name } ($${ unitPrice }) = $${ totalPrice }`
+const summary = `${ units }x ${ name } ($${ unitPrice }) =
+$${ totalPrice }`
 ----
 
-Whenever there's several references to the same property, it becomes clear that we should avoid repeating references to the host object, by destructuring it.
+Whenever there are several references to the same property, it becomes clear that we should avoid repeating references to the host object, by destructuring it.
 
 When there's a single reference to a single property, it's clear we should avoid destructuring, as it mostly generates noise.
 
@@ -467,7 +469,8 @@ When we have two properties to destructure (or two references to one property), 
 
 [source,javascript]
 ----
-const summary = `This is a summary for ${ model.units }x ${ model.name }`
+const summary = `This is a summary for ${ model.units }x
+${ model.name }`
 ----
 
 Destructuring does help in this case. It reduces the character count in the `summary` declaration statement, and it explicitly announces the `model` properties we're going to be using.
@@ -536,7 +539,7 @@ administrators.concat(moderators)
 [...administrators, ...moderators, bob]
 ----
 
-Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in <<extending_objects_with_object_assign>> allows us to merge objects onto a new object. Consider the following snippet where we programatically create a new object comprised of base `defaults`, user-provided `options`, and some important override property that prevails over previous properties.
+Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in <<extending_objects_with_object_assign>> allows us to merge objects onto a new object. Consider the following snippet where we programmatically create a new object comprised of base `defaults`, user-provided `options`, and some important override property that prevails over previous properties.
 
 [source,javascript]
 ----
@@ -615,7 +618,7 @@ One way to achieve that with plain JavaScript would be to destructure the `name`
 const { name, ...metadata } = person
 ----
 
-In the following bit of code, we map a list of people to a list of `person` models, excluding personally identifiable information such as their name and social security number, while placing everything else in the `person` rest parameter.
+In the following bit of code, we map a list of people to a list of `person` models, excluding personally identifiable information such as their name and Social Security number, while placing everything else in the `person` rest parameter.
 
 [source,javascript]
 ----
@@ -656,7 +659,7 @@ var printSum = function (x, y) {
 var sum = function (x, y) {
   return x + y
 }
-// a `printSum()` statement would fail here: print is not defined
+// a `printSum()` statement would fail: print is not defined
 var print = function (message) {
   console.log(`printing: ${ message }`)
 }
@@ -698,9 +701,9 @@ console.log(sum())
 // <- ReferenceError: sum is not defined
 ----
 
-Arrow functions, introduced in <<arrow_functions>> of this book, are similar to function expressions. The syntax is made shorter by dropping the `function` keyword. In arrow functions, parenthesis around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
+Arrow functions, introduced in <<arrow_functions>> on page xx, are similar to function expressions. The syntax is made shorter by dropping the `function` keyword. In arrow functions, parentheses around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
 
-The following snippet shows an arrow function explicitly returning an expression in a block statement, one that implicitly returns the expression, one that drops the parenthesis around its only parameter, and one that uses a block statement but doesn't return a value.
+The following snippet shows an arrow function explicitly returning an expression in a block statement, one that implicitly returns the expression, one that drops the parentheses around its only parameter, and one that uses a block statement but doesn't return a value.
 
 [source,javascript]
 ----
@@ -720,7 +723,7 @@ const makeSlice = (discarded, ...items) => items
 
 Implicitly returning an object literal is a bit tricky because they're hard to tell apart from block statements, which are also wrapped in curly braces. We'll have to add parenthesis around our object literal, turning it into an expression that evaluates into the object. This bit of indirection is just enough to help us disambiguate and tell JavaScript parsers that they're dealing with an object literal.
 
-Consider the following example, where we implicitly return an object expression. Without the parenthesis, the parser would interpret our code as a block statement containing a label and the literal expression `'Nico'`.
+Consider the following example, where we implicitly return an object expression. Without the parentheses, the parser would interpret our code as a block statement containing a label and the literal expression `'Nico'`.
 
 [source,javascript]
 ----
@@ -729,7 +732,7 @@ const getPerson = name => ({
 })
 ----
 
-Explicitly naming arrow functions isn't possible, due to their syntax. However, if an arrow function expression is declared in the right hand side of a variable or property declaration, then its name becomes the name for the arrow function.
+Explicitly naming arrow functions isn't possible, due to their syntax. However, if an arrow function expression is declared in the righthand side of a variable or property declaration, then its name becomes the name for the arrow function.
 
 Arrow function expressions need to be assigned before use, and thus suffer from the same ordering ailments as regular function expressions. In addition, since they can't be named, they must be bound to a variable for us to reference them in recursion scenarios.
 
@@ -739,7 +742,7 @@ That said, arrow functions are a terse and powerful way of declaring functions i
 
 Arrow functions are invaluable in cases where we would've otherwise declared an anonymous function expression, such as in test cases, functions passed to `new Promise()` and `setTimeout`, or array mapping functions.
 
-Consider the following example, where we use a non-blocking `wait` promise to print a statement after five seconds. The `wait` function takes a `delay` in milliseconds and returns a `Promise` which resolves after waiting for the specified time with `setTimeout`.
+Consider the following example, where we use a nonblocking `wait` promise to print a statement after five seconds. The `wait` function takes a `delay` in milliseconds and returns a `Promise`, which resolves after waiting for the specified time with `setTimeout`.
 
 [source,javascript]
 ----
@@ -756,9 +759,9 @@ function wait(delay) {
 }
 ----
 
-When switching to arrow functions, we should stick with the top level `wait` function declaration so that we don't need to hoist it to the top of our scope. We can turn every other function into arrows to improve readability, thus removing many `function` keywords which got in the way of interpreting what those functions do.
+When switching to arrow functions, we should stick with the top-level `wait` function declaration so that we don't need to hoist it to the top of our scope. We can turn every other function into arrows to improve readability, thus removing many `function` keywords that got in the way of interpreting what those functions do.
 
-The next snippet shows how that code would look like using arrow functions. With all the keywords out of the way after refactoring, it's easier to understand the relationship between the `delay` parameter of `wait` and the second argument to `setTimeout`.
+The next snippet shows what that code would look like using arrow functions. With all the keywords out of the way after refactoring, it's easier to understand the relationship between the `delay` parameter of `wait` and the second argument to `setTimeout`.
 
 [source,javascript]
 ----
@@ -773,7 +776,7 @@ function wait(delay) {
 }
 ----
 
-Another large upside in using arrow function lies in their lexical scoping, where they don't modify the meaning of `this` or `arguments`. If we find ourselves copying `this` to a temporary variable -- typically named `self`, `context`, or `_this` -- we may want to use an arrow function for the inner bit of code instead. Let's take a look at an example of this.
+Another large upside in using arrow functions lies in their lexical scoping, where they don't modify the meaning of `this` or `arguments`. If we find ourselves copying `this` to a temporary variable -- typically named `self`, `context`, or `_this` -- we may want to use an arrow function for the inner bit of code instead. Let's take a look at an example of this.
 
 [source,javascript]
 ----
@@ -782,7 +785,7 @@ const pistol = {
   trigger() {
     const self = this
     setTimeout(function () {
-      console.log(`Fired pistol with caliber of ${ self.caliber }`)
+      console.log(`Fired caliber ${ self.caliber } pistol`)
     }, 1000)
   }
 }
@@ -797,14 +800,14 @@ const pistol = {
   caliber: 50,
   trigger() {
     setTimeout(() => {
-      console.log(`Fired pistol with caliber of ${ this.caliber }`)
+      console.log(`Fired caliber ${ self.caliber } pistol`)
     }, 1000)
   }
 }
 pistol.trigger()
 ----
 
-As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, require several lines of code nor involve recursion, then consider an arrow function.
+As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, requires several lines of code, or involve recursion, then consider an arrow function.
 
 === Classes and Proxies
 
@@ -910,13 +913,13 @@ console.log(items.last)
 
 JavaScript classes are less verbose than their prototype-based equivalents. Class sugar is thus a most welcome improvement over raw prototypal inheritance. As for the merits of using JavaScript classes, it depends. Even though classes may be compelling to use due to their improved syntax, sugar alone doesn't instantly promote classes to a wider variety of use cases.
 
-Statically typed languages typically offer and enforce the use of classesfootnote:[An exception should be made for most functional programming languages.]. In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
+Statically typed languages typically offer and enforce the use of classes.footnote:[An exception should be made for most functional programming languages.] In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
 
-Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
+Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON, and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
 
-Proxies empower many previously unavailable use cases, but we need to tread lightly. Solutions which involve a `Proxy` object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
+Proxies empower many previously unavailable use cases, but we need to tread lightly. Solutions that involve a `Proxy` object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
 
-There may indeed be cases where using a `Proxy` is warranted, particularly when it comes to developer tooling meant for development environments, where a high degree of code introspection is desirable and complexity is hidden away in the developer tool's codebase. Using `Proxy` in application-level code bases is easily avoided, and leads to less enigmatic code.
+There may indeed be cases where using a `Proxy` is warranted, particularly when it comes to developer tooling meant for development environments, where a high degree of code introspection is desirable and complexity is hidden away in the developer tool's codebase. Using `Proxy` in application-level codebases is easily avoided, and leads to less enigmatic code.
 
 Readability hinges on code that has a clear purpose. Declarative code is readable: upon reading a piece of code, it becomes clear what it is intended to do. In contrast, using layers of indirection such as a `Proxy` on top of an object can result in highly complex access rules that may be hard to infer when reading a piece of code. It's not that a solution involving a `Proxy` is impossible to understand, but the fact that more code needs to be read and carefully considered before we fully understand the nuances of how the proxy layer behaves.
 
@@ -931,13 +934,13 @@ When we prefer boring code, patterns flourish gradually and naturally. Once a pa
 [[asynchronous_code_flows]]
 === Asynchronous Code Flows
 
-In <<iteration-and-flow-control>> we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, promises, generators, async functions, and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
+In <<iteration-and-flow-control>> we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, promises, generators, async functions and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
 
 Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
 
-When it comes to callbacks, libraries like `async` can help reduce complexity when we have three or more related tasks that need to be executed asynchronouslyfootnote:[A popular flow control library. You can find async on GitHub: https://mjavascript.com/out/async-library.]. Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
+When it comes to callbacks, libraries like `async` can help reduce complexity when we have three or more related tasks that need to be executed asynchronously.footnote:[A popular flow control library. You can find async on GitHub: https://mjavascript.com/out/async-library.] Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
 
-Events are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Event don't lend themselves well to managing the complexity of asynchronous tasks, however.
+Events are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Events don't lend themselves well to managing the complexity of asynchronous tasks, however.
 
 The following example shows how convoluted our code could become if we wanted to handle asynchronous tasks using events. Half of the lines of code are spent on defining the code flow, and even then the flow is quite hard to understand. This means we probably chose the wrong tool for the job.
 
@@ -964,7 +967,7 @@ Promises were around for a long time, in user libraries, before TC39 decided to 
 
 Promises are a bit more expensive than callbacks in terms of commitment, because promise chains involve more promises, so they are hard to interleave with plain callbacks. At the same time, you don't want to interleave promises with callback-based code, because that leads to complex applications. For any given portion of code, it's important to pick one paradigm and stick with it. Relying on a single paradigm produces code that doesn't focus as much on the mechanics as it does on task processing.
 
-Committing to promises isn't inherently bad, however, but merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
+Committing to promises isn't inherently bad, however, but merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators, and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
 
 Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the language.
 
@@ -972,7 +975,7 @@ We could use iterators to lazily describe sequences that don't necessarily need 
 
 An iterator is a useful way of describing how an object is iterated to produce a sequence. When there isn't an object to describe, generators offer a way of describing standalone sequences. Implementing an iterator is the ideal way of describing how a `Movie` object should be iterated, perhaps using `Symbol.asyncIterator` and fetching information about each actor and their roles for every credited actor in a movie. Without the context of a `Movie` object, however, such an iterator would make more sense as a generator.
 
-Another case where generators are useful are infinite sequences, consider the following iterator, where we produce an infinite stream of integer numbers.
+Another case where generators are useful are infinite sequences. Consider the following iterator, where we produce an infinite stream of integer numbers.
 
 [source,javascript]
 ----
@@ -1001,7 +1004,7 @@ function* integers(value = 0) {
 
 Not only is the generator code shorter, but it's also far more readable. The fact that it produces an infinite sequence becomes immediately obvious due to the `while` loop. The iterable requires us to understand that the sequence is infinite because the code never returns an element with the `done: true` flag. Setting the seed `value` is more natural and doesn't involve wrapping the object in a function that receives the initial parameters.
 
-Promises were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows be hard. Async functions present an elegant solution to this problem, where we can describe the same promise based code using `await` expressions.
+Promises were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows. Async functions present an elegant solution to this problem, where we can describe the same promise-based code using `await` expressions.
 
 Consider the following piece of code.
 
@@ -1014,7 +1017,7 @@ Promise
   .then(x => x * 2)
 ----
 
-When we use an `await` expression, the expression on its right-hand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise -- coerced or otherwise -- has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
+When we use an `await` expression, the expression on its righthand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise -- coerced or otherwise -- has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
 
 [source,javascript]
 ----
@@ -1029,19 +1032,19 @@ async function calculate() {
 
 The beauty of `async`/`await` lies in the fact that it fixes the biggest problem with promises, where you can't easily mix synchronous code into your flows. At the same time, async functions let you use `try`/`catch`, a construct we are unable to leverage when using callbacks. Meanwhile, `async`/`await` manages to stay synergistic with promises by using them under the hood, always returning a `Promise` from every async function and coercing awaited expressions into promises. Moreover, async functions accomplish all of the above while turning asynchronous code into synchronous-looking code.
 
-While using `await` expressions are optimized towards reducing complexity in serial asynchronous code, it becomes hard to reason about concurrent asynchronous code flows when replacing promises with `async`/`await`. This can be mitigated by using `await Promise.all(tasks)` and firing those tasks concurrently before the `await` expression is reached. Given, however, that async functions don't optimize for this use case, reading this kind of code can be confusing, so this is something to look out for. If our code is highly concurrent, we might want to consider a callback based approach.
+While using `await` expressions optimizes toward reducing complexity in serial asynchronous code, it becomes hard to reason about concurrent asynchronous code flows when replacing promises with `async`/`await`. This can be mitigated by using `await Promise.all(tasks)` and firing those tasks concurrently before the `await` expression is reached. Given, however, that async functions don't optimize for this use case, reading this kind of code can be confusing, so this is something to look out for. If our code is highly concurrent, we might want to consider a callback-based approach.
 
 Once again, this leads us to critical thinking. New language features aren't always necessarily better, for all use cases. While sticking to conventions is important so that our code remains consistent and we don't spend most of our time deciding on how to better represent a small portion of a program, it is also important to have a fine balance.
 
 When we don't spend at least some of our time on figuring out what feature or flow style is the most appropriate for the code we're writing, we risk treating every problem as a nail because all we have is a hammer. Picking the right tool for the problem at hand is even more important than being a stickler for conventions and hard rules.
 
-=== Complexity Creep, Abstractions and Conventions
+=== Complexity Creep, Abstractions, and Conventions
 
 Picking the right abstractions is hard: we want to reduce complexity in our code flows by introducing complexity that's hidden away behind the constructs we use. Async functions borrow their foundation from generators. Generator objects are iterable. Async iterators use promises. Iterators are implemented using symbols. Promises use callbacks.
 
 Consistency is an important theme when it comes to maintainable code. An application might mostly use callbacks, or mostly use promises. Individually, both callbacks and promises can be used to reduce complexity in code flows. When mixing them together, however, we need to make sure we don't introduce context switching where developers reading different pieces of a codebase need to enter different mindsets to understand them.
 
-This is why conventions exist. A strong convention such as "use promises where possible" goes a long way towards augmenting consistency across a codebase. Conventions, more than anything are what drive readability and maintainability in a codebase. Code is, after all, a communication device used to convey a message. This message is not only relevant to the computers executing the code, but most importantly to developers reading the code, maintaining and improving the application over time.
+This is why conventions exist. A strong convention such as "use promises where possible" goes a long way toward augmenting consistency across a codebase. Conventions, more than anything, are what drive readability and maintainability in a codebase. Code is, after all, a communication device used to convey a message. This message is not only relevant to the computers executing the code, but most importantly to developers reading the code, maintaining and improving the application over time.
 
 Without strong conventions, communication breaks down and developers have a hard time understanding how a program works, ultimately leading to reduced productivity.
 
