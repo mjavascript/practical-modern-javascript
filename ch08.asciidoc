@@ -11,9 +11,9 @@ CommonJS (CJS) surfaced as an alternative to RequireJS, and it was swiftly popul
 
 === CommonJS
 
-Unlike other module formats where modules are declared programatically, in CommonJS every file is a module. CommonJS modules have an implicit local scope, while the `global` scope needs to be accessed explicitly. CommonJS modules can dynamically export a public interface consumers can interact with. CommonJS modules import their dependencies dynamically as well, resolving dependencies through `require` function calls. These `require` function calls are synchronous and return the interface exposed by required modules.
+Unlike other module formats where modules are declared programmatically, in CommonJS every file is a module. CommonJS modules have an implicit local scope, while the `global` scope needs to be accessed explicitly. CommonJS modules can dynamically export a public interface consumers can interact with. CommonJS modules import their dependencies dynamically as well, resolving dependencies through `require` function calls. These `require` function calls are synchronous and return the interface exposed by required modules.
 
-Interpreting the definition of a module format without looking at some code can be confusing. The following code snippet shows how a reusable CommonJS module file may look like. Both the `has` and `union` functions are local to our module's scope. Given that we've assigned `union` to `module.exports`, that'll be the public API for our module.
+Interpreting the definition of a module format without looking at some code can be confusing. The following code snippet shows what a reusable CommonJS module file may look like. Both the `has` and `union` functions are local to our module's scope. Given that we've assigned `union` to `module.exports`, that'll be the public API for our module.
 
 [source,javascript]
 ----
@@ -29,7 +29,7 @@ function union(list, item) {
 module.exports = union
 ----
 
-Suppose we take that snippet of code and save it as `union.js`. We can now consume `union.js` in another CommonJS module. Let's call that one `app.js`. In order to consume `union.js`, we call `require` passing in a relative path to the `union.js` file.
+Suppose we take that snippet of code and save it as _union.js_. We can now consume _union.js_ in another CommonJS module. Let's call that one _app.js_. In order to consume _union.js_, we call `require` passing in a relative path to the _union.js_ file.
 
 [source,javascript]
 ----
@@ -42,12 +42,12 @@ console.log(union([1, 2], 2))
 
 [WARNING]
 ====
-We can omit the file extension as long as it's `.js` or `.json`, but this is discouraged.
+We can omit the file extension as long as it's _.js_ or _.json_, but this is discouraged.
 
-While the file extension is optional for `require` statements and when using the `node` CLI, we should strongly consider getting into the habit of including it nevertheless. Browser implementations of ESM won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. You can learn more in the specification at: https://mjavascript.com/out/esm-integration.
+While the file extension is optional for `require` statements and when using the `node` CLI, we should strongly consider getting into the habit of including it nevertheless. Browser implementations of ESM won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. You can learn more in the specification at https://mjavascript.com/out/esm-integration.
 ====
 
-We could run `app.js` in its current state through the CLI for Node.js, `node`, as seen in the next snippet.
+We could run `_app.js_` in its current state through the CLI for Node.js, `node`, as seen in the next snippet.
 
 [source,shell]
 ----
@@ -58,10 +58,10 @@ We could run `app.js` in its current state through the CLI for Node.js, `node`, 
 
 [NOTE]
 ====
-You can download Node.js from their website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the `node` program in your terminal.
+You can download Node.js from its website: https://mjavascript.com/out/node. After installing Node, you'll be able to use the `node` program in your terminal.
 ====
 
-The `require` function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of `require` is sometimes leveraged to dynamically `require` different modules that conform to one interface. As an example, let's conjure up a `templates` directory with a number of view template functions. Our templates will take a model and return an HTML string.
+The `require` function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of `require` is sometimes leveraged to dynamically `require` different modules that conform to one interface. As an example, let's conjure up a _templates_ directory with a number of view template functions. Our templates will take a model and return an HTML string.
 
 The template found in the following code snippet renders an item of a grocery shopping list by reading its attributes from a `model` object.
 
@@ -75,7 +75,7 @@ module.exports = model => `<li>
 </li>`
 ----
 
-Our application could print a `<li>` by leveraging the `item.js` view template.
+Our application could print a `<li>` by leveraging the _item.js_ view template.
 
 [source,javascript]
 ----
@@ -88,11 +88,13 @@ const html = renderItem({
 console.log(html)
 ----
 
-The following screenshot shows our tiny application in action.
+<<Fig8_1>> shows our tiny application in action.
 
+[[fig8_1]]
+.Rendering a model as HTML is as easy as saying template literal expression interpolation!
 image::images/pmjs_08in01.png["Printing an item for our grocery shopping list"]
 
-The next template we'll make renders the grocery list itself. It receives an array of items, and renders each of them by reusing the `item.js` template from the previous code snippet.
+The next template we'll make renders the grocery list itself. It receives an array of items, and renders each of them by reusing the _item.js_ template from the previous code snippet.
 
 [source,javascript]
 ----
@@ -104,7 +106,7 @@ module.exports = model => `<ul>
 </ul>`
 ----
 
-We can consume the `list.js` template in a very similar way than what we did before, but we'll need to adjust the model passed into the template so that we provide a collection of items instead of a single one.
+We can consume the _list.js_ template in a very similar way to what we did before, but we'll need to adjust the model passed into the template so that we provide a collection of items instead of a single one.
 
 [source,javascript]
 ----
@@ -120,13 +122,15 @@ const html = renderList([{
 console.log(html)
 ----
 
-The following screenshot shows our updated application in all its glory.
+<<Fig8_2>> shows our updated application in all its glory.
 
+[[Fig8_2]]
+.Composing components made with template literals can be as simple as we choose to make them.
 image::images/pmjs_08in02.png["Printing a grocery shopping list"]
 
-In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a `model` object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the `item.js` templating function, and joining their HTML representations with newlines.
+In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a `model` object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the _item.js_ templating function, and joining their HTML representations with newlines.
 
-Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` function that could render any template, we could easily do that thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls doesn't necessarily need to be on the top level of a module. Calls to `require` can be anywhere, even embedded within other functions.
+Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` function that could render any template, we could easily do that thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls don't necessarily need to be on the top level of a module. Calls to `require` can be anywhere, even embedded within other functions.
 
 [source,javascript]
 ----
@@ -136,7 +140,7 @@ module.exports = function render(template, model) {
 }
 ----
 
-Once we had such an API, we wouldn't have to worry about carefully constructing `require` statements that match the directory structure of our view templates, because the `render.js` module could take care of that. Rendering any template becomes a matter of calling the `render` function with the template's name and the model for that template.
+Once we had such an API, we wouldn't have to worry about carefully constructing `require` statements that match the directory structure of our view templates, because the _render.js_ module could take care of that. Rendering any template becomes a matter of calling the `render` function with the template's name and the model for that template, as demonstrated in the following code and <<Fig8-3>>.
 
 [source,javascript]
 ----
@@ -155,6 +159,8 @@ console.log(render('list', [{
 }]))
 ----
 
+[[Fig8_3]]
+.Creating a bare bones HTML rendering application is made easy by template literals.
 image::images/pmjs_08in03.png["Printing different views through a normalized render function."]
 
 Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. In the next few sections we'll look at `export` and `import` statements, and learn how ESM is compatible with CJS.
@@ -181,7 +187,7 @@ In the ES6 module system, strict mode is turned on by default. Strict mode is a 
 - `arguments.caller` is no longer supported, throws a `TypeError`
 - Context passed as `this` in method invocations is not "boxed" into an `Object`
 - No longer able to use `fn.caller` and `fn.arguments` to access the JavaScript stack
-- Reserved words (e.g `protected`, `static`, `interface`, etc) cannot be bound
+- Reserved words (e.g., `protected`, `static`, `interface`, etc.) cannot be bound
 
 Let's now dive into the `export` statement.
 
@@ -211,7 +217,7 @@ module.exports = function hello() {}
 
 ES6 modules are files that may expose an API through `export` statements. Declarations in ESM are scoped to the local module, just like we observed about CommonJS. Any variables declared inside a module aren't available to other modules unless they're explicitly exported as part of that module's API and then imported in the module that wants to access them.
 
-===== Exporting a Default Binding
+===== Exporting a default binding
 
 You can mimic the CommonJS code we just saw by replacing `module.exports =` with `export default` statements.
 
@@ -257,7 +263,7 @@ initialize()
 
 There are a few other ways of exposing an API in ESM, besides `export default` statements.
 
-===== Named Exports
+===== Named exports
 
 When you want to expose multiple values from CJS modules you don't necessarily need to explicitly export an object containing every one of those values. You could simply add properties onto the implicit `module.exports` object. There's still a single binding being exported, containing all properties the `module.exports` object ends up holding. While the following example exports two individual values, both are exposed as properties on the exported object.
 
@@ -287,7 +293,7 @@ export count
 
 By being rigid in how its declarative module syntax works, ESM favors static analysis, once again at the expense of flexibility. Flexibility inevitably comes at the cost of added complexity, which is a good reason not to offer flexible interfaces.
 
-===== Exporting Lists
+===== Exporting lists
 
 ES6 modules let you `export` lists of named top-level members, as seen in the following snippet. The syntax for export lists is easy to parse, and presents a solution to the problem we observed in the last code snippet from the previous section.
 
@@ -328,9 +334,9 @@ export { count as increment }
 
 It's important to keep in mind that we are exporting bindings, and not merely values.
 
-===== Bindings, Not Values
+===== Bindings, not values
 
-ES6 modules export bindings, not values nor references. This means that a `fungible` binding exported from a module would be bound into the `fungible` variable on the module, and its value would be subject to changes made to `fungible`. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
+ES6 modules export bindings, not values or references. This means that a `fungible` binding exported from a module would be bound into the `fungible` variable on the module, and its value would be subject to changes made to `fungible`. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
 
 In the next code snippet, our module's `fungible` export would be initially bound to an object and be changed into an array after five seconds.
 
@@ -340,7 +346,7 @@ export let fungible = { name: 'bound' }
 setTimeout(() => fungible = [0, 1, 2], 5000)
 ----
 
-Modules consuming this API would see the `fungible` value changing after five seconds. Consider the following example, where we print the consumed binding every 2 seconds.
+Modules consuming this API would see the `fungible` value changing after five seconds. Consider the following example, where we print the consumed binding every two seconds.
 
 [source,javascript]
 ----
@@ -355,7 +361,7 @@ setInterval(() => console.log(fungible), 2000)
 // <- [0, 1, 2]
 ----
 
-This kind of behavior is best suited for counters and flags, but is best avoided unless its purpose is clearly defined, since it can lead to confusing behavior and API surfaces changing unexpected from the point of view of a consumer.
+This kind of behavior is best suited for counters and flags, but is best avoided unless its purpose is clearly defined, since it can lead to confusing behavior and API surfaces changing unexpectedly from the point of view of a consumer.
 
 The JavaScript module system also offers an `export..from` syntax, where you can expose another module's interface.
 
@@ -395,11 +401,11 @@ We've now covered every way in which we can expose an API in ES6 modules. Let's 
 
 ==== import Statements
 
-We can load a module from another one using `import` statements. The way modules are loaded is implementation-specific, that is: it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
+We can load a module from another one using `import` statements. The way modules are loaded is implementation-specifically; that is, it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
 Compilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means `import` statements in Babel mostly follow the same semantics as `require` statements in CommonJS.
 
-Let's suppose we have the following code snippet in a `./counter.js` module.
+Let's suppose we have the following code snippet in a _./counter.js_ module.
 
 [source,javascript]
 ----
@@ -418,7 +424,7 @@ import './counter.js'
 
 In the same fashion as `export` statements, `import` statements are only allowed in the top level of your module definitions. This limitation helps compilers simplify their module loading capabilities, as well as help other static analysis tools parse your codebase.
 
-===== Importing Default Exports
+===== Importing default exports
 
 CommonJS modules let you import other modules using `require` statements. When we need a reference to the default export, all we'd have to do is assign that to a variable.
 
@@ -438,7 +444,7 @@ console.log(counter)
 
 Besides default exports, you could also import named exports and alias them.
 
-===== Importing Named Exports
+===== Importing named exports
 
 The following bit of code shows how we can import the `increment` method from our `counter` module. Reminiscent of assignment destructuring, the syntax for importing named exports is wrapped in braces.
 
@@ -507,7 +513,7 @@ At the time of this writing, a proposal for dynamic `import()`​footnoteref:[dy
 
 The module specifier can be any string, like with `import` statements. Keep in mind `import` statements only allow statically defined plain string literals as module specifiers. In contrast, we're able to use template literals or any valid JavaScript expression to produce the module specifier string for `import()` function calls.
 
-Imagine you're looking to internationalize an application based on the language provided by user agents. You might statically import a `localizationService`, and then dynamically import the localized data for a given language using `import()` and a module specifier built using a template literal which interpolates `navigator.language`, as shown in the following example.
+Imagine you're looking to internationalize an application based on the language provided by user agents. You might statically import a `localizationService`, and then dynamically import the localized data for a given language using `import()` and a module specifier built using a template literal that interpolates `navigator.language`, as shown in the following example.
 
 [source,javascript]
 ----
@@ -516,7 +522,7 @@ import(`./localizations/${ navigator.language }.json`)
   .then(module => localizationService.use(module))
 ----
 
-Note that writing code like this is generally a bad idea for a number of reasons.
+Note that writing code like this is generally a bad idea for a number of reasons:
 
 - It can be challenging to statically analyze, given that static analysis is executed at build-time, when it can be hard or impossible to infer the value of interpolations such as `${ navigator.language }`.
 - It can't be packaged up as easily by JavaScript bundlers, meaning the module would probably be loaded asynchronously while the bulk of our application has been loaded.
@@ -527,7 +533,7 @@ Just like with `import` statements, the mechanism for retrieving the module is u
 
 The proposal does specify that once the module is resolved, the promise should fulfill with its namespace object. It also specifies that whenever an error results in the module failing to load, the promise should be rejected.
 
-This allows for loading non-critical modules asynchronously, without blocking page load, and being able to gracefully handle failure scenarios when such module fails to load, as demonstrated next.
+This allows for loading noncritical modules asynchronously, without blocking page load, and being able to gracefully handle failure scenarios when such a module fails to load, as demonstrated next.
 
 [source,javascript]
 ----
@@ -579,7 +585,7 @@ Keep in mind that `import` is function-like, but it has different semantics from
 
 === Practical Considerations for ES Modules
 
-When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a `random` module with a locally scoped `calc` function, which computes a random number in the `[0, n)` range; and a public API with the `range` method, which computes a random number in the `[min, max]` range.
+When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought-out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a `random` module with a locally scoped `calc` function, which computes a random number in the `[0, n)` range; and a public API with the `range` method, which computes a random number in the `[min, max]` range.
 
 [source,javascript]
 ----
@@ -590,7 +596,7 @@ const random = (function() {
 })()
 ----
 
-Compare that to the following piece of code, used in an ESM module called `random`. The immediately-invoking function expression(IIFE) wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
+Compare that to the following piece of code, used in an ESM module called `random`. The immediately-invoking function expression (IIFE) wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
 
 [source,javascript]
 ----
@@ -601,7 +607,7 @@ export { range }
 
 While we don't have the problem of having to wrap our modules in an IIFE anymore, we still have to be careful about how we define, test, document, and use each module.
 
-Deciding what constitutes a module is difficult. A lot of factors come into play, some of which I've outlined in the form of questions below.
+Deciding what constitutes a module is difficult. A lot of factors come into play, some of which I've outlined in the form of questions below:
 
 - Is it highly complex?
 - Is it too large?
@@ -613,23 +619,23 @@ Deciding what constitutes a module is difficult. A lot of factors come into play
 
 Complexity is a more powerful metric to track than length. A module can be several thousand lines long but simple, such as a dictionary that maps identifiers to localized strings in a particular language; or it could be a couple dozen lines long but very hard to reason about, such as a data model that also includes domain validation and business logic rules. Complexity can be mitigated by splitting our code up into smaller modules that are only concerned with one aspect of the problem we're trying to solve. As long as they're not highly complex, large modules are not as much of an issue.
 
-Having a well-defined API that's also properly documented is a key aspect of effective modular application design. A module's API should be focused, and follow information hiding principles. That is: only reveal what is necessary for consumers to interact with it. By not exposing internal aspects of a module, which may be undocumented and prone to change, we keep a simple interface overall and avoid unintended usage patterns. By documenting the public API, even if its documented in code or self-documenting, we reduce the barrier of entry for humans looking to utilize the module.
+Having a well-defined API that's also properly documented is a key aspect of effective modular application design. A module's API should be focused, and follow information hiding principles. That is: only reveal what is necessary for consumers to interact with it. By not exposing internal aspects of a module, which may be undocumented and prone to change, we keep a simple interface overall and avoid unintended usage patterns. By documenting the public API, even if it's documented in code or self-documenting, we reduce the barrier of entry for humans looking to utilize the module.
 
 Tests should only be written against the public interface to a module, while its internals must be treated as uninteresting implementation details. Tests need to cover the different aspects of a module's public interface, but changes to the internal implementation shouldn't break our test coverage as long as the API remains the same in terms of inputs and outputs.
 
-Ease of adding or removing functionality from a module is yet another useful metric.
+Ease of adding or removing functionality from a module is yet another useful metric:
 
 - How hard would it be to add a new feature?
 - Do you have to edit several different modules in order to implement something?
-- Is this a repetitive process? Maybe you could abstract those changes behind a higher level module that hides that complexity, or maybe doing so would mostly add indirection and make following the codebase harder to read, but with little added benefit or justification.
+- Is this a repetitive process? Maybe you could abstract those changes behind a higher-level module that hides that complexity, or maybe doing so would mostly add indirection and make following the codebase harder to read, but with little added benefit or justification.
 - From the other end of the spectrum, how deeply entrenched is the API?
 - Would it be easy to remove a portion of the module, delete it entirely, or even replace it with something else?
-- If modules become too co-dependant, then it can be hard to make edits as the codebase ages, mutates and grows in size.
+- If modules become too co-dependent, then it can be hard to make edits as the codebase ages, mutates, and grows in size.
 
-We'll plunge deeper into proper module design, effective module interaction and module testing over the next three books in this series.
+We'll plunge deeper into proper module design, effective module interaction, and module testing over the next three books in this series.
 
 Browsers are only scratching the surface of native JavaScript modules. At the time of this writing, some browsers already implement `import` and `export` statements. Some browsers have already implemented `<script type='module'>`, enabling them to consume modules when specifying the `module` script type. The module loader specification isn't finalized yet, and you can track its current status at https://mjavascript.com/out/loader.
 
-Meanwhile, Node.js hasn't yet shipped a working implementation of the JavaScript module system. Given that JavaScript ecosystem tooling relies on node, it's not yet clear how cross-compatibility will be attained. The dilemma of how to know whether a file is written in CJS or ESM is what's delaying a working implementation. A proposal to infer whether a file was ESM based on the presence of at least one `import` or `export` statement was abandoned, and it seems like the current course of action is to introduce a new file extension specifically tailored towards ESM modules. There is quite a bit of nuance given the variety of use cases and platforms Node.js runs on, making it tough to arrive at a solution that remains elegant, performant, and correct for every use case.
+Meanwhile, Node.js hasn't yet shipped a working implementation of the JavaScript module system. Given that JavaScript ecosystem tooling relies on node, it's not yet clear how cross-compatibility will be attained. The dilemma of how to know whether a file is written in CJS or ESM is what's delaying a working implementation. A proposal to infer whether a file was ESM based on the presence of at least one `import` or `export` statement was abandoned, and it seems like the current course of action is to introduce a new file extension specifically tailored toward ESM modules. There is quite a bit of nuance given the variety of use cases and platforms Node.js runs on, making it tough to arrive at a solution that remains elegant, performant, and correct for every use case.
 
 With that said, let's turn over to the last chapter, on leveraging all of these new language features and syntax effectively.
