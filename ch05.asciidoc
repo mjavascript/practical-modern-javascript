@@ -96,7 +96,9 @@ Here's how what we had earlier would have looked like when using ES6 maps. As yo
 const map = new Map()
 map.set('contra', { description: 'Asynchronous flow control' })
 map.set('dragula', { description: 'Drag and drop' })
-map.set('woofmark', { description: 'Markdown and WYSIWYG editor' })
+map.set('woofmark', {
+  description: 'Markdown and WYSIWYG editor'
+})
 console.log([...map])
 ----
 
@@ -667,7 +669,8 @@ function listOwnProperties(input) {
   }
 }
 function isObject(value) {
-  return Object.prototype.toString.call(value) === '[object Object]'
+  return Object.prototype.toString.call(value) ===
+  '[object Object]'
 }
 ----
 
