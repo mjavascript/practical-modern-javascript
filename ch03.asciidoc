@@ -1,11 +1,11 @@
 [[classes-symbols-objects-and-decorators]]
 == Classes, Symbols, Objects, and Decorators
 
-Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes, and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript, like strings, booleans, and numbers. They can be used for defining protocols, and in this chapter we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the `Object` built-in in ES6.
+Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript, like strings, booleans, and numbers. They can be used for defining protocols, and in this chapter we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the `Object` built-in in ES6.
 
 === Classes
 
-JavaScript is a prototype-based language, and classes are mostly syntactic sugar on top of prototypal inheritance. The fundamental difference between prototypal inheritance and classes is that classes can `extend` other classes, making it possible for us to extend the `Array` built-in -- something that was very convoluted before ES6.
+JavaScript is a prototype-based language, and classes are mostly syntactic sugar on top of prototypal inheritance. The fundamental difference between prototypal inheritance and classes is that classes can `extend` other classes, making it possible for us to extend the `Array` built-in--something that was very convoluted before ES6.
 
 The `class` keyword acts, then, as a device that makes JavaScript more inviting to programmers coming from other paradigms, who might not be all that familiar with prototype chains.
 
@@ -13,7 +13,7 @@ The `class` keyword acts, then, as a device that makes JavaScript more inviting 
 
 When learning about new language features, it's always a good idea to look at existing constructs first, and then see how the new feature improves those use cases. We'll start by looking at a simple prototype-based JavaScript constructor and then compare that with the newer classes syntax in ES6.
 
-The code snippet shown below represents a fruit using a constructor function and adding a couple of methods to the prototype. The constructor function takes a `name` and the amount of `calories` for a fruit, and defaults to the fruit being in a single piece. There's a `.chop` method that will slice another piece of fruit, and then there's a `.bite` method. The `person` passed into `.bite` will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
+The following code snippet represents a fruit using a constructor function and adding a couple of methods to the prototype. The constructor function takes a `name` and the amount of `calories` for a fruit, and defaults to the fruit being in a single piece. There's a `.chop` method that will slice another piece of fruit, and then there's a `.bite` method. The `person` passed into `.bite` will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
 
 [source,javascript]
 ----
@@ -83,7 +83,7 @@ class Fruit {
 
 A not-so-minor detail you might have missed is that there aren't any commas in between method declarations of the `Fruit` class. That's not a mistake our copious copy editors missed, but rather part of the `class` syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as public and private class fields.
 
-The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest, the API for `Fruit` remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces and ate most of it would work well with our `class` flavored `Fruit` as well.
+The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest; the API for `Fruit` remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces, and ate most of it would work well with our `class`-flavored `Fruit` as well.
 
 It's worth noting that class declarations aren't hoisted to the top of their scope, unlike function declarations. That means you won't be able to instantiate, or otherwise access, a class before its declaration is reached and executed.
 
@@ -94,7 +94,7 @@ class Person {
 }
 ----
 
-Besides the class declaration syntax presented above, classes can also be declared as expressions, just like with function declarations and function expressions. You may omit the name for a `class` expression, as shown in the following bit of code.
+Besides the class declaration syntax presented earlier, classes can also be declared as expressions, just like with function declarations and function expressions. You may omit the name for a `class` expression, as shown in the following bit of code.
 
 [source,javascript]
 ----
@@ -105,7 +105,7 @@ const Person = class {
 }
 ----
 
-Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a `JakePerson` class dynamically in arrow function which takes a name parameter and then feeds that to the parent `Person` constructor via `super()`.
+Class expressions could be easily returned from a function, making it possible to create a factory of classes with minimal effort. In the following example we create a `JakePerson` class dynamically in an arrow function that takes a `name` parameter and then feeds that to the parent `Person` constructor via `super()`.
 
 [source,javascript]
 ----
@@ -122,13 +122,12 @@ We'll dig deeper into class inheritance later. Let's take a more nuanced look at
 
 ==== Properties and Methods in Classes
 
-It should be noted that the `constructor` method declaration is an optional member of a `class` declaration. The following bit of code is an entirely valid `class` declaration that's comparable to an empty constructor function.
+It should be noted that the `constructor` method declaration is an optional member of a `class` declaration. The following bit of code shows an entirely valid `class` declaration that's comparable to an empty constructor function by the same name.
 
 [source,javascript]
 ----
 class Fruit {
 }
-// the constructor function below is roughly equivalent to the class above
 function Fruit() {
 }
 ----
@@ -200,7 +199,7 @@ console.log(ls.data)
 // <- ['apples', 'bananas', 'grapes']
 ----
 
-Besides getters and setters, you can also define regular instance methods, as we've explored earlier when creating the `Fruit` class. The following code example creates a `Person` class that's able to eat `Fruit` instances as we had declared them earlier. We then instantiate a fruit and a person, and have the person eat the fruit. The person ends up with a satiety level equal to `40`, because they ate the whole fruit.
+Besides getters and setters, you can also define regular instance methods, as we've explored earlier when creating the `Fruit` class. The following code example creates a `Person` class that's able to eat `Fruit` instances as we had declared them earlier. We then instantiate a fruit and a person, and have the person eat the fruit. The person ends up with a satiety level equal to `40`, because he ate the whole fruit.
 
 [source,javascript]
 ----
@@ -255,7 +254,7 @@ Finally, it's worth mentioning that you could also declare static property acces
 
 ==== Extending JavaScript Classes
 
-You could use plain JavaScript to extend the `Fruit` class, but as you will notice by reading the next code snippet, declaring a sub-class involves esoteric knowledge such as `Parent.call(this)` in order to pass in parameters to the parent class so that we can properly initialize the sub-class, and setting the prototype of the sub-class to an instance of the parent class' prototype. We won't be delving into detailed minutia about these constructs, as you can readily find heaps of information about prototypal inheritance around the web, and our focus in in the newly introduced `class` syntax anyways.
+You could use plain JavaScript to extend the `Fruit` class, but as you will notice by reading the next code snippet, declaring a subclass involves esoteric knowledge such as `Parent.call(this)` in order to pass in parameters to the parent class so that we can properly initialize the subclass, and setting the prototype of the subclass to an instance of the parent class's prototype. As you can readily find heaps of information about prototypal inheritance around the web, we won't be delving into detailed minutia about prototypal inheritance.
 
 [source,javascript]
 ----
@@ -320,19 +319,20 @@ The following piece of code has a `createJuicyFruit` function where we forward t
 
 [source,javascript]
 ----
-const createJuicyFruit = (...params) => class JuicyFruit extends Fruit {
-  constructor() {
-    this.juice = 0
-    super(...params)
-  }
-  squeeze() {
-    if (this.calories <= 0) {
-      return
+const createJuicyFruit = (...params) =>
+  class JuicyFruit extends Fruit {
+    constructor() {
+      this.juice = 0
+      super(...params)
     }
-    this.calories -= 10
-    this.juice += 3
+    squeeze() {
+      if (this.calories <= 0) {
+        return
+      }
+      this.calories -= 10
+      this.juice += 3
+    }
   }
-}
 class Plum extends createJuicyFruit('plum', 30) {
 }
 ----
@@ -341,7 +341,7 @@ Let's move onto `Symbol`. While not an iteration or flow control mechanism, lear
 
 === Symbols
 
-Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is an unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in <<iterator_protocol_and_iterable_protocol>>.
+Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is a unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in <<iterator_protocol_and_iterable_protocol>> on page xx.
 
 There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the `Symbol` built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
 
@@ -428,7 +428,7 @@ console.log(JSON.stringify(character))
 // <- '{"name":"Penguin"}'
 ----
 
-That being said, symbols are by no means a safe mechanism to conceal properties. Even though you won't stumble upon symbol properties when using reflection or serialization methods, symbols are revealed by a dedicated method as shown in the next snippet of code. In other words, symbols are not non-enumerable, but hidden in plain sight. Using `Object.getOwnPropertySymbols` we can retrieve all symbols used as property keys on any given object.
+That being said, symbols are by no means a safe mechanism to conceal properties. Even though you won't stumble upon symbol properties when using reflection or serialization methods, symbols are revealed by a dedicated method as shown in the next snippet of code. In other words, symbols are not nonenumerable, but hidden in plain sight. Using `Object.getOwnPropertySymbols` we can retrieve all symbols used as property keys on any given object.
 
 [source,javascript]
 ----
@@ -436,9 +436,9 @@ console.log(Object.getOwnPropertySymbols(character))
 // <- [Symbol(weapon)]
 ----
 
-Now that we've established how symbols work. What can we use them for?
+Now that we've established how symbols work, what can we use them for?
 
-==== Practical use cases for Symbols
+==== Practical Use Cases for Symbols
 
 Symbols could be used by a library to map objects to DOM elements. For example, a library that needs to associate the API object for a calendar to the provided DOM element. Before ES6, there wasn't a clear way of mapping DOM elements to objects. You could add a property to a DOM element pointing to the API, but polluting DOM elements with custom properties is a bad practice. You have to be careful to use property keys that won't be used by other libraries, or worse, by the language itself in the future. That leaves you with using an array lookup table containing an entry for each DOM/API pair. That, however, might be slow in long-running applications where the array lookup table might grow in size, slowing down the lookup operation over time.
 
@@ -448,7 +448,7 @@ Symbols, on the other hand, don't have this problem. They can be used as propert
 ----
 const cache = Symbol('calendar')
 function createCalendar(el) {
-  if (cache in el) { // check if the symbol exists in the element
+  if (cache in el) { // does the symbol exist in the element?
     return el[cache] // use the cache to avoid re-instantiation
   }
   const api = el[cache] = {
@@ -458,9 +458,9 @@ function createCalendar(el) {
 }
 ----
 
-There is an ES6 built-in -- the `WeakMap` -- that can be used to uniquely map objects to other objects without using arrays nor placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in <<leveraging-es-collections>>, alongside other ES6 collection built-ins.
+There is an ES6 built-in--the `WeakMap`--that can be used to uniquely map objects to other objects without using arrays or placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in <<leveraging-es-collections>>, alongside other ES6 collection built-ins.
 
-===== Defining Protocols through Symbols
+===== Defining protocols through symbols
 
 Earlier, we posited that a use case for symbols is to define protocols. A protocol is a communication contract or convention that defines behavior. In less abstract terms, a library could use a symbol that could then be used by objects that adhere to a convention from the library.
 
@@ -510,7 +510,7 @@ function stringify(target) {
 }
 ----
 
-Using a symbol means we need to use a computed property name to define the `json` behavior directly on an object literal. It also means that the behavior won't clash with other user-defined properties or upcoming language features we couldn't foresee. Another difference is that the `json` symbol should be available to consumers of the `stringify` function, so that they can define their own behavior. We could easily add the following line of code to expose the `json` symbol directly through `stringify`, as shown below. That'd also tie the `stringify` function with the symbol that modifies its behavior.
+Using a symbol means we need to use a computed property name to define the `json` behavior directly on an object literal. It also means that the behavior won't clash with other user-defined properties or upcoming language features we couldn't foresee. Another difference is that the `json` symbol should be available to consumers of the `stringify` function, so that they can define their own behavior. We could easily add the following line of code to expose the `json` symbol directly through `stringify`, as shown next. That'd also tie the `stringify` function with the symbol that modifies its behavior.
 
 [source,javascript]
 ----
@@ -519,7 +519,7 @@ stringify.as = json
 
 By exposing the `stringify` function we'd be exposing the `stringify.as` symbol as well, allowing consumers to tweak behavior by minimally modifying objects, using the custom symbol.
 
-When it comes to the merits of using a symbol to describe behavior, as opposed to an option passed as to the `stringify` function, there's a few considerations to keep in mind. First, adding option parameters to a function changes its public API, whereas changing the internal implementation of the function to support another symbol wouldn't affect the public API. Using an `options` object with different properties for each option mitigates this effect, but it's not always convenient to require an `options` object in every function call.
+When it comes to the merits of using a symbol to describe behavior, as opposed to an option passed to the `stringify` function, there are a few considerations to keep in mind. First, adding option parameters to a function changes its public API, whereas changing the internal implementation of the function to support another symbol wouldn't affect the public API. Using an `options` object with different properties for each option mitigates this effect, but it's not always convenient to require an `options` object in every function call.
 
 A benefit of defining behavior via symbols is that you could augment and customize the behavior of objects without changing anything other than the value assigned to a symbol property and perhaps the internal implementation of the piece of code that leverages that behavior. The benefit of using symbols over properties is that you're not subject to name clashes when new language features are introduced.
 
@@ -527,15 +527,15 @@ Besides local symbols, there's also a global symbol registry, accessible from ac
 
 ==== Global Symbol Registry
 
-A code realm is any JavaScript execution context, such as the page your application is running in, an `<iframe>` within that page, a script running through `eval`, or a worker of any kind -- such as web workers, service workers, or shared workersfootnoteref:[workers,Workers are a way of executing background tasks in browsers. The initiator can communicate with their workers, which run in a different execution context, via messaging. https://mjavascript.com/out/workers]. Each of these execution contexts has its own global object. Global variables defined on the `window` object of a page, for example, aren't available to a `ServiceWorker`. In contrast, the global symbol registry is shared across all code realms.
+A code realm is any JavaScript execution context, such as the page your application is running in, an `<iframe>` within that page, a script running through `eval`, or a worker of any kind--such as web workers, service workers, or shared workers.footnoteref:[workers,Workers are a way of executing background tasks in browsers. The initiator can communicate with their workers, which run in a different execution context, via messaging. https://mjavascript.com/out/workers] Each of these execution contexts has its own global object. Global variables defined on the `window` object of a page, for example, aren't available to a `ServiceWorker`. In contrast, the global symbol registry is shared across all code realms.
 
-There's two methods that interact with the runtime-wide global symbol registry: `Symbol.for` and `Symbol.keyFor`. What do they do?
+There are two methods that interact with the runtime-wide global symbol registry: `Symbol.for` and `Symbol.keyFor`. What do they do?
 
 ===== Getting symbols with Symbol.for(key)
 
 The `Symbol.for(key)` method looks up `key` in the runtime-wide symbol registry. If a symbol with the provided `key` exists in the global registry, that symbol is returned. If no symbol with that `key` is found in the registry, one is created and added to the registry under the provided `key`. That's to say, `Symbol.for(key)` is idempotent: it looks for a symbol under a `key`, creates one if it didn't already exist, and then returns the symbol.
 
-In the following code snippet, the first call to `Symbol.for` creates a symbol identified as `'example'`, adds it to the registry, and returns it. The second call returns that same symbol because the `key` is already in the registry -- and associated to the symbol returned by the first call.
+In the following code snippet, the first call to `Symbol.for` creates a symbol identified as `'example'`, adds it to the registry, and returns it. The second call returns that same symbol because the `key` is already in the registry--and associated to the symbol returned by the first call.
 
 [source,javascript]
 ----
@@ -548,7 +548,7 @@ The global symbol registry keeps track of symbols by their `key`. Note that the 
 
 ===== Using Symbol.keyFor(symbol) to retrieve symbol keys
 
-Given a symbol `symbol`, `Symbol.keyFor(symbol)` returns the `key` that was associated with `symbol` when the symbol was added to the global registry. The next example shows how we can grab a the `key` for a `symbol` using `Symbol.keyFor`.
+Given a symbol `symbol`, `Symbol.keyFor(symbol)` returns the `key` that was associated with `symbol` when the symbol was added to the global registry. The next example shows how we can grab the `key` for a `symbol` using `Symbol.keyFor`.
 
 [source,javascript]
 ----
@@ -576,7 +576,7 @@ console.log(Symbol.keyFor(Symbol('example')))
 
 Now that you've learned about the API for interacting with the global symbol registry, let's take some considerations into account.
 
-===== Best Practices and Considerations
+===== Best practices and considerations
 
 A runtime-wide registry means the symbols are accessible across code realms. The global registry returns a reference to the same object in any realm the code runs in. In the following example, we demonstrate how the `Symbol.for` API returns the same symbol in a page and within an `<iframe>`.
 
@@ -591,15 +591,15 @@ console.log(s1 === s2)
 // <- true
 ----
 
-There are tradeoffs in using widely available symbols. On the one hand, they make it easy for libraries to expose their own symbols, but on the other hand they could also expose their symbols on their own API, using local symbols. The symbol registry is obviously useful when symbols need to be shared across any two code realms, for example: `ServiceWorker` and a web page. The API is also convenient when you don't want to bother storing references to the symbols, you could use the registry directly for that, since every call with a given `key` is guaranteed to return the same `symbol`. You'll have to keep in mind, though, that these symbols are shared across the runtime and that might lead to unwanted consequences if you use generic symbol names like `each` or `contains`.
+There are trade-offs in using widely available symbols. On the one hand, they make it easy for libraries to expose their own symbols, but on the other hand they could also expose their symbols on their own API, using local symbols. The symbol registry is obviously useful when symbols need to be shared across any two code realms; for example, `ServiceWorker` and a web page. The API is also convenient when you don't want to bother storing references to the symbols. You could use the registry directly for that, since every call with a given `key` is guaranteed to return the same `symbol`. You'll have to keep in mind, though, that these symbols are shared across the runtime and that might lead to unwanted consequences if you use generic symbol names like `each` or `contains`.
 
-There's one more kind of symbols: built-in well-known symbols.
+There's one more kind of symbol: built-in well-known symbols.
 
 ==== Well-known Symbols
 
-So far we've covered symbols you can create using the `Symbol` function and those you can create through `Symbol.for`. The third and last kind of symbols we're going to cover is the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
+So far we've covered symbols you can create using the `Symbol` function and those you can create through `Symbol.for`. The third and last kind of symbols we're going to cover are the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
 
-A great example of how symbols can add extensibility to the language without breaking existing code is the `Symbol.toPrimitive` well-known symbol. It can be assigned a function to determine how an object is casted into a primitive value. The function receives a `hint` parameter that can be `'string'`, `'number'`, or `'default'`, indicating what type of primitive value is expected.
+A great example of how symbols can add extensibility to the language without breaking existing code is the `Symbol.toPrimitive` well-known symbol. It can be assigned a function to determine how an object is cast into a primitive value. The function receives a `hint` parameter that can be `'string'`, `'number'`, or `'default'`, indicating what type of primitive value is expected.
 
 [source,javascript]
 ----
@@ -622,7 +622,7 @@ console.log(morphling + ' is powerful')
 // <- '[object Morphling] is powerful'
 ----
 
-Another example of a well-known symbol is `Symbol.match`. A regular expression that sets `Symbol.match` to `false` will be treated as a string literal when passed to `.startsWith`, `.endsWith`, or `.includes`. These three functions are new string methods in ES6. First we have `.startsWith`, which can be used to determine if the string starts with another string. Then there's `.endsWith`, that finds out whether the string ends in another one. Lastly, the `.includes` method returns `true` if a string contains another one. The next snippet of code shows how `Symbol.match` can be used to compare a string with the string representation of a regular expression.
+Another example of a well-known symbol is `Symbol.match`. A regular expression that sets `Symbol.match` to `false` will be treated as a string literal when passed to `.startsWith`, `.endsWith`, or `.includes`. These three functions are new string methods in ES6. First we have `.startsWith`, which can be used to determine if the string starts with another string. Then there's `.endsWith`, which finds out whether the string ends in another one. Lastly, the `.includes` method returns `true` if a string contains another one. The next snippet of code shows how `Symbol.match` can be used to compare a string with the string representation of a regular expression.
 
 [source,javascript]
 ----
@@ -643,7 +643,7 @@ Well-known symbols are shared across realms. The following example shows how `Sy
 ----
 const frame = document.createElement('iframe')
 document.body.appendChild(frame)
-console.log(Symbol.iterator === frame.contentWindow.Symbol.iterator)
+Symbol.iterator === frame.contentWindow.Symbol.iterator
 // <- true
 ----
 
@@ -659,12 +659,12 @@ One of the most useful well-known symbols is `Symbol.iterator`, used by a few di
 
 === Object Built-in Improvements
 
-While we've already addressed syntax enhancements coming to object literals in <<ecmascript6-essentials>>, there's a few new static methods available to the `Object` built-in which we haven't addressed yet. It's time to take a look at what these methods bring to the table.
+While we've already addressed syntax enhancements coming to object literals in <<ecmascript6-essentials>>, there are a few new static methods available to the `Object` built-in that we haven't addressed yet. It's time to take a look at what these methods bring to the table.
 
 We've already looked at `Object.getOwnPropertySymbols`, but let's also take a look at `Object.assign`, `Object.is`, and `Object.setPrototypeOf`.
 
 [[extending_objects_with_object_assign]]
-==== Extending objects with Object.assign
+==== Extending Objects with Object.assign
 
 The need to provide default values for a configuration object is not at all uncommon. Typically, libraries and well-designed component interfaces come with sensible defaults that cater to the most frequented use cases.
 
@@ -681,7 +681,7 @@ const defaults = {
 }
 ----
 
-One possibility would be to use the `defaults` object as the default value for the `options` parameter, using destructuring. In this case, the user must provide values for every option whenever they decide to provide any options at all.
+One possibility would be to use the `defaults` object as the default value for the `options` parameter, using destructuring. In this case, the users must provide values for every option whenever they decide to provide any options at all.
 
 [source,javascript]
 ----
@@ -689,7 +689,7 @@ function md(input, options=defaults) {
 }
 ----
 
-The default values have to be merged with user-provided configuration, somehow. That's where `Object.assign` comes in, as shown in the following example. We start with an empty `{}` object, -- which will be mutated and returned by `Object.assign` -- we copy the default values over to it, and then copy the options on top. The resulting `config` object will have all of the default values plus the user-provided configuration.
+The default values have to be merged with user-provided configuration, somehow. That's where `Object.assign` comes in, as shown in the following example. We start with an empty `{}` object--which will be mutated and returned by `Object.assign`--we copy the default values over to it, and then copy the options on top. The resulting `config` object will have all of the default values plus the user-provided configuration.
 
 [source,javascript]
 ----
@@ -698,12 +698,12 @@ function md(input, options) {
 }
 ----
 
-.Understanding the `target` of Object.assign
+.Understanding the target of Object.assign
 [WARNING]
 ====
-The `Object.assign` function mutates its first argument. It's signature is `(target, ...sources)`. Every source is applied onto the target object, source by source and property by property.
+The `Object.assign` function mutates its first argument. Its signature is `(target, ...sources)`. Every source is applied onto the target object, source by source and property by property.
 
-Consider the following scenario, where we don't pass an empty object as the first argument of `Object.assign`, instead just providing it with the `defaults` and the `options`. We would be changing the contents of the `defaults` object, losing some of our default values -- and obtaining some wrong ones -- in the process of mutating the object. The first invocation would produce the same result as the previous example, but it would modify our defaults in the process, changing how subsequent calls to `md` work.
+Consider the following scenario, where we don't pass an empty object as the first argument of `Object.assign`, instead just providing it with the `defaults` and the `options`. We would be changing the contents of the `defaults` object, losing some of our default values--and obtaining some wrong ones--in the process of mutating the object. The first invocation would produce the same result as the previous example, but it would modify our defaults in the process, changing how subsequent calls to `md` work.
 
 [source,javascript]
 ----
@@ -715,7 +715,7 @@ function md(input, options) {
 For this reason, it's generally best to pass a brand new object on the first position, every time.
 ====
 
-For any properties that had a default value where the user also provided a value, the user-provided value will prevail. Here's how `Object.assign` works. First, it takes the first argument passed to it, let's call it `target`. It then iterates over all keys of each of the other arguments, let's call them `sources`. For each source in `sources`, all of its properties are iterated and assigned to `target`. The end result is that right-most sources -- in our case, the `options` object -- overwrite any previously assigned values, as shown in the following bit of code.
+For any properties that had a default value where the user also provided a value, the user-provided value will prevail. Here's how `Object.assign` works. First, it takes the first argument passed to it; let's call it `target`. It then iterates over all keys of each of the other arguments; let's call them `sources`. For each source in `sources`, all of its properties are iterated and assigned to `target`. The end result is that rightmost sources--in our case, the `options` object--overwrite any previously assigned values, as shown in the following bit of code.
 
 [source,javascript]
 ----
@@ -736,7 +736,7 @@ applyDefaults({ second: false })
 
 Before `Object.assign` made its way into the language, there were numerous similar implementations of this technique in user-land JavaScript, with names like assign, or extend. Adding `Object.assign` to the language consolidates these options into a single method.
 
-Note that `Object.assign` takes into consideration only enumerable own properties, including both string and symbol properties.
+Note that `Object.assign` takes into consideration only own enumerable properties, including both string and symbol properties.
 
 [source,javascript]
 ----
@@ -772,7 +772,7 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 // <- { a: ['e', 'f'] }
 ----
 
-At the time of this writing, there's an ECMAScript stage 3 proposalfootnoteref:[object-spread,You can find the proposal draft at: https://mjavascript.com/out/object-spread.] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an `Object.assign` function call.
+At the time of this writing, there's an ECMAScript stage 3 proposalfootnoteref:[object-spread,You can find the proposal draft at https://mjavascript.com/out/object-spread.] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an `Object.assign` function call.
 
 The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and their `Object.assign` counterpart. As you can see, using object spread is more succint and should be preferred where possible.
 
@@ -794,7 +794,8 @@ The following example shows how we could leverage object rest to get an object c
 
 [source,javascript]
 ----
-const getUnknownProperties = ({ name, type, ...unknown }) => unknown
+const getUnknownProperties = ({ name, type, ...unknown }) =>
+  unknown
 getUnknownProperties({
   name: 'Carrot',
   type: 'vegetable',
@@ -819,7 +820,7 @@ const { name, type, ...meta } = {
 
 We dive deeper into object rest and spread in <<practical-considerations>>.
 
-==== Comparing objects with Object.is
+==== Comparing Objects with Object.is
 
 The `Object.is` method is a slightly different version of the strict equality comparison operator, `===`. For the most part, `Object.is(a, b)` is equal to `a === b`. There are two differences: the case of `NaN` and the case of `-0` and `+0`. This algorithm is referred to as `SameValue` in the ECMAScript specification.
 
@@ -847,7 +848,7 @@ These differences may not seem like much, but dealing with `NaN` has always been
 
 ==== Object.setPrototypeOf
 
-The `Object.setPrototypeOf` method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__` which is a legacy feature.
+The `Object.setPrototypeOf` method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__`, which is a legacy feature.
 
 Before ES6, we were introduced to `Object.create` in ES5. Using that method, we could create an object based on any prototype passed into `Object.create`, as shown next.
 
@@ -863,15 +864,18 @@ The `Object.create` method is, however, limited to newly created objects. In con
 [source,javascript]
 ----
 const baseCat = { type: 'cat', legs: 4 }
-const cat = Object.setPrototypeOf({ name: 'Milanesita' }, baseCat)
+const cat = Object.setPrototypeOf(
+  { name: 'Milanesita' },
+  baseCat
+)
 ----
 
 Note however that there are serious performance implications when using `Object.setPrototypeOf` as opposed to `Object.create`, and some careful consideration is in order before you decide to go ahead and sprinkle `Object.setPrototypeOf` all over a codebase.
 
-.Performance issues
+.Performance Issues
 [WARNING]
 ====
-Using `Object.setPrototypeOf` to change the prototype of an object is an expensive operation. Here is what the Mozilla Developer Network documentation has to say about the matter.
+Using `Object.setPrototypeOf` to change the prototype of an object is an expensive operation. Here is what the Mozilla Developer Network documentation has to say about the matter:
 
 [quote, Mozilla Developer Network]
 ____
@@ -881,13 +885,13 @@ ____
 
 === Decorators
 
-Decorators are, as most things programming, definitely not a new concept. They pattern is fairly commonplace in modern programming languages: you have attributes in C#, they're called annotations in Java, there's decorators in Python, and the list goes on. There's a JavaScript decorators proposalfootnoteref:[decorators,You can find the proposal draft online at: https://mjavascript.com/out/decorators.] in the works. It is currently sitting at stage 2 of the TC39 process.
+Decorators are, as most things programming, definitely not a new concept. They pattern is fairly commonplace in modern programming languages: you have attributes in C#, they're called annotations in Java, there are decorators in Python, and the list goes on. There's a JavaScript decorators proposalfootnoteref:[decorators,You can find the proposal draft online at https://mjavascript.com/out/decorators.] in the works. It is currently sitting at stage 2 of the TC39 process.
 
 ==== A Primer on JavaScript Decorators
 
-The syntax for JavaScript decorators is fairly similar to that of Python decorators. JavaScript decorators may be applied to classes and any statically-defined properties, such as those found on an object literal declaration or in a `class` declaration -- even if they are `get` accessors, `set` accessors, or `static` properties.
+The syntax for JavaScript decorators is fairly similar to that of Python decorators. JavaScript decorators may be applied to classes and any statically defined properties, such as those found on an object literal declaration or in a `class` declaration--even if they are `get` accessors, `set` accessors, or `static` properties.
 
-The proposal defines a decorator as an `@` followed by a sequence of dotted identifiersfootnoteref:[no-dynamic-access, Accessing properties via `[]` notation is disallowed due to the difficulty it would present when disambiguating grammar at the compiler level.] and an optional argument list. Here's a few examples.
+The proposal defines a decorator as an `@` followed by a sequence of dotted identifiersfootnoteref:[no-dynamic-access, Accessing properties via `[]` notation is disallowed due to the difficulty it would present when disambiguating grammar at the compiler level.] and an optional argument list. Here are a few examples:
 
 - `@decorators.frozen` is a valid decorator
 - `@decorators.frozen(true)` is a valid decorator
@@ -925,7 +929,7 @@ interface MemberDesciptor {
 }
 ----
 
-In the following example we define a `readonly` member decorator function which makes decorated members non-writable. Taking advantage of the object rest parameter and object spread, we modify the property descriptor to be non-writable while keeping the rest of the member descriptor unchanged.
+In the following example we define a `readonly` member decorator function that makes decorated members nonwritable. Taking advantage of the object rest parameter and object spread, we modify the property descriptor to be non-writable while keeping the rest of the member descriptor unchanged.
 
 [source,javascript]
 ----
@@ -942,7 +946,7 @@ function readonly({ descriptor, ...rest }) {
 
 Class decorator functions take a `ctor`, which is the class constructor being decorated; a `heritage` parameter, containing the parent class when the decorated class extends another class; and a `members` array, with a list of member descriptors for the class being decorated.
 
-We could implement a class-wide `readonlyMembers` decorator by reusing the `readonly member decorator on each member descriptor for a decorated class, as shown next.
+We could implement a class-wide `readonlyMembers` decorator by reusing the `readonly` member decorator on each member descriptor for a decorated class, as shown next.
 
 [source,javascript]
 ----
@@ -961,19 +965,19 @@ We should be careful to write decorators that take into account the supplied `de
 
 ==== Use Case By Example: Attributes in C#
 
-A long time ago, I was first getting acquainted with C# by way of an Ultima Onlinefootnoteref:[uo,Ultima Online is a decades-old fantasy role playing game based on the Ultima universe.] server emulator written in open-source C# code -- RunUO. RunUO was one of the most beautiful codebases I've ever worked with, and it was written in C# to boot.
+A long time ago, I was first getting acquainted with C# by way of an Ultima Onlinefootnoteref:[uo,Ultima Online is a decades-old fantasy role playing game based on the Ultima universe.] server emulator written in open-source C# code--RunUO. RunUO was one of the most beautiful codebases I've ever worked with, and it was written in C# to boot.
 
 They distributed the server software as an executable and a series of `.cs` files. The `runuo` executable would compile those `.cs` scripts at runtime and dynamically mix them into the application. The result was that you didn't need the Visual Studio IDE (nor `msbuild`), or anything other than just enough programming knowledge to edit one of the "scripts" in those `.cs` files. All of the above made RunUO the perfect learning environment for the newcomer developer.
 
 RunUO relied heavily in reflection. They made significant efforts to be customizable by players who were not necessarily invested in programming but were nevertheless interested in changing a few details of the game, such as how much damage a Dragon's fire breath inflicts or how often they shot fireballs. Great developer experience was a big part of their philosophy, and you could create a new kind of `Dragon` just by copying one of the monster files, changing it to inherit from the `Dragon` class, and overriding a few properties to change its color hue, its damage output, and so on.
 
-Just as they made it easy to create new monsters, -- or "non-player characters" (NPC) in gaming slang -- they also relied in reflection to provide functionality to in-game administrators. Administrators could run an in-game command and click on an item or a moster to visualize or change properties without ever leaving the game.
+Just as they made it easy to create new monsters--or "non-player characters" (NPC) in gaming slang--they also relied in reflection to provide functionality to in-game administrators. Administrators could run an in-game command and click on an item or a moster to visualize or change properties without ever leaving the game.
 
 image::images/pmjs_03in01.png["Modifying properties for a RunUO item in-game from the Ultima Online client."]
 
 Not every property in a class is meant to be accessible in-game, though. Some properties are only meant for internal use, or not meant to be modified at runtime. RunUO had a `CommandPropertyAttribute` decoratorfootnoteref:[runuo-attributes,You can find the definition of `CommandPropertyAttribute` for RunUO here: https://mjavascript.com/out/runuo-attributes.] which definied that the property could be modified in-game and where you could also specify the access level required to read and write that property. This decorator was used extensively throughout the RunUO codebasefootnoteref:[runuo-commandprops,Their use is widespread throughout the codebase, marking over 200 properties in the RunUO core alone: https://mjavascript.com/out/runuo-commandprops.].
 
-The `PlayerMobile` class, which governed how a player's character works, is a great place to look at these attributes. `PlayerMobile` have several properties that are accessible in-gamefootnoteref:[runuo-playermobile,You can find quite a few usage examples of `CommandProperty` attribute in the `PlayerMobile.cs` class: https://mjavascript.com/out/runuo-playermobile.] to administrators and moderators. Here are a couple of getters and setters, but only the first one has the `CommandProperty` attribute -- making that property accessible to Game Masters in-game.
+The `PlayerMobile` class, which governed how a player's character works, is a great place to look at these attributes. `PlayerMobile` have several properties that are accessible in-gamefootnoteref:[runuo-playermobile,You can find quite a few usage examples of `CommandProperty` attribute in the `PlayerMobile.cs` class: https://mjavascript.com/out/runuo-playermobile.] to administrators and moderators. Here are a couple of getters and setters, but only the first one has the `CommandProperty` attribute--making that property accessible to Game Masters in-game.
 
 [source,csharp]
 ----
@@ -995,7 +999,7 @@ One interesting difference between C# attributes and JavaScript decorators is th
 
 ==== Marking Properties in JavaScript
 
-In JavaScript, there's no such thing -- not in the existing proposal draft, at least -- to get the custom attributes on a property. That said, JavaScript is a highly dynamic language, and creating this sort of "labels" wouldn't be much of a hassle. Decorating a `Dog` with a "command property" wouldn't be all that different from RunUO and C#.
+In JavaScript, there's no such thing--not in the existing proposal draft, at least--to get the custom attributes on a property. That said, JavaScript is a highly dynamic language, and creating this sort of "labels" wouldn't be much of a hassle. Decorating a `Dog` with a "command property" wouldn't be all that different from RunUO and C#.
 
 [source,javascript]
 ----

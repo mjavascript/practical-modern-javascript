@@ -184,7 +184,7 @@ function getCompletionText(progress) {
 
 === Template Literals
 
-For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multiline string was also a hassle, as was escaping single or double quotes -- depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
+For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multiline string was also a hassle, as was escaping single or double quotes--depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
 
 With a template literal, you can use expression interpolation, which enables you to inline variables, function calls, or any other arbitrary JavaScript expressions in a string without relying on concatenation.
 
@@ -776,7 +776,7 @@ function wait(delay) {
 }
 ----
 
-Another large upside in using arrow functions lies in their lexical scoping, where they don't modify the meaning of `this` or `arguments`. If we find ourselves copying `this` to a temporary variable -- typically named `self`, `context`, or `_this` -- we may want to use an arrow function for the inner bit of code instead. Let's take a look at an example of this.
+Another large upside in using arrow functions lies in their lexical scoping, where they don't modify the meaning of `this` or `arguments`. If we find ourselves copying `this` to a temporary variable--typically named `self`, `context`, or `_this`--we may want to use an arrow function for the inner bit of code instead. Let's take a look at an example of this.
 
 [source,javascript]
 ----
@@ -1017,7 +1017,7 @@ Promise
   .then(x => x * 2)
 ----
 
-When we use an `await` expression, the expression on its righthand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise -- coerced or otherwise -- has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
+When we use an `await` expression, the expression on its righthand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise--coerced or otherwise--has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
 
 [source,javascript]
 ----

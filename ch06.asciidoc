@@ -5,7 +5,7 @@ Proxies are an interesting and powerful feature in ES6 that act as intermediarie
 
 === Getting Started with Proxy
 
-By default, proxies don't do much -- in fact they don't do anything. If you don't provide any configuration, your proxy will just work as a pass-through to the `target` object, also known as a "no-op forwarding proxy," meaning that all operations on the proxy object defer to the underlying object.
+By default, proxies don't do much--in fact they don't do anything. If you don't provide any configuration, your proxy will just work as a pass-through to the `target` object, also known as a "no-op forwarding proxy," meaning that all operations on the proxy object defer to the underlying object.
 
 In the following piece of code, we create a no-op forwarding `Proxy`. You can observe how by assigning a value to `proxy.exposed`, that value is passed onto `target.exposed`. You could think of proxies as the gatekeepers of their underlying objects: they may allow certain operations to go through and prevent others from passing, but they carefully inspect every single interaction with their underlying objects.
 
@@ -123,7 +123,7 @@ proxy._secret = 'invalidate'
 // <- Error: Can't set private "_secret" property
 ----
 
-The object being proxied, `target` in our latest example, should be completely hidden from consumers, so that they are forced to access it exclusively through `proxy`. Preventing direct access to the `target` object means that they will have to obey the access rules defined on the `proxy` object -- such as _"properties prefixed with an underscore are off-limits."_
+The object being proxied, `target` in our latest example, should be completely hidden from consumers, so that they are forced to access it exclusively through `proxy`. Preventing direct access to the `target` object means that they will have to obey the access rules defined on the `proxy` object--such as _"properties prefixed with an underscore are off-limits."_
 
 To that end, you could wrap the proxied object in a function and then return the `proxy`.
 
@@ -260,7 +260,7 @@ console.log(proxy.isUsable)
 // <- TypeError: illegal operation attempted on a revoked proxy
 ----
 
-This type of `Proxy` is particularly useful because you can completely cut off access to the `proxy` granted to a consumer. You could expose a revocable `Proxy` and keep around the `revoke` method, perhaps in a `WeakMap` collection. When it becomes clear that the consumer shouldn't have access to `target` anymore -- not even through `proxy` -- you `.revoke()` their access rights.
+This type of `Proxy` is particularly useful because you can completely cut off access to the `proxy` granted to a consumer. You could expose a revocable `Proxy` and keep around the `revoke` method, perhaps in a `WeakMap` collection. When it becomes clear that the consumer shouldn't have access to `target` anymore--not even through `proxy`--you `.revoke()` their access rights.
 
 The following example shows two functions. The `getStorage` function can be used to get proxied access into `storage`, and it keeps a reference to the `revoke` function for the returned `proxy` object. Whenever we want to cut off access to `storage` for a given `proxy`, `revokeStorage` will call its associated `revoke` function and remove the entry from the `WeakMap`. Note that making both functions accessible to the same set of consumers won't pose security concerns: once access through a proxy has been revoked, it can't be restored.
 
@@ -286,7 +286,7 @@ Given that `revoke` is available on the same scope where your `handler` traps ar
 
 === Proxy Trap Handlers
 
-Perhaps the most interesting aspect of proxies is how you can use them to intercept just about any interaction with the `target` object -- not only plain `get` or `set` operations.
+Perhaps the most interesting aspect of proxies is how you can use them to intercept just about any interaction with the `target` object--not only plain `get` or `set` operations.
 
 We've already covered `get`, which traps property access; and `set`, which traps property assignment. Next up we'll discuss the different kinds of traps you can set up.
 
@@ -329,7 +329,7 @@ function invariant(key, action) {
 }
 ----
 
-Note how accessing properties through the proxy will now return `false` when querying one of the private properties, with the consumer being none the wiser -- completely unaware that we've intentionally hid the property from them. Note how `_secret in target` returns `true` because we're bypassing the proxy. That means we can still use the underlying object unchallenged by tight access control rules while consumers have no choice but to stick to the proxy's rules.
+Note how accessing properties through the proxy will now return `false` when querying one of the private properties, with the consumer being none the wiser--completely unaware that we've intentionally hid the property from them. Note how `_secret in target` returns `true` because we're bypassing the proxy. That means we can still use the underlying object unchallenged by tight access control rules while consumers have no choice but to stick to the proxy's rules.
 
 [source,javascript]
 ----
@@ -429,7 +429,7 @@ Consumers interacting with `target` through the `proxy` can no longer delete pro
 
 ==== defineProperty Trap
 
-The `Object.defineProperty` function -- introduced in ES5 -- can be used to add new properties to a `target` object, using a property `key` and a property `descriptor`. For the most part, `Object.defineProperty(target, key, descriptor)` is used in two kinds of situations:
+The `Object.defineProperty` function--introduced in ES5--can be used to add new properties to a `target` object, using a property `key` and a property `descriptor`. For the most part, `Object.defineProperty(target, key, descriptor)` is used in two kinds of situations:
 
 1. When we need to ensure cross-browser support of getters and setters
 2. When we want to define a custom property accessor

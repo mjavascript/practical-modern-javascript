@@ -154,7 +154,7 @@ map.has(1)
 // <- []
 ----
 
-Maps come with a read-only `.size` property that behaves similarly to `Array#length` -- at any point in time it gives you the current amount of entries in the map.
+Maps come with a read-only `.size` property that behaves similarly to `Array#length`--at any point in time it gives you the current amount of entries in the map.
 
 [source,javascript]
 ----
@@ -169,7 +169,7 @@ map.size
 // <- 0
 ----
 
-You're able to use arbitrary objects when choosing map keys: you're not limited to using primitive values like symbols, numbers, or strings. Instead, you can use functions, objects, dates -- and even DOM elements, too. Keys won't be cast to strings as we observe with plain JavaScript objects, but instead their references are preserved.
+You're able to use arbitrary objects when choosing map keys: you're not limited to using primitive values like symbols, numbers, or strings. Instead, you can use functions, objects, dates--and even DOM elements, too. Keys won't be cast to strings as we observe with plain JavaScript objects, but instead their references are preserved.
 
 [source,javascript]
 ----
@@ -439,7 +439,7 @@ map.set(Symbol(), 2)
 // <- TypeError
 ----
 
-In exchange for having a more limited feature set, `WeakMap` key references are weakly held, meaning that the objects referenced by `WeakMap` keys are subject to garbage collection if there are no references to them -- other than weak references. This kind of behavior is useful when you have metadata about a `person`, for example, but you want the `person` to be garbage collected when and if the only reference back to `person` is their associated metadata. You can now keep that metadata in a `WeakMap` using `person` as the key.
+In exchange for having a more limited feature set, `WeakMap` key references are weakly held, meaning that the objects referenced by `WeakMap` keys are subject to garbage collection if there are no references to them--other than weak references. This kind of behavior is useful when you have metadata about a `person`, for example, but you want the `person` to be garbage collected when and if the only reference back to `person` is their associated metadata. You can now keep that metadata in a `WeakMap` using `person` as the key.
 
 In that sense, a `WeakMap` is most useful when the component maintaining it doesn't own the mapped objects, but wants to assign its own information to them without modifying the original objects or their lifecycle; letting memory be reclaimed when, for example, a DOM node is removed from the document.
 
@@ -476,7 +476,7 @@ Correspondingly, use cases for `WeakMap` revolve around the need to specify meta
 
 Keeping data about DOM elements that should be released from memory when they're no longer of interest is another important use case, and in this regard using `WeakMap` is an even better solution to the DOM-related API caching solution we implemented earlier using `Map`.
 
-In so many words, then: no, `WeakMap` is definitely not worse than `Map` -- they just cater to different use cases.
+In so many words, then: no, `WeakMap` is definitely not worse than `Map`--they just cater to different use cases.
 
 === Sets in ES6
 

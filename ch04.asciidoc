@@ -1,13 +1,13 @@
 [[iteration-and-flow-control]]
 == Iteration and Flow Control
 
-Having covered the essential aspects of ES6 in <<ecmascript6-essentials>>, and symbols in <<classes-symbols-and-symbols>>, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn towards the end of the chapter.
+Having covered the essential aspects of ES6 in <<ecmascript6-essentials>>, and symbols in <<classes-symbols-and-symbols>>, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn toward the end of the chapter.
 
 To kick off the chapter, we'll start by discussing promises. Promises have existed in user-land for a long time, but they're a native part of the language starting in ES6.
 
 === Promises
 
-Promises can be vaguely defined as "a proxy for a value that will eventually become available". While we can write synchronous code inside promises, promise-based code flows in a strictly asynchronous manner. Promises can make asynchronous flows easier to reason about -- once you've mastered promises, that is.
+Promises can be vaguely defined as "a proxy for a value that will eventually become available." While we can write synchronous code inside promises, promise-based code flows in a strictly asynchronous manner. Promises can make asynchronous flows easier to reason about--once you've mastered promises, that is.
 
 ==== Getting Started with Promises
 
@@ -68,10 +68,10 @@ p.then(null, err => {
 })
 ----
 
-.Promises as an alternative to callbacks and events
+.Promises as an Alternative to Callbacks and Events
 ****
 
-Traditionally JavaScript relied on callbacks instead of promises and chaining. If the `fetch` function asked for a callback, you'd have to add one that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors -- that may or may not occur -- during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how `fetch` would look if it had a callback-based API.
+Traditionally JavaScript relied on callbacks instead of promises and chaining. If the `fetch` function asked for a callback, you'd have to add one that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors--that may or may not occur--during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how `fetch` would look if it had a callback-based API.
 
 [source,javascript]
 ----
@@ -84,9 +84,9 @@ fetch('/items', (err, res) => {
 })
 ----
 
-The callback wouldn't be invoked until the `/items` resource has been retrieved, or an error arises from the `fetch` operation. Execution remains asynchronous and non-blocking. Note that in this model you could only specify a single callback. That callback would be responsible for all functionality derived from the response, and it'd be up to the consumer to come up with a mechanism to compose different aspects of handling the response into that single callback.
+The callback wouldn't be invoked until the `/items` resource has been retrieved, or an error arises from the `fetch` operation. Execution remains asynchronous and nonblocking. Note that in this model you could only specify a single callback. That callback would be responsible for all functionality derived from the response, and it'd be up to the consumer to come up with a mechanism to compose different aspects of handling the response into that single callback.
 
-Besides traditional callbacks, another API design choice might have been to use an event-driven model. In this case the object returned by `fetch` would be able to register callbacks for different kinds of events, binding as many event handlers as needed for any events -- just like when you attach event listeners to the browser DOM. Typically there's an `error` event that's raised when things go awry, and other events that are raised when something notable happens. In the following piece of code, we show how `fetch` would look if it had an event-based API.
+Besides traditional callbacks, another API design choice might have been to use an event-driven model. In this case the object returned by `fetch` would be able to register callbacks for different kinds of events, binding as many event handlers as needed for any events--just like when you attach event listeners to the browser DOM. Typically there's an `error` event that's raised when things go awry, and other events that are raised when something notable happens. In the following piece of code, we show how `fetch` would look if it had an event-based API.
 
 [source,javascript]
 ----
@@ -99,26 +99,27 @@ fetch('/items')
   })
 ----
 
-Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events however make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in. Moreover, events are better suited to handle streams of values, making them somewhat inappropriate in for this particular use case. <<asynchronous_code_flows>> discusses proper asynchronous code flow design in more detail, expanding on which kinds of constructs are better suited for which kinds of code flows.
+Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events, however, make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in. Moreover, events are better suited to handle streams of values, making them somewhat inappropriate in this particular use case. <<asynchronous_code_flows>> on page xx discusses proper asynchronous code flow design in more detail, expanding on which kinds of constructs are better suited for which kinds of code flows.
 ****
 
 When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the `.on` method attach the event listener and then returning the event emitter itself. Promises are different. The `.then` and `.catch` methods return a new promise every time. That's important because chaining can have wildly different results depending on where you append a `.then` or a `.catch` call onto.
 
-.Visualizing Promise chains: a major source of confusion
+.Visualizing Promise Chains: a Major Source of Confusion
 [WARNING]
 ====
 The `.then` and `.catch` methods return a new promise every time, creating a tree-like data structure. If you had a `p1` promise and a `p2` promise returned by `p1.then`, the `p1` and `p2` promises would be nodes connected by the `p1.then` reaction handler. Reactions create new promises that are attached to the tree as children of the promise they're reacting to.
 
 When we chain promises, we need to understand that `p1.then(r1).then(r2)` creates two new `p2` and `p3` promises. The second reaction, `r2`, is going to fire if `p2` fulfills, while the `r1` reaction will fire when `p1` is fulfilled. When we have a statement such as `p1.then(r1); p1.then(r2)`, in contrast, both `r1` and `r2` will fire if `p1` is fulfilled. A discrepancy occurs when `p1` fulfills but `p2` doesn't.
 
-Figuring out the tree-like nature of promises is the key to unlocking a deep understanding of how promises behave. To this end, I've created an online tool called Promisees you can use to play around with promise chains while visualizing the tree structure they leave behind.
+Figuring out the tree-like nature of promises is the key to unlocking a deep understanding of how promises behave. To this end, I've created an online tool called Promisees you can use to play around with promise chains while visualizing the tree structure they leave behind, as shown in <<Fig4-1>>.
 
+[[Fig4-1]]
+.You can find Promisees at https://mjavascript.com/out/promisees
 image::images/pmjs_04in01.png["Promisees lets you write a piece of code and visualize how the underlying graph evolves as promises are settled in fulfillment or rejection."]
 
-You can find Promisees at https://mjavascript.com/out/promisees.
 ====
 
-A promise is created by passing the `Promise` constructor a resolver that decides how and when the promise is settled, by calling either a `resolve` method that will settle the promise in fulfillment or a `reject` method that'd settle the promise as a rejection. Until the promise is settled by calling either function, it'll be in pending state and any reactions attached to it won't be executed. The following snippet of code creates a promise from scratch where we'll wait for a second before randomly settling the promise with a fulfillment or rejection result.
+A promise is created by passing the `Promise` constructor a resolver that decides how and when the promise is settled, by calling either a `resolve` method that will settle the promise in fulfillment or a `reject` method that'd settle the promise as a rejection. Until the promise is settled by calling either function, it'll be in a pending state and any reactions attached to it won't be executed. The following snippet of code creates a promise from scratch where we'll wait for a second before randomly settling the promise with a fulfillment or rejection result.
 
 [source,javascript]
 ----
@@ -133,7 +134,7 @@ new Promise(function (resolve, reject) {
 })
 ----
 
-Promises can also be created using `Promise.resolve` and `Promise.reject`, these methods create promises that will immediately settle with a fulfillment value and a rejection reason respectively.
+Promises can also be created using `Promise.resolve` and `Promise.reject`. These methods create promises that will immediately settle with a fulfillment value and a rejection reason, respectively.
 
 [source,javascript]
 ----
@@ -143,7 +144,7 @@ Promise
 // <- 123
 ----
 
-When a `p` promise is fulfilled, reactions registered with `p.then` are executed. When a `p` promise is rejected, reactions registered with `p.catch` are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, a `Promise`, a thenable, or `throw` an error. Thenables are objects considered promise-like that can be casted into a `Promise` using `Promise.resolve` as observed in <<creating_a_promise_from_scratch>>.
+When a `p` promise is fulfilled, reactions registered with `p.then` are executed. When a `p` promise is rejected, reactions registered with `p.catch` are executed. Those reactions can, in turn, result in three different situations depending on whether they return a value, a `Promise`, a thenable, or `throw` an error. Thenables are objects considered promise-like that can be cast into a `Promise` using `Promise.resolve` as observed in <<creating_a_promise_from_scratch>>.
 
 A reaction may return a value, which would cause the promise returned by `.then` to become fulfilled with that value. In this sense, promises can be chained to transform the fulfillment value of the previous promise over and over, as shown in the following snippet of code.
 
@@ -211,7 +212,7 @@ Promise
   .catch(err => console.error(err))
 ----
 
-It might be easier to decompose that series of chained method calls into variables, as shown next. The following piece of code might help you visualize the fact that, if you attached the `.catch` reaction to `p1`, you wouldn't be able to catch the error originated in the `.then` reaction. While `p1` is fulfilled, `p2` -- a different promise than `p1`, resulting from calling `p1.then` -- is rejected due to the error being thrown. That error could be caught, instead, if we attached the rejection reaction to `p2`.
+It might be easier to decompose that series of chained method calls into variables, as shown next. The following piece of code might help you visualize the fact that, if you attached the `.catch` reaction to `p1`, you wouldn't be able to catch the error originated in the `.then` reaction. While `p1` is fulfilled, `p2`--a different promise than `p1`, resulting from calling `p1.then`--is rejected due to the error being thrown. That error could be caught, instead, if we attached the rejection reaction to `p2`.
 
 [source,javascript]
 ----
@@ -220,15 +221,19 @@ const p2 = p1.then(x => { throw new Error('failed') })
 const p3 = p2.catch(err => console.error(err))
 ----
 
-Here is another situation where it might help you to think of promises as a tree-like data structure. In the following illustration it becomes clear that, given the error originates in the `p2` node, we couldn't notice it by attaching a rejection reaction to `p1`.
+Here is another situation where it might help you to think of promises as a tree-like data structure. In <<Fig4_2>> it becomes clear that, given the error originates in the `p2` node, we couldn't notice it by attaching a rejection reaction to `p1`.
 
+[[Fig4_2]]
+.Understanding the tree structure of promises reveals that rejection reactions can only catch errors that arise in a given branch of promise-based code.
 image::images/pmjs_04in02.png["The p3 rejection handler in this example won't be able to catch the failure in p2's reaction, since it reacts to p1 instead of p2."]
 
-In order for the reaction to handle the rejection in `p2`, we'd have to attach the reaction to `p2` instead.
+In order for the reaction to handle the rejection in `p2`, we'd have to attach the reaction to `p2` instead, as shown in <<Fig4_3>>.
 
+[[Fig4_3]]
+.By attaching a rejection handler on the branch where an error is produced, we're able to handle the rejection.
 image::images/pmjs_04in03.png["In this example, p3 reacts to p2. This enables p3 to handle the rejection that arises in p2."]
 
-We've established that the promise you attach your reactions onto is important, as it determines what errors it can capture and what errors it can not. It's also worth noting that as long as an error remains uncaught in a promise chain, a rejection handler will be able to capture it. In the following example we've introduced an intermediary `.then` call in between `p2`, where the error originated; and `p4`, where we attach the rejection reaction. When `p2` settles with a rejection, `p3` becomes settled with a rejection as it depends on `p2` directly. When `p3` settles with a rejection, the rejection handler in `p4` fires.
+We've established that the promise you attach your reactions onto is important, as it determines what errors it can capture and what errors it cannot. It's also worth noting that as long as an error remains uncaught in a promise chain, a rejection handler will be able to capture it. In the following example we've introduced an intermediary `.then` call in between `p2`, where the error originated; and `p4`, where we attach the rejection reaction. When `p2` settles with a rejection, `p3` becomes settled with a rejection as it depends on `p2` directly. When `p3` settles with a rejection, the rejection handler in `p4` fires.
 
 [source,javascript]
 ----
@@ -273,7 +278,9 @@ In contrast, the next snippet will print `err.message` twice. It works by saving
 
 [source,javascript]
 ----
-const p = fetch('/items').then(res => res.a.prop.that.does.not.exist)
+const p = fetch('/items').then(res =>
+  res.a.prop.that.does.not.exist
+)
 p.catch(err => console.error(err.message))
 p.catch(err => console.error(err.message))
 // <- 'Cannot read property "prop" of undefined'
@@ -292,30 +299,32 @@ const p3 = p2.catch(err => {})
 const p4 = p3.catch(err => console.error(err.message))
 ----
 
-Here is an enumeration of what is going on as that piece of code is executed.
+Here is an enumeration of what is going on as that piece of code is executed:
 
-1. `fetch` returns a brand new `p1` promise
-2. `p1.then` returns a brand new `p2` promise, which will react if `p1` is fulfilled
-3. `p2.catch` returns a brand new `p3` promise, which will react if `p2` is rejected
-4. `p3.catch` returns a brand new `p4` promise, which will react if `p3` is rejected
-5. When `p1` is fulfilled, the `p1.then` reaction is executed
-6. Afterwards, `p2` is rejected because of an error in the `p1.then` reaction
-7. Since `p2` was rejected, `p2.catch` reactions are executed, and the `p2.then` branch is ignored
-8. The `p3` promise from `p2.catch` is fulfilled, because it doesn't produce an error or result in a rejected promise
-9. Because `p3` was fulfilled, the `p3.catch` is never followed. The `p3.then` branch would've been used instead
+1. `fetch` returns a brand new `p1` promise.
+2. `p1.then` returns a brand new `p2` promise, which will react if `p1` is fulfilled.
+3. `p2.catch` returns a brand new `p3` promise, which will react if `p2` is rejected.
+4. `p3.catch` returns a brand new `p4` promise, which will react if `p3` is rejected.
+5. When `p1` is fulfilled, the `p1.then` reaction is executed.
+6. Afterwards, `p2` is rejected because of an error in the `p1.then` reaction.
+7. Since `p2` was rejected, `p2.catch` reactions are executed, and the `p2.then` branch is ignored.
+8. The `p3` promise from `p2.catch` is fulfilled, because it doesn't produce an error or result in a rejected promise.
+9. Because `p3` was fulfilled, the `p3.catch` is never followed. The `p3.then` branch would've been used instead.
 
-You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structurefootnoteref:[promisees,I wrote an online visualization tool called Promisees where you can see the tree structure underlying a Promise chain: https://mjavascript.com/out/promisees.].
+You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure.footnoteref:[promisees,I wrote an online visualization tool called Promisees where you can see the tree structure underlying a `Promise` chain: https://mjavascript.com/out/promisees.] Let's reinforce this concept with <<Fig4-4>>.
 
+[[Fig4-4]]
+.Given the tree structure, we realize that `p3` is fulfilled, as it doesn't produce an exception nor is it rejected. For that reason, `p4` can never follow the rejection branch, given its parent was fulfilled.
 image::images/pmjs_04in04.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
 
 It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches, and so on.
 
 [[creating_a_promise_from_scratch]]
-==== Creating a Promise From Scratch
+==== Creating a Promise from Scratch
 
 We already know that promises can be created using a function such as `fetch`, `Promise.resolve`, `Promise.reject`, or the `Promise` constructor function. We've already used `fetch` extensively to create promises in previous examples. Let's take a more nuanced look at the other three ways we can create a promise.
 
-Promises can be created from scratch by using `new Promise(resolver)`. The `resolver` parameter is a function that will be used to settle the promise. The `resolver` takes two arguments, a `resolve` function and a `reject` function.
+Promises can be created from scratch by using `new Promise(resolver)`. The `resolver` parameter is a function that will be used to settle the promise. The `resolver` takes two arguments: a `resolve` function and a `reject` function.
 
 The pair of promises shown in the next snippet are settled in fulfillment and rejection, respectively. Here we're settling the first promise with a fulfillment value of `'result'`, and rejecting the second promise with an `Error` object, specifying `'reason'` as its message.
 
@@ -325,7 +334,7 @@ new Promise(resolve => resolve('result'))
 new Promise((resolve, reject) => reject(new Error('reason')))
 ----
 
-Resolving and rejecting promises without a value is possible, but not that useful. Usually promises will fulfill with a `result` such as the response from an AJAX call as we've seen with `fetch`. You'll definitely want to state the `reason` for your rejections -- typically wrapping them in an `Error` object so that you can report back a stack trace.
+Resolving and rejecting promises without a value is possible, but not that useful. Usually promises will fulfill with a `result` such as the response from an AJAX call as we've seen with `fetch`. You'll definitely want to state the `reason` for your rejections--typically wrapping them in an `Error` object so that you can report back a stack trace.
 
 As you may have guessed, there's nothing inherently synchronous about promise resolvers. Settlement can be completely asynchronous for fulfillment and rejection alike. Even if the resolver calls `resolve` right away, the result won't trickle down to reactions until the next tick. That's the whole point of promises! The following example creates a promise that becomes fulfilled after two seconds elapse.
 
@@ -334,7 +343,7 @@ As you may have guessed, there's nothing inherently synchronous about promise re
 new Promise(resolve => setTimeout(resolve, 2000))
 ----
 
-Note that only the first call made to one of these functions will have an impact -- once a promise is settled its outcome can't change. The following code snippet creates a promise that's fulfilled after the provided `delay` or rejected after a three second timeout. We're taking advantage of the fact that calling either of these functions after a promise has been settled have no effect, in order to create a race condition where the first call to be made will be the one that sticks.
+Note that only the first call made to one of these functions will have an impact--once a promise is settled its outcome can't change. The following code snippet creates a promise that's fulfilled after the provided `delay` or rejected after a three-second timeout. We're taking advantage of the fact that calling either of these functions after a promise has been settled has no effect, in order to create a race condition where the first call to be made will be the one that sticks.
 
 [source,javascript]
 ----
@@ -348,16 +357,16 @@ resolveUnderThreeSeconds(2000) // becomes fulfilled after 2s
 resolveUnderThreeSeconds(7000) // becomes rejected after 3s
 ----
 
-When creating a new promise `p1`, you could call `resolve` with another promise `p2` -- besides calling `resolve` with non-promise values. In those cases, `p1` will be resolved but blocked on the outcome of `p2`. Once `p2` settles, `p1` will be settled with its value and outcome. The following bit of code is, thus, effectively the same as simply doing `fetch('/items')`.
+When creating a new promise `p1`, you could call `resolve` with another promise `p2`--besides calling `resolve` with nonpromise values. In those cases, `p1` will be resolved but blocked on the outcome of `p2`. Once `p2` settles, `p1` will be settled with its value and outcome. The following bit of code is, thus, effectively the same as simply doing `fetch('/items')`.
 
 [source,javascript]
 ----
 new Promise(resolve => resolve(fetch('/items')))
 ----
 
-Note that you this behavior is only possible when using `resolve`. If you try to replicate the same behavior with `reject` you'll find that the `p1` promise is rejected with the `p2` promise as the rejection `reason`. While `resolve` may result in a promise being fulfilled or rejected, `reject` always results in the promise being rejected. If you `resolve` to a rejected promise or a promise that's eventually rejected, then your promise will be rejected as well. The opposite isn't true for rejections. If you `reject` in a resolver, the promise will be rejected no matter what value is passed into `reject`.
+Note that this behavior is only possible when using `resolve`. If you try to replicate the same behavior with `reject` you'll find that the `p1` promise is rejected with the `p2` promise as the rejection `reason`. While `resolve` may result in a promise being fulfilled or rejected, `reject` always results in the promise being rejected. If you `resolve` to a rejected promise or a promise that's eventually rejected, then your promise will be rejected as well. The opposite isn't true for rejections. If you `reject` in a resolver, the promise will be rejected no matter what value is passed into `reject`.
 
-In some cases you'll know beforehand about a value you want to settle a promise with. In these cases you could create a promise from scratch, as shown next. This can be convenient when you want to set off the benefits of promise chaining, but don't otherwise have a clear initiator which returns a `Promise` -- such as a call to `fetch`.
+In some cases you'll know beforehand about a value you want to settle a promise with. In these cases you could create a promise from scratch, as shown next. This can be convenient when you want to set off the benefits of promise chaining, but don't otherwise have a clear initiator that returns a `Promise`--such as a call to `fetch`.
 
 [source,javascript]
 ----
@@ -386,7 +395,9 @@ When you already know the rejection reason for a promise, you can use `Promise.r
 [source,javascript]
 ----
 Promise.reject(reason)
-fetch('/items').then(() => Promise.reject(new Error('arbitrarily')))
+fetch('/items').then(() =>
+  Promise.reject(new Error('arbitrarily'))
+)
 fetch('/items').then(() => { throw new Error('arbitrarily')})
 ----
 
@@ -398,7 +409,7 @@ Promises can be in three distinct states: pending, fulfilled, and rejected. Pend
 
 A promise can be resolved or rejected exactly once. Attempting to resolve or reject a promise for a second time won't have any effect.
 
-When a promise is resolved with a non-promise, non-thenable value, it settles in fulfillment. When a promise is rejected, it's also considered to be settled.
+When a promise is resolved with a nonpromise, nonthenable value, it settles in fulfillment. When a promise is rejected, it's also considered to be settled.
 
 A promise `p1` that's resolved to another promise or thenable `p2` stays in the pending state, but is nevertheless resolved: it can't be resolved again nor rejected. When `p2` settles, its outcome is forwarded to `p1`, which becomes settled as well.
 
@@ -413,7 +424,7 @@ fetch('/items')
   .then(() => console.log('done'))
 ----
 
-A less contrived example would involve other steps. In the following piece of code we use the outcome of the first `fetch` request in order to construct the second request. To do that, we use the `res.json` method which returns a promise that resolves to the object from parsing a JSON response. Then we use that object to construct the endpoint we want to request in our second call to `fetch`, and finally we print the `item` object from the second response to the console.
+A less contrived example would involve other steps. In the following piece of code we use the outcome of the first `fetch` request in order to construct the second request. To do that, we use the `res.json` method, which returns a promise that resolves to the object from parsing a JSON response. Then we use that object to construct the endpoint we want to request in our second call to `fetch`, and finally we print the `item` object from the second response to the console.
 
 [source,javascript]
 ----
@@ -424,7 +435,7 @@ fetch('/items')
   .then(item => console.log(item))
 ----
 
-We're not limited to returning promises or thenables. We could also return values from `.then` and `.catch` reactions. Those values would be passed to the next reaction in the chain. In this sense, a reaction can be regarded as the transformation of input from the previous reaction in the chain into the input for the next reaction in the chain. The example below starts by creating a promise fulfilled with `[1, 2, 3]`. Then there's a reaction which maps those values into `[2, 4, 6]`. Those values are then printed to the console in the following reaction in the chain.
+We're not limited to returning promises or thenables. We could also return values from `.then` and `.catch` reactions. Those values would be passed to the next reaction in the chain. In this sense, a reaction can be regarded as the transformation of input from the previous reaction in the chain into the input for the next reaction in the chain. The following example starts by creating a promise fulfilled with `[1, 2, 3]`. Then there's a reaction that maps those values into `[2, 4, 6]`. Those values are then printed to the console in the following reaction in the chain.
 
 [source,javascript]
 ----
@@ -439,7 +450,7 @@ Note that you can transform data in rejection branches as well. Keep in mind tha
 
 ==== Promise#finally Proposal
 
-There's a TC39 proposalfootnoteref:[proposal-promise-finally,This proposal is in stage 2 at the time of this writing. You can find the proposal draft at: https://mjavascript.com/out/proposal-promise-finally.] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
+There's a TC39 proposalfootnoteref:[proposal-promise-finally,This proposal is in stage 2 at the time of this writing. You can find the proposal draft at https://mjavascript.com/out/proposal-promise-finally.] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
 
 We can think of the following bit of code as a rough ponyfill for `Promise#finally`. We pass the reaction callback to `p.then` as both a fulfillment reaction and a rejection reaction.
 
@@ -475,7 +486,7 @@ const p3 = p2.then(data => console.log(data))
 // <- 'value'
 ----
 
-This is unlike `p.then(fn, fn)` which would produce a new fulfillment value unless it's explicitly forwarded in the reaction, as shown next.
+This is unlike `p.then(fn, fn)`, which would produce a new fulfillment value unless it's explicitly forwarded in the reaction, as shown next.
 
 [source,javascript]
 ----
@@ -511,7 +522,7 @@ As we can observe after carefully reading the code for our ponyfill, if either r
 
 ==== Leveraging Promise.all and Promise.race
 
-When writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There's also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excell at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API methods: `Promise.all` and `Promise.race`.
+When writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There are also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excel at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API methods: `Promise.all` and `Promise.race`.
 
 In most cases you'll want code that can be executed concurrently to take advantage of that, as it could make your code run much faster. Suppose you wanted to pull the description of two products in your catalog, using two distinct API calls, and then print out both of them to the console. The following piece of code would run both operations concurrently, but it would need separate print statements. In the case of printing to the console, that wouldn't make much of a difference, but if we needed to make single function call passing in both products, we couldn't do that with two separate `fetch` requests.
 
@@ -537,7 +548,7 @@ Promise
   .then(products => console.log(products[0], products[1]))
 ----
 
-Given that the results are provided as an array, its indices have no semantic meaning to our code. Using parameter destructuring to pull out variable names for each product might make more sense when reading the code. The following example uses destructuring to clean that up. Keep in mind that even though there's a single argument, destructuring forces us to use parenthesis in the arrow function parameter declaration.
+Given that the results are provided as an array, its indices have no semantic meaning to our code. Using parameter destructuring to pull out variable names for each product might make more sense when reading the code. The following example uses destructuring to clean that up. Keep in mind that even though there's a single argument, destructuring forces us to use parentheses in the arrow function parameter declaration.
 
 [source,javascript]
 ----
@@ -549,7 +560,7 @@ Promise
   .then(([chair, table]) => console.log(chair, table))
 ----
 
-The following example shows how if a single promise is rejected, `p` will be rejected as well. It's important to understand that as a single rejected promise might prevent an otherwise fulfilled array of promises from fulfilling `p`. In the example, rather than wait until `p2` and `p3` settle, `p` becomes immediately rejected.
+The following example shows how if a single promise is rejected, `p` will be rejected as well. It's important to understand that, as a single rejected promise might prevent an otherwise fulfilled array of promises from fulfilling `p`. In the example, rather than wait until `p2` and `p3` settle, `p` becomes immediately rejected.
 
 [source,javascript]
 ----
@@ -562,7 +573,7 @@ const p = Promise
   // <- 'failed'
 ----
 
-In summary, `Promise.all` has three possible outcomes.
+In summary, `Promise.all` has three possible outcomes:
 
 - Settle with all fulfillment `results` as soon as all of its dependencies are fulfilled
 - Settle with a single rejection `reason` as soon as one of its dependencies is rejected
@@ -581,7 +592,7 @@ Promise
   // <- 1
 ----
 
-Rejections will also finish the race, and the resulting promise will be rejected. Using `Promise.race` could be useful in scenarios where we want to time out a promise we otherwise have no control over. For instance, in the following piece of code there's a race between a `fetch` request and a promise that becomes rejected after a five second timeout. If the request takes more than five seconds the race will be rejected.
+Rejections will also finish the race, and the resulting promise will be rejected. Using `Promise.race` could be useful in scenarios where we want to time out a promise we otherwise have no control over. For instance, in the following piece of code there's a race between a `fetch` request and a promise that becomes rejected after a five-second timeout. If the request takes more than five seconds, the race will be rejected.
 
 [source,javascript]
 ----
@@ -602,7 +613,7 @@ Promise
 [[iterator_protocol_and_iterable_protocol]]
 === Iterator Protocol and Iterable Protocol
 
-JavaScript gets two new protocols in ES6: iterators and iterables. These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into lazyness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
+JavaScript gets two new protocols in ES6: iterators and iterables. These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into laziness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
 
 ==== Understanding Iteration Principles
 
@@ -615,7 +626,7 @@ The spread operator was first introduced in <<ecmascript6-essentials>>, and it's
 const sequence = [...iterable]
 ----
 
-As you might remember, symbol properties can't be directly embedded into object literal keys. The following bit of code shows how you'd add a Symbol property using pre-ES6 language semantics.
+As you might remember, symbol properties can't be directly embedded into object literal keys. The following bit of code shows how you'd add a symbol property using pre-ES6 language semantics.
 
 [source,javascript]
 ----
@@ -632,7 +643,7 @@ const example = {
 }
 ----
 
-The method assigned to `Symbol.iterator` must return an object that adheres to the iterator protocol. That protocol defines how to get values out of an iterable sequence. The protocol dictates iterators must be objects with a `next` method. The `next` method takes no arguments and should return an object with the two properties found below.
+The method assigned to `Symbol.iterator` must return an object that adheres to the iterator protocol. That protocol defines how to get values out of an iterable sequence. The protocol dictates iterators must be objects with a `next` method. The `next` method takes no arguments and should return an object with these two properties found below:
 
 - `value` is the current item in the sequence
 - `done` is a boolean indicating whether the sequence has ended
@@ -657,7 +668,7 @@ const sequence = {
 }
 ----
 
-JavaScript is a progressive language: new features are additive, and they practically never break existing code. For that reason, iterables can't be taken advantage of in existing constructs such as `forEach` and `for..in`. In ES6, there's a few ways to go over iterables: `for..of`, the `...` spread operator, and `Array.from`.
+JavaScript is a progressive language: new features are additive, and they practically never break existing code. For that reason, iterables can't be taken advantage of in existing constructs such as `forEach` and `for..in`. In ES6, there are a few ways to go over iterables: `for..of`, the `...` spread operator, and `Array.from`.
 
 The `for..of` iteration method can be used to loop over any iterable. The following example demonstrates how we could use `for..of` to loop over the `sequence` object we put together in the previous example, because it is an iterable object.
 
@@ -690,7 +701,7 @@ console.log(Array.from({ 0: 'a', 1: 'b', 2: 'c', length: 3 }))
 
 As a recap, the `sequence` object adheres to the iterable protocol by assigning a method to `[Symbol.iterator]`. That means that the object is iterable: it can be iterated. Said method returns an object that adheres to the `iterator` protocol. The iterator method is called once whenever we need to start iterating over the object, and the returned iterator is used to pull values out of `sequence`. To iterate over iterables, we can use `for..of`, the spread operator, or `Array.from`.
 
-In essence, the selling point about these protocols is that they provide expressive ways to effortlessly iterate over collections and array-likes. Having the ability to define how any object may be iterated is huge, because it enables libraries to converge under a protocol the language natively understands: iterables. The upside is that implementing the iterator protocol in doesn't have a high effort cost because, due to its additive nature, it won't break existing behavior.
+In essence, the selling point about these protocols is that they provide expressive ways to effortlessly iterate over collections and array-likes. Having the ability to define how any object may be iterated is huge, because it enables libraries to converge under a protocol the language natively understands: iterables. The upside is that implementing the iterator protocol doesn't have a high-effort cost because, due to its additive nature, it won't break existing behavior.
 
 For example, jQuery and `document.querySelectorAll` both return array-likes. If jQuery implemented the iterator protocol on their collection's prototype, then you could iterate over collection elements using the native `for..of` construct.
 
@@ -707,7 +718,7 @@ Iterable sequences aren't necessarily finite. They may have an uncountable amoun
 [[infinite_sequences]]
 ==== Infinite Sequences
 
-Iterators are lazy in nature. Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the lazyness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
+Iterators are lazy in nature. Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the laziness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
 
 The following example shows an iterator that represents an infinite sequence of random floating numbers between 0 and 1. Note how items returned by `next` don't ever have a `done` property set to `true`, which would signal that the sequence has ended. It uses a pair of arrow functions that implicitly return objects. The first one returns the iterator object used to loop over the infinite sequence of random numbers. The second arrow function is used to pull each individual value in the sequence, using `Math.random`.
 
@@ -722,7 +733,7 @@ const random = {
 
 Attempting to cast the iterable `random` object into an array using either `Array.from(random)` or `[...random]` would crash our program, since the sequence never ends. We must be very careful with these types of sequences as they can easily crash and burn our browser and Node.js server processes.
 
-There's a few different ways you can access a sequence safely, without risking an infinite loop. The first option is to use destructuring to pull values in specific positions of the sequence, as shown in the following piece of code.
+There are a few different ways you can access a sequence safely, without risking an infinite loop. The first option is to use destructuring to pull values in specific positions of the sequence, as shown in the following piece of code.
 
 [source,javascript]
 ----
@@ -745,7 +756,7 @@ for (const value of random) {
 }
 ----
 
-It can be hard to understand code like that when reading it later, as a lot of the code is focused on how the sequence is iterated, printing values from `random` until one value is large enough; and not on what the sequence looks like, the first N values until a larger value is found. Abstracting away part of the logic into another method might make the code more readable.
+It can be hard to understand code like that when reading it later, as a lot of the code is focused on how the sequence is iterated, printing values from `random` until one of those values is large enough. Abstracting away part of the logic into another method might make the code more readable.
 
 As another example, a common pattern when extracting values from an infinite or very large sequence is to "take" the first few elements in the sequence. While you could accommodate that use case through `for..of` and `break`, you'd be better off abstracting it into a `take` method. The following example shows a potential implementation of `take`. It receives a `sequence` parameter and the `amount` of entries you'd like to take from the `sequence`. It returns an iterable object, and whenever that object is iterated it constructs an iterator for the provided `sequence`. The `next` method defers to the original `sequence` while the `amount` is at least `1`, and then ends the sequence.
 
@@ -776,7 +787,7 @@ Our implementation works great on infinite sequences because it provides them wi
 // <- [0.304253100650385, 0.5851333604659885]
 ----
 
-This pattern allows you to reduce any infinite sequence into a finite one. If your desired finite sequence wasn't just "the first N values", but rather our original "all values before the first one larger than 0.8", you could easily adapt `take` by changing its exit condition. The `range` function shown next has a `low` parameter that defaults to `0`, and a `high` parameter defaulting to `1`. Whenever a value in the sequence is out of bounds, we stop pulling values from it.
+This pattern allows you to reduce any infinite sequence into a finite one. If your desired finite sequence wasn't just "the first N values," but rather our original "all values before the first one larger than 0.8," you could easily adapt `take` by changing its exit condition. The `range` function shown next has a `low` parameter that defaults to `0`, and a `high` parameter defaulting to `1`. Whenever a value in the sequence is out of bounds, we stop pulling values from it.
 
 [source,javascript]
 ----
@@ -798,17 +809,17 @@ function range(sequence, low = 0, high = 1) {
 }
 ----
 
-Now, instead of breaking in the `for..of` loop because we fear that the infinite sequence will never end, we guaranteed that the loop will eventually break outside of our desired range. This way, your code becomes less concerned with how the sequence is generated, and more concerned with what the sequence will be used for. As shown in the example below, you won't even need a `for..of` loop here either, because the escape condition now resides in the intermediary `range` function.
+Now, instead of breaking in the `for..of` loop because we fear that the infinite sequence will never end, we guaranteed that the loop will eventually break outside of our desired range. This way, your code becomes less concerned with how the sequence is generated, and more concerned with what the sequence will be used for. As shown in the following example, you won't even need a `for..of` loop here either, because the escape condition now resides in the intermediary `range` function.
 
 [source,javascript]
 ----
 const low = [...range(random, 0, 0.8)]
-// <- [0.6891209243331105, 0.05978861474432051, 0.0939619520213455]
+// <- [0.68912092433311, 0.059788614744320, 0.09396195202134]
 ----
 
-This sort of abstraction of complexity into another function often helps keep code focused on its intent, while striving to avoid a `for..of` loop when all we wanted was to produce a derivated sequence. It also shows how sequences can be composed and piped into one another. In this case, we first created a multi-purpose and infinite `random` sequence, and then piped it through a `range` function that returns a derivated sequence that ends when it meets values that are below or above a desired range. An important aspect of iterators is that despite having been composed, the iterators produced by the `range` function can be lazily iterated as well, effectively meaning you can compose as many iterators you need into mapping, filtering, and exit condition helpers.
+This sort of abstraction of complexity into another function often helps keep code focused on its intent, while striving to avoid a `for..of` loop when all we wanted was to produce a derivated sequence. It also shows how sequences can be composed and piped into one another. In this case, we first created a multipurpose and infinite `random` sequence, and then piped it through a `range` function that returns a derivated sequence that ends when it meets values that are below or above a desired range. An important aspect of iterators is that despite having been composed, the iterators produced by the `range` function can be lazily iterated as well, effectively meaning you can compose as many iterators you need into mapping, filtering, and exit condition helpers.
 
-.Identifying infinite sequences
+.Identifying Infinite Sequences
 [WARNING]
 ====
 Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem, there is no way of knowing whether the sequence is infinite or not in code.
@@ -818,13 +829,13 @@ image::images/pmjs_04in05.png["The halting problem depicted in an XKCD comic: ht
 You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While `for..of` won't run into the problem unless there's no escape condition, using mechanisms such as spread or `Array.from` would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
 ====
 
-Besides the technical implications of creating iterable objects, lets go over a couple of practical examples on how we can benefit from iterators.
+Besides the technical implications of creating iterable objects, let's go over a couple of practical examples on how we can benefit from iterators.
 
-==== Iterating Object Maps as Key-Value Pairs
+==== Iterating Object Maps as Key/Value Pairs
 
-There's an abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudo-arrays that are meant to be iterated, the random number generator we came up with in <<infinite_sequences>>, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
+There's an abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudoarrays that are meant to be iterated, the random number generator we came up with in <<infinite_sequences>>, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
 
-Oftentimes, JavaScript objects are used to represent a map between string keys and arbitrary values. In the next snippet, as an example, we have a map of color names and hexadecimal RGB representations of that color. There are cases when you'd welcome the ability to effortlessly looping over the different color names, hexadecimal representations, or key-value pairs.
+Oftentimes, JavaScript objects are used to represent a map between string keys and arbitrary values. In the next snippet, as an example, we have a map of color names and hexadecimal RGB representations of that color. There are cases when you'd welcome the ability to effortlessly loop over the different color names, hexadecimal representations, or key/value pairs.
 
 [source,javascript]
 ----
@@ -859,7 +870,7 @@ const colors = {
 }
 ----
 
-When we wanted to pull out all the key-value pairs, we could use the `...` spread operator as shown in the following bit of code.
+When we wanted to pull out all the key/value pairs, we could use the `...` spread operator as shown in the following bit of code.
 
 [source,javascript]
 ----
@@ -867,7 +878,7 @@ console.log([...colors])
 // <- [['green', '#0e0'], ['orange', '#f50'], ['pink', '#e07']]
 ----
 
-The fact that we're polluting our previously-tiny `colors` map with a large iterable definition could represent a problem, as the iterable behavior has little to do with the concern of storing pairs of color names and codes. A good way of decoupling the two aspects of `colors` would be to extract the logic that attaches a key-value pair iterator into a reusable function. This way, we could eventually move `keyValueIterable` somewhere else in our codebase and leverage it for other use cases as well.
+The fact that we're polluting our previously tiny `colors` map with a large iterable definition could represent a problem, as the iterable behavior has little to do with the concern of storing pairs of color names and codes. A good way of decoupling the two aspects of `colors` would be to extract the logic that attaches a key/value pair iterator into a reusable function. This way, we could eventually move `keyValueIterable` somewhere else in our codebase and leverage it for other use cases as well.
 
 [source,javascript]
 ----
@@ -889,7 +900,7 @@ function keyValueIterable(target) {
 }
 ----
 
-We could then call `keyValueIterable` passing in the `colors` object, turning `colors` into an iterable object. You could in fact use `keyValueIterable` on any objects where you want to iterate over key-value pairs, as the iteration behavior doesn't make assumptions about the object. Once we've attached a `Symbol.iterator` behavior, we'll be able to treat the object as an iterable. In the next code snippet, we iterate over the key-value pairs and print only the color codes.
+We could then call `keyValueIterable` passing in the `colors` object, turning `colors` into an iterable object. You could in fact use `keyValueIterable` on any objects where you want to iterate over key-value pairs, as the iteration behavior doesn't make assumptions about the object. Once we've attached a `Symbol.iterator` behavior, we'll be able to treat the object as an iterable. In the next code snippet, we iterate over the key/value pairs and print only the color codes.
 
 [source,javascript]
 ----
@@ -910,9 +921,9 @@ A song player might be another interesting use case.
 
 ==== Building Versatility Into Iterating a Playlist
 
-Imagine you were developing a song player where a playlist could be reproduced once and then stop or on "repeat" (indefinitely). Whenever you have a use case of looping through a list indefinitely, you could leverage the iterable protocol as well.
+Imagine you were developing a song player where a playlist could be reproduced once and then stopped, or be put on repeat and reproduced indefinitely. Whenever you have a use case of looping through a list indefinitely, you could leverage the iterable protocol as well.
 
-Suppose a human adds a few songs to their library, and they are stored in an array as shown in the next bit of code.
+Suppose a human adds a few songs to her library, and they are stored in an array as shown in the next bit of code.
 
 [source,javascript]
 ----
@@ -924,9 +935,9 @@ const songs = [
 ]
 ----
 
-We could create a `playlist` function that returns a sequence, representing all the songs that will be played by our application. This function would take the `songs` provided by the human as well as the `repeat` value, which indicates how many times they want the songs to be reproduced in a loop -- once, twice, or `Infinity` times -- before coming to an end.
+We could create a `playlist` function that returns a sequence, representing all the songs that will be played by our application. This function would take the `songs` provided by the human as well as the `repeat` value, which indicates how many times she wants the songs to be reproduced in a loop--once, twice, or `Infinity` times--before coming to an end.
 
-The following piece of code shows how we could implement `playlist`. We start with an empty playlist and use an `index` number to track where in the song list we are positioned. We return the next song in the list by incrementing the `index`, until there aren't any songs left in the current loop. At this point we decrement om the `repeat` count and reset the `index`. The sequence ends when there aren't any songs left and `repeat` reaches zero.
+The following piece of code shows how we could implement `playlist`. We start with an empty playlist and use an `index` number to track where in the song list we are positioned. We return the next song in the list by incrementing the `index`, until there aren't any songs left in the current loop. At this point we decrement the `repeat` count and reset the `index`. The sequence ends when there aren't any songs left and `repeat` reaches zero.
 
 [source,javascript]
 ----
@@ -961,7 +972,7 @@ console.log([...playlist(['a', 'b'], 3)])
 // <- ['a', 'b', 'a', 'b', 'a', 'b']
 ----
 
-To iterate over the playlist we'd probably come up with a `player` function. Assuming a `playSong` function that reproduces a song and invokes a callback when the song ends, our `player` implementation could look like the following function, where we asynchronously loop the iterator coming from a sequence, requesting new songs as previous ones finish playback. Given that there's always a considerable waiting period in between `g.next` calls -- while the songs are actually playing inside `playSong` -- there's little risk of being stuck in an infinite loop that'd crash the runtime, even when the sequence produced by `playlist` is infinite.
+To iterate over the playlist we'd probably come up with a `player` function. Assuming a `playSong` function that reproduces a song and invokes a callback when the song ends, our `player` implementation could look like the following function, where we asynchronously loop the iterator coming from a sequence, requesting new songs as previous ones finish playback. Given that there's always a considerable waiting period in between `g.next` calls--while the songs are actually playing inside `playSong`--there's little risk of being stuck in an infinite loop that'd crash the runtime, even when the sequence produced by `playlist` is infinite.
 
 [source,javascript]
 ----
@@ -992,7 +1003,7 @@ const sequence = playlist(songs, Infinity)
 player(sequence)
 ----
 
-A change allowing the human to shuffle their playlist wouldn't be complicated to introduce. We'd have to tweak the `playlist` function to include a `shuffle` flag, and if that flag is present we'd sort the song list at random.
+A change allowing the human to shuffle her playlist wouldn't be complicated to introduce. We'd have to tweak the `playlist` function to include a `shuffle` flag, and if that flag is present we'd sort the song list at random.
 
 [source,javascript]
 ----
@@ -1042,7 +1053,7 @@ console.log([...playlist(shuffleSongs(['a', 'b']), 3)])
 // <- ['a', 'b', 'b', 'a', 'a', 'b']
 ----
 
-Iterators are an important tool in ES6 that help us not only to decouple code but also to come up with constructs that were previously harder to implement, such as the ability of dealing with a sequence of songs indistinctly -- regardless of whether the sequence is finite or infinite. This indifference is, in part, what makes writing code leveraging the iterator protocol more elegant. It also makes it risky to cast an unknown iterable into an array (with, say, the `...` spread operator), as you're risking crashing your program due to an infinite loop.
+Iterators are an important tool in ES6 that help us not only to decouple code, but also to come up with constructs that were previously harder to implement, such as the ability of dealing with a sequence of songs indistinctly--regardless of whether the sequence is finite or infinite. This indifference is, in part, what makes writing code leveraging the iterator protocol more elegant. It also makes it risky to cast an unknown iterable into an array (with, say, the `...` spread operator), as you're risking crashing your program due to an infinite loop.
 
 Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in <<infinite_sequences>>, while also allowing for a few more interesting use cases.
 
@@ -1052,7 +1063,7 @@ Generators are a new feature in ES6. The way they work is that you declare a gen
 
 ==== Generator Fundamentals
 
-We already examined iterators in the previous section, learning how their `.next()` method is called once at a time to pull values from a sequence. Instead of a `next` method whenever you return a value, generators use the `yield` keyword to add values into the sequence.
+We already examined iterators in the previous section, learning how their `.next()` method is called one at a time to pull values from a sequence. Instead of a `next` method whenever you return a value, generators use the `yield` keyword to add values into the sequence.
 
 Here is an example generator function. Note the `*` after `function`. That's not a typo, that's how you mark a generator function as a generator.
 
@@ -1065,7 +1076,7 @@ function* abc() {
 }
 ----
 
-Generator objects conform to both the iterable protocol and the iterator protocol.
+Generator objects conform to both the iterable protocol and the iterator protocol:
 
 - A generator object `chars` is built using the `abc` function
 - Object `chars` is an iterable because it has a `Symbol.iterator` method
@@ -1128,7 +1139,7 @@ for (const number of numbers()) {
 }
 ----
 
-.Using yield* to delegate sequence generation
+.Using yield* to Delegate Sequence Generation
 ****
 Generator functions can use `yield*` to delegate to a generator object or any other iterable object.
 
@@ -1197,7 +1208,7 @@ Besides iterating over a generator object using spread, `for..of`, and `Array.fr
 
 ==== Iterating over Generators by Hand
 
-Generator iteration isn't limited to `for..of`, `Array.from`, or the spread operator. Just like with any iterable object, you can use its `Symbol.iterator` to pull values on demand using `.next`, rather than in an strictly synchronous `for..of` loop or all at once with `Array.from` or spread. Given that a generator object is both iterable and iterator, you won't need to call `g[Symbol.iterator]()` to get an iterator: you can use `g` directly because it's the same object as the one returned by the `Symbol.iterator` method.
+Generator iteration isn't limited to `for..of`, `Array.from`, or the spread operator. Just like with any iterable object, you can use its `Symbol.iterator` to pull values on demand using `.next`, rather than in a strictly synchronous `for..of` loop or all at once with `Array.from` or spread. Given that a generator object is both iterable and iterator, you won't need to call `g[Symbol.iterator]()` to get an iterator: you can use `g` directly because it's the same object as the one returned by the `Symbol.iterator` method.
 
 Assuming the `numbers` iterator we created earlier, the following example shows how you could iterate it by hand using the generator object and a `while` loop. Remember that any items returned by an iterator need a `done` property that indicates whether the sequence has ended, and a `value` property indicating the current value in the sequence.
 
@@ -1215,14 +1226,14 @@ while (true) {
 
 Using iterators to loop over a generator might look like a complicated way of implementing a `for..of` loop, but it also allows for some interesting use cases. Particularly: `for..of` is always a synchronous loop, whereas with iterators we're in charge of deciding when to invoke `g.next`. In turn, that translates into additional opportunities such as running an asynchronous operation and then calling `g.next` once we have a result.
 
-Whenever `.next()` is called on a generator, there are four different kinds of "events" that can suspend execution in the generator while returning a result to the caller of `.next()`. We'll promptly explore each of these scenarios.
+Whenever `.next()` is called on a generator, there are four different kinds of "events" that can suspend execution in the generator while returning a result to the caller of `.next()`. We'll promptly explore each of these scenarios:
 
 - A `yield` expression returning the next value in the sequence
 - A `return` statement returning the last value in the sequence
 - A `throw` statement halts execution in the generator entirely
 - Reaching the end of the generator function signals `{ done: true }`, as the function implicitly returns `undefined`
 
-Once the `g` generator ended iterating over a sequence, subsequent calls to `g.next()` will have no effect and just return `{ done: true }`. The following code snippet demonstrates the idempotence we can observe when calling `g.next` repeatedly once a sequence has ended.
+Once the `g` generator finishes iterating over a sequence, subsequent calls to `g.next()` will have no effect and just return `{ done: true }`. The following code snippet demonstrates the idempotence we can observe when calling `g.next` repeatedly once a sequence has ended.
 
 [source,javascript]
 ----
@@ -1238,11 +1249,11 @@ console.log(g.next())
 // <- { done: true }
 ----
 
-==== Mixing Generators Into Iterables
+==== Mixing Generators into Iterables
 
 Let's do a quick recap of generators. Generator functions return generator objects when invoked. A generator object has a `next` method, which returns the next element in the sequence. The `next` method returns objects with a `{ value, done }` shape.
 
-The following example shows an infinite fibonacci number generator. We then instantiate a generator object and read the first eight values in the sequence.
+The following example shows an infinite Fibonacci number generator. We then instantiate a generator object and read the first eight values in the sequence.
 
 [source,javascript]
 ----
@@ -1326,7 +1337,7 @@ console.log(g.next()) // <- { value: 13, done: false }
 console.log(g.next()) // <- { value: 21, done: false }
 ----
 
-Meanwhile, the iterable protocol also holds up. To verify that you might use a construct like `for..of`, instead of manually creating the generator object. The following example uses `for..of` and introduces a circuit breaker to prevent an infinite loop from crashing the program.
+Meanwhile, the iterable protocol also holds up. To verify that, you might use a construct like `for..of`, instead of manually creating the generator object. The following example uses `for..of` and introduces a circuit breaker to prevent an infinite loop from crashing the program.
 
 [source,javascript]
 ----
@@ -1350,7 +1361,7 @@ Moving onto more practical examples, let's see how generators can help us iterat
 
 ==== Tree Traversal Using Generators
 
-Algorithms to work with tree structures can be tricky to understand, often involving recursion. Consider the following bit of code, where we define a `Node` class which can hold a `value` and an arbitrary amount of child nodes.
+Algorithms to work with tree structures can be tricky to understand, often involving recursion. Consider the following bit of code, where we define a `Node` class that can hold a `value` and an arbitrary amount of child nodes.
 
 [source,javascript]
 ----
@@ -1383,7 +1394,7 @@ const root = new Node(1,
 )
 ----
 
-One way of implementing depth-first traversal for our tree would be using a generator function which yields the current node's value, and then iterates over its children yielding every item in their sequences using the `yield*` operator as a way of composing the recursive component of the iterator.
+One way of implementing depth-first traversal for our tree would be using a generator function that yields the current node's value, and then iterates over its children yielding every item in their sequences using the `yield*` operator as a way of composing the recursive component of the iterator.
 
 [source,javascript]
 ----
@@ -1397,7 +1408,7 @@ console.log([...depthFirst(root)])
 // <- [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ----
 
-A slightly different way of declaring the traversal algorithm would be to make the `Node` class iterable using the `depthFirst` generator. The following piece of code also takes advantage that `child` is a `Node` class -- and thus an iterable -- using `yield*` in order to yield the iterable sequence for that `child` as part of the sequence for its parent node.
+A slightly different way of declaring the traversal algorithm would be to make the `Node` class iterable using the `depthFirst` generator. The following piece of code also takes advantage that `child` is a `Node` class--and thus an iterable--using `yield*` in order to yield the iterable sequence for that `child` as part of the sequence for its parent node.
 
 [source,javascript]
 ----
@@ -1443,7 +1454,7 @@ Generators are useful due to their expressiveness, while the iterator protocol a
 
 ==== Consuming Generator Functions for Flexibility
 
-Thus far in the chapter we've talked about generators in terms of constructing a consumable sequence. Generators can also be presented as an interface to a piece of code which decides how the generator function is to be iterated over.
+Thus far in the chapter we've talked about generators in terms of constructing a consumable sequence. Generators can also be presented as an interface to a piece of code that decides how the generator function is to be iterated over.
 
 In this section, we'll be writing a generator function that gets passed to a method, which loops over the generator consuming elements of its sequence. Even though you might think that writing code like this is unconventional at first, most libraries built around generators have their users write the generators while the library retains control over the iteration.
 
@@ -1461,7 +1472,7 @@ modelProvider(function* () {
 })
 ----
 
-Whenever a resource is yielded by the user-provided generator, execution in the generator function is suspended until the iterator calls `g.next` again, which may even happen asynchronously behind the scenes. The next code snippet implements a `modelProvider` function which iterates over `paths` yielded by the generator. Note also how we're passing `data` to `g.next()`.
+Whenever a resource is yielded by the user-provided generator, execution in the generator function is suspended until the iterator calls `g.next` again, which may even happen asynchronously behind the scenes. The next code snippet implements a `modelProvider` function that iterates over `paths` yielded by the generator. Note also how we're passing `data` to `g.next()`.
 
 [source,javascript]
 ----
@@ -1515,7 +1526,7 @@ modelProvider(function* () {
 })
 ----
 
-We'll be using `fetch` to make requests for each HTTP resource -- which, as you may recall, returns a `Promise`. Note that given an asynchronous scenario we can't use `for..of` to go over the sequence, which is limited to synchronous loops.
+We'll be using `fetch` to make requests for each HTTP resource--which, as you may recall, returns a `Promise`. Note that given an asynchronous scenario we can't use `for..of` to go over the sequence, which is limited to synchronous loops.
 
 The next code snippet sends an HTTP request for each query to the model, and the server is now in charge of producing the relevant bits of the model, without the client having to keep any state other than the relevant user authentication bits, such as cookies.
 
@@ -1536,15 +1547,15 @@ function modelProvider(paths) {
 }
 ----
 
-Always keep in mind that, while a `yield` expression is being evaluated, execution of the generator function is paused until the next item in the sequence -- the next query for the model, in our example -- is requested to the iterator. In this sense, code in a generator function looks and feels as if it were synchronous, even though `yield` pauses execution in the generator until `g.next` resumes execution.
+Always keep in mind that, while a `yield` expression is being evaluated, execution of the generator function is paused until the next item in the sequence--the next query for the model, in our example--is requested to the iterator. In this sense, code in a generator function looks and feels as if it were synchronous, even though `yield` pauses execution in the generator until `g.next` resumes execution.
 
 While generators let us write asynchronous code that appears synchronous, this introduces an inconvenience. How do we handle errors that arise in the iteration? If an HTTP request fails, for instance, how do we notify the generator and then handle the error notification in the generator function?
 
 ==== Throwing Errors at a Generator
 
-Before shifting our thinking into user-provided generators, where they retain control of seemingly-synchronous functions thanks to `yield` and suspension, we would've been hard pressed to find a use case for `g.throw`, a method that can be used to report errors which take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between `yield` expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to `throw` that error into the generator.
+Before shifting our thinking into user-provided generators, where they retain control of seemingly synchronous functions thanks to `yield` and suspension, we would've been hard pressed to find a use case for `g.throw`, a method that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between `yield` expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to `throw` that error into the generator.
 
-In the case of `modelProvider`, the iterator may experience network issues -- or a malformed HTTP response -- and fail to provide a piece of the model. In the snippet of code below, the `fetch` step was modified by adding an error callback that will be executed if parsing fails in `response.json()`, in which case we'll throw the exception at the generator function.
+In the case of `modelProvider`, the iterator may experience network issues--or a malformed HTTP response--and fail to provide a piece of the model. In the following snippet of code, the `fetch` step was modified by adding an error callback that will be executed if parsing fails in `response.json()`, in which case we'll throw the exception at the generator function.
 
 [source,javascript]
 ----
@@ -1554,13 +1565,13 @@ fetch(`/model?query=${ encodeURIComponent(value) }`)
   .catch(err => g.throw(err))
 ----
 
-When `g.next` is called, execution in generator code is unsuspended. The `g.throw` method also unsuspends the generator, but it causes an exception to be thrown at the location of the `yield` expression. An unhandled exception in a generator would stop iteration by preventing other `yield` expressions from being reachable. Generator code could wrap `yield` expressions in `try`/`catch` blocks to gracefully manage exceptions forwarded by iteration code -- as shown in the following code snippet. This would allow subsequent `yield` expressions to be reached, suspending the generator and putting the iterator in charge once again.
+When `g.next` is called, execution in generator code is unsuspended. The `g.throw` method also unsuspends the generator, but it causes an exception to be thrown at the location of the `yield` expression. An unhandled exception in a generator would stop iteration by preventing other `yield` expressions from being reachable. Generator code could wrap `yield` expressions in `try`/`catch` blocks to gracefully manage exceptions forwarded by iteration code--as shown in the following code snippet. This would allow subsequent `yield` expressions to be reached, suspending the generator and putting the iterator in charge once again.
 
 [source,javascript]
 ----
 modelProvider(function* () {
   try {
-    console.log('these items are in the cart:', yield 'cart.items')
+    console.log('items in the cart:', yield 'cart.items')
   } catch (e) {
     console.error('uh oh, failed to fetch model.cart.items!', e)
   }
@@ -1572,7 +1583,7 @@ modelProvider(function* () {
 })
 ----
 
-Even though generator functions allow us to suspend execution and then resume asynchronously, we can use the same error handling semantics -- `try`, `catch`, and `throw` -- as with regular functions. Having the ability to use `try`/`catch` blocks in generator code lets us treat the code as if it were synchronous, even when there's HTTP requests sitting behind `yield` expressions, in iterator code.
+Even though generator functions allow us to suspend execution and then resume asynchronously, we can use the same error handling semantics--`try`, `catch`, and `throw`--as with regular functions. Having the ability to use `try`/`catch` blocks in generator code lets us treat the code as if it were synchronous, even when there are HTTP requests sitting behind `yield` expressions, in iterator code.
 
 ==== Returning on Behalf of a Generator
 
@@ -1709,7 +1720,7 @@ saveProducts(function* () {
 
 One of the benefits of taking this blanket "inputs and output" approach is that the implementation could be changed in a variety of ways, while keeping the API largely unchanged. The input resources could be pulled via HTTP requests or from a temporary cache, they could be pulled one by one or concurrently, or there could be a mechanism that combines all yielded resources into a single HTTP request. Other than semantic differences of pulling one value at a time versus pulling them all at the same time to combine them into a single request, the API would barely change in the face of significant changes to the implementation.
 
-We'll go over an implementation of `saveProducts` bit by bit. First off, the following piece of code shows how we could combine `fetch` and it's promise-based API to make an HTTP request for a JSON document about the first yielded product.
+We'll go over an implementation of `saveProducts` bit by bit. First off, the following piece of code shows how we could combine `fetch` and its promise-based API to make an HTTP request for a JSON document about the first yielded product.
 
 [source,javascript]
 ----
@@ -1722,7 +1733,7 @@ function saveProducts(productList) {
 }
 ----
 
-In order to pull product data in a concurrent series -- asynchronously, but one at a time -- we'll wrap the `fetch` call in a recursive function that gets invoked as we get responses about each product. Each step of the way we'll be fetching a product, calling `g.next` to unsuspend the generator function asking for the next yielded item in the sequence, and then calling `more` to fetch that item.
+In order to pull product data in a concurrent series--asynchronously, but one at a time--we'll wrap the `fetch` call in a recursive function that gets invoked as we get responses about each product. Each step of the way we'll be fetching a product, calling `g.next` to unsuspend the generator function asking for the next yielded item in the sequence, and then calling `more` to fetch that item.
 
 [source,javascript]
 ----
@@ -1742,7 +1753,7 @@ function saveProducts(productList) {
 }
 ----
 
-Thus far we're pulling all inputs and passing their details back to the generator via `g.next(product)` -- an item at a time. In order to leverage the `return` statement, we'll save the products in a temporary array and then `POST` the list onto the output endpoint present on the iterator `item` when the sequence is marked as having ended.
+Thus far we're pulling all inputs and passing their details back to the generator via `g.next(product)`--an item at a time. In order to leverage the `return` statement, we'll save the products in a temporary array and then `POST` the list onto the output endpoint present on the iterator `item` when the sequence is marked as having ended.
 
 [source,javascript]
 ----
@@ -1776,7 +1787,7 @@ function saveProducts(productList) {
 
 At this point product descriptions are being pulled down, cached in the `products` array, forwarded to the generator body, and eventually saved in one fell swoop using the endpoint provided by the `return` statement.
 
-In our original API design we suggested we'd return a promise from `saveProducts` so that callbacks could be chained and executed after the `save` operation. As we mentioned earlier, `fetch` returns a promise. By adding `return` statements all the way through our function calls, you can observe how `saveProducts` returns the output of `more`, which returns the output of `save` or `details`, both of which return the promise created by a `fetch` call. In addition, each `details` call returns the result of calling `more` from inside the `details` promise, meaning the original `fetch` won't be fulfilled until the second `fetch` is fulfilled, allowing us to chain these promises which will ultimately resolve when the `save` call is executed and resolved.
+In our original API design we suggested we'd return a promise from `saveProducts` so that callbacks could be chained and executed after the `save` operation. As we mentioned earlier, `fetch` returns a promise. By adding `return` statements all the way through our function calls, you can observe how `saveProducts` returns the output of `more`, which returns the output of `save` or `details`, both of which return the promise created by a `fetch` call. In addition, each `details` call returns the result of calling `more` from inside the `details` promise, meaning the original `fetch` won't be fulfilled until the second `fetch` is fulfilled, allowing us to chain these promises, which will ultimately resolve when the `save` call is executed and resolved.
 
 [source,javascript]
 ----
@@ -1808,15 +1819,15 @@ function saveProducts(productList) {
 }
 ----
 
-As you may have noticed, the implementation doesn't hardcode any important aspects of the operation, which means you could use the inputs and output pattern in a generic way as long as you have zero or more inputs you want to pipe into one output. The consumer ends up with an elegant-looking method that's easy to understand -- they `yield` input stores and `return` an output store. Furthermore, our use of promises makes it easy to concatenate this operation with others. This way, we're keeping a potential tangle of conditional statements and flow control mechanisms in check, by abstracting away flow control into the iteration mechanism under the `saveProducts` method.
+As you may have noticed, the implementation doesn't hardcode any important aspects of the operation, which means you could use the inputs and output pattern in a generic way as long as you have zero or more inputs you want to pipe into one output. The consumer ends up with an elegant-looking method that's easy to understand--they `yield` input stores and `return` an output store. Furthermore, our use of promises makes it easy to concatenate this operation with others. This way, we're keeping a potential tangle of conditional statements and flow control mechanisms in check, by abstracting away flow control into the iteration mechanism under the `saveProducts` method.
 
-We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into `async` / `await`, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this chapter.
+We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into `async`/`await`, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this chapter.
 
 === Async Functions
 
-Languages like Python and C# have had `async` / `await` for a while. In ES2017, JavaScript gained native syntax that can be used to describe asynchronous operations.
+Languages like Python and C# have had `async`/`await` for a while. In ES2017, JavaScript gained native syntax that can be used to describe asynchronous operations.
 
-Let's go over a quick recap comparing promises, callbacks and generators. Afterwards we'll look into async functions in JavaScript, and how this new feature can help make our code more readable.
+Let's go over a quick recap comparing promises, callbacks, and generators. Afterwards we'll look into async functions in JavaScript, and how this new feature can help make our code more readable.
 
 ==== Flavors of Async Code
 
@@ -1918,13 +1929,13 @@ Besides involving an unintuitive syntax into the mix, your iterator code will be
 
 A better alternative would be to use an async function.
 
-==== Using async / await
+==== Using async/await
 
 Async functions let us take a promise-based implementation and take advantage of the synchronous-looking generator style. A huge benefit in this approach is that you won't have to change the original `getRandomArticle` at all: as long as it returns a promise it can be awaited.
 
 Note that `await` may only be used inside async functions, marked with the `async` keyword. Async functions work similarly to generators, by suspending execution in the local context until a promise settles. If the awaited expression isn't originally a promise, it gets casted into a promise.
 
-The following piece of code consumes our original `getRandomArticle`, which relied on promises. Then it runs that model through an asynchronous `renderView` function, which returns a bit of HTML, and updates the page. Note how we can use `try` / `catch` to handle errors in awaited promises from within the `async` function, treating completely asynchronous code as if it were synchronous.
+The following piece of code consumes our original `getRandomArticle`, which relied on promises. Then it runs that model through an asynchronous `renderView` function, which returns a bit of HTML, and updates the page. Note how we can use `try`/`catch` to handle errors in awaited promises from within the `async` function, treating completely asynchronous code as if it were synchronous.
 
 [source,javascript]
 ----
@@ -1969,7 +1980,7 @@ async function read() {
 }
 ----
 
-Following the example, we can use plain promises to prints the HTML.
+Following the example, we can use plain promises to print the HTML.
 
 [source,javascript]
 ----
@@ -1990,14 +2001,20 @@ What about concurrent asynchronous flows?
 
 ==== Concurrent Async Flows
 
-In asynchronous code flows, it is commonplace to execute two or more tasks concurrently. While async functions make it easier to write asynchronous code, they also lend themselves to code that executes one asynchronous operation at a time. A function with multiple `await` expressions in it will be suspended once at a time on each `await` expression until that `Promise` is settled, before unsuspending execution and moving onto the next `await` expression -- this is a similar case to what we observe with generators and `yield`.
+In asynchronous code flows, it is commonplace to execute two or more tasks concurrently. While async functions make it easier to write asynchronous code, they also lend themselves to code that executes one asynchronous operation at a time. A function with multiple `await` expressions in it will be suspended one at a time on each `await` expression until that `Promise` is settled, before unsuspending execution and moving onto the next `await` expression--this is a similar case to what we observe with generators and `yield`.
 
 [source,javascript]
 ----
 async function concurrent() {
-  const p1 = new Promise(resolve => setTimeout(resolve, 500, 'fast'))
-  const p2 = new Promise(resolve => setTimeout(resolve, 200, 'faster'))
-  const p3 = new Promise(resolve => setTimeout(resolve, 100, 'fastest'))
+  const p1 = new Promise(resolve =>
+  setTimeout(resolve, 500, 'fast')
+)
+  const p2 = new Promise(resolve =>
+  setTimeout(resolve, 200, 'faster')
+)
+  const p3 = new Promise(resolve =>
+  setTimeout(resolve, 100, 'fastest')
+)
   const r1 = await p1 // execution is blocked until p1 settles
   const r2 = await p2
   const r3 = await p3
@@ -2011,9 +2028,15 @@ The following example shows how you could `await` on three different promises th
 [source,javascript]
 ----
 async function concurrent() {
-  const p1 = new Promise(resolve => setTimeout(resolve, 500, 'fast'))
-  const p2 = new Promise(resolve => setTimeout(resolve, 200, 'faster'))
-  const p3 = new Promise(resolve => setTimeout(resolve, 100, 'fastest'))
+  const p1 = new Promise(resolve =>
+  setTimeout(resolve, 500, 'fast')
+)
+  const p2 = new Promise(resolve =>
+  setTimeout(resolve, 200, 'faster')
+)
+  const p3 = new Promise(resolve =>
+  setTimeout(resolve, 100, 'fastest')
+)
   const [r1, r2, r3] = await Promise.all([p1, p2, p3])
   console.log(r1, r2, r3)
   // 'fast', 'faster', 'fastest'
@@ -2036,13 +2059,13 @@ async function race() {
 
 ==== Error Handling
 
-Errors are swallowed silently within an `async` function, just like inside normal Promises, due to async functions being wrapped in a `Promise`. Uncaught exceptions raised in the body of your async function or during suspended execution while evaluating an `await` expresion will reject the promise returned by the `async` function.
+Errors are swallowed silently within an `async` function, just like inside normal Promises, due to async functions being wrapped in a `Promise`. Uncaught exceptions raised in the body of your async function or during suspended execution while evaluating an `await` expression will reject the promise returned by the `async` function.
 
-That is, unless we add `try` / `catch` blocks around `await` expressions. For the portion of the async function code that's wrapped, errors are treated under typical `try` / `catch` semantics.
+That is, unless we add `try`/`catch` blocks around `await` expressions. For the portion of the async function code that's wrapped, errors are treated under typical `try`/`catch` semantics.
 
-Naturally, this can be seen as a strength: you can leverage `try` / `catch` conventions, something you were unable to do with asynchronous callbacks, and somewhat able to when using promises. In this sense, async functions are akin to generators, where we can take advantage of `try` / `catch` thanks to function execution suspension turning asynchronous flows into seemingly synchronous code.
+Naturally, this can be seen as a strength: you can leverage `try`/`catch` conventions, something you were unable to do with asynchronous callbacks, and somewhat able to when using promises. In this sense, async functions are akin to generators, where we can take advantage of `try`/`catch` thanks to function execution suspension turning asynchronous flows into seemingly synchronous code.
 
-Furthermore, you're able to catch these exceptions from outside the `async` function, by adding a `.catch` clause to the promise they return. While this is a flexible way of combining the `try` / `catch` error handling flavor with `.catch` clauses in promises, it can also lead to confusion and ultimately cause to errors going unhandled, unless everyone reading the code is comfortable with async function semantics in terms of the promise wrapper and how `try` / `catch` works under this context.
+Furthermore, you're able to catch these exceptions from outside the `async` function, by adding a `.catch` clause to the promise they return. While this is a flexible way of combining the `try`/`catch` error handling flavor with `.catch` clauses in promises, it can also lead to confusion and ultimately cause to errors going unhandled, unless everyone reading the code is comfortable with async function semantics in terms of the promise wrapper and how `try`/`catch` works under this context.
 
 [source,javascript]
 ----
@@ -2051,7 +2074,7 @@ read()
   .catch(err => console.error(err))
 ----
 
-As you can see, there's quite a few ways in which we can notice exceptions and then handle, log, or offload them.
+As you can see, there are quite a few ways in which we can notice exceptions and then handle, log, or offload them.
 
 ==== Understanding Async Function Internals
 
@@ -2064,7 +2087,7 @@ async function example(a, b, c) {
 }
 ----
 
-The next bit shows how the `example` declaration could be converted into a plain old `function` which returns the result of feeding a generator function to a `spawn` helper.
+The next bit shows how the `example` declaration could be converted into a plain old `function` that returns the result of feeding a generator function to a `spawn` helper.
 
 [source,javascript]
 ----
@@ -2077,9 +2100,9 @@ function example(a, b, c) {
 
 Inside the generator function, we'll assume `yield` to be the syntactic equivalent of `await`.
 
-In `spawn`, a promise is wrapped around code that will step through the generator function -- made out of user code -- in series, forwarding values to the generator code (the `async` function's body).
+In `spawn`, a promise is wrapped around code that will step through the generator function--made out of user code--in series, forwarding values to the generator code (the `async` function's body).
 
-The following listing should aid you in understanding how the `async` / `await` algorithm iterates over a sequence of `await` expressions using a generator. Each item in the sequence is wrapped in a promise and then gets chained with the next step in the sequence. The promise returned by the underlying generator function becomes settled when the sequence ends or one of the promises is rejected.
+The following listing should aid you in understanding how the `async`/`await` algorithm iterates over a sequence of `await` expressions using a generator. Each item in the sequence is wrapped in a promise and then gets chained with the next step in the sequence. The promise returned by the underlying generator function becomes settled when the sequence ends or one of the promises is rejected.
 
 [source,javascript]
 ----
@@ -2125,8 +2148,12 @@ Consider the following async function. In order to print the result, we're also 
 [source,javascript]
 ----
 async function exercise() {
-  const r1 = await new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
-  const r2 = await new Promise(resolve => setTimeout(resolve, 200, 'slow'))
+  const r1 = await new Promise(resolve =>
+  setTimeout(resolve, 500, 'slowest')
+)
+  const r2 = await new Promise(resolve =>
+  setTimeout(resolve, 200, 'slow')
+)
   return [r1, r2]
 }
 
@@ -2134,14 +2161,18 @@ exercise().then(result => console.log(result))
 // <- ['slowest', 'slow']
 ----
 
-First, we could translate the function to our `spawn` based logic. We wrap the body of our async function in a generator passed to `spawn`, and replace any `await` expressions with `yield`.
+First, we could translate the function to our `spawn` based-logic. We wrap the body of our async function in a generator passed to `spawn`, and replace any `await` expressions with `yield`.
 
 [source,javascript]
 ----
 function exercise() {
   return spawn(function* () {
-    const r1 = yield new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
-    const r2 = yield new Promise(resolve => setTimeout(resolve, 200, 'slow'))
+    const r1 = yield new Promise(resolve =>
+    setTimeout(resolve, 500, 'slowest')
+  )
+    const r2 = yield new Promise(resolve =>
+    setTimeout(resolve, 200, 'slow')
+  )
     return [r1, r2]
   })
 }
@@ -2166,7 +2197,7 @@ function spawn(generator) {
 }
 ----
 
-The first thing that happens in the `step` function is calling the `nextFn` function inside a `try` / `catch` block. This resumes execution in the generator function. If the generator function were to produce an error, we'd fall into the `catch` clause, and the underlying promise for our async function would be rejected without any further steps, as shown next.
+The first thing that happens in the `step` function is calling the `nextFn` function inside a `try`/`catch` block. This resumes execution in the generator function. If the generator function were to produce an error, we'd fall into the `catch` clause, and the underlying promise for our async function would be rejected without any further steps, as shown next.
 
 [source,javascript]
 ----
@@ -2190,10 +2221,12 @@ Back to the async function, code up until the following expression is evaluated.
 
 [source,javascript]
 ----
-yield new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
+yield new Promise(resolve =>
+  setTimeout(resolve, 500, 'slowest')
+)
 ----
 
-The yielded expression is received by `step` as `next.value`, while `next.done` indicates whether the generator sequence has ended. In this case, we receive the `Promise` in the function controlling exactly how iteration should occur. At this time, `next.done` is `false`, meaning we won't be resolving the async function's wrapper Promise. We wrap `next.value` in a fulfilled `Promise`, just in case we haven't received a `Promise`.
+The yielded expression is received by `step` as `next.value`, while `next.done` indicates whether the generator sequence has ended. In this case, we receive the `Promise` in the function controlling exactly how iteration should occur. At this time, `next.done` is `false`, meaning we won't be resolving the async function's wrapper `Promise`. We wrap `next.value` in a fulfilled `Promise`, just in case we haven't received a `Promise`.
 
 We then wait on the `Promise` to be fulfilled or rejected. If the promise is fulfilled, we push the fulfillment value to the generator function by advancing the generator sequence with `value`. If the promise is rejected, we would've used `g.throw`, which would've resulted in an error being raised in the generator function, causing the async function's wrapper promise to be rejected at `runNext`.
 
@@ -2206,7 +2239,8 @@ function step(nextFn) {
     resolve(next.value)
     return
   }
-  // not finished, chain off the yielded promise and run next step
+  // not finished
+  // chain off the yielded promise and run next step
   Promise
     .resolve(next.value)
     .then(
@@ -2222,7 +2256,9 @@ Back in the generator function, we assign `'slowest'` to `r1`.
 
 [source,javascript]
 ----
-const r1 = yield new Promise(resolve => setTimeout(resolve, 500, 'slowest'))
+const r1 = yield new Promise(resolve =>
+  setTimeout(resolve, 500, 'slowest')
+)
 ----
 
 Then, execution runs up until the second `yield` statement. The `yield` expression once again causes execution in the async function to be suspended, and sends the new `Promise` to the `spawn` iterator.
@@ -2232,7 +2268,7 @@ Then, execution runs up until the second `yield` statement. The `yield` expressi
 yield new Promise(resolve => setTimeout(resolve, 200, 'slow'))
 ----
 
-The same process is repeated this time: `next.done` is `false` because we haven't reached the end of the generator function. We wrap the Promise in another promise just in case, and once the promise settles with `'slow'`, we resume execution in the generator function.
+The same process is repeated this time: `next.done` is `false` because we haven't reached the end of the generator function. We wrap the `Promise` in another promise just in case, and once the promise settles with `'slow'`, we resume execution in the generator function.
 
 Then we reach the return statement in the generator function. Once again, execution is suspended in the generator function, and returned to the iterator.
 
@@ -2272,7 +2308,7 @@ exercise().then(result => console.log(result))
 
 Async functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the `spawn` function used to iterate over the sequence of yielded expressions, and `yield` becomes `await`.
 
-Another way of thinking of async functions is in terms of promises. Consider the following example, where we have an async function which awaits for a promise that's the result of a function call, and then awaits on mapping every user through a function. How would you translate it, in terms of promises?
+Another way of thinking of async functions is in terms of promises. Consider the following example, where we have an async function that awaits for a promise that's the result of a function call, and then awaits on mapping every user through a function. How would you translate it, in terms of promises?
 
 [source,javascript]
 ----
@@ -2290,8 +2326,12 @@ The following snippet has a rough equivalent of the `getUserProfiles` async func
 ----
 function getUserProfiles() {
   const userPromise = findAllUsers()
-  const modelPromise = userPromise.then(users => Promise.all(users.map(toUserModel)))
-  const profilePromise = modelPromise.then(models => models.map(model => model.profile))
+  const modelPromise = userPromise.then(users =>
+    Promise.all(users.map(toUserModel))
+    )
+  const profilePromise = modelPromise.then(models =>
+    models.map(model => model.profile)
+  )
   return profilePromise
 }
 ----
@@ -2300,7 +2340,7 @@ Noting that async functions are syntactic sugar on top of generators and promise
 
 === Asynchronous Iteration
 
-As explained in <<iterator_protocol_and_iterable_protocol>>, You may recall how iterators leverage `Symbol.iterator` as an interface to define how an object is to be iterated.
+As explained in <<iterator_protocol_and_iterable_protocol>> on page xx, you may recall how iterators leverage `Symbol.iterator` as an interface to define how an object is to be iterated.
 
 [source,javascript]
 ----
@@ -2362,7 +2402,7 @@ const sequence = {
 }
 ----
 
-A case could be made for an infinite sequence that increases its value at a certain time interval. The following example has an `interval` function which returns an infinite async sequence. Each step resolves to the next value in the sequence after `duration`.
+A case could be made for an infinite sequence that increases its value at a certain time interval. The following example has an `interval` function that returns an infinite async sequence. Each step resolves to the next value in the sequence after `duration`.
 
 [source,javascript]
 ----
@@ -2393,11 +2433,11 @@ async function print() {
 print()
 ----
 
-Note that async iterators -- as well as async generators -- are in stage 3 of the ECMAScript process as of the time of this writing.
+Note that async iterators--as well as async generators--are in stage 3 of the ECMAScript process as of the time of this writing.
 
 ==== Async Generators
 
-Like with regular iterators, there's async generators to complement async iterators. An async generator function is like a generator function, except that it also supports `await` and `for await..of` declarations. The following example shows a `fetchInterval` generator that fetches a resource periodically at an interval.
+Like with regular iterators, there are async generators to complement async iterators. An async generator function is like a generator function, except that it also supports `await` and `for await..of` declarations. The following example shows a `fetchInterval` generator that fetches a resource periodically at an interval.
 
 [source,javascript]
 ----
@@ -2408,14 +2448,17 @@ async function* fetchInterval(duration, ...params) {
 }
 ----
 
-When stepped over, async generators return objects with a `{ next, return, throw }` signature, whose methods return promises for `{ value, done }`. This is in contrast with regular generators which return `{ value, done }` directly.
+When stepped over, async generators return objects with a `{ next, return, throw }` signature, whose methods return promises for `{ value, done }`. This is in contrast with regular generators, which return `{ value, done }` directly.
 
 You can consume the `fetchInterval` async generator in exactly the same way you could consume the object-based `interval` async iterator. The following example consumes the `fetchInterval` generator to poll an `/api/status` HTTP resource and leverage its JSON response. After each step ends, we wait for a second and repeat the process.
 
 [source,javascript]
 ----
 async function process() {
-  for await (const response of fetchInterval(1000, '/api/status')) {
+  for await (const response of fetchInterval(
+  1000,
+  '/api/status'
+)) {
     const data = await response.json()
     // use updated data
   }
@@ -2423,4 +2466,4 @@ async function process() {
 process()
 ----
 
-As highlighted in <<infinite_sequences>>, it's important to break out of this kinds of sequences, in order to avoid infinite loops.
+As highlighted in <<infinite_sequences>>, it's important to break out of these kinds of sequences, in order to avoid infinite loops.
