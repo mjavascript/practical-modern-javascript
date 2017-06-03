@@ -937,7 +937,7 @@ const songs = [
 
 We could create a `playlist` function that returns a sequence, representing all the songs that will be played by our application. This function would take the `songs` provided by the human as well as the `repeat` value, which indicates how many times she wants the songs to be reproduced in a loop--once, twice, or `Infinity` times--before coming to an end.
 
-The following piece of code shows how we could implement `playlist`. We start with an empty playlist and use an `index` number to track where in the song list we are positioned. We return the next song in the list by incrementing the `index`, until there aren't any songs left in the current loop. At this point we decrement the `repeat` count and reset the `index`. The sequence ends when there aren't any songs left and `repeat` reaches zero.
+The following piece of code shows how we could implement `playlist`. We start with an empty playlist and use an `index` number to track where in the song list we are positioned. We return the next song in the list by incrementing the `index`, until there aren't any songs left in the current loop. At this point we decrement the `repeat` counter and reset the `index`. The sequence ends when there aren't any songs left and `repeat` reaches zero.
 
 [source,javascript]
 ----
