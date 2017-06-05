@@ -2340,7 +2340,7 @@ Noting that async functions are syntactic sugar on top of generators and promise
 
 === Asynchronous Iteration
 
-As explained in <<iterator_protocol_and_iterable_protocol>> on page xx, you may recall how iterators leverage `Symbol.iterator` as an interface to define how an object is to be iterated.
+As explained in <<iterator_protocol_and_iterable_protocol>>, you may recall how iterators leverage `Symbol.iterator` as an interface to define how an object is to be iterated.
 
 [source,javascript]
 ----
