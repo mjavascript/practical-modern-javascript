@@ -1467,7 +1467,7 @@ Using an escape sequence for an unreserved character such as `a` in a regular ex
 The following example attempts to embed the horse emoji in a regular expression by way of the `\u{1f40e}` notation that ES6 introduced for strings like `'\u{1f40e}'`, but the regular expression fails to match against the horse emoji. Without the `u` flag, the `\u{…}` pattern is interpreted as having an unnecessarily escaped `u` character followed by the rest of the sequence.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/.test('<img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ/>') // &lt;- false
+<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/.test('<img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎" />') // &lt;- false
 /\u{1f40e}/.test('u{1f40e}') // &lt;- true</pre>
 ++++
 
