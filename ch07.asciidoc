@@ -1112,7 +1112,7 @@ Counting code points before ES6 was tricky, as the language didn't make an effor
 If we now consider a `for` loop, we can observe more clearly how this is a problem. In the following example, we wanted to extract each individual emoji from the `text` string, but we got each code unit instead of the code points they form.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">const text = '<img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ/><img src="images/1f471.png" style="width: 12px" alt="ߑᢠdata-emoji-embed="ߑᢠ/><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" />'
+<pre data-type="programlisting" data-code-language="javascript">const text = '<img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 12px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" />'
 for (let i = 0; i &lt; text.length; i++) {
   console.log(text[i])
   // &lt;- '\ud83d'
