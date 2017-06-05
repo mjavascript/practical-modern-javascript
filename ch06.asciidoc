@@ -1042,7 +1042,8 @@ const target = {}
 const proxy = new Proxy(target, handler)
 canExtend.add(target)
 Object.preventExtensions(proxy)
-// <- TypeError: 'preventExtensions' on proxy: trap returned falsy
+// <- TypeError: 'preventExtensions' on proxy: 
+// trap returned falsy
 ----
 
 If we removed the `target` from the `canExtend` set before calling `Object.preventExtensions`, then `target` would be made non-extensible as originally intended. The following code snippet shows that behavior in action.
