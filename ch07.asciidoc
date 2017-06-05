@@ -1275,7 +1275,7 @@ This method takes in a number and returns a code point. Note how I can use the `
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
-// &lt;- '<img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ/>'
+// &lt;- '<img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎" />'
 String.fromCodePoint(0x1f471)
 // &lt;- '<img src="images/1f471.png" style="width: 12px" alt="ߑᢠdata-emoji-embed="ߑᢠ/>'
 String.fromCodePoint(0x2764)
