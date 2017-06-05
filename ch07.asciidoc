@@ -1474,7 +1474,7 @@ The following example attempts to embed the horse emoji in a regular expression 
 The `u` flag introduces support for Unicode code point escapes, like the `\u{1f40e}` horse emoji, within regular expressions.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/u.test('<img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ/>')
+<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/u.test('<img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎" />')
 // &lt;- true</pre>
 ++++
 
