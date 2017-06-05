@@ -341,7 +341,7 @@ Let's move onto `Symbol`. While not an iteration or flow control mechanism, lear
 
 === Symbols
 
-Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is a unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in <<iterator_protocol_and_iterable_protocol>> on page xx.
+Symbols are a new primitive type in ES6, and the seventh type in JavaScript. It is a unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in <<iterator_protocol_and_iterable_protocol>>.
 
 There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the `Symbol` built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
 
