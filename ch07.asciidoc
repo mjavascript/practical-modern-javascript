@@ -1264,7 +1264,7 @@ We could wrap those base-16 values in `'\u{codePoint}'` and voilá: you'd get th
 <pre data-type="programlisting" data-code-language="javascript">'\u{1f40e}'
 // &lt;- '<img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎" />'
 '\u{1f471}'
-// &lt;- '<img src="images/1f471.png" style="width: 12px" alt="ߑᢠdata-emoji-embed="ߑᢠ/>'
+// &lt;- '<img src="images/1f471.png" style="width: 12px" alt="👱" data-emoji-embed="👱" />'
 '\u{2764}'
 // &lt;- '<img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
