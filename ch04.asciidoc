@@ -2306,7 +2306,7 @@ exercise().then(result => console.log(result))
 // <- ['slowest', 'slow']
 ----
 
-Async functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the `spawn` function used to iterate over the sequence of yielded expressions, and `yield` becomes `await`.
+Async functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the `spawn` function—used to iterate over the sequence of yielded expressions, and `yield` becomes `await`.
 
 Another way of thinking of async functions is in terms of promises. Consider the following example, where we have an async function that awaits for a promise that's the result of a function call, and then awaits on mapping every user through a function. How would you translate it, in terms of promises?
 
