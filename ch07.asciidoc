@@ -772,7 +772,7 @@ Rounds `value` to the nearest 32-bit float representation of a number.
 
 === Strings and Unicode
 
-You may recall template literals from <<template_literals>> on page xx, and how those can be used to mix strings and variables, or any valid JavaScript expression, to produce string output.
+You may recall template literals from <<template_literals>>, and how those can be used to mix strings and variables, or any valid JavaScript expression, to produce string output.
 
 [source,javascript]
 ----
