@@ -99,7 +99,7 @@ fetch('/items')
   })
 ----
 
-Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events, however, make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in. Moreover, events are better suited to handle streams of values, making them somewhat inappropriate in this particular use case. <<asynchronous_code_flows>> on page xx discusses proper asynchronous code flow design in more detail, expanding on which kinds of constructs are better suited for which kinds of code flows.
+Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events, however, make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in. Moreover, events are better suited to handle streams of values, making them somewhat inappropriate in this particular use case. <<asynchronous_code_flows>> discusses proper asynchronous code flow design in more detail, expanding on which kinds of constructs are better suited for which kinds of code flows.
 ****
 
 When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the `.on` method attach the event listener and then returning the event emitter itself. Promises are different. The `.then` and `.catch` methods return a new promise every time. That's important because chaining can have wildly different results depending on where you append a `.then` or a `.catch` call onto.
