@@ -1,6 +1,5 @@
 {
   "branch": "master",
-  "export_formats": ["html", "pdf"],
   "files": [
     "titlepage.html",
     "copyright.html",
@@ -54,9 +53,13 @@
       "consolidated": false
     }
   },
-  "name": "oreillymedia/practical-modern-javascript",
-  "theme": "oreillymedia/animal_theme",
+  "theme": "oreillymedia/animal_theme_sass",
   "title": "Practical Modern JavaScript",
+  "export_formats": [
+    "html",
+    "pdf"
+  ],
+  "name": "oreillymedia/practical-modern-javascript",
   "templating": false,
   "print_isbn13": "9781491943533",
   "lang": "en",
