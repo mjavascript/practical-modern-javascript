@@ -2,10 +2,10 @@
 
 /*--------Put Your Custom CSS Rules Below--------*/
 
-/* Font fallback for characters not represented in standard monospace */
+/* ----Font fallback for characters not represented in standard monospace ----*/
 pre, code { font-family: UbuntuMono, monospace, ArialUnicodeMS, Symbola }
 
-/* emoji handling (STYL-952) */
+/* ----emoji handling (STYL-952) ----*/
 pre > img { 
   margin-bottom: -6pt;
   height: 14pt;
