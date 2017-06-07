@@ -699,8 +699,7 @@ function md(input, options) {
 ----
 
 .Understanding the target of Object.assign
-[WARNING]
-====
+****
 The `Object.assign` function mutates its first argument. Its signature is `(target, ...sources)`. Every source is applied onto the target object, source by source and property by property.
 
 Consider the following scenario, where we don't pass an empty object as the first argument of `Object.assign`, instead just providing it with the `defaults` and the `options`. We would be changing the contents of the `defaults` object, losing some of our default values--and obtaining some wrong ones--in the process of mutating the object. The first invocation would produce the same result as the previous example, but it would modify our defaults in the process, changing how subsequent calls to `md` work.
@@ -713,7 +712,7 @@ function md(input, options) {
 ----
 
 For this reason, it's generally best to pass a brand new object on the first position, every time.
-====
+****
 
 For any properties that had a default value where the user also provided a value, the user-provided value will prevail. Here's how `Object.assign` works. First, it takes the first argument passed to it; let's call it `target`. It then iterates over all keys of each of the other arguments; let's call them `sources`. For each source in `sources`, all of its properties are iterated and assigned to `target`. The end result is that rightmost sources--in our case, the `options` object--overwrite any previously assigned values, as shown in the following bit of code.
 
