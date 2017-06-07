@@ -837,7 +837,8 @@ console.log(selfishLogger.test === selfishLogger.test)
 // <- true
 console.log(selfishLogger.test() === selfishLogger)
 // <- true
-console.log(selfishLogger.test.call(something) === selfishLogger)
+console.log(selfishLogger.test.call(something) === 
+   selfishLogger)
 // <- true
 ----
 
