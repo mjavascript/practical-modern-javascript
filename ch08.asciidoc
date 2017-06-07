@@ -159,7 +159,7 @@ console.log(render('list', [{
 }]))
 ----
 
-[[ig8-3]]
+[[fig8-3]]
 .Creating a bare bones HTML rendering application is made easy by template literals.
 image::images/pmjs_08in03.png["Printing different views through a normalized render function."]
 
