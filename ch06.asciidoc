@@ -1,5 +1,5 @@
 [[managing-property-access-with-proxies]]
-== Managing Property Access with Proxies
+== Managing Property Access pass:[<span class="keep-together">with Proxies</span>]
 
 Proxies are an interesting and powerful feature in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a `Proxy` to determine the desired behavior whenever the properties of an underlying `target` object are accessed. A `handler` object can be used to configure traps for your `Proxy`, which define and restrict how the underlying object is accessed, as we'll see in a bit.
 
