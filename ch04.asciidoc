@@ -111,10 +111,10 @@ The `.then` and `.catch` methods return a new promise every time, creating a tre
 
 When we chain promises, we need to understand that `p1.then(r1).then(r2)` creates two new `p2` and `p3` promises. The second reaction, `r2`, is going to fire if `p2` fulfills, while the `r1` reaction will fire when `p1` is fulfilled. When we have a statement such as `p1.then(r1); p1.then(r2)`, in contrast, both `r1` and `r2` will fire if `p1` is fulfilled. A discrepancy occurs when `p1` fulfills but `p2` doesn't.
 
-Figuring out the tree-like nature of promises is the key to unlocking a deep understanding of how promises behave. To this end, I've created an online tool called Promisees you can use to play around with promise chains while visualizing the tree structure they leave behind, as shown in <<Fig4-1>>.
+Figuring out the tree-like nature of promises is the key to unlocking a deep understanding of how promises behave. To this end, I've created an online tool called https://mjavascript.com/out/promisees[Promisees] you can use to play around with promise chains while visualizing the tree structure they leave behind, as shown in <<Fig4-1>>.
 
 [[Fig4-1]]
-.You can find Promisees at https://mjavascript.com/out/promisees
+.Promisees lets you write a piece of code and visualize how the underlying graph evolves as promises are settled in fulfillment or rejection
 image::images/pmjs_0401.png["Promisees lets you write a piece of code and visualize how the underlying graph evolves as promises are settled in fulfillment or rejection."]
 
 ====
