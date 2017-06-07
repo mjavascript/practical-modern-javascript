@@ -29,7 +29,7 @@ In <<classes-symbols-objects-and-decorators>>, we'll discuss the new `class` syn
 
 <<managing-property-access-with-proxies>> covers the new `Proxy` and `Reflect` built-ins. We'll learn all about how we can use proxies and the reasons why we need to be careful when choosing to do so.
 
-<<built-in-improvements>> is dedicated to the rest of built-in improvements that can be found in ES6. Particularly around `Array`, `Math`, numbers, strings, Unicode, and regular expressions.
+<<built-in-improvements-in-es6>> is dedicated to the rest of built-in improvements that can be found in ES6. Particularly around `Array`, `Math`, numbers, strings, Unicode, and regular expressions.
 
 <<javascript-modules>> is devoted to native JavaScript Modules and, briefly, the history that led to their inception. We'll then discuss their syntax implications at length.
 
