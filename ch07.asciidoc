@@ -1212,7 +1212,8 @@ Let's look at more Unicode-related methods introduced in ES6.
 
 ==== String#codePointAt
 
-We can use `String#codePointAt` to get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the following example we print the code points for each of the three emoji in our demo `'pass:[<img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 12px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" />]'` string.
+We can use `String#codePointAt` to get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the following example we print the code points for each of the three emoji in our demo 'pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎" /><img src="images/1f471.png" style="width: 12px" alt="👱" data-emoji-embed="👱" /><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" /></code>]' string.
+
 
 [source,javascript]
 ----
