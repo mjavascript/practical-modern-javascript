@@ -972,6 +972,8 @@ RunUO relied heavily in reflection. They made significant efforts to be customiz
 
 Just as they made it easy to create new monsters--or "non-player characters" (NPC) in gaming slang--they also relied in reflection to provide functionality to in-game administrators. Administrators could run an in-game command and click on an item or a moster to visualize or change properties without ever leaving the game.
 
+[[fig0301]]
+.Modifying properties for a RunUO item in-game from the Ultima Online client
 image::images/pmjs_03in01.png["Modifying properties for a RunUO item in-game from the Ultima Online client."]
 
 Not every property in a class is meant to be accessible in-game, though. Some properties are only meant for internal use, or not meant to be modified at runtime. RunUO had a `CommandPropertyAttribute` decoratorpass:[<span data-type="footnote" id="runuo-attributes">GitHub has the definition of <a href="http://bit.ly/2r1Xlfs"><code>CommandPropertyAttribute</code> for RunUO</a>.</span>] which definied that the property could be modified in-game and where you could also specify the access level required to read and write that property. This decorator was used extensively throughout the RunUO codebase.pass:[<span data-type="footnote" id="runuo-commandprops">Their use is widespread throughout the codebase, marking over 200 properties in the <a href="https://mjavascript.com/out/runuo-commandprops">RunUO core alone</a>.</span>]
