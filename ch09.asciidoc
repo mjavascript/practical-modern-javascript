@@ -229,7 +229,7 @@ When it comes to quotes, `'` and `"` are more likely to be necessary when writin
 `Alfred's cat suit is "slick".`
 ----
 
-As we've discovered in <<ecmascript6-essentials>>, there are also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multiline support, expression interpolation, or reduced escaping.
+As we've discovered in <<es6-essentials>>, there are also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multiline support, expression interpolation, or reduced escaping.
 
 The combination of all of these features warrants considering template literals as the default string flavor over single- or double-quoted strings. There are a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
 
