@@ -1044,7 +1044,8 @@ function getCommandProperties(ctor) {
   return [...properties]
 }
 getCommandProperties(Dog)
-// <- [{ key: 'name', readLevel: 'game-master', writeLevel: 'game-master' }]
+// <- [{ key: 'name', readLevel: 'game-master', 
+// writeLevel: 'game-master' }]
 ----
 
 We could then iterate over known safe command properties and render a way of modifying those during runtime, through a simple UI. Instead of maintaining long lists of properties that can be modified, relying on some sort of heuristics bound to break from time to time, or using some sort of restrictive naming convention, decorators are the cleanliest way to implement a protocol where we mark properties as special for some particular use case.
