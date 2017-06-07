@@ -598,7 +598,7 @@ const castHealingSpell = player => ({
 })
 ----
 
-As we explained in <<classes-symbols-and-symbols>>, we can use object rest properties while destructuring objects. Among other uses, such as listing unknown properties, object rest can be used to create a shallow copy of an object.
+As we explained in <<classes-symbols-objects-and-decorators>>, we can use object rest properties while destructuring objects. Among other uses, such as listing unknown properties, object rest can be used to create a shallow copy of an object.
 
 In the next snippet, we'll look at three of the simplest ways in which we can create a shallow copy of an object in JavaScript. The first one uses `Object.assign`, assigning every property of `source` to an empty object that's then returned; the second example uses object spread and is equivalent to using `Object.assign`, but a bit more gentle on the eyes; the last example relies on destructuring the rest parameter.
 
