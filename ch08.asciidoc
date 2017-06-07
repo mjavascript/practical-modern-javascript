@@ -92,7 +92,7 @@ console.log(html)
 
 [[fig8_1]]
 .Rendering a model as HTML is as easy as saying template literal expression interpolation!
-image::images/pmjs_08in01.png["Printing an item for our grocery shopping list"]
+image::images/pmjs_0801.png["Printing an item for our grocery shopping list"]
 
 The next template we'll make renders the grocery list itself. It receives an array of items, and renders each of them by reusing the _item.js_ template from the previous code snippet.
 
@@ -126,7 +126,7 @@ console.log(html)
 
 [[Fig8_2]]
 .Composing components made with template literals can be as simple as we choose to make them.
-image::images/pmjs_08in02.png["Printing a grocery shopping list"]
+image::images/pmjs_0802.png["Printing a grocery shopping list"]
 
 In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a `model` object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the _item.js_ templating function, and joining their HTML representations with newlines.
 
@@ -161,7 +161,7 @@ console.log(render('list', [{
 
 [[fig8-3]]
 .Creating a bare bones HTML rendering application is made easy by template literals
-image::images/pmjs_08in03.png["Printing different views through a normalized render function."]
+image::images/pmjs_0803.png["Printing different views through a normalized render function."]
 
 Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. In the next few sections we'll look at `export` and `import` statements, and learn how ESM is compatible with CJS.
 
