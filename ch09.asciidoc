@@ -776,7 +776,7 @@ function wait(delay) {
 }
 ----
 
-Another large upside in using arrow functions lies in their lexical scoping, where they don't modify the meaning of `this` or `arguments`. If we find ourselves copying `this` to a temporary variable--typically named `self`, `context`, or `_this`--we may want to use an arrow function for the inner bit of code instead. Let's take a look at an example of this.
+Another large upside in using arrow functions lies in their lexical scoping, where they don't modify the meaning of `this` or `arguments`. If we find ourselves copying `this` to a temporary variable--typically named `self`, `context`, or ++_this++—we may want to use an arrow function for the inner bit of code instead. Let's take a look at an example of this.
 
 [source,javascript]
 ----

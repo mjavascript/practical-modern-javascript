@@ -469,7 +469,7 @@ var { metadata: { gender: characterGender } } = character
 
 The scenario we just saw repeats itself frequently, because properties are often named in the context of their host object. While `palette.color.code` is perfectly descriptive, `code` on its own could mean a wide variety of things, and aliases such as `colorCode` can help you bring context back into the variable name while still using destructuring.
 
-Whenever you access an mpnexistent property in ES5 notation, you get a value of `undefined`:
+Whenever you access an nonexistent property in ES5 notation, you get a value of `undefined`:
 
 [source,javascript]
 ----
@@ -894,7 +894,7 @@ console.log(first)
 // <- 'a'
 ----
 
-In ES6, you can combine spread with array destructuring. The following piece of code is similar to the preceding one, except we're using a single line of code, and that single line is more descriptive of what we're doing than repeateadly calling `list.shift()` in the previous example.
+In ES6, you can combine spread with array destructuring. The following piece of code is similar to the preceding one, except we're using a single line of code, and that single line is more descriptive of what we're doing than repeatedly calling `list.shift()` in the previous example.
 
 [source,javascript]
 ----
@@ -925,7 +925,7 @@ console.log(result)
 // <- 6
 ----
 
-Spreading arguments onto a function call can be combined with regular arguments as much as necessary, just like with array literals. The next example calls `print` with a couple of regular arguments and a couple of arrays being spread over the parameter list. Note how conveniently the rest `list` parameter matches all the provided arguments. Spread and rest can help make code intent more clear without dilluting your codebase.
+Spreading arguments onto a function call can be combined with regular arguments as much as necessary, just like with array literals. The next example calls `print` with a couple of regular arguments and a couple of arrays being spread over the parameter list. Note how conveniently the rest `list` parameter matches all the provided arguments. Spread and rest can help make code intent more clear without diluting your codebase.
 
 [source,javascript]
 ----
@@ -1305,7 +1305,7 @@ console.log(i)
 
 Given `let` variables declared in a loop are scoped to each step in the loop, the bindings would work as expected in combination with an asynchronous function call, as opposed to what we're used to with `var`. Let's look at concrete examples.
 
-First, we'll look at the typical example of how `var` scoping works. The `i` binding is scoped to the `printNumbers` function, and its value increases all the way to `10` as each timeout callback is scheduled. By the time each callback runs--one every 100 milliseconds--`i` has a value of `10` and thus that's what's printed every single time.
+First, we'll look at the typical example of how `var` scoping works. The `i` binding is scoped to the `printNumbers` function, and its value increases all the way to `10` as each timeout callback is scheduled. By the time each callback runs—one every 100 milliseconds—++i++ has a value of `10` and thus that's what's printed every single time.
 
 [source,javascript]
 ----
@@ -1484,7 +1484,7 @@ Let's take a moment to discuss the merits of `const` and `let`.
 
 New features should never be used for the sake of using new features. ES6 features should be used where they genuinely improve code readability and maintainability. The `let` statement is able to, in many cases, simplify pieces of code where you'd otherwise declare `var` statements at the top of a function just so that hoisting doesn't produce unexpected results. Using the `let` statement you'd be able to place your declarations at the top of a code block, instead of the top of the whole function, reducing the latency in mental trips to the top of the scope.
 
-Using the `const` statement is a great way to prevent accidents. The following piece of code is a plausibly error-prone scenario where we pass of a reference to an `items` variable to a `checklist` function, which then returns a `todo` API that in turn interacts with said `items` reference. When the `items` variable is changed to reference another list of items, we're in for a world of hurt--the `todo` API still works with the value `items` used to have, but `items` is referencing something else now.
+Using the `const` statement is a great way to prevent accidents. The following piece of code is a plausibly error-prone scenario where we pass of a reference to an `items` variable to a `checklist` function, which then returns a `todo` API that in turn interacts with said `items` reference. When the `items` variable is changed to reference another list of items, we're in for a world of hurt—the `todo` API still works with the value `items` used to have, but `items` is referencing something else now.
 
 [source,javascript]
 ----

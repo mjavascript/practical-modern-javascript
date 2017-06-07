@@ -211,7 +211,7 @@ Promise
   .catch(err => console.error(err))
 ----
 
-It might be easier to decompose that series of chained method calls into variables, as shown next. The following piece of code might help you visualize the fact that, if you attached the `.catch` reaction to `p1`, you wouldn't be able to catch the error originated in the `.then` reaction. While `p1` is fulfilled, `p2`--a different promise than `p1`, resulting from calling `p1.then`--is rejected due to the error being thrown. That error could be caught, instead, if we attached the rejection reaction to `p2`.
+It might be easier to decompose that series of chained method calls into variables, as shown next. The following piece of code might help you visualize the fact that, if you attached the `.catch` reaction to `p1`, you wouldn't be able to catch the error originated in the `.then` reaction. While `p1` is fulfilled, ++p2++—a different promise than `p1`, resulting from calling ++p1.then++—is rejected due to the error being thrown. That error could be caught, instead, if we attached the rejection reaction to `p2`.
 
 [source,javascript]
 ----
@@ -356,7 +356,7 @@ resolveUnderThreeSeconds(2000) // becomes fulfilled after 2s
 resolveUnderThreeSeconds(7000) // becomes rejected after 3s
 ----
 
-When creating a new promise `p1`, you could call `resolve` with another promise `p2`--besides calling `resolve` with nonpromise values. In those cases, `p1` will be resolved but blocked on the outcome of `p2`. Once `p2` settles, `p1` will be settled with its value and outcome. The following bit of code is, thus, effectively the same as simply doing `fetch('/items')`.
+When creating a new promise `p1`, you could call `resolve` with another promise ++p2++—besides calling `resolve` with nonpromise values. In those cases, `p1` will be resolved but blocked on the outcome of `p2`. Once `p2` settles, `p1` will be settled with its value and outcome. The following bit of code is, thus, effectively the same as simply doing `fetch('/items')`.
 
 [source,javascript]
 ----
@@ -365,7 +365,7 @@ new Promise(resolve => resolve(fetch('/items')))
 
 Note that this behavior is only possible when using `resolve`. If you try to replicate the same behavior with `reject` you'll find that the `p1` promise is rejected with the `p2` promise as the rejection `reason`. While `resolve` may result in a promise being fulfilled or rejected, `reject` always results in the promise being rejected. If you `resolve` to a rejected promise or a promise that's eventually rejected, then your promise will be rejected as well. The opposite isn't true for rejections. If you `reject` in a resolver, the promise will be rejected no matter what value is passed into `reject`.
 
-In some cases you'll know beforehand about a value you want to settle a promise with. In these cases you could create a promise from scratch, as shown next. This can be convenient when you want to set off the benefits of promise chaining, but don't otherwise have a clear initiator that returns a `Promise`--such as a call to `fetch`.
+In some cases you'll know beforehand about a value you want to settle a promise with. In these cases you could create a promise from scratch, as shown next. This can be convenient when you want to set off the benefits of promise chaining, but don't otherwise have a clear initiator that returns a ++Promise++—such as a call to `fetch`.
 
 [source,javascript]
 ----
@@ -973,7 +973,7 @@ console.log([...playlist(['a', 'b'], 3)])
 // <- ['a', 'b', 'a', 'b', 'a', 'b']
 ----
 
-To iterate over the playlist we'd probably come up with a `player` function. Assuming a `playSong` function that reproduces a song and invokes a callback when the song ends, our `player` implementation could look like the following function, where we asynchronously loop the iterator coming from a sequence, requesting new songs as previous ones finish playback. Given that there's always a considerable waiting period in between `g.next` calls--while the songs are actually playing inside `playSong`--there's little risk of being stuck in an infinite loop that'd crash the runtime, even when the sequence produced by `playlist` is infinite.
+To iterate over the playlist we'd probably come up with a `player` function. Assuming a `playSong` function that reproduces a song and invokes a callback when the song ends, our `player` implementation could look like the following function, where we asynchronously loop the iterator coming from a sequence, requesting new songs as previous ones finish playback. Given that there's always a considerable waiting period in between `g.next` calls--while the songs are actually playing inside ++playSong++—there's little risk of being stuck in an infinite loop that'd crash the runtime, even when the sequence produced by `playlist` is infinite.
 
 [source,javascript]
 ----
@@ -1584,7 +1584,7 @@ modelProvider(function* () {
 })
 ----
 
-Even though generator functions allow us to suspend execution and then resume asynchronously, we can use the same error handling semantics--`try`, `catch`, and `throw`--as with regular functions. Having the ability to use `try`/`catch` blocks in generator code lets us treat the code as if it were synchronous, even when there are HTTP requests sitting behind `yield` expressions, in iterator code.
+Even though generator functions allow us to suspend execution and then resume asynchronously, we can use the same error handling semantics—++try++, `catch`, and ++throw++—as with regular functions. Having the ability to use `try`/`catch` blocks in generator code lets us treat the code as if it were synchronous, even when there are HTTP requests sitting behind `yield` expressions, in iterator code.
 
 ==== Returning on Behalf of a Generator
 
@@ -1643,7 +1643,7 @@ function* numbers() {
 }
 ----
 
-While you may place `return value` statements anywhere in a generator function, the returned `value` won't show up when itearting the generator using the spread operator or `Array.from` to build an array, nor when using `for..of`, as shown next.
+While you may place `return value` statements anywhere in a generator function, the returned `value` won't show up when iterating the generator using the spread operator or `Array.from` to build an array, nor when using `for..of`, as shown next.
 
 [source,javascript]
 ----

@@ -69,7 +69,7 @@ console.log(0x0ff) // <- 255
 console.log(0xf00) // <- 3840
 ----
 
-Besides these minor syntax changes where octal and binary literals were introduced, a few methods were added to `Number` in ES6. The first four `Number` methods that we'll be discussing--`Number.isNaN`, `Number.isFinite`, `Number.parseInt`, and `Number.parseFloat`--already existed as functions in the global namespace. In addition, the methods in `Number` are slightly different in that they don't coerce nonnumeric values into numbers before producing a result.
+Besides these minor syntax changes where octal and binary literals were introduced, a few methods were added to `Number` in ES6. The first four `Number` methods that we'll be discussing—++Number.isNaN++, `Number.isFinite`, `Number.parseInt`, and ++Number.parseFloat++—already existed as functions in the global namespace. In addition, the methods in `Number` are slightly different in that they don't coerce nonnumeric values into numbers before producing a result.
 
 ==== Number.isNaN
 
@@ -137,7 +137,7 @@ There is a function, which was already in the language, that somewhat resembles 
 
 The rarely promoted `isFinite` method has been available since ES3. It returns a boolean value indicating whether the provided `value` matches none of: `Infinity`, `-Infinity`, and `NaN`.
 
-The `isFinite` method coerces values through `Number(value)`, while `Number.isFinite` doesn't. This means that values that can be coerced into non-`NaN` numbers will be considered finite numbers by `isNumber`--even though they aren't explicit numbers.
+The `isFinite` method coerces values through `Number(value)`, while `Number.isFinite` doesn't. This means that values that can be coerced into non-`NaN` numbers will be considered finite numbers by ++isNumber++—even though they aren't explicit numbers.
 
 Here are a few examples using the global `isFinite` function.
 
@@ -637,7 +637,7 @@ Math.log1p(1.00000000005e-10)
 
 ==== Math.log10
 
-Base 10 logarithm of a number--`log~10~(value)`.
+Base 10 logarithm of a number—++log~10~(value)++.
 
 [source,javascript]
 ----
@@ -658,7 +658,7 @@ And then there's `Math.log2`.
 
 ==== Math.log2
 
-Base 2 logarithm of a number--`log~2~(value)`.
+Base 2 logarithm of a number—++log~2~(value)++.
 
 [source,javascript]
 ----
@@ -1650,7 +1650,7 @@ isDecimalNumber('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻�
 // <- true
 ----
 
-For an exhaustive overview of supported Unicode properties and values, visit https://mjavascript.com/out/unicode-property-list.
+Check out this exhaustive overview of https://mjavascript.com/out/unicode-property-list[supported Unicode properties and values].
 
 ==== Lookbehind Assertions
 
@@ -1805,7 +1805,7 @@ console.log(...parseAttributes(html))
 // ]
 ----
 
-A bigger source of confusion is that `rattributes` mutates its `lastIndex` property on each call to `RegExp#exec`, which is how it can track the position after the last match. When there are no matches left, `lastIndex` is reset back to `0`. A problem arises when we don't iterate over all possible matches for a piece of input in one go--which would reset `lastIndex` to `0`--and then we use the regular expression on a second piece of input, obtaining unexpected results.
+A bigger source of confusion is that `rattributes` mutates its `lastIndex` property on each call to `RegExp#exec`, which is how it can track the position after the last match. When there are no matches left, `lastIndex` is reset back to `0`. A problem arises when we don't iterate over all possible matches for a piece of input in one go--which would reset `lastIndex` to ++0++—and then we use the regular expression on a second piece of input, obtaining unexpected results.
 
 While it looks like our `matchAll` implementation wouldn't fall victim of this given it loops over all matches, it's be possible to iterate over the generator by hand, meaning that we'd run into trouble if we reused the same regular expression, as shown in the next bit of code. Note how the second matcher should report `['type', 'text']` but instead starts at an index much further ahead than `0`, even misreporting the `'placeholder'` key as `'laceholder'`.
 
@@ -1958,9 +1958,9 @@ Array.from(document.querySelectorAll('div')).slice(1)
 
 `Array.from` has three arguments, although only the `input` is required. To wit:
 
-- `input`--the array-like or iterable object you want to cast
-- `map`--a mapping function that's executed on every item of `input`
-- `context`--the `this` binding to use when calling `map`
+- ++input++—the array-like or iterable object you want to cast
+- ++map++—a mapping function that's executed on every item of `input`
+- ++context++—the `this` binding to use when calling `map`
 
 With `Array.from` you cannot slice, but you can dice. The `map` function will efficiently map the values into something else as they're being added to the array that results from calling `Array.from`.
 

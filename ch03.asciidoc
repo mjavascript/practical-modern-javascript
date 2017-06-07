@@ -159,7 +159,7 @@ class Counter {
 }
 ----
 
-In this case, you could consume the `Counter` class as shown in the next snippet. Each time the `.next` property is accessed, the count raises by one. While mildly useful, this sort of use case is usually better suited by methods than by magical `get` property accessors, and we need to be careful not to abuse property accesors, as consuming an object that abuses of accessors may become very confusing.
+In this case, you could consume the `Counter` class as shown in the next snippet. Each time the `.next` property is accessed, the count raises by one. While mildly useful, this sort of use case is usually better suited by methods than by magical `get` property accessors, and we need to be careful not to abuse property accessors, as consuming an object that abuses of accessors may become very confusing.
 
 [source,javascript]
 ----
@@ -458,7 +458,7 @@ function createCalendar(el) {
 }
 ----
 
-There is an ES6 built-in--the `WeakMap`--that can be used to uniquely map objects to other objects without using arrays or placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in <<leveraging-ecmascript-collections>>, alongside other ES6 collection built-ins.
+There is an ES6 built-in--the ++WeakMap++—that can be used to uniquely map objects to other objects without using arrays or placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in <<leveraging-ecmascript-collections>>, alongside other ES6 collection built-ins.
 
 ===== Defining protocols through symbols
 
@@ -689,7 +689,7 @@ function md(input, options=defaults) {
 }
 ----
 
-The default values have to be merged with user-provided configuration, somehow. That's where `Object.assign` comes in, as shown in the following example. We start with an empty `{}` object--which will be mutated and returned by `Object.assign`--we copy the default values over to it, and then copy the options on top. The resulting `config` object will have all of the default values plus the user-provided configuration.
+The default values have to be merged with user-provided configuration, somehow. That's where `Object.assign` comes in, as shown in the following example. We start with an empty `{}` object--which will be mutated and returned by ++Object.assign++—we copy the default values over to it, and then copy the options on top. The resulting `config` object will have all of the default values plus the user-provided configuration.
 
 [source,javascript]
 ----
@@ -773,7 +773,7 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 
 At the time of this writing, there's an ECMAScript stage 3 proposalpass:[<span data-type="footnote" id="object-spread">You can find the proposal draft at <a href="http://bit.ly/2r2ima9">GitHub</a>.</span>] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an object onto another is equivalent to using an `Object.assign` function call.
 
-The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and their `Object.assign` counterpart. As you can see, using object spread is more succint and should be preferred where possible.
+The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and their `Object.assign` counterpart. As you can see, using object spread is more succinct and should be preferred where possible.
 
 [source,javascript]
 ----
@@ -918,7 +918,7 @@ Decorators are implemented by way of functions. Member decorator functions take 
 
 [source]
 ----
-interface MemberDesciptor {
+interface MemberDescriptor {
   kind: "Property"
   key: string,
   isStatic: boolean,
@@ -970,7 +970,7 @@ They distributed the server software as an executable and a series of `.cs` file
 
 RunUO relied heavily in reflection. They made significant efforts to be customizable by players who were not necessarily invested in programming but were nevertheless interested in changing a few details of the game, such as how much damage a Dragon's fire breath inflicts or how often they shot fireballs. Great developer experience was a big part of their philosophy, and you could create a new kind of `Dragon` just by copying one of the monster files, changing it to inherit from the `Dragon` class, and overriding a few properties to change its color hue, its damage output, and so on.
 
-Just as they made it easy to create new monsters--or "non-player characters" (NPC) in gaming slang--they also relied in reflection to provide functionality to in-game administrators. Administrators could run an in-game command and click on an item or a moster to visualize or change properties without ever leaving the game.
+Just as they made it easy to create new monsters--or "non-player characters" (NPC) in gaming slang--they also relied in reflection to provide functionality to in-game administrators. Administrators could run an in-game command and click on an item or a monster to visualize or change properties without ever leaving the game.
 
 [[fig0301]]
 .Modifying properties for a RunUO item in-game from the Ultima Online client

@@ -154,7 +154,7 @@ map.has(1)
 // <- []
 ----
 
-Maps come with a read-only `.size` property that behaves similarly to `Array#length`--at any point in time it gives you the current amount of entries in the map.
+Maps come with a read-only `.size` property that behaves similarly to ++Array#length++—at any point in time it gives you the current amount of entries in the map.
 
 [source,javascript]
 ----
