@@ -880,6 +880,7 @@ console.log(all)
 
 Note that the spread operator isn't limited to arrays and `arguments`. The spread operator can be used with any iterable object. Iterable is a protocol in ES6 that allows you to turn any object into something that can be iterated over. We'll research the iterable protocol in <<iteration-and-flow-control>>.
 
+[role="pagebreak-before"]
 .Shifting and Spreading
 ****
 When you want to extract an element or two from the beginning of an array, the common approach is to use `.shift`. While functional, the following snippet of code can be hard to understand at a glance, because it uses `.shift` twice to grab a different item from the beginning of the `list` each time. The focus is, like in many other pre-ES6 situations, placed on getting the language to do what we want.
