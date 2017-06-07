@@ -140,7 +140,7 @@ module.exports = function render(template, model) {
 }
 ----
 
-Once we had such an API, we wouldn't have to worry about carefully constructing `require` statements that match the directory structure of our view templates, because the _render.js_ module could take care of that. Rendering any template becomes a matter of calling the `render` function with the template's name and the model for that template, as demonstrated in the following code and <<Fig8-3>>.
+Once we had such an API, we wouldn't have to worry about carefully constructing `require` statements that match the directory structure of our view templates, because the _render.js_ module could take care of that. Rendering any template becomes a matter of calling the `render` function with the template's name and the model for that template, as demonstrated in the following code and <<fig8-3>>.
 
 [source,javascript]
 ----
@@ -159,7 +159,7 @@ console.log(render('list', [{
 }]))
 ----
 
-[[Fig8_3]]
+[[ig8-3]]
 .Creating a bare bones HTML rendering application is made easy by template literals.
 image::images/pmjs_08in03.png["Printing different views through a normalized render function."]
 
