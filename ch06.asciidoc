@@ -651,7 +651,8 @@ function invariant(key, action) {
 const target = {}
 const proxy = new Proxy(target, handler)
 Reflect.getOwnPropertyDescriptor(proxy, '_secret')
-// <- Error: Can't get property descriptor for private "_secret" property
+// <- Error: Can't get property descriptor for private 
+// "_secret" property
 ----
 
 One problem with this approach might be that you're effectively telling external consumers that they're unauthorized to access prefixed properties. It might be best to conceal them entirely by returning `undefined`. That way, private properties will behave no differently than properties that are truly absent from the `target` object. The following example shows how `Object.getOwnPropertyDescriptor` returns `undefined` for an nonexistent `dressing` property, and how it does the same for a `_secret` property. Existing properties that aren't in the private property space produce their property descriptors as usual.
