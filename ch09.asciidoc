@@ -282,7 +282,7 @@ const alfred = { `suit kind`: `cat` }
 
 Object property keys accept value types, which are then cast into plain strings, but template literals aren't value types, and thus it's not possible to use them as property keys.
 
-As you might recall from <<ecmascript6-essentials>>, ES6 introduces computed property names, as seen in the following code snippet. In a computed property key we can use any expression we want to produce the desired property key, including template literals.
+As you might recall from <<es6-essentials>>, ES6 introduces computed property names, as seen in the following code snippet. In a computed property key we can use any expression we want to produce the desired property key, including template literals.
 
 [source,javascript]
 ----
