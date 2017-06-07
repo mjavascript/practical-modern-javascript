@@ -104,9 +104,9 @@ isNaN(new Date())
 
 `Number.isNaN` is more precise than its global counterpart, because it doesn't involve casting. There are still a few reasons why `Number.isNaN` can be a source of confusion.
 
-First off, `isNaN` casts input through `Number(value)` before comparison, while `Number.isNaN` doesn't. Neither `Number.isNaN` nor `isNaN` answer the "is this not a number?" question, but instead they answer whether `value`--or `Number(value)`--is `NaN`.
+First off, `isNaN` casts input through `Number(value)` before comparison, while `Number.isNaN` doesn't. Neither `Number.isNaN` nor `isNaN` answer the "is this not a number?" question, but instead they answer whether ++value++—or ++Number(value)++—is `NaN`.
 
-In most cases, what you actually want to know is whether a value identifies as a number--`typeof NaN === 'number'`--and is a number. The `isNumber` function in the following code snippet does just that. Note that it'd work with both `isNaN` and `Number.isNaN` due to type checking. Everything that reports a `typeof` value of `'number'` is a number, except for `NaN`, so we filter out those out as false positive results.
+In most cases, what you actually want to know is whether a value identifies as a number—++typeof NaN === 'number'++—and is a number. The `isNumber` function in the following code snippet does just that. Note that it'd work with both `isNaN` and `Number.isNaN` due to type checking. Everything that reports a `typeof` value of `'number'` is a number, except for `NaN`, so we filter out those out as false positive results.
 
 [source,javascript]
 ----
@@ -616,7 +616,7 @@ The inverse function of `Math.expm1` is `Math.log1p`.
 
 ==== Math.log1p
 
-This is the natural logarithm of `value` plus `1`--`ln(value + 1)`--and the inverse function of `Math.expm1`. The base `e` logarithm of a number can be expressed as `Math.log` in JavaScript.
+This is the natural logarithm of `value` plus ++1++—++ln(value + 1)++—and the inverse function of `Math.expm1`. The base `e` logarithm of a number can be expressed as `Math.log` in JavaScript.
 
 [source,javascript]
 ----
@@ -722,7 +722,7 @@ Math.hypot(1, 2, 3)
 // <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
 ----
 
-We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.pass:[<span data-type="footnote" id="native-arrays">You can go deeper into functional <code>Array</code> methods by reading the article, <a href="https://mjavascript.com/out/native-arrays">Fun with Native Arrays"</a>.</span>]
+We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.pass:[<span data-type="footnote" id="native-arrays">You can go deeper into functional <code>Array</code> methods by reading the article, <a href="https://mjavascript.com/out/native-arrays">"Fun with Native Arrays"</a>.</span>]
 
 [source,javascript]
 ----
@@ -1082,14 +1082,14 @@ Let's switch protocols and learn about Unicode.
 
 JavaScript strings are represented using UTF-16 code units.pass:[<span data-type="footnote" id="unicode-encodings">Learn more about <a href="https://mjavascript.com/out/unicode-encodings">UCS-2, UCS-4, UTF-16, and UTF-32</a>.</span>] Each code unit can be used to represent a code point in the `[U+0000, U+FFFF]` range--also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the `'\u3456'` syntax. You could also represent code units in the `[U+0000, U+0255]` range using the `\x00..\xff` notation. For instance, `'\xbb'` represents `'»'`, the `U+00BB` code point, as you can also verify by doing `String.fromCharCode(0xbb)`.
 
-For code points beyond `U+FFFF`, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji pass:[<code><img src="images/1f40e.png" alt="🐎" data-emoji-embed="🐎"/></code>] code point is represented with the `'\ud83d\udc0e'` contiguous code units. In ES6 notation you can also represent code points using the `'\u{1f40e}'` notation (that example is also the horse emoji).
+For code points beyond `U+FFFF`, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji (pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎"/></code>]) code point is represented with the `'\ud83d\udc0e'` contiguous code units. In ES6 notation you can also represent code points using the `'\u{1f40e}'` notation (that example is also the horse emoji).
 
 Note that the internal representation hasn't changed, so there are still two code units behind that single code point. In fact, `'\u{1f40e}'.length` evaluates to `2`, one for each code unit.
 
 The `'\ud83d\udc0e\ud83d\udc71\u2764'` string, found in the next code snippet, evaluates to a few emoji.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">'\ud83d\udc0e\ud83d\udc71\u2764'
+<pre data-type="programlisting" data-code-language="javascript" class="emoji-code">'\ud83d\udc0e\ud83d\udc71\u2764'
 // &lt;- '<img src="images/1f40e.png" style="width: 12px" alt="🐎" data-emoji-embed="🐎"/><img src="images/1f471.png" style="width: 12px" alt="👱" data-emoji-embed="👱"/><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
