@@ -527,7 +527,7 @@ Besides local symbols, there's also a global symbol registry, accessible from ac
 
 ==== Global Symbol Registry
 
-A code realm is any JavaScript execution context, such as the page your application is running in, an `<iframe>` within that page, a script running through `eval`, or a worker of any kind--such as web workers, service workers, or shared workers.footnoteref:[workers,Workers are a way of executing background tasks in browsers. The initiator can communicate with their workers, which run in a different execution context, via messaging. https://mjavascript.com/out/workers] Each of these execution contexts has its own global object. Global variables defined on the `window` object of a page, for example, aren't available to a `ServiceWorker`. In contrast, the global symbol registry is shared across all code realms.
+A code realm is any JavaScript execution context, such as the page your application is running in, an `<iframe>` within that page, a script running through `eval`, or a worker of any kind--such as web workers, service workers, or shared workers.pass:[<span data-type="footnote" id="workers">Workers are a way of executing background tasks in browsers. The initiator can communicate with their workers, which run in a different execution context, via <a href="https://mjavascript.com/out/workers">messaging</a>.</span>] Each of these execution contexts has its own global object. Global variables defined on the `window` object of a page, for example, aren't available to a `ServiceWorker`. In contrast, the global symbol registry is shared across all code realms.
 
 There are two methods that interact with the runtime-wide global symbol registry: `Symbol.for` and `Symbol.keyFor`. What do they do?
 
