@@ -1441,8 +1441,7 @@ console.log(people)
 Note that creating a `const` variable doesn't mean that the assigned value becomes immutable. This is a common source of confusion, and it is strongly recommended that you pay attention when reading the following warning.
 
 .Variables Declared Using const Are Not Immutable
-[WARNING]
-====
+****
 Using `const` only means that the variable will always have a reference to the same object or primitive value, because that reference can't change. The reference itself is immutable, but the value held by the variable does not become immutable.
 
 The following example shows that even though the `people` reference couldn't be changed, the array itself can indeed be modified. If the array were immutable, this wouldn't be possible.
@@ -1477,7 +1476,7 @@ frozen.push('Water')
 // Uncaught TypeError: Can't add property 3
 // object is not extensible
 ----
-====
+****
 
 Let's take a moment to discuss the merits of `const` and `let`.
 
