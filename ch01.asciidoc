@@ -8,7 +8,7 @@ How did JavaScript get here, and where is it going next?
 
 === A Brief History of JavaScript Standards
 
-Back in 1995, Netscape envisioned a dynamic web beyond what HTML could offer. Brendan Eich was initially brought into Netscape to develop a language that was functionally akin to Scheme, but for the browser. Once he joined, he learned that upper management wanted it to look like Java and a deal to that effect was already underway.
+Back ((("JavaScript", "standards evolution", id="js1se")))((("standards evolution", id="se1")))in 1995, ((("Netscape", id="net1")))Netscape envisioned a dynamic web beyond what HTML could offer. Brendan Eich was initially brought into Netscape to develop a language that was functionally akin to Scheme, but for the browser. Once he joined, he learned that upper management wanted it to look like Java and a deal to that effect was already underway.
 
 Brendan created the first JavaScript prototype in ten days, taking Scheme's first-class functions and Self's prototypes as its main ingredients. The initial version of JavaScript was code-named Mocha. It didn't have array or object literals, and every error resulted in an alert. The lack of exception handling is why, to this day, many operations result in `NaN` or `undefined`. Brendan's work on DOM level 0 and the first edition of JavaScript set the stage for standards work.
 
@@ -26,7 +26,7 @@ Drafts for an ES4 specification were soon afterwards published by TC39. This ear
 
 Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. This was a delicate time for web standards: Microsoft had all but monopolized the web and they had little interest in standards development.
 
-As AOL laid off 50 Netscape employees in 2003,pass:[<span data-type="footnote">You can read a news report from <a href="https://mjavascript.com/out/aol-netscape"><em>The Mac Observer</em></a>, July 2003.</span>], the Mozilla Foundation was formed. With over 95% of web browsing market share now in the hands of Microsoft, TC39 was disbanded.
+As AOL laid off 50 Netscape employees in 2003,pass:[<span data-type="footnote">You can read a news report from <a href="https://mjavascript.com/out/aol-netscape"><em>The Mac Observer</em></a>, July 2003.</span>], the Mozilla Foundation was formed. With over 95% of web browsing market share now in the hands of Microsoft, TC39 was ((("Netscape", startref="net1")))disbanded.
 
 It took two years until Brendan, now at Mozilla, had ECMA resurrect work on TC39 by using Firefox's growing market share as leverage to get Microsoft back in the fold. By mid 2005, TC39 started meeting regularly once again. As for ES4, there were plans for introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features. Due to how ambitious the project was, work on ES4 was repeatedly delayed.
 
@@ -40,7 +40,7 @@ It took TC39 another four years to formalize ECMAScript 6, in June 2015. The six
 
 In parallel with the ES6 effort, in 2012 the WHATWG (a standards body interested in pushing the web forward) set out to document the differences between ES5.1 and browser implementations, in terms of compatibility and interoperability requirements. The taskforce standardized `String#substr`, which was previously unspecified; unified several methods for wrapping strings in HTML tags, which were inconsistent across browsers; and documented `Object.prototype` properties like `__proto__` and `__defineGetter__`, among other improvements.pass:[<span data-type="footnote">For the full set of changes made when merging the Web ECMAScript specification upstream, see the <a href="https://mjavascript.com/out/javascript-standard">WHATWG blog</a>.</span>] This effort was condensed into a separate Web ECMAScript specification, which eventually made its way into Annex B in 2015. Annex B was an informative section of the core ECMAScript specification, meaning implementations weren't required to follow its suggestions. Jointly with this update, Annex B was also made normative and required for web browsers.
 
-The sixth edition is a significant milestone in the history of JavaScript. Besides the dozens of new features, ES6 marks a key inflection point where ECMAScript would become a rolling standard.
+The sixth edition is a significant milestone in the history of JavaScript. Besides the dozens of new features, ES6 marks a key inflection point where ECMAScript would become a ((("JavaScript", "standards evolution", startref="js1se")))((("standards evolution", startref="se1")))rolling standard.
 
 [[ecmascript_as_a_rolling_standard]]
 === ECMAScript as a Rolling Standard
