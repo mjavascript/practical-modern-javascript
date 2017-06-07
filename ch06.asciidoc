@@ -103,7 +103,8 @@ const handler = {
 }
 function invariant(key, action) {
   if (key.startsWith('_')) {
-    throw new Error(`Can't ${ action } private "${ key }" property`)
+    throw new Error(`Can't ${ action } private "${ key }" 
+    property`)
   }
 }
 const target = {}
