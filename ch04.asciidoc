@@ -1,7 +1,7 @@
 [[iteration-and-flow-control]]
 == Iteration and Flow Control
 
-Having covered the essential aspects of ES6 in <<ecmascript6-essentials>>, and symbols in <<classes-symbols-objects-and-decorators>>, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn toward the end of the chapter.
+Having covered the essential aspects of ES6 in <<es6-essentials>>, and symbols in <<classes-symbols-objects-and-decorators>>, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn toward the end of the chapter.
 
 To kick off the chapter, we'll start by discussing promises. Promises have existed in user-land for a long time, but they're a native part of the language starting in ES6.
 
@@ -619,7 +619,7 @@ JavaScript gets two new protocols in ES6: iterators and iterables. These two pro
 
 Any object can adhere to the iterable protocol by assigning a function to the `Symbol.iterator` property for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to `Symbol.iterator`, is called once.
 
-The spread operator was first introduced in <<ecmascript6-essentials>>, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
+The spread operator was first introduced in <<es6-essentials>>, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
 
 [source,javascript]
 ----
