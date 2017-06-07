@@ -172,7 +172,8 @@ function concealWithPrefix(original, prefix='_') {
   return new Proxy(original, handler)
   function invariant(key, action) {
     if (key.startsWith(prefix)) {
-      throw new Error(`Can't ${ action } private "${ key }" property`)
+      throw new Error(`Can't ${ action } private "${ key }" 
+      property`)
     }
   }
 }
@@ -262,7 +263,7 @@ console.log(proxy.isUsable)
 // <- TypeError: illegal operation attempted on a revoked proxy
 ----
 
-This type of `Proxy` is particularly useful because you can completely cut off access to the `proxy` granted to a consumer. You could expose a revocable `Proxy` and keep around the `revoke` method, perhaps in a `WeakMap` collection. When it becomes clear that the consumer shouldn't have access to `target` anymore--not even through `proxy`--you `.revoke()` their access rights.
+This type of `Proxy` is particularly useful because you can completely cut off access to the `proxy` granted to a consumer. You could expose a revocable `Proxy` and keep around the `revoke` method, perhaps in a `WeakMap` collection. When it becomes clear that the consumer shouldn't have access to `target` anymore--not even through ++proxy++—you `.revoke()` their access rights.
 
 The following example shows two functions. The `getStorage` function can be used to get proxied access into `storage`, and it keeps a reference to the `revoke` function for the returned `proxy` object. Whenever we want to cut off access to `storage` for a given `proxy`, `revokeStorage` will call its associated `revoke` function and remove the entry from the `WeakMap`. Note that making both functions accessible to the same set of consumers won't pose security concerns: once access through a proxy has been revoked, it can't be restored.
 
