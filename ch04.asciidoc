@@ -116,7 +116,6 @@ Figuring out the tree-like nature of promises is the key to unlocking a deep und
 .Promisees lets you write a piece of code and visualize how the underlying graph evolves as promises are settled in fulfillment or rejection
 image::images/pmjs_0401.png["Promisees lets you write a piece of code and visualize how the underlying graph evolves as promises are settled in fulfillment or rejection."]
 
-====
 ****
 
 A promise is created by passing the `Promise` constructor a resolver that decides how and when the promise is settled, by calling either a `resolve` method that will settle the promise in fulfillment or a `reject` method that'd settle the promise as a rejection. Until the promise is settled by calling either function, it'll be in a pending state and any reactions attached to it won't be executed. The following snippet of code creates a promise from scratch where we'll wait for a second before randomly settling the promise with a fulfillment or rejection result.
@@ -820,8 +819,7 @@ const low = [...range(random, 0, 0.8)]
 This sort of abstraction of complexity into another function often helps keep code focused on its intent, while striving to avoid a `for..of` loop when all we wanted was to produce a derivated sequence. It also shows how sequences can be composed and piped into one another. In this case, we first created a multipurpose and infinite `random` sequence, and then piped it through a `range` function that returns a derivated sequence that ends when it meets values that are below or above a desired range. An important aspect of iterators is that despite having been composed, the iterators produced by the `range` function can be lazily iterated as well, effectively meaning you can compose as many iterators you need into mapping, filtering, and exit condition helpers.
 
 .Identifying Infinite Sequences
-[WARNING]
-====
+****
 Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem (<<fig0405>>), there is no way of knowing whether the sequence is infinite or not in code.
 
 [[fig0405]]
@@ -829,7 +827,8 @@ Iterators don't have any knowledge that the sequences they produce are infinite.
 image::images/pmjs0405.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
 
 You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While `for..of` won't run into the problem unless there's no escape condition, using mechanisms such as spread or `Array.from` would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
-====
+****
+
 
 Besides the technical implications of creating iterable objects, let's go over a couple of practical examples on how we can benefit from iterators.
 
