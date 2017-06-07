@@ -314,7 +314,7 @@ Here is an enumeration of what is going on as that piece of code is executed:
 You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure.pass:[<span data-type="footnote" id="promisees">I wrote an online visualization tool called Promisees where you can see the <a href="https://mjavascript.com/out/promisees">tree structure underlying a `Promise` chain</a>.</span>] Let's reinforce this concept with <<Fig4-4>>.
 
 [[Fig4-4]]
-.Given the tree structure, we realize that `p3` is fulfilled, as it doesn't produce an exception nor is it rejected. For that reason, `p4` can never follow the rejection branch, given its parent was fulfilled.
+.Given the tree structure, we realize that p3 is fulfilled, as it doesn't produce an exception nor is it rejected. For that reason, p4 can never follow the rejection branch, given its parent was fulfilled.
 image::images/pmjs_04in04.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
 
 It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches, and so on.
@@ -450,7 +450,7 @@ Note that you can transform data in rejection branches as well. Keep in mind tha
 
 ==== Promise#finally Proposal
 
-There's a TC39 proposalfootnoteref:[proposal-promise-finally,This proposal is in stage 2 at the time of this writing. You can find the proposal draft at https://mjavascript.com/out/proposal-promise-finally.] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
+There's a TC39 proposalpass:[<span data-type="footnote" id="proposal-promise-finally">This proposal is in stage 2 at the time of this writing. You can find the proposal draft at <a href="https://mjavascript.com/out/proposal-promise-finally">GitHub</a>.</span>] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
 
 We can think of the following bit of code as a rough ponyfill for `Promise#finally`. We pass the reaction callback to `p.then` as both a fulfillment reaction and a rejection reaction.
 
