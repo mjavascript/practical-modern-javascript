@@ -458,7 +458,7 @@ function createCalendar(el) {
 }
 ----
 
-There is an ES6 built-in--the `WeakMap`--that can be used to uniquely map objects to other objects without using arrays or placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in <<leveraging-es-collections>>, alongside other ES6 collection built-ins.
+There is an ES6 built-in--the `WeakMap`--that can be used to uniquely map objects to other objects without using arrays or placing foreign properties on the objects we want to be able to look up. In contrast with array lookup tables, `WeakMap` lookups are constant in time or O(1). We'll explore `WeakMap` in <<leveraging-ecmascript-collections>>, alongside other ES6 collection built-ins.
 
 ===== Defining protocols through symbols
 
