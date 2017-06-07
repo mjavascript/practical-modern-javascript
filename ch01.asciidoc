@@ -16,7 +16,7 @@ This revision of JavaScript was marketed as ((("LiveScript")))LiveScript when it
 
 The language started being standardized under the ((("ECMAScript")))ECMAScript name (ES) into the ECMA-262 specification in 1996, under a technical commitee at ECMA known as TC39. Sun wouldn't transfer ownership of the JavaScript trademark to ECMA, and while Microsoft offered JScript, other member companies didn't want to use that name, so ECMAScript stuck.
 
-Disputes by competing implementations, JavaScript by Netscape and JScript by Microsoft, dominated most of the TC39 standards commitee meetings at the time. Even so, the committee was already bearing fruit: backward compatibility was established as a golden rule, bringing about strict equality operators (`===` and `!==`) instead of breaking existing programs that relied on the loose equality comparision algorithm.
+Disputes by competing implementations, JavaScript by Netscape and JScript by ((("Microsoft", id="ms1")))Microsoft, dominated most of the TC39 standards commitee meetings at the time. Even so, the committee was already bearing fruit: backward compatibility was established as a golden rule, bringing about strict equality operators (`===` and `!==`) instead of breaking existing programs that relied on the loose equality comparision algorithm.
 
 The first edition of ECMA-262 was released June 1997. A year later, in June 1998, the specification was refined under the ISO/IEC 16262 international standard, after much scrutiny from national ISO bodies, and formalized as the second edition.
 
@@ -26,7 +26,7 @@ Drafts for an ES4 specification were soon afterwards published by TC39. This ear
 
 Conflicting opinions on how JavaScript was to move forward brought work on the specification to a standstill. This was a delicate time for web standards: Microsoft had all but monopolized the web and they had little interest in standards development.
 
-As AOL laid off 50 Netscape employees in 2003,pass:[<span data-type="footnote">You can read a news report from <a href="https://mjavascript.com/out/aol-netscape"><em>The Mac Observer</em></a>, July 2003.</span>], the Mozilla Foundation was formed. With over 95% of web browsing market share now in the hands of Microsoft, TC39 was ((("Netscape", startref="net1")))disbanded.
+As AOL laid off 50 Netscape employees in 2003,pass:[<span data-type="footnote">You can read a news report from <a href="https://mjavascript.com/out/aol-netscape"><em>The Mac Observer</em></a>, July 2003.</span>], the Mozilla Foundation was formed. With over 95% of web browsing market share now in the hands of ((("Microsoft", startref="ms1")))Microsoft, TC39 was ((("Netscape", startref="net1")))disbanded.
 
 It took two years until Brendan, now at Mozilla, had ECMA resurrect work on TC39 by using Firefox's growing market share as leverage to get Microsoft back in the fold. By mid 2005, TC39 started meeting regularly once again. As for ES4, there were plans for introducing a module system, classes, iterators, generators, destructuring, type annotations, proper tail calls, algebraic typing, and an assortment of other features. Due to how ambitious the project was, work on ES4 was repeatedly delayed.
 
