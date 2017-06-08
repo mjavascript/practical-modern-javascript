@@ -1225,7 +1225,7 @@ Phew, ((("template literals", "tagged templates", startref="tl2tt")))((("tagged 
 
 The `let` statement ((("let statements", id="lets2")))is one of the most well-known features in ES6. It works like a `var` statement, but it has different scoping rules.
 
-JavaScript has always had a complicated ruleset when it comes to scoping, driving many programmers crazy when they were first trying to figure out how variables work in JavaScript. Eventually, you discover hoisting, and JavaScript starts making a bit more sense to you. Hoisting means that variables get pulled from anywhere they were declared in user code to the top of their scope. For example, see the following code.
+JavaScript has always had a complicated ruleset when it comes to scoping, driving many programmers crazy when they were first trying to figure out how variables work in JavaScript. Eventually, you discover ((("hoisting")))hoisting, and JavaScript starts making a bit more sense to you. Hoisting means that variables get pulled from anywhere they were declared in user code to the top of their scope. For example, see the following code.
 
 [source,javascript]
 ----
@@ -1274,7 +1274,7 @@ With `var`, because of lexical scoping, one could still access the `deep` variab
 - The block in question has many siblings that would also want to use the same variable name
 - One of the parent blocks already has a variable with the name we need, but the name is still appropriate to use in the inner block
 
-The `let` statement is an alternative to `var`. It follows block scoping rules instead of the default lexical scoping rules. With `var`, the only way of getting a deeper scope is to create a nested function, but with `let` you can just open another pair of curly braces. This means you don't need entirely new functions to get a new scope; a simple `{}` block will do.
+The `let` statement is an alternative ((("var versus let")))to `var`. It follows block scoping rules instead of the default lexical scoping rules. With `var`, the only way of getting a deeper scope is to create a nested function, but with `let` you can just open another pair of curly braces. This means you don't need entirely new functions to get a new scope; a simple `{}` block will do.
 
 [source,javascript]
 ----
@@ -1404,7 +1404,7 @@ We made it through the Temporal Dead Zone! It's now time to cover `const`, a sim
 
 ==== Const Statements
 
-The `const` statement is block scoped like `let`, and it follows TDZ semantics as well. In fact, TDZ semantics were implemented because of `const`, and then TDZ was also applied to `let` for consistency. The reason why `const` needed TDZ semantics is that it would otherwise have been possible to assign a value to a hoisted `const` variable before reaching the `const` declaration, meaning that the declaration itself would throw. The temporal dead zone defines a solution that solves the problem of making `const` assignment possible only at declaration time, helps avoid potential issues when using `let`, and also makes it easy to eventually implement other features that benefit from TDZ semantics.
+The `const` statement ((("const statements", id="cs2")))is block scoped like `let`, and it follows TDZ semantics as well. In fact, TDZ semantics were implemented because of `const`, and then TDZ was also applied to `let` for consistency. The reason why `const` needed TDZ semantics is that it would otherwise have been possible to assign a value to a hoisted `const` variable before reaching the `const` declaration, meaning that the declaration itself would throw. The temporal dead zone defines a solution that solves the problem of making `const` assignment possible only at declaration time, helps avoid potential issues when using `let`, and also makes it easy to eventually implement other features that benefit from TDZ semantics.
 
 The following snippet shows how `const` follows block scoping rules exactly like `let`.
 
@@ -1512,4 +1512,4 @@ If we choose to default to using `const` and use `let` for variables that need t
 
 On the counterside, `var` is a more complex declaration because it is hard to use in code branches due to function scoping rules, it allows reassignment, and it can be accessed before the declaration statement is reached. The `var` statement is inferior to `const` and `let`, which do less, and is thus less prominent in modern JavaScript codebases.
 
-Throughout this book, we'll follow the practice of using `const` by default and `let` when reassignment is desirable. You can learn more about the rationale behind this choice in <<practical-considerations>>.
+Throughout this book, we'll follow the practice of using `const` by default and `let` when reassignment is desirable. You can learn more about the rationale behind this choice ((("const statements", startref="cs2")))in <<practical-considerations>>.
