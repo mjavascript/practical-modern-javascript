@@ -601,7 +601,7 @@ The last area of destructuring we'll be covering is ((("assignment destructuring
 
 ==== Function Parameter Defaults
 
-Function parameters in ES6 enjoy the ability of specifying default values as well. The following example defines a default `exponent` with the most commonly used value.
+Function parameters ((("assignment destructuring", "function parameters", id="ad2fpd")))((("destructuring", "function parameters", id="d2fpd")))((("function parameters", id="fpd2")))in ES6 enjoy the ability of specifying default values as well. The following example defines a default `exponent` with the most commonly used value.
 
 [source,javascript]
 ----
@@ -746,7 +746,7 @@ console.log(random({ max: 24 }))
 // <- 18
 ----
 
-Regular expressions are another great fit for destructuring. Destructuring empowers you to name groups from a match without having to resort to index numbers. Here's an example `RegExp` that could be used for parsing simple dates, and an example of destructuring those dates into each of its components. The first entry in the resulting array is reserved for the raw input string, and we can discard it.
+Regular ((("assignment destructuring", "function parameters", startref="ad2fpd")))((("destructuring", "function parameters", startref="d2fpd")))((("function parameters", startref="fpd2")))expressions are another great fit for destructuring. Destructuring empowers you to name groups from a match without having to resort to index numbers. Here's an example `RegExp` that could be used for parsing simple dates, and an example of destructuring those dates into each of its components. The first entry in the resulting array is reserved for the raw input string, and we can discard it.
 
 [source,javascript]
 ----
