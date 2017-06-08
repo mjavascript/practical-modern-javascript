@@ -966,7 +966,7 @@ The following table summarizes the use cases we've discussed for the spread oper
 [[template_literals]]
 === Template Literals
 
-Template ((("spread operator", startref="so2")))literals are a vast improvement upon regular JavaScript strings. Instead of using single or double quotes, template literals are declared using backticks, as shown next.
+Template ((("spread operator", startref="so2")))((("template literals", id="templ2")))literals are a vast improvement upon regular JavaScript strings. Instead of using single or double quotes, template literals are declared using backticks, as shown next.
 
 [source,javascript]
 ----
@@ -1219,7 +1219,7 @@ console.log(html)
 // <- '<div>Evil comment</div>'
 ----
 
-Phew, that malicious `<iframe>` almost got us. Rounding out ES6 syntax changes, we have the `let` and `const` statements.
+Phew, ((("template literals", startref="templ2")))that malicious `<iframe>` almost got us. Rounding out ES6 syntax changes, we have the `let` and `const` statements.
 
 === let and const Statements
 
