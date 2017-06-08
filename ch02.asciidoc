@@ -401,7 +401,7 @@ This ((("arrow functions", startref="af2")))((("arrow functions", "merits and us
 
 ==== Destructuring Objects
 
-Imagine you had a program with some comic book characters, Bruce Wayne being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman:
+Imagine ((("assignment destructuring", "objects", id="ad2o")))((("destructuring", "objects", id="d2o")))you had a program with some comic book characters, Bruce Wayne being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman:
 
 [source,javascript]
 ----
@@ -543,7 +543,7 @@ console.log(characterBoots)
 
 This flavor of destructuring is probably the least useful, as `characterBoots = character[type]` is usually simpler than `{ [type]: characterBoots } = character`, as it's a more sequential statement. That being said, the feature is useful when you have properties you want to declare in the object literal, as opposed to using subsequent assignment statements.
 
-That's it, as far as objects go, in terms of destructuring. What about arrays?
+That's it, as far as objects go, in terms of destructuring. ((("assignment destructuring", "objects", startref="ad2o")))((("destructuring", "objects", startref="d2o")))What about arrays?
 
 ==== Destructuring Arrays
 
