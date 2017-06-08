@@ -341,7 +341,7 @@ There's a common practice in JavaScript where developers use plain objects to cr
 
 Proxy objects ((("proxy objects")))redefine what can be done through JavaScript reflection. Proxy objects are similar to proxies in other contexts, such as web traffic routing. They can intercept any interaction with a JavaScript object such as defining, deleting, or accessing a property. Given the mechanics of how proxies work, they are impossible to polyfill holistically: ((("polyfills")))polyfills exist, but they have limitations making them incompatible with the specification in some use cases. We'll devote <<managing-property-access-with-proxies>> to understanding proxies.
 
-Besides new built-ins, ES6 comes with several updates to `Number`, `Math`, `Array`, and ((("Number")))((("Math")))((("Array")))((("strings")))strings. In <<built-in-improvements-in-es6>> we'll go over a plethora of new instance and static methods added to these built-ins.
+Besides new built-ins, ES6 comes with several updates to `Number`, `Math`, `Array`, and ((("Number")))((("Math")))((("arrays")))((("strings")))strings. In <<built-in-improvements-in-es6>> we'll go over a plethora of new instance and static methods added to these built-ins.
 
 We are getting a new module system that's native to JavaScript. After going over the CommonJS module format that's used in Node.js, <<javascript-modules>> explains the semantics we can expect from native JavaScript modules.
 
