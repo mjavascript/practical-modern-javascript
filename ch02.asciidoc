@@ -1337,7 +1337,7 @@ One more thing of note about `let` is a concept called the "Temporal Dead Zone."
 
 ==== Temporal Dead Zone
 
-In so ((("temporal dead zone", id="tdz2")))many words: if you have code such as the following code snippet, it'll throw. Once execution enters a scope, and until a `let` statement is reached, attempting to access the variable for said `let` statement will throw. This is known as the Temporal Dead Zone (TDZ).
+In so ((("temporal dead zone (TDZ)", id="tdz2")))many words: if you have code such as the following code snippet, it'll throw. Once execution enters a scope, and until a `let` statement is reached, attempting to access the variable for said `let` statement will throw. This is known as the Temporal Dead Zone (TDZ).
 
 [source,javascript]
 ----
@@ -1400,7 +1400,7 @@ The only tricky part to remember is that it's okay to declare functions that acc
 
 The whole point of the TDZ is to make it easier to catch errors where accessing a variable before it's declared in user code leads to unexpected behavior. This happened a lot before ES6 due both to hoisting and poor coding conventions. In ES6 it's easier to avoid. Keep in mind that hoisting still applies for `let` as well. That means variables will be created when we enter the scope, and the TDZ will be born, but they will be inaccessible until code execution hits the place where the variable was actually declared, at which point we leave the TDZ and are allowed to access the variable.
 
-We made it through the Temporal Dead Zone! It's now time to cover `const`, a similar statement to `let` but with a few major ((("let statements", startref="lets2")))((("temporal dead zone", startref="tdz2")))differences.
+We made it through the Temporal Dead Zone! It's now time to cover `const`, a similar statement to `let` but with a few major ((("let statements", startref="lets2")))((("temporal dead zone (TDZ)", startref="tdz2")))differences.
 
 ==== Const Statements
 
