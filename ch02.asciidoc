@@ -366,7 +366,7 @@ Now that you understand arrow functions, let's ponder about their merits and whe
 
 ==== Merits and Use Cases
 
-As a rule of thumb, you shouldn't blindly adopt ES6 features wherever you can. Instead, it's best to reason about each case individually and see whether adopting the new feature actually improves code readability and maintainability. ES6 features are not strictly better than what we had all along, and it's a bad idea to treat them as such.
+As ((("arrow functions", "merits and use cases", id="af2mauc")))a rule of thumb, you shouldn't blindly adopt ES6 features wherever you can. Instead, it's best to reason about each case individually and see whether adopting the new feature actually improves code readability and maintainability. ES6 features are not strictly better than what we had all along, and it's a bad idea to treat them as such.
 
 There are a few situations where arrow functions may not be the best tool. For example, if you have a large function comprised of several lines of code, replacing `function` with `=>` is hardly going to improve your code. Arrow functions are often most effective for short routines, where the `function` keyword and syntax boilerplate make up a significant portion of the function expression.
 
@@ -397,7 +397,7 @@ Arrow functions are neat when it comes to defining anonymous functions that shou
 
 === Assignment Destructuring
 
-This ((("arrow functions", startref="af2")))is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in `function` parameter lists. Let's go step by step, starting with objects.
+This ((("arrow functions", startref="af2")))((("arrow functions", "merits and use cases", startref="af2mauc")))is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in `function` parameter lists. Let's go step by step, starting with objects.
 
 ==== Destructuring Objects
 
