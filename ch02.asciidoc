@@ -1,13 +1,13 @@
 [[es6-essentials]]
 == ES6 Essentials
 
-The sixth edition of the language comes with a plethora of non-breaking syntax improvements, most of which we'll tackle throughout this chapter. Many of these changes are syntactic sugar; that is, they could be represented in ES5, albeit using more complicated pieces of code. There are also changes that aren't merely syntactic sugar but a completely different way of declaring variables using `let` and `const`, as we'll see toward the end of the chapter.
+The sixth edition of the language comes with a plethora of non-breaking syntax improvements, most of which we'll tackle throughout this chapter. Many of these changes are syntactic sugar; that is, they could be represented in ES5, albeit using more complicated pieces of code. There are also changes that aren't merely ((("syntactic sugar")))syntactic sugar but a completely different way of declaring variables using `let` and `const`, as we'll see toward the end of the chapter.
 
 Object literals get a few syntax changes in ES6, and they're a good place to start.
 
 === Object Literals
 
-An object literal is any object declaration using the `{}` shorthand syntax, such as the following example:
+An ((("object literals", id="ol2")))object literal is any object declaration using the `{}` shorthand syntax, such as the following example:
 
 [source,javascript]
 ----
@@ -201,7 +201,7 @@ var emitter = {
 }
 ----
 
-Arrow functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave semantically.
+Arrow functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave ((("object literals", startref="ol2")))semantically.
 
 [[arrow_functions]]
 === Arrow Functions
