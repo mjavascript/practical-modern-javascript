@@ -292,7 +292,7 @@ I've mentioned there are several flavors of arrow functions, but so far we've on
 
 ==== Arrow Function Flavors
 
-Let's look one more time at the arrow function syntax we've learned so far:
+Let's ((("arrow functions", "flavors", id="af2f")))look one more time at the arrow function syntax we've learned so far:
 
 [source,javascript]
 ----
@@ -310,7 +310,7 @@ var double = value => {
 }
 ----
 
-Arrow functions are heavily used for simple functions, such as the `double` function we just saw. The following flavor of arrow functions does away with the function body. Instead, you provide an expression such as `value * 2`. When the function is called, the expression is evaluated and its result is returned. The `return` statement is implicit, and there's no need for curly braces denoting the function body anymore, as you can only use a single expression:
+Arrow functions are heavily used for simple functions, such as the `double` function ((("double functions")))((("arrow functions", "double")))we just saw. The following flavor of arrow functions does away with the function body. Instead, you provide an expression such as `value * 2`. When the function is called, the expression is evaluated and its result is returned. The `return` statement is ((("return statement")))implicit, and there's no need for curly braces denoting the function body anymore, as you can only use a single expression:
 
 [source,javascript]
 ----
@@ -362,7 +362,7 @@ Wrapping the expression in parentheses fixes these issues, because the compiler 
 ----
 ****
 
-Now that you understand arrow functions, let's ponder about their merits and where they might be a good fit.
+Now that you understand arrow functions, let's ponder about their merits and where they might be a ((("arrow functions", "flavors", startref="af2f")))good fit.
 
 ==== Merits and Use Cases
 
