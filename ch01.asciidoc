@@ -112,7 +112,7 @@ Given the situation, it might be best to wait until browsers support new built-i
 
 Modern browsers like Chrome, Firefox, and Edge now support a large portion of ES2015 and beyond, making their developer tools useful when we want to take the semantics of a particular feature for a spin, provided it's supported by the browser. When it comes to production-grade applications that rely on modern JavaScript features, a transpilation build-step is advisable so that your application supports a wider array of JavaScript runtimes.
 
-Besides the REPL, Babel offers a command-line tool written as a Node.js package. You can install it through `npm`, the package manager for Node.
+Besides the REPL, Babel offers a command-line tool written as a Node.js package. You can install it through `npm`, ((("npm")))the package manager for Node.
 
 [NOTE]
 ====
@@ -222,7 +222,7 @@ Let's jump into a different kind of tool, the `eslint` code linter, which can he
 
 As ((("ESLint", id="esl1")))((("lint tools", id="lt1")))we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
 
-A lint tool can be used to identify syntax errors. Modern linters are often customizable, helping establish a coding style convention that works for everyone on the team. By adhering to a consistent set of style rules and a quality baseline, we bring the team closer together in terms of coding style. Every team member has different opinions about coding styles, but those opinions can be condensed into style rules once we put a linter in place and agree upon a configuration.
+A lint tool can be used to identify syntax errors. Modern linters are often customizable, helping establish a ((("coding style conventions")))coding style convention that works for everyone on the team. By adhering to a consistent set of style rules and a quality baseline, we bring the team closer together in terms of coding style. Every team member has different opinions about coding styles, but those opinions can be condensed into style rules once we put a linter in place and agree upon a configuration.
 
 Beyond ensuring a program can be parsed, we might want to prevent `throw` statements throwing string literals as exceptions, or disallow `console.log` and `debugger` statements in production code. However, a rule demanding that every function call must have exactly one argument is probably too harsh.
 
@@ -230,7 +230,7 @@ While linters are effective at defining and enforcing a coding style, we should 
 
 In order to strike the right balance, we may consider avoiding style rules that don't improve our programs in the majority of cases when they're applied. Whenever we're considering a new rule, we should ask ourselves whether it would noticeably improve our existing codebase, as well as new code going forward.
 
-ESLint is a modern linter that packs several plugins, sporting different rules, allowing us to pick and choose which ones we want to enforce. We decide whether failing to stick by these rules should result in a warning being printed as part of the output, or a halting error. To install `eslint`, we'll use `npm` just like we did with `babel` in the previous section:
+ESLint is a modern linter that packs several plugins, sporting different rules, allowing us to pick and choose which ones we want to enforce. We decide whether failing to stick by these rules should result in a warning being printed as part of the output, or a halting error. To install `eslint`, we'll use `npm` ((("npm")))just like we did with `babel` in the previous section:
 
 [source,shell]
 ----
@@ -318,14 +318,14 @@ if (false) {}
 
 [NOTE]
 ====
-A similar kind of tool can be found in https://mjavascript.com/out/prettier[`prettier`], which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length.
+A similar kind of tool can be found in https://mjavascript.com/out/prettier[`prettier`], ((("prettier")))which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length.
 ====
 
 Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of ((("ESLint", startref="esl1")))((("lint tools", startref="lt1")))JavaScript.
 
 === Feature Themes in ES6
 
-ES6 is big: the language specification went from 258 pages in ES5.1 to over double that amount in ES6, at 566 pages. Each change to the specification falls in some of a few different categories:
+ES6 is big: ((("feature themes", id="ft1")))the language specification went from 258 pages in ES5.1 to over double that amount in ES6, at 566 pages. Each change to the specification falls in some of a few different categories:
 
 - Syntactic sugar
 - New mechanics
@@ -345,7 +345,7 @@ Besides new built-ins, ES6 comes with several updates to `Number`, `Math`, `Arra
 
 We are getting a new module system that's native to JavaScript. After going over the CommonJS module format that's used in Node.js, <<javascript-modules>> explains the semantics we can expect from native JavaScript modules.
 
-Due to the sheer amount of changes introduced by ES6, it's hard to reconcile its new features with our pre-existing knowledge of JavaScript. We'll spend all of <<practical-considerations>> analyzing the merits and importance of different individual features in ES6, so that you have a practical grounding upon which you can start experimenting with ES6 right away.
+Due to the sheer amount of changes introduced by ES6, it's hard to reconcile its new features with our pre-existing knowledge of JavaScript. We'll spend all of <<practical-considerations>> analyzing the merits and importance of different individual features in ES6, so that you have a practical grounding upon which you can start experimenting with ((("feature themes", startref="ft1")))ES6 right away.
 
 === Future of JavaScript
 
