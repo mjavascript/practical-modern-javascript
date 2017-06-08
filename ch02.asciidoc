@@ -370,7 +370,7 @@ As ((("arrow functions", "merits and use cases", id="af2mauc")))a rule of thumb,
 
 There are a few situations where arrow functions may not be the best tool. For example, if you have a large function comprised of several lines of code, replacing `function` with `=>` is hardly going to improve your code. Arrow functions are often most effective for short routines, where the `function` keyword and syntax boilerplate make up a significant portion of the function expression.
 
-Properly naming a function adds context to make it easier for humans to interpret them. Arrow functions can't be explicitly named, but they can be named implicitly by assigning them to a variable. In the following example, we assign an arrow function to the `throwError` variable. When calling this function results in an error, the stack trace properly identifies the arrow function as `throwError`:
+Properly ((("arrow functions", "naming")))naming a function adds context to make it easier for humans to interpret them. Arrow functions can't be explicitly named, but they can be named implicitly by assigning them to a variable. In the following example, we assign an arrow function to the `throwError` variable. When calling this function results in an error, the stack trace properly identifies the arrow function as `throwError`:
 
 [source,javascript]
 ----
