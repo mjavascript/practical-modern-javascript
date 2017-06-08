@@ -110,7 +110,7 @@ var person = {
 }
 ----
 
-A common scenario for computed property names is when we want to add an entity to an object map that uses the `entity.id` field as its keys, as shown next. Instead of having to have a third statement where we add the `grocery` to the `groceries` map, we can inline that declaration in the `groceries` object literal itself.
+A common scenario for computed property names is when we want to add an entity to an object map that uses the `entity.id` ((("  entity.id  field")))field as its keys, as shown next. Instead of having to have a third statement where we add the `grocery` to the `groceries` map, we can inline that declaration in the `groceries` object literal itself.
 
 [source,javascript]
 ----
@@ -126,7 +126,7 @@ var groceries = {
 }
 ----
 
-Another case may be whenever a function receives a parameter that it should then use to build out an object. In ES5 code, you'd need to allocate a variable declaring an object literal, then add the dynamic property, and then return the object. The following example shows exactly that, when creating an envelope that could later be used for AJAX messages that follow a convention: they have an `error` property with a description when something goes wrong, and a `success` property when things turn out okay:
+Another case may be whenever a function receives a parameter that it should then use to build out an object. In ES5 code, you'd need to allocate a variable declaring an object literal, then add the dynamic property, and then return the object. The following example shows exactly that, when creating an envelope that could later be used for AJAX messages that follow a convention: they have an `error` property with a description when something goes wrong, and a `success` property ((("error property")))((("success property")))when things turn out okay:
 
 [source,javascript]
 ----
