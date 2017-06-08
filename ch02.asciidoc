@@ -178,7 +178,7 @@ var emitter = {
 }
 ----
 
-Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the `function` keyword. This is meant as a terse alternative to traditional method declarations where you need to use the `function` keyword. The following example shows how our `emitter` object looks like when using method definitions.
+Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the `function` keyword. This is meant as a terse alternative to traditional method declarations where you need to use the `function` ((("function keyword")))keyword. The following example shows how our `emitter` object looks like when using method definitions.
 
 [source,javascript]
 ----
@@ -201,7 +201,7 @@ var emitter = {
 }
 ----
 
-Arrow ((("emitter object", startref="eo2")))functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave ((("object literals", startref="ol2")))((("object literals", "method definitions", startref="ol2md")))((("method definitions", startref="mdef2")))semantically.
+Arrow ((("emitter object", startref="eo2")))((("arrow functions", id="af2")))functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave ((("object literals", startref="ol2")))((("object literals", "method definitions", startref="ol2md")))((("method definitions", startref="mdef2")))semantically.
 
 [[arrow_functions]]
 === Arrow Functions
@@ -397,7 +397,7 @@ Arrow functions are neat when it comes to defining anonymous functions that shou
 
 === Assignment Destructuring
 
-This is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in `function` parameter lists. Let's go step by step, starting with objects.
+This ((("arrow functions", startref="af2")))is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in `function` parameter lists. Let's go step by step, starting with objects.
 
 ==== Destructuring Objects
 
