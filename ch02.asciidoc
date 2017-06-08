@@ -839,7 +839,7 @@ Next up we have the spread operator. It's also denoted with three dots, but it s
 
 ==== Spread Operator
 
-The spread operator can be used to cast any iterable object into an array. Spreading effectively expands an expression onto a target such as an array literal or a function call. The following example uses `...arguments` to cast function parameters into an array literal.
+The ((("spread operator", id="so2")))spread operator can be used to cast any iterable object into an array. Spreading effectively expands an expression onto a target such as an array literal or a function call. The following example uses `...arguments` to cast function parameters into an array literal.
 
 [source,javascript]
 ----
@@ -966,7 +966,7 @@ The following table summarizes the use cases we've discussed for the spread oper
 [[template_literals]]
 === Template Literals
 
-Template literals are a vast improvement upon regular JavaScript strings. Instead of using single or double quotes, template literals are declared using backticks, as shown next.
+Template ((("spread operator", startref="so2")))literals are a vast improvement upon regular JavaScript strings. Instead of using single or double quotes, template literals are declared using backticks, as shown next.
 
 [source,javascript]
 ----
