@@ -1134,7 +1134,7 @@ Sometimes, it might be a good idea to pre-process the results of interpolated ex
 
 ==== Tagged Templates
 
-By default, JavaScript interprets `\` as an escape character with special meaning. For example, `\n` is interpreted as a newline, `\u00f1` is interpreted as `ñ`, etc. You could avoid these rules using the `String.raw` tagged template. The next snippet shows a template literal using `String.raw`, which prevents `\n` from being interpreted as a newline.
+By ((("template literals", "tagged templates", id="tl2tt")))((("tagged templates", id="tt2")))default, JavaScript interprets `\` as an escape character with special meaning. For example, `\n` is interpreted as a newline, `\u00f1` is interpreted as `ñ`, etc. You could avoid these rules using the `String.raw` tagged template. The next snippet shows a template literal using `String.raw`, which prevents `\n` from being interpreted as a newline.
 
 [source,javascript]
 ----
@@ -1219,7 +1219,7 @@ console.log(html)
 // <- '<div>Evil comment</div>'
 ----
 
-Phew, ((("template literals", startref="templ2")))that malicious `<iframe>` almost got us. Rounding out ES6 syntax changes, we have the `let` and `const` statements.
+Phew, ((("template literals", "tagged templates", startref="tl2tt")))((("tagged templates", startref="tt2")))((("template literals", startref="templ2")))that malicious `<iframe>` almost got us. Rounding out ES6 syntax changes, we have the `let` and `const` statements.
 
 === let and const Statements
 
