@@ -64,7 +64,7 @@ That's the first of many ES6 features that are aimed toward reducing complexity 
 
 ==== Computed Property Names
 
-Sometimes you have to declare objects that contain properties with names based on variables or other JavaScript expressions, as shown in the following piece of code written in ES5. For this example, assume that `expertise` is provided to you as a function parameter, and is not a value you know beforehand:
+Sometimes ((("object literals", "computed property names", id="ol2cpn")))((("computed property names", id="cpn2")))you have to declare objects that contain properties with names based on variables or other JavaScript expressions, as shown in the following piece of code written in ES5. For this example, assume that `expertise` is provided to you as a function parameter, and is not a value you know beforehand:
 
 [source,javascript]
 ----
@@ -151,7 +151,7 @@ function getEnvelope(type, description) {
 }
 ----
 
-The last enhancement coming to object literals is about functions.
+The last enhancement coming to object literals is ((("object literals", "computed property names", startref="ol2cpn")))((("computed property names", startref="cpn2")))about functions.
 
 ==== Method Definitions
 
