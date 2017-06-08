@@ -1223,7 +1223,7 @@ Phew, ((("template literals", "tagged templates", startref="tl2tt")))((("tagged 
 
 === let and const Statements
 
-The `let` statement is one of the most well-known features in ES6. It works like a `var` statement, but it has different scoping rules.
+The `let` statement ((("let statements", id="lets2")))is one of the most well-known features in ES6. It works like a `var` statement, but it has different scoping rules.
 
 JavaScript has always had a complicated ruleset when it comes to scoping, driving many programmers crazy when they were first trying to figure out how variables work in JavaScript. Eventually, you discover hoisting, and JavaScript starts making a bit more sense to you. Hoisting means that variables get pulled from anywhere they were declared in user code to the top of their scope. For example, see the following code.
 
@@ -1400,7 +1400,7 @@ The only tricky part to remember is that it's okay to declare functions that acc
 
 The whole point of the TDZ is to make it easier to catch errors where accessing a variable before it's declared in user code leads to unexpected behavior. This happened a lot before ES6 due both to hoisting and poor coding conventions. In ES6 it's easier to avoid. Keep in mind that hoisting still applies for `let` as well. That means variables will be created when we enter the scope, and the TDZ will be born, but they will be inaccessible until code execution hits the place where the variable was actually declared, at which point we leave the TDZ and are allowed to access the variable.
 
-We made it through the Temporal Dead Zone! It's now time to cover `const`, a similar statement to `let` but with a few major differences.
+We made it through the Temporal Dead Zone! It's now time to cover `const`, a similar statement to `let` but with a few major ((("let statements", startref="lets2")))differences.
 
 ==== Const Statements
 
