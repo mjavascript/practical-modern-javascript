@@ -984,7 +984,7 @@ One of the most appealing features of template literals is their ability to inte
 
 ==== String Interpolation
 
-With template literals, you're able to interpolate any JavaScript expressions inside your templates. When the template literal expression is reached, it's evaluated and you get back the compiled result. The following example interpolates a `name` variable into a template literal.
+With ((("template literals", "string interpolation", id="temp2si")))((("string interpolation", id="si2")))template literals, you're able to interpolate any JavaScript expressions inside your templates. When the template literal expression is reached, it's evaluated and you get back the compiled result. The following example interpolates a `name` variable into a template literal.
 
 [source,javascript]
 ----
@@ -1020,7 +1020,7 @@ You could even nest template literals, as they are also valid JavaScript express
 // <- 'This template literal is nested!'
 ----
 
-Another perk of template literals is their multiline string representation support.
+Another perk of template literals is their multiline string representation ((("template literals", "string interpolation", startref="temp2si")))((("string interpolation", startref="si2")))support.
 
 ==== Multiline Template Literals
 
