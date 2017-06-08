@@ -155,7 +155,7 @@ The last enhancement coming to object literals is ((("object literals", "compute
 
 ==== Method Definitions
 
-Typically, ((("object literals", "method definitions", id="ol2md")))((("method definitions", id="mdef2")))you can declare methods on an object by adding properties to it. In the next snippet, we're creating an small event emitter that supports multiple kinds of events. It comes with an `emitter#on` method that can be used to register event listeners, and an `emitter#emit` method that can be used to raise events:
+Typically, ((("object literals", "method definitions", id="ol2md")))((("method definitions", id="mdef2")))you can declare methods on an object by adding properties to it. In the next snippet, we're creating an small event emitter that supports multiple kinds of events. It comes with an `emitter#on` method ((("emitter object", id="eo2")))that can be used to register event listeners, and an `emitter#emit` method that can be used to raise events:
 
 [source,javascript]
 ----
@@ -201,7 +201,7 @@ var emitter = {
 }
 ----
 
-Arrow functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave ((("object literals", startref="ol2")))((("object literals", "method definitions", startref="ol2md")))((("method definitions", startref="mdef2")))semantically.
+Arrow ((("emitter object", startref="eo2")))functions are another way of declaring functions in ES6, and they come in several flavors. Let's investigate what arrow functions are, how they can be declared, and how they behave ((("object literals", startref="ol2")))((("object literals", "method definitions", startref="ol2md")))((("method definitions", startref="mdef2")))semantically.
 
 [[arrow_functions]]
 === Arrow Functions
