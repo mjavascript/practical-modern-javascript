@@ -878,7 +878,7 @@ console.log(all)
 // <- [1, 2, 3, 4, 5, 6, 7]
 ----
 
-Note that the spread operator isn't limited to arrays and `arguments`. The spread operator can be used with any iterable object. Iterable is a protocol in ES6 that allows you to turn any object into something that can be iterated over. We'll research the iterable protocol in <<iteration-and-flow-control>>.
+Note that the spread operator isn't limited to arrays and `arguments`. The spread operator can be used with any iterable object. Iterable is a protocol in ES6 that allows you to turn any object into something that can be iterated over. We'll research the ((("iterable protocol")))iterable protocol in <<iteration-and-flow-control>>.
 
 [role="pagebreak-before"]
 .Shifting and Spreading
