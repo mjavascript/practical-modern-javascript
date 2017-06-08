@@ -723,7 +723,7 @@ Besides default values and filling an `options` object, let's explore what else 
 
 ==== Use Cases for Destructuring
 
-Whenever there's a function that returns an object or an array, destructuring makes it much terser to interact with. The following example shows a function that returns an object with some coordinates, where we grab only the ones we're interested in: `x` and `y`. We're avoiding an intermediate `point` variable declaration that often gets in the way without adding a lot of value to the readability of your code.
+Whenever ((("assignment destructuring", "use cases for", id="ad2ucf")))((("destructuring", "use cases for", id="d2ucf")))there's a function that returns an object or an array, destructuring makes it much terser to interact with. The following example shows a function that returns an object with some coordinates, where we grab only the ones we're interested in: `x` and `y`. We're avoiding an intermediate `point` variable declaration that often gets in the way without adding a lot of value to the readability of your code.
 
 [source,javascript]
 ----
@@ -768,7 +768,7 @@ if (matches === null) {
 var [, year, month, day] = matches
 ----
 
-Let's turn our attention to spread and rest operators ((("assignment destructuring", startref="ad2")))((("destructuring", startref="d2")))next.
+Let's turn our attention to spread and rest operators ((("assignment destructuring", "use cases for", startref="ad2ucf")))((("destructuring", "use cases for", startref="d2ucf")))((("assignment destructuring", startref="ad2")))((("destructuring", startref="d2")))next.
 
 === Rest Parameter and Spread Operator
 
