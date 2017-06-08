@@ -71,7 +71,7 @@ The streamlined proposal process combined with the yearly cut into standardizati
 
 A stage 3 candidate recommendation proposal is most likely to make it into the specification in the next cut, provided two independent implementations land in JavaScript engines. Effectively, stage 3 proposals are considered safe to use in real-world applications, be it through an experimental engine implementation, a polyfill, or using a compiler. Stage 2 and earlier proposals are also used in the wild by JavaScript developers, tightening the feedback loop between implementors and consumers.
 
-Babel and similar ((("Babel")))((("compilers")))compilers that take code as input and produce output native to the web platform (HTML, CSS, or JavaScript) are often referred to as ((("transpilers")))transpilers, which are considered to be a subset of compilers. When we want to leverage a proposal that's not widely implemented in JavaScript engines in our code, compilers like Babel can transform the portions of code using that new proposal into something that's more widely supported by existing JavaScript implementations.
+Babel and similar ((("Babel", id="b1")))((("compilers")))compilers that take code as input and produce output native to the web platform (HTML, CSS, or JavaScript) are often referred to as ((("transpilers", seealso="Babel", id="t1")))transpilers, which are considered to be a subset of compilers. When we want to leverage a proposal that's not widely implemented in JavaScript engines in our code, compilers like Babel can transform the portions of code using that new proposal into something that's more widely supported by existing JavaScript implementations.
 
 This transformation can be done at build time, so that consumers receive code that's well supported by their JavaScript runtime of choice. This mechanism improves the runtime support baseline, giving JavaScript developers the ability to take advantage of new language features and syntax sooner. It is also significantly beneficial to specification writers and implementors, as it allows them to collect feedback regarding viability, desirability, and possible bugs or corner cases.
 
@@ -116,10 +116,10 @@ Besides the REPL, Babel offers a command-line tool written as a Node.js package.
 
 [NOTE]
 ====
-Download https://mjavascript.com/out/node[Node.js]. After installing `node`, you'll also be able to use the `npm` command-line tool in your terminal.
+Download https://mjavascript.com/out/node[Node.js]. After ((("Node.js")))installing `node`, you'll also be able to use the `npm` command-line tool in your terminal.
 ====
 
-Before getting started we'll make a project directory and a _package.json_ file, which is a manifest used to describe Node.js applications. We can create the _package.json_ file through the `npm` CLI:
+Before getting started we'll make a project directory and a _package.json_ file, which is a manifest used to describe Node.js applications. We can create the _package.json_ file ((("package.json")))through the `npm` CLI:
 
 [source,shell]
 ----
@@ -199,7 +199,7 @@ If you execute `npm run build` in your terminal now, you'll note that a _dist/ex
 }
 ----
 
-The `env` preset, which we had installed earlier via `npm`, adds a series of plugins to Babel that transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our _example.js_ file into ES5 code. The `env` Babel preset works by convention, enabling Babel transformation plugins according to feature support in the latest browsers. This preset is configurable, meaning we can decide how far back we want to cover browser support. The more browsers we support, the larger our transpiled bundle. The fewer browsers we support, the fewer customers we can satisfy. As always, research is of the essence to identify what the correct configuration for the Babel `env` preset is. By default, every transform is enabled, providing broad runtime support.
+The `env` preset, ((("Babel", "env preset")))which we had installed earlier via `npm`, adds a series of plugins to Babel that transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our _example.js_ file into ES5 code. The `env` Babel preset works by convention, enabling Babel transformation plugins according to feature support in the latest browsers. This preset is configurable, meaning we can decide how far back we want to cover browser support. The more browsers we support, the larger our transpiled bundle. The fewer browsers we support, the fewer customers we can satisfy. As always, research is of the essence to identify what the correct configuration for the Babel `env` preset is. By default, every transform is enabled, providing broad runtime support.
 
 Once we run our build script again, we'll observe that the output is now valid ES5 code:
 
@@ -216,11 +216,11 @@ console.log(double(3))
 // <- 6
 ----
 
-Let's jump into a different kind of tool, the `eslint` code linter, which can help us establish a code quality baseline for our applications.
+Let's jump into a different kind of tool, the `eslint` code linter, which can help us establish a code quality baseline for our ((("transpilers", seealso="Babel", id="t1")))((("Babel", startref="b1")))applications.
 
 ==== Code Quality and Consistency with ESLint
 
-As we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
+As ((("ESLint", id="esl1")))we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
 
 A lint tool can be used to identify syntax errors. Modern linters are often customizable, helping establish a coding style convention that works for everyone on the team. By adhering to a consistent set of style rules and a quality baseline, we bring the team closer together in terms of coding style. Every team member has different opinions about coding styles, but those opinions can be condensed into style rules once we put a linter in place and agree upon a configuration.
 
@@ -321,7 +321,7 @@ if (false) {}
 A similar kind of tool can be found in https://mjavascript.com/out/prettier[`prettier`], which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length.
 ====
 
-Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of JavaScript.
+Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of ((("ESLint", startref="esl1")))JavaScript.
 
 === Feature Themes in ES6
 
