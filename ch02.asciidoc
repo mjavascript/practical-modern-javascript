@@ -944,7 +944,7 @@ new (Date.bind.apply(Date, [null, 2015, 11, 31]))
 // <- Thu Dec 31 2015
 ----
 
-As shown in the next snippet, the spread operator strips away all the complexity and we're only left with the important bits. It's a `new` instance, it uses `...` to spread a dynamic list of arguments over the function call, and it's a `Date`. That's it.
+As shown in the next snippet, the spread operator strips away all the complexity and we're only left with the important bits. It's a `new` instance, it uses `...` to spread a dynamic list of arguments over the function call, and it's a `Date`. ((("Date()")))That's it.
 
 [source,javascript]
 ----
