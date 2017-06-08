@@ -215,7 +215,7 @@ function name(parameters) {
 }
 ----
 
-You could also create anonymous functions, by omitting the name, when assigning the function to a variable, a property, or a function call.
+You could also create ((("arrow functions", "anonymous")))anonymous functions, by omitting the name, when assigning the function to a variable, a property, or a function call.
 
 [source,javascript]
 ----
@@ -239,7 +239,7 @@ Let's dig into their semantic differences with traditional functions, the many w
 
 ==== Lexical Scoping
 
-In the body of an arrow function, `this`, `arguments`, and `super` point to the containing scope, since arrow functions don't create a new scope. Consider the following example. We have a `timer` object with a `seconds` counter and a `start` method defined using the syntax we learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of elapsed `seconds`:
+In ((("arrow functions", "lexical scoping", id="af2ls")))((("lexical scoping", id="ls2")))the body of an arrow function, `this`, `arguments`, and `super` point to the containing scope, since arrow functions don't create a new scope. Consider the following example. We have a `timer` object with a `seconds` counter and a `start` method defined using the syntax we learned about earlier. We then start the timer, wait for a few seconds, and log the current amount of elapsed `seconds`:
 
 [source,javascript]
 ----
@@ -288,7 +288,7 @@ puzzle('a', 'b', 'c')(1, 2, 3)
 
 In this case, the `arguments` object refers to the context of the `puzzle` function, because arrow functions don't create a closure. For this reason, the printed arguments will be `'a', 'b', 'c'`.
 
-I've mentioned there are several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the other ways to represent an arrow function?
+I've mentioned there are several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the other ways to represent an ((("arrow functions", "lexical scoping", startref="af2ls")))((("lexical scoping", startref="ls2")))arrow function?
 
 ==== Arrow Function Flavors
 
