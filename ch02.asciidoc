@@ -22,7 +22,7 @@ ES6 brings a few improvements to object literal syntax: property value shorthand
 
 ==== Property Value Shorthands
 
-Sometimes we declare objects with one or more properties whose values are references to variables by the same name. For example, we might have a `listeners` collection, and in order to assign it to a property called `listeners` of an object literal, we have to repeat its name. The following snippet has a typical example where we have an object literal declaration with a couple of these repetitive properties:
+Sometimes ((("object literals", "property value shorthands", id="ol2pvs")))((("property value shorthands", id="pvs2")))we declare objects with one or more properties whose values are references to variables by the same name. For example, we might have a `listeners` collection, and in order to assign it to a property called `listeners` of an object literal, we have to repeat its name. The following snippet has a typical example where we have an object literal declaration with a couple of these repetitive properties:
 
 [source,javascript]
 ----
@@ -60,7 +60,7 @@ function clear() {
 }
 ----
 
-That's the first of many ES6 features that are aimed toward reducing complexity in the code you have to maintain. Once you get used to the syntax, you'll notice that code readability and developer productivity get boosts as well.
+That's the first of many ES6 features that are aimed toward reducing complexity in the code you have to maintain. Once you get used to the syntax, you'll notice that code readability and developer productivity get boosts as ((("object literals", "property value shorthands", startref="ol2pvs")))((("property value shorthands", startref="pvs2")))well.
 
 ==== Computed Property Names
 
