@@ -453,7 +453,7 @@ console.log(alias)
 // <- 'Batman'
 ----
 
-While aliases don't look any simpler than the ES5 flavor, `alias = character.pseudonym`, they start making sense when you consider the fact that destructuring supports deep structures as in the following example:
+While aliases don't look any simpler than the ES5 flavor, `alias = character.pseudonym`, ((("aliases", id="al2")))they start making sense when you consider the fact that destructuring supports deep structures as in the following example:
 
 [source,javascript]
 ----
@@ -532,7 +532,7 @@ For use in combination with aliases, you should place the alias first, and then 
 var { boots: footwear = { size: 10 } } = character
 ----
 
-It's possible to use the computed property names syntax in destructuring patterns. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler wouldn't be able to infer a variable name. In the following example we use the `value` alias, and a computed property name to extract the `boots` property from the `character` object.
+It's possible to use the ((("computed property names")))computed property names syntax in destructuring patterns. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler wouldn't be able to infer a variable name. In the following example we use the `value` alias, and a computed property name to extract the `boots` property from the `character` object.
 
 [source,javascript]
 ----
@@ -543,7 +543,7 @@ console.log(characterBoots)
 
 This flavor of destructuring is probably the least useful, as `characterBoots = character[type]` is usually simpler than `{ [type]: characterBoots } = character`, as it's a more sequential statement. That being said, the feature is useful when you have properties you want to declare in the object literal, as opposed to using subsequent assignment statements.
 
-That's it, as far as objects go, in terms of destructuring. ((("assignment destructuring", "objects", startref="ad2o")))((("destructuring", "objects", startref="d2o")))What about arrays?
+That's it, as far as objects go, in terms of destructuring. ((("assignment destructuring", "objects", startref="ad2o")))((("destructuring", "objects", startref="d2o")))((("aliases", startref="al2")))What about arrays?
 
 ==== Destructuring Arrays
 
