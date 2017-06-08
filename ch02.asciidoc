@@ -1024,7 +1024,7 @@ Another perk of template literals is their multiline string representation ((("t
 
 ==== Multiline Template Literals
 
-Before template literals, if you wanted to represent strings in multiple lines of JavaScript, you had to resort to escaping, concatenation, arrays, or even elaborate hacks using comments. The following snippet summarizes some of the most common multiline string representations prior to ES6.
+Before ((("template literals", "multiline string representation", id="templ2msr")))((("mulitline strings", id="ms2")))((("strings, multiline", id="sm2")))template literals, if you wanted to represent strings in multiple lines of JavaScript, you had to resort to escaping, concatenation, arrays, or even elaborate hacks using comments. The following snippet summarizes some of the most common multiline string representations prior to ES6.
 
 [source,javascript]
 ----
@@ -1130,7 +1130,7 @@ function unindent(text) {
 }
 ----
 
-Sometimes, it might be a good idea to pre-process the results of interpolated expressions before inserting them into your templates. For these advanced kinds of use cases, it's possible to use another feature of template literals called tagged templates.
+Sometimes, it might be a good idea to pre-process the results of interpolated expressions before inserting them into your templates. For these advanced kinds of use cases, it's possible to use another feature of template literals called tagged ((("template literals", "multiline string representation", startref="templ2msr")))((("mulitline strings", startref="ms2")))((("strings, multiline", startref="sm2")))templates.
 
 ==== Tagged Templates
 
