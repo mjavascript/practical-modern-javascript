@@ -220,7 +220,7 @@ Let's jump into a different kind of tool, the `eslint` code linter, which can he
 
 ==== Code Quality and Consistency with ESLint
 
-As ((("ESLint", id="esl1")))we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
+As ((("ESLint", id="esl1")))((("lint tools", id="lt1")))we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
 
 A lint tool can be used to identify syntax errors. Modern linters are often customizable, helping establish a coding style convention that works for everyone on the team. By adhering to a consistent set of style rules and a quality baseline, we bring the team closer together in terms of coding style. Every team member has different opinions about coding styles, but those opinions can be condensed into style rules once we put a linter in place and agree upon a configuration.
 
@@ -321,7 +321,7 @@ if (false) {}
 A similar kind of tool can be found in https://mjavascript.com/out/prettier[`prettier`], which can be used to automatically format your code. Prettier can be configured to automatically overwrite our code ensuring it follows preferences such as a given amount of spaces for indentation, single or double quotes, trailing commas, or a maximum line length.
 ====
 
-Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of ((("ESLint", startref="esl1")))JavaScript.
+Now that you know how to compile modern JavaScript into something every browser understands, and how to properly lint and format your code, let's jump into ES6 feature themes and the future of ((("ESLint", startref="esl1")))((("lint tools", startref="lt1")))JavaScript.
 
 === Feature Themes in ES6
 
