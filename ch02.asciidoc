@@ -628,7 +628,7 @@ console.log(sumOf(undefined, undefined, 4))
 // <- 1 + 2 + 4 = 7
 ----
 
-In JavaScript it's not uncommon to provide a function with an `options` object, containing several properties. You could determine a default `options` object if one isn't provided, as shown in the next snippet.
+In JavaScript it's not uncommon to provide a function with an `options` object, containing several properties. You could determine a default `options` object ((("options object", id="oo2")))if one isn't provided, as shown in the next snippet.
 
 [source,javascript]
 ----
@@ -684,7 +684,7 @@ carFactory()
 // <- 1999
 ----
 
-Besides default values, you can use destructuring in function parameters to describe the shape of objects your function can handle. Consider the following code snippet, where we have a `car` object with several properties. The `car` object describes its owner, what kind of car it is, who manufactured it, when, and the owner's preferences when he purchased the car.
+Besides default values, you can use destructuring in function parameters to describe the shape of objects your function can handle. Consider the following code snippet, where we have a `car` object with several properties. The `car` object describes its owner, what kind of car it is, who manufactured it, when, and the owner's preferences when he ((("options object", startref="oo2")))purchased the car.
 
 [source,javascript]
 ----
