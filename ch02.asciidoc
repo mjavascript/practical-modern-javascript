@@ -397,7 +397,7 @@ Arrow functions are neat when it comes to defining anonymous functions that shou
 
 === Assignment Destructuring
 
-This ((("arrow functions", startref="af2")))((("arrow functions", "merits and use cases", startref="af2mauc")))is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in `function` parameter lists. Let's go step by step, starting with objects.
+This ((("arrow functions", startref="af2")))((("arrow functions", "merits and use cases", startref="af2mauc")))((("assignment destructuring", id="ad2")))((("destructuring", id="d2")))is one of the most flexible and expressive features in ES6. It's also one of the simplest. It binds properties to as many variables as you need. It works with objects, arrays, and even in `function` parameter lists. Let's go step by step, starting with objects.
 
 ==== Destructuring Objects
 
@@ -768,7 +768,7 @@ if (matches === null) {
 var [, year, month, day] = matches
 ----
 
-Let's turn our attention to spread and rest operators next.
+Let's turn our attention to spread and rest operators ((("assignment destructuring", startref="ad2")))((("destructuring", startref="d2")))next.
 
 === Rest Parameter and Spread Operator
 
