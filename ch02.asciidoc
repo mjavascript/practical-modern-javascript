@@ -788,7 +788,7 @@ ES6 has a better solution to the problem, and that's rest parameters.
 
 ==== Rest Parameters
 
-You can now precede the last parameter in any JavaScript function with three dots, converting it into an special "rest parameter." When the rest parameter is the only parameter in a function, it gets all arguments passed to the function: it works just like the `.slice` solution we saw earlier, but you avoid the need for a complicated construct like `arguments`, and it's specified in the parameter list.
+You ((("rest parameters", id="rp2")))can now precede the last parameter in any JavaScript function with three dots, converting it into an special "rest parameter." When the rest parameter is the only parameter in a function, it gets all arguments passed to the function: it works just like the `.slice` solution we saw earlier, but you avoid the need for a complicated construct like `arguments`, and it's specified in the parameter list.
 
 [source,javascript]
 ----
@@ -835,7 +835,7 @@ console.log(sumAll(1, 2, 5))
 // <- 8
 ----
 
-Next up we have the spread operator. It's also denoted with three dots, but it serves a slightly different purpose.
+Next up we have the spread operator. It's also denoted with three dots, but it serves a slightly different ((("rest parameters", startref="rp2")))purpose.
 
 ==== Spread Operator
 
