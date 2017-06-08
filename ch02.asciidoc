@@ -883,7 +883,7 @@ Note that the spread operator isn't limited to arrays and `arguments`. The sprea
 [role="pagebreak-before"]
 .Shifting and Spreading
 ****
-When you want to extract an element or two from the beginning of an array, the common approach is to use `.shift`. While functional, the following snippet of code can be hard to understand at a glance, because it uses `.shift` twice to grab a different item from the beginning of the `list` each time. The focus is, like in many other pre-ES6 situations, placed on getting the language to do what we want.
+When you want to extract an element or two from the beginning of an array, the common approach is to (((".shift()", primary-sortas="shift")))use `.shift`. While functional, the following snippet of code can be hard to understand at a glance, because it uses `.shift` twice to grab a different item from the beginning of the `list` each time. The focus is, like in many other pre-ES6 situations, placed on getting the language to do what we want.
 
 [source,javascript]
 ----
@@ -906,14 +906,14 @@ console.log(other)
 Using the spread operator you can focus on implementing the functionality you need while the language stays out of the way. Improving expressiveness and decreasing time spent working around language limitations is a common pattern we can observe in ES6 features.
 ****
 
-Before ES6, whenever you had a dynamic list of arguments that needed to be applied to a function call, you'd use `.apply`. This is inelegant because `.apply` also takes a context for `this`, which, in this scenario, you don't want to concern yourself with.
+Before ES6, whenever you had a dynamic list of arguments that needed to be applied to a function call, you'd use `.apply`. This (((".apply()", primary-sortas="apply", id="apply2")))is inelegant because `.apply` also takes a context for `this`, which, in this scenario, you don't want to concern yourself with.
 
 [source,javascript]
 ----
 fn.apply(null, ['a', 'b', 'c'])
 ----
 
-Besides spreading onto arrays, you can also spread items onto function calls. The following example shows how you could use the spread operator to pass an arbitrary number of arguments to the `multiply` function.
+Besides spreading onto arrays, you can also spread items onto function calls. The following example shows how you could use the spread operator to pass an arbitrary number of arguments to the `multiply` ((("multiply()")))function.
 
 [source,javascript]
 ----
@@ -936,7 +936,7 @@ print(1, ...[2, 3], 4, ...[5])
 // <- [1, 2, 3, 4, 5]
 ----
 
-Another limitation of `.apply` is that combining it with the `new` keyword, when instantiating an object, becomes very verbose. Here's an example of combining `new` and `.apply` to create a `Date` object. Ignore for a moment that months in JavaScript dates are zero-based, turning `11` into December, and consider how much of the following line of code is spent bending the language in our favor, just to instantiate a `Date` object.
+Another limitation of `.apply` is that combining it with the `new` keyword, when instantiating an object, becomes very verbose. Here's an example of combining `new` and `.apply` to create a `Date` object. Ignore for a moment that months in JavaScript dates are zero-based, turning `11` into December, and consider how much of the following line of code is spent bending the language in our favor, (((".apply()", primary-sortas="apply", startref="apply2")))just to instantiate a `Date` object.
 
 [source,javascript]
 ----
