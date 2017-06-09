@@ -1,13 +1,13 @@
 [[iteration-and-flow-control]]
 == Iteration and Flow Control
 
-Having covered the essential aspects of ES6 in <<es6-essentials>>, and symbols in <<classes-symbols-objects-and-decorators>>, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn toward the end of the chapter.
+Having ((("flow control", see="promises")))covered the essential aspects of ES6 in <<es6-essentials>>, and symbols in <<classes-symbols-objects-and-decorators>>, we're now in great shape to understand promises, iterators, and generators. Promises offer a different way of attacking asynchronous code flows. Iterators dictate how an object is iterated, producing the sequence of values that gets iterated over. Generators can be used to write code that looks sequential but works asynchronously, in the background, as we'll learn toward the end of the chapter.
 
 To kick off the chapter, we'll start by discussing promises. Promises have existed in user-land for a long time, but they're a native part of the language starting in ES6.
 
 === Promises
 
-Promises can be vaguely defined as "a proxy for a value that will eventually become available." While we can write synchronous code inside promises, promise-based code flows in a strictly asynchronous manner. Promises can make asynchronous flows easier to reason about--once you've mastered promises, that is.
+Promises ((("promises", id="prom4")))can be vaguely defined as "a proxy for a value that will eventually become available." While we can write synchronous code inside promises, promise-based code flows in a strictly asynchronous manner. Promises can make asynchronous flows easier to reason about--once you've mastered promises, that is.
 
 ==== Getting Started with Promises
 
@@ -612,7 +612,7 @@ Promise
 [[iterator_protocol_and_iterable_protocol]]
 === Iterator Protocol and Iterable Protocol
 
-JavaScript gets two new protocols in ES6: iterators and iterables. These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into laziness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
+JavaScript ((("promises", startref="prom4")))gets two new protocols in ES6: iterators and iterables. These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into laziness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
 
 ==== Understanding Iteration Principles
 
