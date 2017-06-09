@@ -13,7 +13,7 @@ The `class` keyword acts, then, as a device that makes JavaScript more inviting 
 
 When ((("classes", "fundamentals", id="class3f")))learning about new language features, it's always a good idea to look at existing constructs first, and then see how the new feature improves those use cases. We'll start by looking at a simple prototype-based JavaScript constructor and then compare that with the newer classes syntax in ES6.
 
-The following code snippet represents a fruit using a ((("constructor function", id="cf3")))constructor function and adding a couple of methods to the prototype. The constructor function takes a `name` and the amount of `calories` for a fruit, and defaults to the fruit being in a single piece. There's a `.chop` method that will slice another piece of fruit, and then there's a `.bite` method. The `person` passed into `.bite` will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
+The following code snippet ((("classes", "class declaration syntax", id="class3cds")))represents a fruit using a ((("constructor function", id="cf3")))constructor function and adding a couple of methods to the prototype. The constructor function takes a `name` and the amount of `calories` for a fruit, and defaults to the fruit being in a single piece. There's a `.chop` method that will slice another piece of fruit, and then there's a `.bite` method. The `person` passed into `.bite` will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
 
 [source,javascript]
 ----
@@ -36,7 +36,7 @@ Fruit.prototype.bite = function (person) {
 }
 ----
 
-While fairly simple, the piece of code we just put together should be enough to note a few things. We have a constructor function that takes a couple of parameters, a pair of methods, and a number of ((("constructor function", startref="cf3")))properties. The next snippet codifies how one should create a `Fruit` and a `person` that chops the fruit into four slices and then takes three bites.
+While fairly simple, the piece of code we just put together should be enough to note a few things. We have a constructor function that takes a couple of parameters, a pair of methods, and a number of properties. The next snippet codifies how one should create a `Fruit` and a `person` that chops the fruit into four slices and then takes three bites.
 
 [source,javascript]
 ----
@@ -56,7 +56,7 @@ console.log(apple.calories)
 // <- 35
 ----
 
-When using `class` syntax, as shown in the following code listing, the `constructor` function is declared as an explicit member of the `Fruit` class, and methods follow the object literal method definition syntax. When we compare the `class` syntax with the prototype-based syntax, you'll notice we're reducing the amount of boilerplate code quite a bit by avoiding explicit references to `Fruit.prototype` while declaring methods. The fact that the entire declaration is kept inside the `class` block also helps the reader understand the scope of this piece of code, making our classes' intent clearer. Lastly, having the constructor explicitly as a method member of `Fruit` makes the `class` syntax easier to understand when compared with the prototype-based flavor of class syntax.
+When using `class` syntax, as shown in the following code listing, the `constructor` function is declared as an explicit member of the `Fruit` class, and methods follow the object literal method definition syntax. When we compare the `class` syntax with the prototype-based syntax, you'll notice we're reducing the amount of boilerplate code quite a bit by avoiding explicit references to `Fruit.prototype` while declaring methods. The fact that the entire declaration is kept inside the `class` block also helps the reader understand the scope of this piece of code, making our classes' intent clearer. Lastly, having the constructor explicitly as a method member of `Fruit` makes the `class` syntax easier to understand when compared with the prototype-based ((("constructor function", startref="cf3")))flavor of class syntax.
 
 [source,javascript]
 ----
@@ -81,11 +81,11 @@ class Fruit {
 }
 ----
 
-A not-so-minor detail you might have missed is that there aren't any commas in between method declarations of the `Fruit` class. That's not a mistake our copious copy editors missed, but rather part of the `class` syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as public and private class fields.
+A not-so-minor detail you might have missed is that there aren't any commas in ((("classes", "commas in class syntax")))between method declarations of the `Fruit` class. That's not a mistake our copious copy editors missed, but rather part of the `class` syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as public and private class fields.
 
 The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest; the API for `Fruit` remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces, and ate most of it would work well with our `class`-flavored `Fruit` as well.
 
-It's worth noting that class declarations aren't hoisted to the top of their scope, unlike function declarations. That means you won't be able to instantiate, or otherwise access, a class before its declaration is reached and executed.
+It's worth noting that class declarations ((("classes", "class declaration syntax", startref="class3cds")))aren't hoisted to the top of their scope, unlike function declarations. That means you won't be able to instantiate, or otherwise access, a class before its declaration is reached and executed.
 
 [source,javascript]
 ----
