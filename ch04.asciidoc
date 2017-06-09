@@ -7,11 +7,11 @@ To kick off the chapter, we'll start by discussing promises. Promises have exist
 
 === Promises
 
-Promises ((("promises", id="prom4")))can be vaguely defined as "a proxy for a value that will eventually become available." While we can write synchronous code inside promises, promise-based code flows in a strictly asynchronous manner. Promises can make asynchronous flows easier to reason about--once you've mastered promises, that is.
+Promises ((("promises", id="prom4")))((("promises", "defined")))can be vaguely defined as "a proxy for a value that will eventually become available." While we can write synchronous code inside promises, promise-based code flows in a strictly asynchronous manner. Promises can make asynchronous flows easier to reason about--once you've mastered promises, that is.
 
 ==== Getting Started with Promises
 
-As an example, let's take a look at the new `fetch` API for the browser. This API is a simplification of `XMLHttpRequest`. It aims to be super simple to use for the most basic use cases: making a `GET` request against an HTTP resource. It provides an extensive API that caters to advanced use cases, but that's not our focus for now. In its most basic incarnation, you can make a `GET /items` HTTP request using a piece of code like the following.
+As an ((("promises", "basics of", id="p4bo")))example, let's take a look at the new `fetch` API for the browser. This API is a simplification of `XMLHttpRequest`. It aims to be super simple to use for the most basic use cases: making a `GET` request against an HTTP resource. It provides an extensive API that caters to advanced use cases, but that's not our focus for now. In its most basic incarnation, you can make a `GET /items` HTTP request using a piece of code like the following.
 
 [source,javascript]
 ----
@@ -179,7 +179,7 @@ const p = fetch('/items')
   .catch(err => console.error(err))
 ----
 
-Let's take a step back and pace ourselves, walking over more examples in each particular use case.
+Let's take a step back and pace ourselves, walking over more examples in each particular use ((("promises", "basics of", startref="p4bo")))case.
 
 ==== Promise Continuation and Chaining
 
