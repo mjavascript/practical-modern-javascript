@@ -310,7 +310,7 @@ Here is an enumeration of what is going on as that piece of code is executed:
 8. The `p3` promise from `p2.catch` is fulfilled, because it doesn't produce an error or result in a rejected promise.
 9. Because `p3` was fulfilled, the `p3.catch` is never followed. The `p3.then` branch would've been used instead.
 
-You should think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure.pass:[<span data-type="footnote" id="promisees">I wrote an online visualization tool called Promisees where you can see the <a href="https://mjavascript.com/out/promisees">tree structure underlying a `Promise` chain</a>.</span>] Let's reinforce this concept with <<Fig4-4>>.
+You should ((("promises", "as tree structure")))think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure.pass:[<span data-type="footnote" id="promisees">I wrote an online visualization tool called Promisees where you can see the <a href="https://mjavascript.com/out/promisees">tree structure underlying a `Promise` chain</a>.</span>] Let's reinforce this concept with <<Fig4-4>>.
 
 [[Fig4-4]]
 .Given the tree structure, we realize that p3 is fulfilled, as it doesn't produce an exception nor is it rejected. For that reason, p4 can never follow the rejection branch, given its parent was fulfilled.
