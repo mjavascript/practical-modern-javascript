@@ -637,7 +637,7 @@ If the regular expression wasn't modified through the symbol, it would've thrown
 
 ===== Shared across realms but not in the registry
 
-Well-known symbols are shared across realms. The following example shows how `Symbol.iterator` is the same reference as that within the context of an `<iframe>` window.
+Well-known symbols ((("symbols", "Symbol.iterator")))are shared across realms. The following example shows how `Symbol.iterator` is the same reference as that within the context of an `<iframe>` window.
 
 [source,javascript]
 ----
