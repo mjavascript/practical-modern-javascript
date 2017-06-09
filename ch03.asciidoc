@@ -254,7 +254,7 @@ Finally, it's worth mentioning that you could also declare static property ((("a
 
 ==== Extending JavaScript Classes
 
-You ((("classes", "extending", id="class3ext")))could use plain JavaScript to extend the `Fruit` class, but as you will notice by reading the next code snippet, declaring a subclass involves esoteric knowledge such as `Parent.call(this)` in order to pass in parameters to the parent class so that we can properly initialize the subclass, and setting the prototype of the subclass to an instance of the parent class's prototype. As you can readily find heaps of information about prototypal inheritance around the web, we won't be delving into detailed minutia about prototypal inheritance.
+You ((("classes", "extending", id="class3ext")))could use plain JavaScript to extend the `Fruit` class, but as you will notice by reading the next code snippet, declaring a subclass involves esoteric knowledge such as `Parent.call(this)` in order to pass in parameters to the parent class so that we can properly initialize the subclass, and setting the prototype of the subclass to an instance of the parent class's prototype. As you can readily find heaps of information about ((("prototypal inheritance", id="pi3)))prototypal inheritance around the web, we won't be delving into detailed minutia about prototypal inheritance.
 
 [source,javascript]
 ----
@@ -267,7 +267,7 @@ Banana.prototype.slice = function () {
 }
 ----
 
-Given the ephemeral knowledge one has to remember, and the fact that `Object.create` was only made available in ES5, JavaScript developers have historically turned to libraries to resolve their prototype inheritance issues. One such example is `util.inherits` in Node.js, which is usually favored over `Object.create` for legacy support reasons.
+Given the ephemeral knowledge one has to remember, and the fact that `Object.create` ((("Object.create")))was only made available in ES5, JavaScript developers have historically turned to libraries to resolve their prototype inheritance issues. One such example is `util.inherits` in Node.js, which ((("util.inherits")))is usually favored over `Object.create` for legacy support reasons.
 
 [source,javascript]
 ----
@@ -337,7 +337,7 @@ class Plum extends createJuicyFruit('plum', 30) {
 }
 ----
 
-Let's move onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length later in ((("classes", startref="class3")))((("classes", "extending", startref="class3ext")))the chapter.
+Let's move ((("prototypal inheritance", startref="pi3)))onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length later in ((("classes", startref="class3")))((("classes", "extending", startref="class3ext")))the chapter.
 
 === Symbols
 
