@@ -533,7 +533,7 @@ There are two methods that interact with the runtime-wide global symbol registry
 
 ===== Getting symbols with Symbol.for(key)
 
-The `Symbol.for(key)` method looks up `key` in the runtime-wide symbol registry. If a symbol with the provided `key` exists in the global registry, that symbol is returned. If no symbol with that `key` is found in the registry, one is created and added to the registry under the provided `key`. That's to say, `Symbol.for(key)` is idempotent: it looks for a symbol under a `key`, creates one if it didn't already exist, and then returns the symbol.
+The `Symbol.for(key)` ((("symbols", "Symbol.for(key)")))method looks up `key` in the runtime-wide symbol registry. If a symbol with the provided `key` exists in the global registry, that symbol is returned. If no symbol with that `key` is found in the registry, one is created and added to the registry under the provided `key`. That's to say, `Symbol.for(key)` is idempotent: it looks for a symbol under a `key`, creates one if it didn't already exist, and then returns the symbol.
 
 In the following code snippet, the first call to `Symbol.for` creates a symbol identified as `'example'`, adds it to the registry, and returns it. The second call returns that same symbol because the `key` is already in the registry--and associated to the symbol returned by the first call.
 
@@ -548,7 +548,7 @@ The global symbol registry keeps track of symbols by their `key`. Note that the 
 
 ===== Using Symbol.keyFor(symbol) to retrieve symbol keys
 
-Given a symbol `symbol`, `Symbol.keyFor(symbol)` returns the `key` that was associated with `symbol` when the symbol was added to the global registry. The next example shows how we can grab the `key` for a `symbol` using `Symbol.keyFor`.
+Given a ((("symbols", "Symbol.keyFor(symbol)")))symbol `symbol`, `Symbol.keyFor(symbol)` returns the `key` that was associated with `symbol` when the symbol was added to the global registry. The next example shows how we can grab the `key` for a `symbol` using `Symbol.keyFor`.
 
 [source,javascript]
 ----
@@ -597,7 +597,7 @@ There's one more kind of symbol: built-in well-known symbols.
 
 ==== Well-known Symbols
 
-So far we've covered symbols you can create using the `Symbol` function and those you can create through `Symbol.for`. The third and last kind of symbols we're going to cover are the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
+So ((("symbols", "well-known", id="sym3wk")))far we've covered symbols you can create using the `Symbol` function and those you can create through `Symbol.for`. The third and last kind of symbols we're going to cover are the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
 
 A great example of how symbols can add extensibility to the language without breaking existing code is the `Symbol.toPrimitive` well-known symbol. It can be assigned a function to determine how an object is cast into a primitive value. The function receives a `hint` parameter that can be `'string'`, `'number'`, or `'default'`, indicating what type of primitive value is expected.
 
@@ -655,7 +655,7 @@ console.log(Symbol.keyFor(Symbol.iterator))
 // <- undefined
 ----
 
-One of the most useful well-known symbols is `Symbol.iterator`, used by a few different language constructs to iterate over a sequence, as defined by a function assigned to a property using that symbol on any object. In the next chapter we'll go over `Symbol.iterator` in detail, using it extensively along with the iterator and iterable ((("symbols", startref="sym3")))protocols.
+One of the most useful well-known symbols is `Symbol.iterator`, used by a few different language constructs to iterate over a sequence, as defined by a function assigned to a property using that symbol on any object. In the next chapter we'll go over `Symbol.iterator` in detail, using it extensively along with the iterator and iterable ((("symbols", startref="sym3")))((("symbols", "well-known", startref="sym3wk")))protocols.
 
 === Object Built-in Improvements
 
