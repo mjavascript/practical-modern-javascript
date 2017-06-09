@@ -406,7 +406,7 @@ console.log(character[weapon])
 // <- 'umbrella'
 ----
 
-Keep in mind that symbol keys are hidden from many of the traditional ways of pulling keys from an object. The next bit of code shows how `for..in`, `Object.keys`, and `Object.getOwnPropertyNames` fail to report on symbol properties.
+Keep in mind that ((("symbols", "hidden properties of")))symbol keys are hidden from many of the traditional ways of pulling keys from an object. The next bit of code shows how `for..in`, `Object.keys`, and `Object.getOwnPropertyNames` fail to report on symbol properties.
 
 [source,javascript]
 ----
