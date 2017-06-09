@@ -404,7 +404,7 @@ Presumably, you won't be calling `new Promise` directly very often. The promise 
 
 ==== Promise States and Fates
 
-Promises can be in three distinct states: pending, fulfilled, and rejected. Pending is the default state. A promise can then transition into either fulfillment or rejection.
+Promises ((("promises", "states of", id="p4so")))can be in three distinct states: pending, fulfilled, and rejected. Pending is the default state. A promise can then transition into either fulfillment or rejection.
 
 A promise can be resolved or rejected exactly once. Attempting to resolve or reject a promise for a second time won't have any effect.
 
@@ -445,7 +445,7 @@ Promise
   // <- [2, 4, 6]
 ----
 
-Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in <<creating_a_promise_from_scratch>>, when a `.catch` reaction executes without errors and doesn't return a rejected promise either, it will fulfill, following `.then` reactions.
+Note that you can transform data in rejection branches as well. Keep in mind that, as we first learned in <<creating_a_promise_from_scratch>>, when a `.catch` reaction executes without errors and doesn't return a rejected promise either, it will fulfill, ((("promises", "states of", startref="p4so")))following `.then` reactions.
 
 ==== Promise#finally Proposal
 
