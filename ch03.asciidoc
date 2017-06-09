@@ -884,7 +884,7 @@ ____
 
 === Decorators
 
-Decorators are, as most things programming, definitely not a new concept. They pattern is fairly commonplace in modern programming languages: you have attributes in C#, they're called annotations in Java, there are decorators in Python, and the list goes on. There's a JavaScript decorators proposalpass:[<span data-type="footnote" id="decorators">You can find the proposal draft online at <a href="https://mjavascript.com/out/decorators">GitHub</a>.</span>] in the works. It is currently sitting at stage 2 of the TC39 process.
+Decorators are, ((("Decorators", id="dec3")))as most things programming, definitely not a new concept. They pattern is fairly commonplace in modern programming languages: you have attributes in C#, they're called annotations in Java, there are decorators in Python, and the list goes on. There's a JavaScript decorators proposalpass:[<span data-type="footnote" id="decorators">You can find the proposal draft online at <a href="https://mjavascript.com/out/decorators">GitHub</a>.</span>] in the works. It is currently sitting at stage 2 of the TC39 process.
 
 ==== A Primer on JavaScript Decorators
 
@@ -1050,4 +1050,4 @@ getCommandProperties(Dog)
 
 We could then iterate over known safe command properties and render a way of modifying those during runtime, through a simple UI. Instead of maintaining long lists of properties that can be modified, relying on some sort of heuristics bound to break from time to time, or using some sort of restrictive naming convention, decorators are the cleanliest way to implement a protocol where we mark properties as special for some particular use case.
 
-In the following chapter we'll look at more features coming in ES6 and how they can be used to iterate over any JavaScript objects, as well as how to master flow control using promises and generators.
+In the following chapter we'll look at more features coming in ES6 and how they can be used to iterate over any JavaScript objects, as well as how to master flow control using promises and ((("Decorators", startref="dec3")))generators.
