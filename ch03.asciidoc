@@ -159,7 +159,7 @@ class Counter {
 }
 ----
 
-In this case, you could consume the `Counter` class as shown in the next snippet. Each time the `.next` property is accessed, the count raises by one. While mildly useful, this sort of use case is usually better suited by methods than by magical `get` ((("accessors")))property accessors, and we need to be careful not to abuse property accessors, as consuming an object that abuses of accessors may become very confusing.
+In this case, you could consume the `Counter` class as shown in the next snippet. Each time the `.next` property is accessed, the count raises by one. While mildly useful, this sort of use case is usually better suited by methods than by ((("getters")))magical `get` ((("accessors", id="acc3")))property accessors, and we need to be careful not to abuse property accessors, as consuming an object that abuses of accessors may become very confusing.
 
 [source,javascript]
 ----
@@ -172,7 +172,7 @@ console.log(counter.next)
 // <- 4
 ----
 
-When paired with setters, though, accessors may provide an interesting bridge between an object and its underlying data store. Consider the following example where we define a class that can be used to store and retrieve JSON data from `localStorage` using the provided storage `key`.
+When paired with ((("setters")))setters, though, accessors may provide an interesting bridge between an object and its underlying data store. Consider the following example where we define a class that can be used to store and retrieve JSON data from `localStorage` using the provided ((("accessors", startref="acc3")))storage `key`.
 
 [source,javascript]
 ----
@@ -235,7 +235,7 @@ Person.isPerson = function (person) {
 }
 ----
 
-JavaScript classes allow you to define static methods like `Person.isPerson` using the `static` keyword, much like you would use `get` or `set` as a prefix to a method definition that's a getter or a setter.
+JavaScript classes allow you to define ((("static methods")))static methods like `Person.isPerson` using the `static` keyword, much like you would use `get` or `set` as a prefix to a method definition that's a getter or a setter.
 
 The following example defines a `MathHelper` class with a static `sum` method that's able to calculate the sum of all numbers passed to it in a function call, by taking advantage of the `Array#reduce` method.
 
@@ -250,11 +250,11 @@ console.log(MathHelper.sum(1, 2, 3, 4, 5))
 // <- 15
 ----
 
-Finally, it's worth mentioning that you could also declare static property accessors, such as getters or setters (`static get`, `static set`). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, ((("classes", "properties and methods in", startref="class3pami")))((("properties", "in classes", startref="p3ic")))((("methods", "in classes", startref="m3ic")))after all.
+Finally, it's worth mentioning that you could also declare static property ((("accessors")))accessors, such as ((("getters")))((("setters")))getters or setters (`static get`, `static set`). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, ((("classes", "properties and methods in", startref="class3pami")))((("properties", "in classes", startref="p3ic")))((("methods", "in classes", startref="m3ic")))after all.
 
 ==== Extending JavaScript Classes
 
-You could use plain JavaScript to extend the `Fruit` class, but as you will notice by reading the next code snippet, declaring a subclass involves esoteric knowledge such as `Parent.call(this)` in order to pass in parameters to the parent class so that we can properly initialize the subclass, and setting the prototype of the subclass to an instance of the parent class's prototype. As you can readily find heaps of information about prototypal inheritance around the web, we won't be delving into detailed minutia about prototypal inheritance.
+You ((("classes", "extending", id="class3ext")))could use plain JavaScript to extend the `Fruit` class, but as you will notice by reading the next code snippet, declaring a subclass involves esoteric knowledge such as `Parent.call(this)` in order to pass in parameters to the parent class so that we can properly initialize the subclass, and setting the prototype of the subclass to an instance of the parent class's prototype. As you can readily find heaps of information about prototypal inheritance around the web, we won't be delving into detailed minutia about prototypal inheritance.
 
 [source,javascript]
 ----
@@ -337,7 +337,7 @@ class Plum extends createJuicyFruit('plum', 30) {
 }
 ----
 
-Let's move onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length later in ((("classes", startref="class3")))the chapter.
+Let's move onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length later in ((("classes", startref="class3")))((("classes", "extending", startref="class3ext")))the chapter.
 
 === Symbols
 
