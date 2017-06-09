@@ -321,7 +321,7 @@ It all starts with a single promise, which we'll next learn how to construct. Th
 [[creating_a_promise_from_scratch]]
 ==== Creating a Promise from Scratch
 
-We already ((("promises", "creating from scratch", id="p4cfs")))know that promises can be created using a function such as `fetch`, `Promise.resolve`, `Promise.reject`, or the `Promise` constructor function. We've already used `fetch` extensively to create promises in previous examples. Let's take a more nuanced look at the other three ways we can create a promise.
+We already ((("promises", "creating from scratch", id="p4cfs")))((("promises ", "resolving and rejecting", id="p4rar")))know that promises can be created using a function such as `fetch`, `Promise.resolve`, `Promise.reject`, or the `Promise` constructor function. We've already used `fetch` extensively to create promises in previous examples. Let's take a more nuanced look at the other three ways we can create a promise.
 
 Promises can be created from scratch by using `new Promise(resolver)`. The `resolver` parameter is a function that will be used to settle the promise. The `resolver` takes two arguments: a `resolve` function and a `reject` function.
 
@@ -400,7 +400,7 @@ fetch('/items').then(() =>
 fetch('/items').then(() => { throw new Error('arbitrarily')})
 ----
 
-Presumably, you won't be calling `new Promise` directly very often. The promise constructor is often invoked internally by libraries that support promises or native functions like `fetch`. Given that `.then` and `.catch` provide tree structures that unfold beyond the original promise, a single call to `new Promise` in the entry point to an API is often sufficient. Regardless, understanding promise creation is essential when leveraging promise-based control ((("promises", "creating from scratch", startref="p4cfs")))flows.
+Presumably, you won't be calling `new Promise` directly very often. The promise constructor is often invoked internally by libraries that support promises or native functions like `fetch`. Given that `.then` and `.catch` provide tree structures that unfold beyond the original promise, a single call to `new Promise` in the entry point to an API is often sufficient. Regardless, understanding promise creation is essential when leveraging promise-based control ((("promises", "creating from scratch", startref="p4cfs")))((("promises ", "resolving and rejecting", startref="p4rar")))flows.
 
 ==== Promise States and Fates
 
