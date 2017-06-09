@@ -521,7 +521,7 @@ As we can observe after carefully reading the code for our ponyfill, if either r
 
 ==== Leveraging Promise.all and Promise.race
 
-When ((("promises", "and concurrent tasks", secondary-sortas="concurrent", id="p4act")))((("Promise.all")))((("Promise.race")))writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There are also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excel at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API methods: `Promise.all` and `Promise.race`.
+When ((("promises", "and concurrent tasks", secondary-sortas="concurrent", id="p4act")))((("Promise.all")))((("Promise.race")))writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There are also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excel at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API ((("Promise.all", id="pall4")))methods: `Promise.all` and `Promise.race`.
 
 In most cases you'll want code that can be executed concurrently to take advantage of that, as it could make your code run much faster. Suppose you wanted to pull the description of two products in your catalog, using two distinct API calls, and then print out both of them to the console. The following piece of code would run both operations concurrently, but it would need separate print statements. In the case of printing to the console, that wouldn't make much of a difference, but if we needed to make single function call passing in both products, we couldn't do that with two separate `fetch` requests.
 
@@ -576,7 +576,7 @@ In summary, `Promise.all` has three possible outcomes:
 
 - Settle with all fulfillment `results` as soon as all of its dependencies are fulfilled
 - Settle with a single rejection `reason` as soon as one of its dependencies is rejected
-- Stay in a pending state because at least one dependency stays in pending state and no dependencies are rejected
+- Stay in a pending state because at least one dependency stays in pending state and no dependencies are ((("Promise.all", startref="pall4")))rejected
 
 The `Promise.race` ((("Promise.race", id="prace4")))method is similar to `Promise.all`, except the first dependency to settle will "win" the race, and its result will be passed along to the promise returned by `Promise.race`.
 
