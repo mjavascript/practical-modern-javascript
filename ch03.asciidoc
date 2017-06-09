@@ -122,7 +122,7 @@ We'll dig deeper into class inheritance later. Let's take a more nuanced look at
 
 ==== Properties and Methods in Classes
 
-It ((("classes", "properties and methods in", id="class3pami")))should be noted that the `constructor` ((("constructor()")))method declaration is an optional member of a `class` declaration. The following bit of code shows an entirely valid `class` declaration that's comparable to an empty constructor function by the same name.
+It ((("classes", "properties and methods in", id="class3pami")))((("properties", "in classes", id="p3ic")))((("methods", "in classes", id="m3ic")))should be noted that the `constructor` ((("constructor()")))method declaration is an optional member of a `class` declaration. The following bit of code shows an entirely valid `class` declaration that's comparable to an empty constructor function by the same name.
 
 [source,javascript]
 ----
@@ -250,7 +250,7 @@ console.log(MathHelper.sum(1, 2, 3, 4, 5))
 // <- 15
 ----
 
-Finally, it's worth mentioning that you could also declare static property accessors, such as getters or setters (`static get`, `static set`). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, ((("classes", "properties and methods in", startref="class3pami")))after all.
+Finally, it's worth mentioning that you could also declare static property accessors, such as getters or setters (`static get`, `static set`). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, ((("classes", "properties and methods in", startref="class3pami")))((("properties", "in classes", startref="p3ic")))((("methods", "in classes", startref="m3ic")))after all.
 
 ==== Extending JavaScript Classes
 
