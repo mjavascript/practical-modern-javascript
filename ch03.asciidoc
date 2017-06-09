@@ -440,7 +440,7 @@ Now that we've established how symbols work, what can we use ((("symbols", "loca
 
 ==== Practical Use Cases for Symbols
 
-Symbols could be used by a library to map objects to DOM elements. For example, a library that needs to associate the API object for a calendar to the provided DOM element. Before ES6, there wasn't a clear way of mapping DOM elements to objects. You could add a property to a DOM element pointing to the API, but polluting DOM elements with custom properties is a bad practice. You have to be careful to use property keys that won't be used by other libraries, or worse, by the language itself in the future. That leaves you with using an array lookup table containing an entry for each DOM/API pair. That, however, might be slow in long-running applications where the array lookup table might grow in size, slowing down the lookup operation over time.
+Symbols ((("symbols", "use cases for", id="sym3ucf")))could be used by a library to map objects to DOM elements. For example, a library that needs to associate the API object for a calendar to the provided DOM element. Before ES6, there wasn't a clear way of mapping DOM elements to objects. You could add a property to a DOM element pointing to the API, but polluting DOM elements with custom properties is a bad practice. You have to be careful to use property keys that won't be used by other libraries, or worse, by the language itself in the future. That leaves you with using an array lookup table containing an entry for each DOM/API pair. That, however, might be slow in long-running applications where the array lookup table might grow in size, slowing down the lookup operation over time.
 
 Symbols, on the other hand, don't have this problem. They can be used as properties that don't have a risk of clashing with future language features, as they're unique. The following code snippet shows how a symbol could be used to map DOM elements into calendar API objects.
 
@@ -523,7 +523,7 @@ When it comes to the merits of using a symbol to describe behavior, as opposed t
 
 A benefit of defining behavior via symbols is that you could augment and customize the behavior of objects without changing anything other than the value assigned to a symbol property and perhaps the internal implementation of the piece of code that leverages that behavior. The benefit of using symbols over properties is that you're not subject to name clashes when new language features are introduced.
 
-Besides local symbols, there's also a global symbol registry, accessible from across code realms. Let's look into what that means.
+Besides local symbols, there's also a global symbol registry, accessible from across code realms. Let's look into what ((("symbols", "use cases for", startref="sym3ucf")))that means.
 
 ==== Global Symbol Registry
 
