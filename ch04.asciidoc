@@ -11,7 +11,7 @@ Promises ((("promises", id="prom4")))((("promises", "defined")))can be vaguely d
 
 ==== Getting Started with Promises
 
-As an ((("promises", "basics of", id="p4bo")))example, let's take a look at the new `fetch` API for the browser. This API is a simplification of `XMLHttpRequest`. It aims to be super simple to use for the most basic use cases: making a `GET` request against an HTTP resource. It provides an extensive API that caters to advanced use cases, but that's not our focus for now. In its most basic incarnation, you can make a `GET /items` HTTP request using a piece of code like the following.
+As an ((("promises", "basics of", id="p4bo")))((("fetch", id="fetch4")))((("promises", "in fetch", id="p4if")))example, let's take a look at the new `fetch` API for the browser. This API is a simplification of `XMLHttpRequest`. It aims to be super simple to use for the most basic use cases: making a `GET` request against an HTTP resource. It provides an extensive API that caters to advanced use cases, but that's not our focus for now. In its most basic incarnation, you can make a `GET /items` HTTP request using a piece of code like the following.
 
 [source,javascript]
 ----
@@ -102,7 +102,7 @@ fetch('/items')
 Binding several listeners for each type of event would eliminate the concern we had earlier about having to centralize response handling in a single callback. Events, however, make it hard to chain callbacks and have them fire when another asynchronous task is fulfilled, and that's where promises come in. Moreover, events are better suited to handle streams of values, making them somewhat inappropriate in this particular use case. <<asynchronous_code_flows>> discusses proper asynchronous code flow design in more detail, expanding on which kinds of constructs are better suited for which kinds of code flows.
 ****
 
-When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the `.on` method attach the event listener and then returning the event emitter itself. Promises are different. The `.then` and `.catch` methods return a new promise every time. That's important because chaining can have wildly different results depending on where you append a `.then` or a `.catch` call onto.
+When it comes to promises, chaining is a major source of confusion. In an event-based API, chaining is made possible by having the `.on` method attach the event listener and then returning the event emitter itself. Promises are different. The `.then` and `.catch` methods return a new promise every time. That's important because chaining can have wildly different results depending on where you ((("fetch", startref="fetch4")))((("promises", "in fetch", startref="p4if")))append a `.then` or a `.catch` call onto.
 
 .Visualizing Promise Chains: A Major Source of Confusion
 ****
