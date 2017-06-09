@@ -956,7 +956,7 @@ function readonlyMembers(ctor, heritage, members) {
 
 ==== Stacking Decorators and a Warning about Immutability
 
-With all the fluff around immutability you may be tempted to return a new property descriptor from your decorators, without modifying the original descriptor. While well-intentioned, this may have an undesired effect, as it is possible to decorate the same `class` or class member several times.
+With all ((("Decorators", "stacking")))the fluff around immutability you may be tempted to return a new property descriptor from your decorators, without modifying the original descriptor. While well-intentioned, this may have an undesired effect, as it is possible to decorate the same `class` or class member several times.
 
 If any decorators in a piece of code returned an entirely new `descriptor` without taking into consideration the `descriptor` parameter they receive, they'd effectively lose all the decoration that took place before the different descriptor was returned.
 
@@ -964,7 +964,7 @@ We should be careful to write decorators that take into account the supplied `de
 
 ==== Use Case By Example: Attributes in C#
 
-A long time ago, I was first getting acquainted with C# by way of an Ultima Onlinefootnoteref:[uo,Ultima Online is a decades-old fantasy role playing game based on the Ultima universe.] server emulator written in open-source C# code--RunUO. RunUO was one of the most beautiful codebases I've ever worked with, and it was written in C# to boot.
+A long time ago, I was first getting acquainted with C# by way of an Ultima Onlinefootnoteref:[uo,Ultima Online is a decades-old fantasy role playing game based on the Ultima universe.] server emulator written in open-source C# code--RunUO. ((("RunUO", id="ruo3")))RunUO was one of the most beautiful codebases I've ever worked with, and it was written in C# to boot.
 
 They distributed the server software as an executable and a series of `.cs` files. The `runuo` executable would compile those `.cs` scripts at runtime and dynamically mix them into the application. The result was that you didn't need the Visual Studio IDE (nor `msbuild`), or anything other than just enough programming knowledge to edit one of the "scripts" in those `.cs` files. All of the above made RunUO the perfect learning environment for the newcomer developer.
 
@@ -996,7 +996,7 @@ public int StepsTaken
 }
 ----
 
-One interesting difference between C# attributes and JavaScript decorators is that reflection in C# allows us to pull all custom attributes from an object using `MemberInfo#getCustomAttributes`. RunUO leverages that method to pull up information about each property that should be accessible in-game when displaying the dialog that lets an administrator view or modify an in-game object's properties.
+One interesting difference between C# attributes and JavaScript decorators is that reflection in C# allows us to pull all custom attributes from an object using `MemberInfo#getCustomAttributes`. RunUO leverages that method to pull up information about each property that should be accessible in-game when displaying the dialog that lets an administrator view or modify an in-game object's ((("RunUO", startref="ruo3")))properties.
 
 ==== Marking Properties in JavaScript
 
