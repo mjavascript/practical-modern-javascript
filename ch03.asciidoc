@@ -821,7 +821,7 @@ We dive deeper into object rest and ((("objects", "extending", startref="ob3e"))
 
 ==== Comparing Objects with Object.is
 
-The `Object.is` method is a slightly different version of the strict equality comparison operator, `===`. For the most part, `Object.is(a, b)` is equal to `a === b`. There are two differences: the case of `NaN` and the case of `-0` and `+0`. This algorithm is referred to as `SameValue` in the ECMAScript specification.
+The `Object.is` ((("objects", "comparing", id="ob3c")))((("Object.is", id="obis3")))method is a slightly different version of the strict equality comparison operator, `===`. For the most part, `Object.is(a, b)` is equal to `a === b`. There are two differences: the case of `NaN` and the case of `-0` and `+0`. This algorithm is referred to as `SameValue` in the ECMAScript specification.
 
 When `NaN` is compared to `NaN`, the strict equality comparison operator returns `false` because `NaN` is not equal to itself. The `Object.is` method, however, returns `true` in this special case.
 
