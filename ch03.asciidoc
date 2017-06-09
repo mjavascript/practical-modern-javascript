@@ -5,7 +5,7 @@ Now that we've covered the basic improvements to the syntax, we're in good shape
 
 === Classes
 
-JavaScript is a prototype-based language, and classes are mostly syntactic sugar on top of prototypal inheritance. The fundamental difference between prototypal inheritance and classes is that classes can `extend` other classes, making it possible for us to extend the `Array` built-in--something that was very convoluted before ES6.
+JavaScript ((("classes", id="class3")))is a prototype-based language, and classes are mostly syntactic sugar on top of prototypal inheritance. The fundamental difference between prototypal inheritance and classes is that classes can `extend` other classes, making it possible for us to extend the `Array` built-in--something that was very convoluted before ES6.
 
 The `class` keyword acts, then, as a device that makes JavaScript more inviting to programmers coming from other paradigms, who might not be all that familiar with prototype chains.
 
@@ -337,7 +337,7 @@ class Plum extends createJuicyFruit('plum', 30) {
 }
 ----
 
-Let's move onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length later in the chapter.
+Let's move onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length later in ((("classes", startref="class3")))the chapter.
 
 === Symbols
 
