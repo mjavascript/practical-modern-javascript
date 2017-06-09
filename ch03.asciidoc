@@ -956,11 +956,11 @@ function readonlyMembers(ctor, heritage, members) {
 
 ==== Stacking Decorators and a Warning about Immutability
 
-With all the fluff around immutability you may be tempted to return a new property descriptor from your ((("Decorators", "descriptors in", startref="dec3d")))((("descriptors", startref="d3")))decorators, without modifying the original descriptor. While well-intentioned, this may have an undesired effect, as it is possible to decorate the same `class` or class member several times.
+With all the fluff around immutability you may be tempted to return a new property descriptor from your decorators, without modifying the original descriptor. While well-intentioned, this may have an undesired effect, as it is possible to decorate the same `class` or class member several times.
 
 If any decorators in a piece of code returned an entirely new `descriptor` without taking into consideration the `descriptor` parameter they receive, they'd effectively lose all the decoration that took place before the different descriptor was returned.
 
-We should be careful to write decorators that take into account the supplied `descriptor`. ALways create one that's based on the original `descriptor` that's provided as a parameter.
+We should be careful to write decorators that take into account the supplied `descriptor`. ALways create one that's based on the original `descriptor` that's provided as a ((("Decorators", "descriptors in", startref="dec3d")))((("descriptors", startref="d3")))parameter.
 
 ==== Use Case By Example: Attributes in C#
 
