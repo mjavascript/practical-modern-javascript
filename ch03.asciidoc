@@ -847,7 +847,7 @@ These differences may not seem like much, but dealing with `NaN` has always been
 
 ==== Object.setPrototypeOf
 
-The `Object.setPrototypeOf` method does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__`, which is a legacy feature.
+The `Object.setPrototypeOf` method ((("objects", "setting prototypes", id="ob3sp")))((("Object.setPrototypeOf", id="ospo3")))does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__`, which is a legacy feature.
 
 Before ES6, we were introduced to `Object.create` in ES5. Using that method, we could create an object based on any prototype passed into `Object.create`, as shown next.
 
@@ -877,7 +877,7 @@ Using `Object.setPrototypeOf` to change the prototype of an object is an expensi
 
 [quote, Mozilla Developer Network]
 ____
-Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `obj.__proto__ = …` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new ((("objects", "built-in improvements", startref="ob3bii")))object with the desired prototype using `Object.create()`.
+Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `obj.__proto__ = …` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new ((("objects", "built-in improvements", startref="ob3bii")))object with the desired ((("objects", "setting prototypes", startref="ob3sp")))((("Object.setPrototypeOf", startref="ospo3")))prototype using `Object.create()`.
 ____
 
 ****
