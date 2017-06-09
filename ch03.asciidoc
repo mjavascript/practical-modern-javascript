@@ -13,7 +13,7 @@ The `class` keyword acts, then, as a device that makes JavaScript more inviting 
 
 When ((("classes", "fundamentals", id="class3f")))learning about new language features, it's always a good idea to look at existing constructs first, and then see how the new feature improves those use cases. We'll start by looking at a simple prototype-based JavaScript constructor and then compare that with the newer classes syntax in ES6.
 
-The following code snippet represents a fruit using a constructor function and adding a couple of methods to the prototype. The constructor function takes a `name` and the amount of `calories` for a fruit, and defaults to the fruit being in a single piece. There's a `.chop` method that will slice another piece of fruit, and then there's a `.bite` method. The `person` passed into `.bite` will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
+The following code snippet represents a fruit using a ((("constructor function", id="cf3")))constructor function and adding a couple of methods to the prototype. The constructor function takes a `name` and the amount of `calories` for a fruit, and defaults to the fruit being in a single piece. There's a `.chop` method that will slice another piece of fruit, and then there's a `.bite` method. The `person` passed into `.bite` will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
 
 [source,javascript]
 ----
@@ -36,7 +36,7 @@ Fruit.prototype.bite = function (person) {
 }
 ----
 
-While fairly simple, the piece of code we just put together should be enough to note a few things. We have a constructor function that takes a couple of parameters, a pair of methods, and a number of properties. The next snippet codifies how one should create a `Fruit` and a `person` that chops the fruit into four slices and then takes three bites.
+While fairly simple, the piece of code we just put together should be enough to note a few things. We have a constructor function that takes a couple of parameters, a pair of methods, and a number of ((("constructor function", startref="cf3")))properties. The next snippet codifies how one should create a `Fruit` and a `person` that chops the fruit into four slices and then takes three bites.
 
 [source,javascript]
 ----
