@@ -1000,7 +1000,7 @@ One interesting difference between C# attributes and JavaScript decorators is th
 
 ==== Marking Properties in JavaScript
 
-In JavaScript, there's no such thing--not in the existing proposal draft, at least--to get the custom attributes on a property. That said, JavaScript is a highly dynamic language, and creating this sort of "labels" wouldn't be much of a hassle. Decorating a `Dog` with a "command property" wouldn't be all that different from RunUO and C#.
+In ((("Decorators", "and marking properties", secondary-sortas="marking", id="dec3amp")))JavaScript, there's no such thing--not in the existing proposal draft, at least--to get the custom attributes on a property. That said, JavaScript is a highly dynamic language, and creating this sort of "labels" wouldn't be much of a hassle. Decorating a `Dog` with a "command property" wouldn't be all that different from RunUO and C#.
 
 [source,javascript]
 ----
@@ -1048,6 +1048,6 @@ getCommandProperties(Dog)
 // writeLevel: 'game-master' }]
 ----
 
-We could then iterate over known safe command properties and render a way of modifying those during runtime, through a simple UI. Instead of maintaining long lists of properties that can be modified, relying on some sort of heuristics bound to break from time to time, or using some sort of restrictive naming convention, decorators are the cleanliest way to implement a protocol where we mark properties as special for some particular use case.
+We could then iterate over known safe command properties and render a way of modifying those during runtime, through a simple UI. Instead of maintaining long lists of properties that can be modified, relying on some sort of heuristics bound to break from time to time, or using some sort of restrictive naming convention, decorators are the cleanliest way to implement a protocol where we mark properties as special for some particular use ((("Decorators", "and marking properties", secondary-sortas="marking", startref="dec3amp")))case.
 
 In the following chapter we'll look at more features coming in ES6 and how they can be used to iterate over any JavaScript objects, as well as how to master flow control using promises and ((("Decorators", startref="dec3")))generators.
