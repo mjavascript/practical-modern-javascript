@@ -85,7 +85,7 @@ A not-so-minor detail you might have missed is that there aren't any commas in (
 
 The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest; the API for `Fruit` remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces, and ate most of it would work well with our `class`-flavored `Fruit` as well.
 
-It's worth noting that class declarations ((("classes", "class declaration syntax", startref="class3cds")))aren't hoisted to the top of their scope, unlike function declarations. That means you won't be able to instantiate, or otherwise access, a class before its declaration is reached and executed.
+It's worth noting that class declarations aren't hoisted to the top of their scope, unlike function declarations. That means you won't be able to instantiate, or otherwise access, a class before its declaration is reached and executed.
 
 [source,javascript]
 ----
@@ -94,7 +94,7 @@ class Person {
 }
 ----
 
-Besides the class declaration syntax presented earlier, classes can also be declared as expressions, just like with function declarations and function expressions. You may omit the name for a `class` expression, as shown in the following bit of code.
+Besides ((("classes", "class declaration syntax", startref="class3cds")))the class declaration syntax presented earlier, classes can also be declared as ((("classes", "expression syntax", id="class3es")))expressions, just like with function declarations and function expressions. You may omit the name for a `class` expression, as shown in the following bit of code.
 
 [source,javascript]
 ----
