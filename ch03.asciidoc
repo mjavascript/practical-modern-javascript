@@ -849,7 +849,7 @@ These differences may not seem like much, but dealing with `NaN` has always been
 
 The `Object.setPrototypeOf` method ((("objects", "setting prototypes", id="ob3sp")))((("Object.setPrototypeOf", id="ospo3")))does exactly what its name conveys: it sets the prototype of an object to a reference to another object. It's considered the proper way of setting the prototype, as opposed to using `__proto__`, which is a legacy feature.
 
-Before ES6, we were introduced to `Object.create` in ES5. Using that method, we could create an object based on any prototype passed into `Object.create`, as shown next.
+Before ES6, we were introduced ((("Object.create()")))to `Object.create` in ES5. Using that method, we could create an object based on any prototype passed into `Object.create`, as shown next.
 
 [source,javascript]
 ----
