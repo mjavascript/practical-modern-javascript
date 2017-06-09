@@ -118,7 +118,7 @@ image::images/pmjs_0401.png["Promisees lets you write a piece of code and visual
 
 ****
 
-A promise ((("promises", "chaining", startref="p4c")))((("chaining", startref="ch4")))is created by passing the `Promise` constructor a resolver that decides how and when the promise is settled, by calling either a `resolve` method that will settle the promise in fulfillment or a `reject` method that'd settle the promise as a rejection. Until the promise is settled by calling either function, it'll be in a pending state and any reactions attached to it won't be executed. The following snippet of code creates a promise from scratch where we'll wait for a second before randomly settling the promise with a fulfillment or rejection result.
+A promise is created by passing the `Promise` constructor a resolver that decides how and when the promise is settled, by calling either a `resolve` method that will settle the promise in fulfillment or a `reject` method that'd settle the promise as a rejection. Until the promise is settled by calling either function, it'll be in a pending state and any reactions attached to it won't be executed. The following snippet of code creates a promise from scratch where we'll wait for a second before randomly settling the promise with a fulfillment or rejection result.
 
 [source,javascript]
 ----
@@ -185,7 +185,7 @@ Let's take a step back and pace ourselves, walking over more examples in each pa
 
 In the previous section we've established that you can chain any number of `.then` calls, each returning its own new promise, but how exactly does this work? What is a good mental model of promises, and what happens when an error is raised?
 
-When an error happens in a promise resolver, you can catch that error using `p.catch` as shown next.
+When an ((("promises", "error handling", id="p4eh")))error happens in a promise resolver, you can catch that error using `p.catch` as shown next.
 
 [source,javascript]
 ----
@@ -286,7 +286,7 @@ p.catch(err => console.error(err.message))
 // <- 'Cannot read property "prop" of undefined'
 ----
 
-We should observe, then, that promises can be chained arbitrarily. As we just saw, you can save a reference to any point in the promise chain and then append more promises on top of it. This is one of the fundamental points to understanding promises.
+We should ((("promises", "error handling", startref="p4eh")))observe, then, that promises can be chained arbitrarily. As we just saw, you can save a reference to any point in the promise chain and then append more promises on top of it. This is one of the fundamental points to understanding promises.
 
 Let's use the following snippet as a crutch to enumerate the sequence of events that arise from creating and chaining a few promises. Take a moment to inspect the following bit of code.
 
@@ -316,7 +316,7 @@ You should think of promises as a tree structure. This bears repetition: you sho
 .Given the tree structure, we realize that p3 is fulfilled, as it doesn't produce an exception nor is it rejected. For that reason, p4 can never follow the rejection branch, given its parent was fulfilled.
 image::images/pmjs_0404.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
 
-It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches, and so on.
+It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches, and ((("promises", "chaining", startref="p4c")))((("chaining", startref="ch4")))so on.
 
 [[creating_a_promise_from_scratch]]
 ==== Creating a Promise from Scratch
