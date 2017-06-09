@@ -341,7 +341,7 @@ Let's move ((("prototypal inheritance", startref="pi3)))onto `Symbol`. While not
 
 === Symbols
 
-Symbols ((("symbols", id="sym3")))are a new primitive type in ES6, and the seventh type in JavaScript. It is a unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol uses a symbol to define how objects are iterated, as we'll learn in <<iterator_protocol_and_iterable_protocol>>.
+Symbols ((("symbols", id="sym3")))are a new primitive type in ES6, and the seventh type in JavaScript. It is a unique value type, like strings and numbers. Unlike strings and numbers, symbols don't have a literal representation such as `'text'` for strings, or `1` for numbers. The purpose of symbols is primarily to implement protocols. For example, the iterable protocol ((("iterable protocol")))uses a symbol to define how objects are iterated, as we'll learn in <<iterator_protocol_and_iterable_protocol>>.
 
 There are three flavors of symbols, and each flavor is accessed in a different way. These are: local symbols, created with the `Symbol` built-in wrapper object and accessed by storing a reference or via reflection; global symbols, created using another API and shared across code realms; and "well-known" symbols, built into JavaScript and used to define internal language behavior.
 
@@ -349,7 +349,7 @@ We'll explore each of these, looking into possible use cases along the way. Let'
 
 ==== Local Symbols
 
-Symbols can be created using the `Symbol` wrapper object. In the following piece of code, we create our `first` symbol.
+Symbols ((("symbols", "local", id="sym3l")))((("local symbols", id="ls3")))can be created using the `Symbol` wrapper object. In the following piece of code, we create our `first` symbol.
 
 [source,javascript]
 ----
@@ -436,7 +436,7 @@ console.log(Object.getOwnPropertySymbols(character))
 // <- [Symbol(weapon)]
 ----
 
-Now that we've established how symbols work, what can we use them for?
+Now that we've established how symbols work, what can we use ((("symbols", "local", startref="sym3l")))((("local symbols", startref="ls3")))them for?
 
 ==== Practical Use Cases for Symbols
 
