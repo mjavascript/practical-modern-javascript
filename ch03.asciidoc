@@ -490,7 +490,7 @@ console.log(JSON.stringify(character))
 // <- '"{"name":"Thor","toJSON":true}"'
 ----
 
-The reason why it would be better to implement the `toJSON` modifier as a symbol is that that way it wouldn't interfere with other object keys. Given that symbols are unique, never serialized, and never exposed unless explicitly requested through `Object.getOwnPropertySymbols`, they would represent a better choice when defining a contract between `JSON.stringify` and how objects want to be serialized. Consider the following piece of code with an alternative implementation of `toJSON` using a symbol to define serialization behavior for a `stringify` function.
+The reason why it would be better to implement the `toJSON` modifier as a symbol is that that way it wouldn't interfere with other object keys. Given that symbols are unique, never serialized, and never exposed unless explicitly requested through `Object.getOwnPropertySymbols`, ((("Object.getOwnPropertySymbol")))they would represent a better choice when defining a contract between `JSON.stringify` and how objects want to be serialized. Consider the following piece of code with an alternative implementation of `toJSON` using a symbol to define serialization behavior for a `stringify` function.
 
 [source,javascript]
 ----
@@ -659,14 +659,14 @@ One of the most useful well-known symbols is `Symbol.iterator`, used by a few di
 
 === Object Built-in Improvements
 
-While we've already addressed syntax enhancements coming to object literals in <<es6-essentials>>, there are a few new static methods available to the `Object` built-in that we haven't addressed yet. It's time to take a look at what these methods bring to the table.
+While ((("objects", "built-in improvements", id="ob3bii")))we've already addressed syntax enhancements coming to object literals in <<es6-essentials>>, there are a few new static methods available to the `Object` built-in that we haven't addressed yet. It's time to take a look at what these methods bring to the table.
 
 We've already looked at `Object.getOwnPropertySymbols`, but let's also take a look at `Object.assign`, `Object.is`, and `Object.setPrototypeOf`.
 
 [[extending_objects_with_object_assign]]
 ==== Extending Objects with Object.assign
 
-The need to provide default values for a configuration object is not at all uncommon. Typically, libraries and well-designed component interfaces come with sensible defaults that cater to the most frequented use cases.
+The ((("objects", "extending", id="ob3e")))((("Object.assign", id="obass3")))need to provide default values for a configuration object is not at all uncommon. Typically, libraries and well-designed component interfaces come with sensible defaults that cater to the most frequented use cases.
 
 A Markdown library, for example, might convert Markdown into HTML by providing only an `input` parameter. That's its most common use case, simply parsing Markdown, and so the library doesn't demand that the consumer provides any options. The library might, however, support many different options that could be used to tweak its parsing behavior. It could have an option to allow `<script>` or `<iframe>` tags, or an option to highlight keywords in code snippets using CSS.
 
@@ -817,7 +817,7 @@ const { name, type, ...meta } = {
 // <- meta = { color: 'orange' }
 ----
 
-We dive deeper into object rest and spread in <<practical-considerations>>.
+We dive deeper into object rest and ((("objects", "extending", startref="ob3e")))((("Object.assign", startref="obass3")))spread in <<practical-considerations>>.
 
 ==== Comparing Objects with Object.is
 
@@ -877,7 +877,7 @@ Using `Object.setPrototypeOf` to change the prototype of an object is an expensi
 
 [quote, Mozilla Developer Network]
 ____
-Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `obj.__proto__ = …` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new object with the desired prototype using `Object.create()`.
+Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `obj.__proto__ = …` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new ((("objects", "built-in improvements", startref="ob3bii")))object with the desired prototype using `Object.create()`.
 ____
 
 ****
