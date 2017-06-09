@@ -914,7 +914,7 @@ class View {
 }
 ----
 
-Decorators are implemented by way of functions. Member decorator functions take a member descriptor and return a member descriptor. Member descriptors are similar to property descriptors, but with a different shape. The following bit of code has the member descriptor interface, as defined by the decorators proposal. An optional `finisher` function receives the class constructor, allowing us to perform operations related to the class whose property is being decorated.
+Decorators are implemented by way of functions. Member decorator functions take a member ((("Decorators", "descriptors in", id="dec3d")))((("descriptors", id="d3")))descriptor and return a member descriptor. Member descriptors are similar to property descriptors, but with a different shape. The following bit of code has the member descriptor interface, as defined by the decorators proposal. An optional `finisher` function receives the class constructor, allowing us to perform operations related to the class whose property is being decorated.
 
 [source]
 ----
@@ -956,7 +956,7 @@ function readonlyMembers(ctor, heritage, members) {
 
 ==== Stacking Decorators and a Warning about Immutability
 
-With all the fluff around immutability you may be tempted to return a new property descriptor from your decorators, without modifying the original descriptor. While well-intentioned, this may have an undesired effect, as it is possible to decorate the same `class` or class member several times.
+With all the fluff around immutability you may be tempted to return a new property descriptor from your ((("Decorators", "descriptors in", startref="dec3d")))((("descriptors", startref="d3")))decorators, without modifying the original descriptor. While well-intentioned, this may have an undesired effect, as it is possible to decorate the same `class` or class member several times.
 
 If any decorators in a piece of code returned an entirely new `descriptor` without taking into consideration the `descriptor` parameter they receive, they'd effectively lose all the decoration that took place before the different descriptor was returned.
 
