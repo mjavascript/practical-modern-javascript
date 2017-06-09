@@ -364,7 +364,7 @@ const oops = new Symbol()
 // <- TypeError, Symbol is not a constructor
 ----
 
-For debugging purposes, you can create symbols using a description.
+For ((("symbols", "for debugging")))debugging purposes, you can create symbols using a description.
 
 [source,javascript]
 ----
@@ -393,7 +393,7 @@ console.log(typeof Symbol('my symbol'))
 // <- 'symbol'
 ----
 
-Symbols can be used as property keys on objects. Note how you can use a computed property name to avoid an extra statement just to add a `weapon` symbol key to the `character` object, as shown in the following example. Note also that, in order to access a symbol property, you'll need a reference to the symbol that was used to create said property.
+Symbols can be used as ((("symbols", "as property keys")))property keys on objects. Note how you can use a computed property name to avoid an extra statement just to add a `weapon` symbol key to the `character` object, as shown in the following example. Note also that, in order to access a symbol property, you'll need a reference to the symbol that was used to create said property.
 
 [source,javascript]
 ----
