@@ -5,13 +5,13 @@ Now that we've covered the basic improvements to the syntax, we're in good shape
 
 === Classes
 
-JavaScript ((("classes", id="class3")))is a prototype-based language, and classes are mostly syntactic sugar on top of prototypal inheritance. The fundamental difference between prototypal inheritance and classes is that classes can `extend` other classes, making it possible for us to extend the `Array` built-in--something that was very convoluted before ES6.
+JavaScript ((("classes", id="class3")))is a prototype-based language, and classes are mostly syntactic sugar on top of prototypal inheritance. The fundamental difference between ((("prototypal inheritance")))((("classes", "versus prototypal inheritance", secondary-sortas="prototypal")))prototypal inheritance and classes is that classes can `extend` other classes, making it possible for us to extend the `Array` built-in--something that was very convoluted before ES6.
 
 The `class` keyword acts, then, as a device that makes JavaScript more inviting to programmers coming from other paradigms, who might not be all that familiar with prototype chains.
 
 ==== Class Fundamentals
 
-When learning about new language features, it's always a good idea to look at existing constructs first, and then see how the new feature improves those use cases. We'll start by looking at a simple prototype-based JavaScript constructor and then compare that with the newer classes syntax in ES6.
+When ((("classes", "fundamentals", id="class3f")))learning about new language features, it's always a good idea to look at existing constructs first, and then see how the new feature improves those use cases. We'll start by looking at a simple prototype-based JavaScript constructor and then compare that with the newer classes syntax in ES6.
 
 The following code snippet represents a fruit using a constructor function and adding a couple of methods to the prototype. The constructor function takes a `name` and the amount of `calories` for a fruit, and defaults to the fruit being in a single piece. There's a `.chop` method that will slice another piece of fruit, and then there's a `.bite` method. The `person` passed into `.bite` will eat a piece of fruit, getting satiety equal to the remaining calories divided by the amount of fruit pieces left.
 
@@ -118,7 +118,7 @@ const JakePerson = createPersonClass('Jake')
 const jake = new JakePerson()
 ----
 
-We'll dig deeper into class inheritance later. Let's take a more nuanced look at properties and methods first.
+We'll dig deeper into class inheritance later. Let's take a more nuanced look at properties and methods ((("classes", "fundamentals", startref="class3f")))first.
 
 ==== Properties and Methods in Classes
 
