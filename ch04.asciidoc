@@ -922,7 +922,7 @@ A song player might be another ((("object maps", startref="om4")))((("iteration 
 
 ==== Building Versatility Into Iterating a Playlist
 
-Imagine you were developing a song player where a playlist could be reproduced once and then stopped, or be put on repeat and reproduced indefinitely. Whenever you have a use case of looping through a list indefinitely, you could leverage the iterable protocol as well.
+Imagine ((("iteration protocol", "iterating a playlist", id="ip4iap")))you were developing a song player where a playlist could be reproduced once and then stopped, or be put on repeat and reproduced indefinitely. Whenever you have a use case of looping through a list indefinitely, you could leverage the iterable protocol as well.
 
 Suppose a human adds a few songs to her library, and they are stored in an array as shown in the next bit of code.
 
@@ -1056,7 +1056,7 @@ console.log([...playlist(shuffleSongs(['a', 'b']), 3)])
 
 Iterators are an important tool in ES6 that help us not only to decouple code, but also to come up with constructs that were previously harder to implement, such as the ability of dealing with a sequence of songs indistinctly--regardless of whether the sequence is finite or infinite. This indifference is, in part, what makes writing code leveraging the iterator protocol more elegant. It also makes it risky to cast an unknown iterable into an array (with, say, the `...` spread operator), as you're risking crashing your program due to an infinite loop.
 
-Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in <<infinite_sequences>>, while also allowing for a few more interesting use ((("iteration protocol", startref="ip4")))cases.
+Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in <<infinite_sequences>>, while also allowing for a few more interesting use ((("iteration protocol", "iterating a playlist", startref="ip4iap")))((("iteration protocol", startref="ip4")))cases.
 
 === Generator Functions and Generator Objects
 
