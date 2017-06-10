@@ -612,7 +612,7 @@ Promise
 [[iterator_protocol_and_iterable_protocol]]
 === Iterator Protocol and Iterable Protocol
 
-JavaScript ((("promises", startref="prom4")))((("promises", "and concurrent tasks", secondary-sortas="concurrent", startref="p4act")))((("Promise.race", startref="prace4")))gets two new protocols in ES6: iterators and iterables. ((("iteration protocols", id="ip4")))These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into laziness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
+JavaScript ((("promises", startref="prom4")))((("promises", "and concurrent tasks", secondary-sortas="concurrent", startref="p4act")))((("Promise.race", startref="prace4")))gets two new protocols in ES6: iterators and iterables. ((("iteration protocol", id="ip4")))These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into laziness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
 
 ==== Understanding Iteration Principles
 
@@ -712,7 +712,7 @@ for (const element of $('li')) {
 }
 ----
 
-Iterable sequences ((("iteration protocol", "for..of method", startref="ip4fom")))aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that ((("iteration principles", startref="ip4")))topic and its implications.
+Iterable sequences ((("iteration protocol", "for..of method", startref="ip4fom")))aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that topic and its implications.
 
 [[infinite_sequences]]
 ==== Infinite Sequences
@@ -1056,7 +1056,7 @@ console.log([...playlist(shuffleSongs(['a', 'b']), 3)])
 
 Iterators are an important tool in ES6 that help us not only to decouple code, but also to come up with constructs that were previously harder to implement, such as the ability of dealing with a sequence of songs indistinctly--regardless of whether the sequence is finite or infinite. This indifference is, in part, what makes writing code leveraging the iterator protocol more elegant. It also makes it risky to cast an unknown iterable into an array (with, say, the `...` spread operator), as you're risking crashing your program due to an infinite loop.
 
-Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in <<infinite_sequences>>, while also allowing for a few more interesting use ((("iteration protocol", startref="itpro4")))cases.
+Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in <<infinite_sequences>>, while also allowing for a few more interesting use ((("iteration protocol", startref="ip4")))cases.
 
 === Generator Functions and Generator Objects
 
