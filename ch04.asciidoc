@@ -1060,7 +1060,7 @@ Generators are an alternative way of creating functions that return an iterable 
 
 === Generator Functions and Generator Objects
 
-Generators are a new feature in ES6. The way they work is that you declare a generator function that returns generator objects `g`. Those `g` objects can then be iterated using any of `Array.from(g)`, `[...g]`, or `for..of` loops. Generator functions allow you to declare a special kind of `iterator`. These iterators can suspend execution while retaining their context.
+Generators ((("generators", id="gen4")))are a new feature in ES6. The way they work is that you declare a generator function that returns generator objects `g`. Those `g` objects can then be iterated using any of `Array.from(g)`, `[...g]`, or `for..of` loops. Generator functions allow you to declare a special kind of `iterator`. These iterators can suspend execution while retaining their context.
 
 ==== Generator Fundamentals
 
@@ -1822,7 +1822,7 @@ function saveProducts(productList) {
 
 As you may have noticed, the implementation doesn't hardcode any important aspects of the operation, which means you could use the inputs and output pattern in a generic way as long as you have zero or more inputs you want to pipe into one output. The consumer ends up with an elegant-looking method that's easy to understand--they `yield` input stores and `return` an output store. Furthermore, our use of promises makes it easy to concatenate this operation with others. This way, we're keeping a potential tangle of conditional statements and flow control mechanisms in check, by abstracting away flow control into the iteration mechanism under the `saveProducts` method.
 
-We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into `async`/`await`, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this chapter.
+We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into `async`/`await`, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this ((("generators", startref="gen4")))chapter.
 
 === Async Functions
 
