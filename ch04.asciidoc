@@ -1064,7 +1064,7 @@ Generators ((("generators", id="gen4")))are a new feature in ES6. The way they w
 
 ==== Generator Fundamentals
 
-We already examined iterators in the previous section, learning how their `.next()` method is called one at a time to pull values from a sequence. Instead of a `next` method whenever you return a value, generators use the `yield` keyword to add values into the sequence.
+We ((("generators", "fundamentals", id="gen4f")))already examined iterators in the previous section, learning how their `.next()` method is called one at a time to pull values from a sequence. Instead of a `next` method whenever you return a value, generators use the `yield` keyword to add values into the sequence.
 
 Here is an example generator function. Note the `*` after `function`. That's not a typo, that's how you mark a generator function as a generator.
 
@@ -1205,7 +1205,7 @@ Here's the sequence produced by the `trailmix` generator function.
 ----
 ****
 
-Besides iterating over a generator object using spread, `for..of`, and `Array.from`, we could use the generator object directly, and iterate over that. Let's investigate how that'd work.
+Besides iterating over a generator object using spread, `for..of`, and `Array.from`, we could use the generator object directly, and iterate over that. Let's investigate how ((("generators", "fundamentals", startref="gen4f")))that'd work.
 
 ==== Iterating over Generators by Hand
 
