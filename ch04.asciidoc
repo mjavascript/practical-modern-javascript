@@ -1077,7 +1077,7 @@ function* abc() {
 }
 ----
 
-Generator objects conform to both the iterable protocol and the iterator protocol:
+Generator ((("iterator protocol", "in generators", see="generators", secondary-sortas="generators")))objects conform to both the iterable protocol and the iterator protocol:
 
 - A generator object `chars` is built using the `abc` function
 - Object `chars` is an iterable because it has a `Symbol.iterator` method
@@ -1100,7 +1100,7 @@ console.log([...chars])
 
 When you create a generator object, you'll get an iterator that uses the generator function to produce an iterable sequence. Whenever a `yield` expression is reached, its value is emitted by the iterator and generator function execution becomes suspended.
 
-The following example shows how iteration can trigger side-effects within the generator function. The `console.log` statements after each `yield` statement will be executed when generator function execution becomes unsuspended and asked for the next element in the sequence.
+The following example shows how iteration can trigger side-effects within the generator function. The `console.log` ((("console.log")))statements after each `yield` statement will be executed when generator function execution becomes unsuspended and asked for the next element in the sequence.
 
 [source,javascript]
 ----
@@ -1125,7 +1125,7 @@ console.log([...numbers()])
 // <- [1, 2, 3]
 ----
 
-If we now used a `for..of` loop instead, we'd be able to preserve the order declared in the `numbers` generator function. In the next example, elements in the `numbers` sequence are printed one at a time in a `for..of` loop. The first time the generator function is asked for a `number`, it yields `1` and execution becomes suspended. The second time, execution is unsuspended where the generator left off, `'a'` is printed to the console as a side-effect, and `2` is yielded. The third time, `'b'` is the side-effect, and `3` is yielded. The fourth time, `'c'` is a side-effect and the generator signals that the sequence has ended.
+If we now used a `for..of` loop ((("for..of")))instead, we'd be able to preserve the order declared in the `numbers` generator function. In the next example, elements in the `numbers` sequence are printed one at a time in a `for..of` loop. The first time the generator function is asked for a `number`, it yields `1` and execution becomes suspended. The second time, execution is unsuspended where the generator left off, `'a'` is printed to the console as a side-effect, and `2` is yielded. The third time, `'b'` is the side-effect, and `3` is yielded. The fourth time, `'c'` is a side-effect and the generator signals that the sequence has ended.
 
 [source,javascript]
 ----
