@@ -918,7 +918,7 @@ for (const [ , color] of colors) {
 }
 ----
 
-A song player might be another ((("object maps", startref="om4")))interesting use case.
+A song player might be another ((("object maps", startref="om4")))((("iteration protocol", "object maps as key/value pairs", startref="ip4omakvp")))interesting use case.
 
 ==== Building Versatility Into Iterating a Playlist
 
