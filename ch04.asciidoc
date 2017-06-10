@@ -717,7 +717,7 @@ Iterable sequences ((("iteration protocol", "for..of method", startref="ip4fom")
 [[infinite_sequences]]
 ==== Infinite Sequences
 
-Iterators are lazy in nature. ((("iteration protocol", "infinite sequences", id="ip4is")))((("infinite sequences", id="is4")))Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the laziness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` ((("iteration protocol", "Array.from method")))to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
+Iterators are lazy in nature. ((("iteration protocol", "infinite sequences", id="ip4is")))((("infinite sequences", id="is4")))Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the laziness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` ((("Array.from")))to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
 
 The following example shows an iterator that represents an infinite sequence of random floating numbers between 0 and 1. Note how items returned by `next` don't ever have a `done` property set to `true`, which would signal that the sequence has ended. It uses a pair of arrow functions that implicitly return objects. The first one returns the iterator object used to loop over the infinite sequence of random numbers. The second arrow function is used to pull each individual value in the sequence, using `Math.random`.
 
@@ -743,7 +743,7 @@ console.log(another)
 // <- 0.28749457537196577
 ----
 
-Destructuring infinite sequences doesn't scale very well, particularly if we want to apply dynamic conditions, such as pulling the first `i` values out of the sequence or pulling values until we find one that doesn't match a condition. In those cases we're better off using `for..of`, ((("iteration protocol", "for..of method")))where we're better able to define conditions that prevent infinite loops while taking as many elements as we need, in a programmatic fashion. The next example  loops over our infinite sequence using `for..of`, but it breaks the loop as soon as a value is higher than `0.8`. Given that `Math.random` produces values anywhere between `0` and `1`, the loop will eventually break.
+Destructuring infinite sequences doesn't scale very well, particularly if we want to apply dynamic conditions, such as pulling the first `i` values out of the sequence or pulling values until we find one that doesn't match a condition. In those cases we're better off using `for..of`, ((("for..of", id="fo4")))where we're better able to define conditions that prevent infinite loops while taking as many elements as we need, in a programmatic fashion. The next example  loops over our infinite sequence using `for..of`, but it breaks the loop as soon as a value is higher than `0.8`. Given that `Math.random` produces values anywhere between `0` and `1`, the loop will eventually break.
 
 [source,javascript]
 ----
@@ -757,7 +757,7 @@ for (const value of random) {
 
 It can be hard to understand code like that when reading it later, as a lot of the code is focused on how the sequence is iterated, printing values from `random` until one of those values is large enough. Abstracting away part of the logic into another method might make the code more readable.
 
-As another example, a common pattern when extracting values from an infinite or very large sequence is to "take" the first few elements in the sequence. While you could accommodate that use case ((("for..of", id="fo4")))through `for..of` and `break`, you'd be better off abstracting it into a `take` method. The following example shows a potential implementation of `take`. It receives a `sequence` parameter and the `amount` of entries you'd like to take from the `sequence`. It returns an iterable object, and whenever that object is iterated it constructs an iterator for the provided `sequence`. The `next` method defers to the original `sequence` while the `amount` is at least `1`, and then ends the sequence.
+As another example, a common pattern when extracting values from an infinite or very large sequence is to "take" the first few elements in the sequence. While you could accommodate that use case through `for..of` and `break`, you'd be better off abstracting it into a `take` method. The following example shows a potential implementation of `take`. It receives a `sequence` parameter and the `amount` of entries you'd like to take from the `sequence`. It returns an iterable object, and whenever that object is iterated it constructs an iterator for the provided `sequence`. The `next` method defers to the original `sequence` while the `amount` is at least `1`, and then ends the sequence.
 
 [source,javascript]
 ----
