@@ -847,7 +847,7 @@ const colors = {
 }
 ----
 
-The following code snippet implements an iterable that produces a `[key, value]` sequence for each color in the `colors` map. Given that that's assigned to the `Symbol.iterator` property, we'd be able to go over the list with minimal effort.
+The following code snippet implements an iterable that produces a `[key, value]` sequence for each color in the `colors` map. Given that that's assigned to the `Symbol.iterator` ((("Symbol.iterator")))property, we'd be able to go over the list with minimal effort.
 
 [source,javascript]
 ----
