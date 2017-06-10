@@ -612,13 +612,13 @@ Promise
 [[iterator_protocol_and_iterable_protocol]]
 === Iterator Protocol and Iterable Protocol
 
-JavaScript ((("promises", startref="prom4")))((("promises", "and concurrent tasks", secondary-sortas="concurrent", startref="p4act")))((("Promise.race", startref="prace4")))gets two new protocols in ES6: iterators and iterables. These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into laziness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
+JavaScript ((("promises", startref="prom4")))((("promises", "and concurrent tasks", secondary-sortas="concurrent", startref="p4act")))((("Promise.race", startref="prace4")))gets two new protocols in ES6: iterators and iterables. ((("iteration protocols", id="ip4")))These two protocols are used to define iteration behavior for any object. We'll start by learning about how to turn an object into an iterable sequence. Later, we'll look into laziness and how iterators can define infinite sequences. Lastly, we'll go over practical considerations while defining iterables.
 
 ==== Understanding Iteration Principles
 
-Any ((("iteration principles", id="ip4")))object can adhere to the iterable protocol by assigning a function to the `Symbol.iterator` property for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to `Symbol.iterator`, is called once.
+Any object can adhere to the iterable protocol by assigning a function to the `Symbol.iterator` property ((("Symbol.iterator", seealso="iteration protocols", id="si4")))for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to `Symbol.iterator`, is called once.
 
-The spread operator was first introduced in <<es6-essentials>>, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
+The ((("spread operator")))spread operator was first introduced in <<es6-essentials>>, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
 
 [source,javascript]
 ----
@@ -700,7 +700,7 @@ console.log(Array.from({ 0: 'a', 1: 'b', 2: 'c', length: 3 }))
 
 As a recap, the `sequence` object adheres to the iterable protocol by assigning a method to `[Symbol.iterator]`. That means that the object is iterable: it can be iterated. Said method returns an object that adheres to the `iterator` protocol. The iterator method is called once whenever we need to start iterating over the object, and the returned iterator is used to pull values out of `sequence`. To iterate over iterables, we can use `for..of`, the spread operator, or `Array.from`.
 
-In essence, the selling point about these protocols is that they provide expressive ways to effortlessly iterate over collections and array-likes. Having the ability to define how any object may be iterated is huge, because it enables libraries to converge under a protocol the language natively understands: iterables. The upside is that implementing the iterator protocol doesn't have a high-effort cost because, due to its additive nature, it won't break existing behavior.
+In essence, ((("Symbol.iterator", seealso="iteration protocols", startref="si4")))the selling point about these protocols is that they provide expressive ways to effortlessly iterate over collections and array-likes. Having the ability to define how any object may be iterated is huge, because it enables libraries to converge under a protocol the language natively understands: iterables. The upside is that implementing the iterator protocol doesn't have a high-effort cost because, due to its additive nature, it won't break existing behavior.
 
 For example, jQuery and `document.querySelectorAll` both return array-likes. If jQuery implemented the iterator protocol on their collection's prototype, then you could iterate over collection elements using the native `for..of` construct.
 
@@ -1056,7 +1056,7 @@ console.log([...playlist(shuffleSongs(['a', 'b']), 3)])
 
 Iterators are an important tool in ES6 that help us not only to decouple code, but also to come up with constructs that were previously harder to implement, such as the ability of dealing with a sequence of songs indistinctly--regardless of whether the sequence is finite or infinite. This indifference is, in part, what makes writing code leveraging the iterator protocol more elegant. It also makes it risky to cast an unknown iterable into an array (with, say, the `...` spread operator), as you're risking crashing your program due to an infinite loop.
 
-Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in <<infinite_sequences>>, while also allowing for a few more interesting use cases.
+Generators are an alternative way of creating functions that return an iterable object, without explicitly declaring an object literal with a `Symbol.iterator` method. They make it easier to implement functions, such as the `range` or `take` functions in <<infinite_sequences>>, while also allowing for a few more interesting use ((("iteration protocol", startref="itpro4")))cases.
 
 === Generator Functions and Generator Objects
 
