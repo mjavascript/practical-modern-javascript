@@ -669,7 +669,7 @@ const sequence = {
 
 JavaScript is a progressive language: new features are additive, and they practically never break existing code. For that reason, iterables can't be taken advantage of in existing constructs such as `forEach` and `for..in`. In ES6, there are a few ways to go over iterables: `for..of`, the `...` spread operator, ((("iteration protocol", "Array.from method", id="ip4afm")))and `Array.from`.
 
-The `for..of` iteration method ((("iteration principles", "for..of method", id="ip4fom")))can be used to loop over any iterable. The following example demonstrates how we could use `for..of` to loop over the `sequence` object we put together in the previous example, because it is an iterable object.
+The `for..of` iteration method ((("iteration protocol", "for..of method", id="ip4fom")))can be used to loop over any iterable. The following example demonstrates how we could use `for..of` to loop over the `sequence` object we put together in the previous example, because it is an iterable object.
 
 [source,javascript]
 ----
@@ -712,7 +712,7 @@ for (const element of $('li')) {
 }
 ----
 
-Iterable sequences ((("iteration principles", "for..of method", startref="ip4fom")))aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that ((("iteration principles", startref="ip4")))topic and its implications.
+Iterable sequences ((("iteration protocol", "for..of method", startref="ip4fom")))aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that ((("iteration principles", startref="ip4")))topic and its implications.
 
 [[infinite_sequences]]
 ==== Infinite Sequences
