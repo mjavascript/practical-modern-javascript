@@ -616,7 +616,7 @@ JavaScript ((("promises", startref="prom4")))((("promises", "and concurrent task
 
 ==== Understanding Iteration Principles
 
-Any object can adhere to the iterable protocol by assigning a function to the `Symbol.iterator` property for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to `Symbol.iterator`, is called once.
+Any ((("iteration principles", id="ip4")))object can adhere to the iterable protocol by assigning a function to the `Symbol.iterator` property for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to `Symbol.iterator`, is called once.
 
 The spread operator was first introduced in <<es6-essentials>>, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
 
@@ -712,7 +712,7 @@ for (const element of $('li')) {
 }
 ----
 
-Iterable sequences aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that topic and its implications.
+Iterable sequences aren't necessarily finite. They may have an uncountable amount of elements. Let's delve into that ((("iteration principles", startref="ip4")))topic and its implications.
 
 [[infinite_sequences]]
 ==== Infinite Sequences
