@@ -743,7 +743,7 @@ console.log(another)
 // <- 0.28749457537196577
 ----
 
-Destructuring infinite sequences doesn't scale very well, particularly if we want to apply dynamic conditions, such as pulling the first `i` values out of the sequence or pulling values until we find one that doesn't match a condition. In those cases we're better off using `for..of`, where we're better able to define conditions that prevent infinite loops while taking as many elements as we need, in a programmatic fashion. The next example  loops over our infinite sequence using `for..of`, but it breaks the loop as soon as a value is higher than `0.8`. Given that `Math.random` produces values anywhere between `0` and `1`, the loop will eventually break.
+Destructuring infinite sequences doesn't scale very well, particularly if we want to apply dynamic conditions, such as pulling the first `i` values out of the sequence or pulling values until we find one that doesn't match a condition. In those cases we're better off using `for..of`, ((("iteration protocol", "for..of method")))where we're better able to define conditions that prevent infinite loops while taking as many elements as we need, in a programmatic fashion. The next example  loops over our infinite sequence using `for..of`, but it breaks the loop as soon as a value is higher than `0.8`. Given that `Math.random` produces values anywhere between `0` and `1`, the loop will eventually break.
 
 [source,javascript]
 ----
@@ -757,7 +757,7 @@ for (const value of random) {
 
 It can be hard to understand code like that when reading it later, as a lot of the code is focused on how the sequence is iterated, printing values from `random` until one of those values is large enough. Abstracting away part of the logic into another method might make the code more readable.
 
-As another example, a common pattern when extracting values from an infinite or very large sequence is to "take" the first few elements in the sequence. While you could accommodate that use case through `for..of` and `break`, you'd be better off abstracting it into a `take` method. The following example shows a potential implementation of `take`. It receives a `sequence` parameter and the `amount` of entries you'd like to take from the `sequence`. It returns an iterable object, and whenever that object is iterated it constructs an iterator for the provided `sequence`. The `next` method defers to the original `sequence` while the `amount` is at least `1`, and then ends the sequence.
+As another example, a common pattern when extracting values from an infinite or very large sequence is to "take" the first few elements in the sequence. While you could accommodate that use case ((("for..of", id="fo4")))through `for..of` and `break`, you'd be better off abstracting it into a `take` method. The following example shows a potential implementation of `take`. It receives a `sequence` parameter and the `amount` of entries you'd like to take from the `sequence`. It returns an iterable object, and whenever that object is iterated it constructs an iterator for the provided `sequence`. The `next` method defers to the original `sequence` while the `amount` is at least `1`, and then ends the sequence.
 
 [source,javascript]
 ----
@@ -826,7 +826,7 @@ Iterators don't have any knowledge that the sequences they produce are infinite.
 .The halting problem depicted in an https://mjavascript.com/out/xkcd-1266[XKCD comic]
 image::images/pmjs0405.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
 
-You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While `for..of` won't run into the problem unless there's no escape condition, using mechanisms such as spread or `Array.from` would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
+You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While `for..of` won't ((("for..of", startref="fo4")))run into the problem unless there's no escape condition, using mechanisms such as spread or `Array.from` would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
 ****
 
 
