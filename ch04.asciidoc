@@ -717,7 +717,7 @@ Iterable sequences ((("iteration protocol", "for..of method", startref="ip4fom")
 [[infinite_sequences]]
 ==== Infinite Sequences
 
-Iterators are lazy in nature. ((("iteration protocol", "infinite sequences", id="ip4is")))((("infinite sequences", id="is4")))Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the laziness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
+Iterators are lazy in nature. ((("iteration protocol", "infinite sequences", id="ip4is")))((("infinite sequences", id="is4")))Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the laziness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` ((("iteration protocol", "Array.from method")))to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
 
 The following example shows an iterator that represents an infinite sequence of random floating numbers between 0 and 1. Note how items returned by `next` don't ever have a `done` property set to `true`, which would signal that the sequence has ended. It uses a pair of arrow functions that implicitly return objects. The first one returns the iterator object used to loop over the infinite sequence of random numbers. The second arrow function is used to pull each individual value in the sequence, using `Math.random`.
 
@@ -732,7 +732,7 @@ const random = {
 
 Attempting to cast the iterable `random` object into an array using either `Array.from(random)` or `[...random]` would crash our program, since the sequence never ends. We must be very careful with these types of sequences as they can easily crash and burn our browser and Node.js server processes.
 
-There are a few different ways you can access a sequence safely, without risking an infinite loop. The first option is to use destructuring to pull values in specific positions of the sequence, as shown in the following piece of code.
+There are a few different ways you can access a sequence safely, without risking an infinite loop. The first option is to use ((("destructuring")))((("infinite sequences", "destructuring")))destructuring to pull values in specific positions of the sequence, as shown in the following piece of code.
 
 [source,javascript]
 ----
