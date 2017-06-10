@@ -1142,7 +1142,7 @@ for (const number of numbers()) {
 
 .Using yield* to Delegate Sequence Generation
 ****
-Generator functions can use `yield*` to delegate to a generator object or any other iterable object.
+Generator functions can use `yield*` to ((("yield*", id="y4")))delegate to a generator object or any other iterable object.
 
 Given that strings in ES6 adhere to the iterable protocol, you could write a piece of code like the following to split `hello` into individual characters.
 
@@ -1197,7 +1197,7 @@ function* trailmix() {
 console.log([...trailmix()])
 ----
 
-Here's the sequence produced by the `trailmix` generator function.
+Here's the sequence produced by the `trailmix` generator ((("yield*", startref="y4")))function.
 
 [source,javascript]
 ----
