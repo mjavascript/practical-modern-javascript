@@ -698,7 +698,7 @@ console.log(Array.from({ 0: 'a', 1: 'b', 2: 'c', length: 3 }))
 // <- ['a', 'b', 'c']
 ----
 
-As a recap, ((("iteration protocol", "sequence object", startref="ip4so")))the `sequence` object adheres to the iterable protocol by assigning a method to `[Symbol.iterator]`. That means that the object is iterable: it can be iterated. Said method returns an object that adheres to the `iterator` protocol. The iterator method is called once whenever we need to start iterating over the object, and the returned iterator is used to pull values out of `sequence`. To iterate over iterables, we can use `for..of`, the ((("spread operator")))((("iteration protocol", "spread operator")))spread operator, ((("iteration protocol", "Array.from method", startref="ip4afm")))or `Array.from`.
+As a recap, ((("iteration protocol", "sequence object", startref="ip4so")))((("iteration protocol", "iterator/iterable distinction")))the `sequence` object adheres to the iterable protocol by assigning a method to `[Symbol.iterator]`. That means that the object is iterable: it can be iterated. Said method returns an object that adheres to the `iterator` protocol. The iterator method is called once whenever we need to start iterating over the object, and the returned iterator is used to pull values out of `sequence`. To iterate over iterables, we can use `for..of`, the ((("spread operator")))((("iteration protocol", "spread operator")))spread operator, ((("iteration protocol", "Array.from method", startref="ip4afm")))or `Array.from`.
 
 In essence, ((("Symbol.iterator", seealso="iteration protocols", startref="si4")))the selling point about these protocols is that they provide expressive ways to effortlessly iterate over collections and array-likes. Having the ability to define how any object may be iterated is huge, because it enables libraries to converge under a protocol the language natively understands: iterables. The upside is that implementing the iterator protocol doesn't have a high-effort cost because, due to its additive nature, it won't break existing behavior.
 
@@ -717,7 +717,7 @@ Iterable sequences ((("iteration protocol", "for..of method", startref="ip4fom")
 [[infinite_sequences]]
 ==== Infinite Sequences
 
-Iterators are lazy in nature. Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the laziness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
+Iterators are lazy in nature. ((("iteration protocol", "infinite sequences", id="ip4is")))Elements in an iterator sequence are generated one at a time, even when the sequence is finite. Note that infinite sequences couldn't be represented without the laziness property. An infinite sequence can't be represented as an array, meaning that using the spread operator or `Array.from` to cast a sequence into an array would crash JavaScript execution, as we'd go into an infinite loop.
 
 The following example shows an iterator that represents an infinite sequence of random floating numbers between 0 and 1. Note how items returned by `next` don't ever have a `done` property set to `true`, which would signal that the sequence has ended. It uses a pair of arrow functions that implicitly return objects. The first one returns the iterator object used to loop over the infinite sequence of random numbers. The second arrow function is used to pull each individual value in the sequence, using `Math.random`.
 
@@ -830,7 +830,7 @@ You typically have a good idea of whether a sequence is infinite or not. Wheneve
 ****
 
 
-Besides the technical implications of creating iterable objects, let's go over a couple of practical examples on how we can benefit from iterators.
+Besides the technical implications of creating iterable objects, let's go over a couple of practical examples on how we can ((("iteration protocol", "infinite sequences", startref="ip4is")))benefit from iterators.
 
 ==== Iterating Object Maps as Key/Value Pairs
 
