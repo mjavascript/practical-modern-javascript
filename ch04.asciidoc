@@ -618,7 +618,7 @@ JavaScript ((("promises", startref="prom4")))((("promises", "and concurrent task
 
 Any object can adhere to the iterable protocol by assigning a function to the `Symbol.iterator` property ((("Symbol.iterator", seealso="iteration protocols", id="si4")))for that object. Whenever an object needs to be iterated its iterable protocol method, assigned to `Symbol.iterator`, is called once.
 
-The ((("spread operator")))spread operator was first introduced in <<es6-essentials>>, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
+The ((("spread operator")))((("iteration protocol", "spread operator")))spread operator was first introduced in <<es6-essentials>>, and it's one of a few language features in ES6 that leverage iteration protocols. When using the spread operator on a hypothetical `iterable` object, as shown in the following code snippet, `Symbol.iterator` would be asked for an object that adheres to the iterator protocol. The returned iterator will be used to obtain values out of the object.
 
 [source,javascript]
 ----
@@ -698,7 +698,7 @@ console.log(Array.from({ 0: 'a', 1: 'b', 2: 'c', length: 3 }))
 // <- ['a', 'b', 'c']
 ----
 
-As a recap, the `sequence` object adheres to the iterable protocol by assigning a method to `[Symbol.iterator]`. That means that the object is iterable: it can be iterated. Said method returns an object that adheres to the `iterator` protocol. The iterator method is called once whenever we need to start iterating over the object, and the returned iterator is used to pull values out of `sequence`. To iterate over iterables, we can use `for..of`, the spread operator, ((("iteration protocol", "Array.from method", startref="ip4afm")))or `Array.from`.
+As a recap, the `sequence` object adheres to the iterable protocol by assigning a method to `[Symbol.iterator]`. That means that the object is iterable: it can be iterated. Said method returns an object that adheres to the `iterator` protocol. The iterator method is called once whenever we need to start iterating over the object, and the returned iterator is used to pull values out of `sequence`. To iterate over iterables, we can use `for..of`, the ((("spread operator")))((("iteration protocol", "spread operator")))spread operator, ((("iteration protocol", "Array.from method", startref="ip4afm")))or `Array.from`.
 
 In essence, ((("Symbol.iterator", seealso="iteration protocols", startref="si4")))the selling point about these protocols is that they provide expressive ways to effortlessly iterate over collections and array-likes. Having the ability to define how any object may be iterated is huge, because it enables libraries to converge under a protocol the language natively understands: iterables. The upside is that implementing the iterator protocol doesn't have a high-effort cost because, due to its additive nature, it won't break existing behavior.
 
