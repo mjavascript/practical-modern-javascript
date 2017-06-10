@@ -757,7 +757,7 @@ for (const value of random) {
 
 It can be hard to understand code like that when reading it later, as a lot of the code is focused on how the sequence is iterated, printing values from `random` until one of those values is large enough. Abstracting away part of the logic into another method might make the code more readable.
 
-As another example, a common pattern when extracting values from an infinite or very large sequence is to "take" the first few elements in the sequence. While you could accommodate that use case through `for..of` and `break`, you'd be better off abstracting it into a `take` method. The following example shows a potential implementation of `take`. It receives a `sequence` parameter and the `amount` of entries you'd like to take from the `sequence`. It returns an iterable object, and whenever that object is iterated it constructs an iterator for the provided `sequence`. The `next` method defers to the original `sequence` while the `amount` is at least `1`, and then ends the sequence.
+As another example, a common pattern when extracting values from an infinite or very large sequence is to "take" the first few elements in the sequence. While you could accommodate that use case through `for..of` and `break`, you'd be better off abstracting it into a `take` ((("take")))method. The following example shows a potential implementation of `take`. It receives a `sequence` parameter and the `amount` of entries you'd like to take from the `sequence`. It returns an iterable object, and whenever that object is iterated it constructs an iterator for the provided `sequence`. The `next` ((("next")))method defers to the original `sequence` while the `amount` is at least `1`, and then ends the sequence.
 
 [source,javascript]
 ----
@@ -820,7 +820,7 @@ This sort of abstraction of complexity into another function often helps keep co
 
 .Identifying Infinite Sequences
 ****
-Iterators don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem (<<fig0405>>), there is no way of knowing whether the sequence is infinite or not in code.
+Iterators ((("infinite sequences", "identifying")))don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem (<<fig0405>>), there is no way of knowing whether the sequence is infinite or not in code.
 
 [[fig0405]]
 .The halting problem depicted in an https://mjavascript.com/out/xkcd-1266[XKCD comic]
@@ -834,7 +834,7 @@ Besides the technical implications of creating iterable objects, let's go over a
 
 ==== Iterating Object Maps as Key/Value Pairs
 
-There's an abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudoarrays that are meant to be iterated, the random number generator we came up with in <<infinite_sequences>>, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
+There's an ((("iteration protocol", "object maps as key/value pairs", id="ip4omakvp")))((("object maps", id="om4")))abundance of practical situations that benefit from turning an object into an iterable. Object maps, pseudoarrays that are meant to be iterated, the random number generator we came up with in <<infinite_sequences>>, and classes or plain objects with properties that are often iterated could all turn a profit from following the iterable protocol.
 
 Oftentimes, JavaScript objects are used to represent a map between string keys and arbitrary values. In the next snippet, as an example, we have a map of color names and hexadecimal RGB representations of that color. There are cases when you'd welcome the ability to effortlessly loop over the different color names, hexadecimal representations, or key/value pairs.
 
@@ -918,7 +918,7 @@ for (const [ , color] of colors) {
 }
 ----
 
-A song player might be another interesting use case.
+A song player might be another ((("object maps", startref="om4")))interesting use case.
 
 ==== Building Versatility Into Iterating a Playlist
 
