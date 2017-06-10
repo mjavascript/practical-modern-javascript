@@ -1209,7 +1209,7 @@ Besides iterating over a generator object using spread, `for..of`, and `Array.fr
 
 ==== Iterating over Generators by Hand
 
-Generator iteration isn't limited to `for..of`, `Array.from`, or the spread operator. Just like with any iterable object, you can use its `Symbol.iterator` to pull values on demand using `.next`, rather than in a strictly synchronous `for..of` loop or all at once with `Array.from` or spread. Given that a generator object is both iterable and iterator, you won't need to call `g[Symbol.iterator]()` to get an iterator: you can use `g` directly because it's the same object as the one returned by the `Symbol.iterator` method.
+Generator iteration ((("generators", "iterating over by hand", id="gen4iobh")))isn't limited to `for..of`, `Array.from`, or the spread operator. Just like with any iterable object, you can use its `Symbol.iterator` to pull values on demand using `.next`, rather than in a strictly synchronous `for..of` loop or all at once with `Array.from` or spread. Given that a generator object is both iterable and iterator, you won't need to call `g[Symbol.iterator]()` to get an iterator: you can use `g` directly because it's the same object as the one returned by the `Symbol.iterator` method.
 
 Assuming the `numbers` iterator we created earlier, the following example shows how you could iterate it by hand using the generator object and a `while` loop. Remember that any items returned by an iterator need a `done` property that indicates whether the sequence has ended, and a `value` property indicating the current value in the sequence.
 
@@ -1252,7 +1252,7 @@ console.log(g.next())
 
 ==== Mixing Generators into Iterables
 
-Let's do a quick recap of generators. Generator functions return generator objects when invoked. A generator object has a `next` method, which returns the next element in the sequence. The `next` method returns objects with a `{ value, done }` shape.
+Let's ((("generators", "iterating over by hand", startref="gen4iobh")))do a quick recap of generators. Generator functions return generator objects when invoked. A generator object has a `next` method, which returns the next element in the sequence. The `next` method returns objects with a `{ value, done }` shape.
 
 The following example shows an infinite Fibonacci number generator. We then instantiate a generator object and read the first eight values in the sequence.
 
