@@ -2384,9 +2384,9 @@ The contract for an iterator mandates that the `next` ((("next")))method of `Sym
 
 ==== Async Iterators
 
-In async iterators, the contract has a subtle difference: `next` is supposed to return a `Promise` that resolves to an object containing `value` and `done` properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new `Symbol.asyncIterator` is ((("Symbol.asyncIterator")))introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing `Symbol.iterator`.
+In ((("asynchronous iteration", "async iterators", id="ai4ai")))async iterators, the contract has a subtle difference: `next` is supposed to return a `Promise` that resolves to an object containing `value` and `done` properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new `Symbol.asyncIterator` is ((("Symbol.asyncIterator")))introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing `Symbol.iterator`.
 
-The `sequence` iterable could be made compatible with the async iterator interface with two small changes: we replace `Symbol.iterator` with `Symbol.asyncIterator`, and we wrap the return value for the `next` method in `Promise.resolve`, thus returning a `Promise`.
+The `sequence` ((("sequence")))iterable could be made compatible with the async iterator interface with two small changes: we replace `Symbol.iterator` with `Symbol.asyncIterator`, and we wrap the return value for the `next` method in `Promise.resolve`, thus returning a `Promise`.
 
 [source,javascript]
 ----
@@ -2403,7 +2403,7 @@ const sequence = {
 }
 ----
 
-A case could be made for an infinite sequence that increases its value at a certain time interval. The following example has an `interval` function that returns an infinite async sequence. Each step resolves to the next value in the sequence after `duration`.
+A case could be made for an infinite sequence that increases its value at a certain time interval. The following example has an `interval` ((("interval")))function that returns an infinite async sequence. Each step resolves to the next value in the sequence after `duration`.
 
 [source,javascript]
 ----
@@ -2422,7 +2422,7 @@ const interval = duration => ({
 })
 ----
 
-In order to consume an async iterator, we can leverage the new `for await..of` construct introduced alongside async iterators. This is yet another way of writing code that behaves asynchronously yet looks synchronous. Note that `for await..of` statements are only allowed inside async functions.
+In order to consume an async iterator, we can leverage the new `for await..of` construct introduced alongside async iterators. This is yet another way of writing code that behaves asynchronously yet looks synchronous. Note that `for await..of` statements ((("for await..of")))are only allowed inside async functions.
 
 [source,javascript]
 ----
@@ -2434,7 +2434,7 @@ async function print() {
 print()
 ----
 
-Note that async iterators--as well as async generators--are in stage 3 of the ECMAScript process as of the time of this writing.
+Note that async iterators--as well as async generators--are in stage 3 of the ECMAScript process as of the time of this ((("asynchronous iteration", "async iterators", startref="ai4ai")))writing.
 
 ==== Async Generators
 
