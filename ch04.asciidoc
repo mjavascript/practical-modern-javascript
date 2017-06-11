@@ -1832,7 +1832,7 @@ Let's go over a quick recap comparing promises, callbacks, and generators. After
 
 ==== Flavors of Async Code
 
-Let's suppose ((("asynchronous functions", "async code types", id="af4act")))we had code like the following. Here I'm wrapping a `fetch` request in a `getRandomArticle` function. The promise fulfills with the JSON `body` when successful, and follows standard `fetch` rejection mechanics otherwise.
+Let's suppose ((("asynchronous functions", "async code types", id="af4act")))we had code like the following. Here I'm wrapping a `fetch` request in a `getRandomArticle` ((("getRandomArticle", id="gra4")))function. The promise fulfills with the JSON `body` when successful, and follows standard `fetch` rejection mechanics otherwise.
 
 [source,javascript]
 ----
@@ -1846,7 +1846,7 @@ function getRandomArticle() {
 }
 ----
 
-The next piece of code shows how typical usage for `getRandomArticle` might look like. We build a promise chain that takes the JSON object for the article and passes it through an asynchronous `renderView` view rendering function, which fulfills as an HTML page. We then replace the contents of our page with that HTML. In order to avoid silent errors, we'll also print any rejection reasons using `console.error`.
+The ((("chained promises")))((("promises", "chaining")))next piece of code shows how typical usage for `getRandomArticle` might look like. We build a promise chain that takes the JSON object for the article and passes it through an asynchronous `renderView` view rendering function, which fulfills as an HTML page. We then replace the contents of our page with that HTML. In order to avoid silent errors, we'll also print any rejection reasons using `console.error`.
 
 [source,javascript]
 ----
@@ -1857,9 +1857,9 @@ getRandomArticle()
   .catch(err => console.error(err))
 ----
 
-Chained promises ((("chained promises")))((("promises", "chaining")))can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
+Chained promises can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
 
-If we were to use plain JavaScript callbacks, our code would become repetitive, as demonstrated in the next code listing. At the same time, we're running into callback hell: we're adding a level of indentation for each step in our asynchronous code flow, making our code increasingly harder to read with each step we add.
+If we were to use plain JavaScript ((("callbacks")))callbacks, our code would become repetitive, as demonstrated in the next code listing. At the same time, we're running into callback hell: we're adding a level of indentation for each step in our asynchronous code flow, making our code increasingly harder to read with each step we add.
 
 [source,javascript]
 ----
@@ -1914,7 +1914,7 @@ function getRandomArticle(gen) {
 }
 ----
 
-The following piece of code shows how you can pull the `json` from `getRandomArticle` by way of a `yield` expression. Even though that looks somewhat synchronous, there's now a generator function wrapper involved. As soon as we want to add more steps, we need to heavily modify `getRandomArticle` so that it yields the results we want, and make the necessary changes to the generator function in order to consume the updated sequence of results.
+The following piece of code shows how you can pull the `json` from `getRandomArticle` by way of a `yield` expression. Even though that looks somewhat synchronous, there's now a generator function wrapper involved. As soon as we want to add more steps, we need to heavily modify `getRandomArticle` so that it yields the results we want, and make the necessary changes to the generator function in order to consume the updated sequence of ((("getRandomArticle", startref="gra4")))results.
 
 [source,javascript]
 ----
