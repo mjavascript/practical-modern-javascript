@@ -295,7 +295,7 @@ We've already covered `get`, which traps property access; and `set`, which traps
 
 ==== has Trap
 
-We ((("proxies", "has trap", id="prox6ht")))((("traps", "has trap", id="t6ht")))can use `handler.has` to conceal any property you want when it comes to the `in` operator. In the `set` trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the `proxy` to figure out whether these properties exist. There are three alternatives here:
+We ((("proxies", "has trap", id="prox6ht")))((("traps", "has trap", id="t6ht")))((("has trap", id="ht6")))can use `handler.has` to conceal any property you want when it comes to the `in` operator. In the `set` trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the `proxy` to figure out whether these properties exist. There are three alternatives here:
 
 - Do nothing, in which case `key in proxy` falls through to `Reflect.has(target, key)`, the equivalent of `key in target`
 - Return `true` or `false` regardless of whether `key` is or is not present in `target`
@@ -360,11 +360,11 @@ console.log(proxy.hasOwnProperty('_secret'))
 // <- true
 ----
 
-The `getOwnPropertyDescriptor` trap in <<getownpropertydescriptor_trap>> offers a ((("proxies", "has trap", startref="prox6ht")))((("traps", "has trap", startref="t6ht")))solution that's able to intercept `Object#hasOwnProperty` as well.
+The `getOwnPropertyDescriptor` trap in <<getownpropertydescriptor_trap>> offers a ((("proxies", "has trap", startref="prox6ht")))((("traps", "has trap", startref="t6ht")))((("has trap", startref="ht6")))solution that's able to intercept `Object#hasOwnProperty` as well.
 
 ==== deleteProperty Trap
 
-Setting a property to `undefined` clears its value, but the property is still part of the object. Using the `delete` operator on a property with code like `delete cat.furBall` means that the `furBall` property will be completely gone from the `cat` object.
+Setting ((("proxies", "deleteProperty trap", id="prox6dpt")))((("traps", "deleteProperty trap", id="trap6dpt")))a property to `undefined` clears its value, but the property is still part of the object. Using the `delete` operator on a property with code like `delete cat.furBall` means that the `furBall` property will be completely gone from the `cat` object.
 
 [source,javascript]
 ----
