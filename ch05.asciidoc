@@ -425,7 +425,7 @@ Maps aren't ((("ES6 maps", "hash maps and the DOM", startref="es5hmatdom")))((("
 
 === Understanding and Using WeakMap
 
-For the most part, you can think of `WeakMap` as a subset of `Map`. The `WeakMap` collection has a reduced API surface with less affordances than what we could find in `Map`. Collections created using `WeakMap` are not iterable like `Map`, meaning there is no iterable protocol in `WeakMap`, no `WeakMap#entries`, no `WeakMap#keys`, no `WeakMap#values`, no `WeakMap#forEach` and no `WeakMap#clear` methods.
+For ((("WeakMap", id="wm5")))((("ES6 maps", "WeakMap", id="es5wm")))the most part, you can think of `WeakMap` as a subset of `Map`. The `WeakMap` collection has a reduced API surface with less affordances than what we could find in `Map`. Collections created using `WeakMap` are not iterable like `Map`, meaning there is no iterable protocol in `WeakMap`, no `WeakMap#entries`, no `WeakMap#keys`, no `WeakMap#values`, no `WeakMap#forEach` and no `WeakMap#clear` methods.
 
 Another distinction found in `WeakMap` is that every `key` must be an object. This is in contrast with `Map` where, while object references were allowed as keys, they weren't enforced. Remember that `Symbol` is a value type, and as such, they're not allowed either.
 
@@ -476,7 +476,7 @@ Correspondingly, use cases for `WeakMap` revolve around the need to specify meta
 
 Keeping data about DOM elements that should be released from memory when they're no longer of interest is another important use case, and in this regard using `WeakMap` is an even better solution to the DOM-related API caching solution we implemented earlier using `Map`.
 
-In so many words, then: no, `WeakMap` is definitely not worse than `Map`--they just cater to different use cases.
+In so many words, then: no, `WeakMap` is definitely not worse than `Map`--they just cater to different ((("WeakMap", startref="wm5")))((("ES6 maps", "WeakMap", startref="es5wm")))use cases.
 
 === Sets in ES6
 
