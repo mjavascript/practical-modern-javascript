@@ -852,7 +852,7 @@ Up to what point is the abstraction justifiable over a few `.bind` statements in
 
 ==== construct Trap
 
-The `construct` trap intercepts uses of the `new` operator. In the following code sample, we implement a custom `construct` trap that behaves identically to the `construct` trap. We use the spread operator, in combination with the `new` keyword, so that we can pass any arguments to the `Target` constructor.
+The `construct` trap ((("construct trap", id="t6")))((("traps", "construct trap", id="t6ct")))((("proxies", "construct trap", id="prox6ct")))intercepts uses of the `new` operator. In the following code sample, we implement a custom `construct` trap that behaves identically to the `construct` trap. We use the spread operator, in combination with the `new` keyword, so that we can pass any arguments to the `Target` constructor.
 
 [source,javascript]
 ----
@@ -912,7 +912,7 @@ proxy.hello()
 // <- 'Hello, Nicolás'
 ----
 
-Note that arrow functions can't be used as constructors, and thus we can't use the `construct` trap on them. Let's move onto the last few traps.
+Note that arrow functions can't be used as constructors, and thus we can't use the `construct` trap on them. Let's move onto the last ((("construct trap", startref="t6")))((("traps", "construct trap", startref="t6ct")))((("proxies", "construct trap", startref="prox6ct")))few traps.
 
 ==== getPrototypeOf Trap
 
