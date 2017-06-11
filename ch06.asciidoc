@@ -189,7 +189,7 @@ You might be tempted to argue that you could achieve the same behavior in ES5 si
 
 ==== Schema Validation with Proxies
 
-Sometimes ((("proxies", "schema validation with", id="prox6svw")))we have an object with user input that we want to validate against a schema, a model of how that input is supposed to be structured, what properties it should have, what types those properties should be, and how those properties should be filled. We'd like to verify that a `customer` email field contains an email address, a numeric `cost` field contains a number, and a required `name` field isn't missing.
+Sometimes ((("proxies", "schema validation with", id="prox6svw")))((("schema validation", id="sv6")))we have an object with user input that we want to validate against a schema, a model of how that input is supposed to be structured, what properties it should have, what types those properties should be, and how those properties should be filled. We'd like to verify that a `customer` email field contains an email address, a numeric `cost` field contains a number, and a required `name` field isn't missing.
 
 There are a number of ways in which you could do schema validation. You could use a validation function that throws errors if an invalid value is found on the object, but you'd have to ensure the object is off limits once you've deemed it valid. You could validate each property individually, but you'd have to remember to validate them whenever they're changed. You could also use a `Proxy`. By providing consumers with a `Proxy` to the actual model object, you'd ensure that the object never enters an invalid state, as an exception would be thrown otherwise.
 
@@ -240,7 +240,7 @@ console.log(person.age)
 // <- 28
 ----
 
-While ((("proxies", "schema validation with", startref="prox6svw")))proxies offer previously unavailable granular control over what a consumer can and cannot do with an object, as defined by access rules defined by the implementor, there's also a harsher variant of proxies that allows us to completely shut off access to `target` whenever we deem it necessary: revocable proxies.
+While ((("proxies", "schema validation with", startref="prox6svw")))((("schema validation", startref="sv6")))proxies offer previously unavailable granular control over what a consumer can and cannot do with an object, as defined by access rules defined by the implementor, there's also a harsher variant of proxies that allows us to completely shut off access to `target` whenever we deem it necessary: revocable proxies.
 
 === Revocable Proxies
 
