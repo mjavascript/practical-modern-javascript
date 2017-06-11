@@ -701,7 +701,7 @@ When debugging concerns outweight security concerns, you should at least conside
 
 ==== apply Trap
 
-The `apply` trap is quite interesting; it's specifically tailored to work with functions. When the proxied `target` function is invoked, the `apply` trap is triggered. All of the statements in the following code sample would go through the `apply` trap in your proxy `handler` object.
+The `apply` ((("apply trap", id="at6")))((("proxies", "apply trap", id="prox6at")))((("traps", "apply trap", id="t6at")))trap is quite interesting; it's specifically tailored to work with functions. When the proxied `target` function is invoked, the `apply` trap is triggered. All of the statements in the following code sample would go through the `apply` trap in your proxy `handler` object.
 
 [source,javascript]
 ----
@@ -848,7 +848,7 @@ There are dozens of ways of binding methods to their parent object, all with the
 
 We haven't used an `apply` trap for the `selfish` examples, which illustrates that not everything is one-size-fits-all. Using an `apply` trap for this use case would involve the current `selfish` proxy returning proxies for `value` functions, and then returning a bound function in the `apply` trap for the `value` proxy. While this may sound more correct, in the sense that we're not using `.bind` but instead relying on `Reflect.apply`, we'd still need the `WeakMap` cache and `selfish` proxy. That is to say we'd be adding an extra layer of abstraction, a second proxy, and getting little value in terms of separation of concerns or maintainability, since both proxy layers would remain coupled to some degree, it'd be best to keep everything in a single layer. While abstractions are a great thing, too many abstractions can become more insurmountable than the problem they attempt to fix.
 
-Up to what point is the abstraction justifiable over a few `.bind` statements in the `constructor` of a class object? These are hard questions that always depend on context, but they must be considered when designing a component system so that, in the process of adding abstraction layers meant to help you avoid repeating yourself, you don't add complexity for complexity's sake.
+Up to what point is the abstraction justifiable over a few `.bind` statements in the `constructor` of a class object? These are hard questions that always depend on context, but they must be considered when designing a component system so that, in the process of adding abstraction layers meant to help you avoid repeating yourself, you don't add complexity for complexity's ((("apply trap", startref="at6")))((("proxies", "apply trap", startref="prox6at")))((("traps", "apply trap", startref="t6at")))sake.
 
 ==== construct Trap
 
