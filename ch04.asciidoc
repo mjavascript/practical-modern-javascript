@@ -1857,7 +1857,7 @@ getRandomArticle()
   .catch(err => console.error(err))
 ----
 
-Chained promises can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
+Chained promises ((("chained promises")))((("promises", "chaining")))can become hard to debug: the root cause of a flow control error can be challenging to track down, and writing promise-based code flows is typically much easier than reading them, which leads to code that becomes difficult to maintain over time.
 
 If we were to use plain JavaScript callbacks, our code would become repetitive, as demonstrated in the next code listing. At the same time, we're running into callback hell: we're adding a level of indentation for each step in our asynchronous code flow, making our code increasingly harder to read with each step we add.
 
