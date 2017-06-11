@@ -2060,9 +2060,9 @@ async function race() {
 
 ==== Error Handling
 
-Errors are swallowed silently within an `async` function, just like inside normal Promises, due to async functions being wrapped in a `Promise`. Uncaught exceptions raised in the body of your async function or during suspended execution while evaluating an `await` expression will reject the promise returned by the `async` function.
+Errors ((("asynchronous functions", "error handling")))are swallowed silently within an `async` function, just like inside normal Promises, due to async functions being wrapped in a `Promise`. Uncaught exceptions raised in the body of your async function or during suspended execution while evaluating an `await` expression will reject the promise returned by the `async` function.
 
-That is, unless we add `try`/`catch` blocks around `await` expressions. For the portion of the async function code that's wrapped, errors are treated under typical `try`/`catch` semantics.
+That is, unless we ((("try/catch")))((("")))((("catch")))add `try`/`catch` blocks around `await` expressions. For the portion of the async function code that's wrapped, errors are treated under typical `try`/`catch` semantics.
 
 Naturally, this can be seen as a strength: you can leverage `try`/`catch` conventions, something you were unable to do with asynchronous callbacks, and somewhat able to when using promises. In this sense, async functions are akin to generators, where we can take advantage of `try`/`catch` thanks to function execution suspension turning asynchronous flows into seemingly synchronous code.
 
@@ -2079,7 +2079,7 @@ As you can see, there are quite a few ways in which we can notice exceptions and
 
 ==== Understanding Async Function Internals
 
-Async functions leverage both generators and promises internally. Let's suppose we have the following async function.
+Async functions ((("asynchronous functions", "internals of", id="af4io")))leverage both generators and promises internally. Let's suppose we have the following async function.
 
 [source,javascript]
 ----
@@ -2337,7 +2337,7 @@ function getUserProfiles() {
 }
 ----
 
-Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows ((("asynchronous functions", startref="af4")))together.
+Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows ((("asynchronous functions", startref="af4")))((("asynchronous functions", "internals of", startref="af4io")))together.
 
 === Asynchronous Iteration
 
