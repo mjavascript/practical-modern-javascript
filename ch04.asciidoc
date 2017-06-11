@@ -2024,7 +2024,7 @@ async function concurrent() {
 
 We can use `Promise.all` to ((("Promise.all")))work around that issue, creating a single promise that we can `await` on. This way, our code blocks until every promise in a list is settled, and they can be resolved concurrently.
 
-The following example shows how you could `await` on three different promises that could be resolved concurrently. Given that `await` suspends your `async` function and the `await Promise.all` expression ultimately resolves into a `results` array, we can take advantage of destructuring to pull individual results out of that ((("asynchronous functions", "async/await", startref="af4a")))array.
+The following example shows how you could `await` on three different promises that could be resolved concurrently. Given that `await` suspends your `async` function and the `await Promise.all` expression ultimately resolves into a `results` array, we can take advantage of destructuring to pull individual results out of that array.
 
 [source,javascript]
 ----
@@ -2103,7 +2103,7 @@ Inside the generator function, we'll assume `yield` to be the syntactic equivale
 
 In `spawn`, a promise is wrapped around code that will step through the generator function--made out of user code--in series, forwarding values to the generator code (the `async` function's body).
 
-The following listing should aid you in understanding how the `async`/`await` algorithm iterates over a sequence of `await` expressions using a generator. Each item in the sequence is wrapped in a promise and then gets chained with the next step in the sequence. The promise returned by the underlying generator function becomes settled when the sequence ends or one of the promises is rejected.
+The following listing should aid you in understanding how the `async`/`await` algorithm ((("asynchronous functions", "await", id="af4ax")))iterates over a sequence of `await` expressions using a generator. Each item in the sequence is wrapped in a promise and then gets chained with the next step in the sequence. The promise returned by the underlying generator function becomes settled when the sequence ends or one of the promises is rejected.
 
 [source,javascript]
 ----
@@ -2337,7 +2337,7 @@ function getUserProfiles() {
 }
 ----
 
-Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows ((("asynchronous functions", startref="af4")))((("asynchronous functions", "internals of", startref="af4io")))together.
+Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows ((("asynchronous functions", startref="af4")))((("asynchronous functions", "internals of", startref="af4io")))((("asynchronous functions", "async/await", startref="af4a")))together.
 
 === Asynchronous Iteration
 
