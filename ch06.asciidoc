@@ -295,7 +295,7 @@ We've already covered `get`, which traps property access; and `set`, which traps
 
 ==== has Trap
 
-We can use `handler.has` to conceal any property you want when it comes to the `in` operator. In the `set` trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the `proxy` to figure out whether these properties exist. There are three alternatives here:
+We ((("proxies", "has trap", id="prox6ht")))((("traps", "has trap", id="t6ht")))can use `handler.has` to conceal any property you want when it comes to the `in` operator. In the `set` trap code samples we prevented changes and even access to properties with a certain prefix, but unwanted accessors could still probe the `proxy` to figure out whether these properties exist. There are three alternatives here:
 
 - Do nothing, in which case `key in proxy` falls through to `Reflect.has(target, key)`, the equivalent of `key in target`
 - Return `true` or `false` regardless of whether `key` is or is not present in `target`
@@ -360,7 +360,7 @@ console.log(proxy.hasOwnProperty('_secret'))
 // <- true
 ----
 
-The `getOwnPropertyDescriptor` trap in <<getownpropertydescriptor_trap>> offers a solution that's able to intercept `Object#hasOwnProperty` as well.
+The `getOwnPropertyDescriptor` trap in <<getownpropertydescriptor_trap>> offers a ((("proxies", "has trap", startref="prox6ht")))((("traps", "has trap", startref="t6ht")))solution that's able to intercept `Object#hasOwnProperty` as well.
 
 ==== deleteProperty Trap
 
