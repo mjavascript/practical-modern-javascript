@@ -449,7 +449,7 @@ Note that you can transform data in rejection branches as well. Keep in mind tha
 
 ==== Promise#finally Proposal
 
-There's a ((("promises", "  Promise#finally", id="p4pf")))TC39 proposalpass:[<span data-type="footnote" id="proposal-promise-finally">This proposal is in stage 2 at the time of this writing. You can find the proposal draft at <a href="https://mjavascript.com/out/proposal-promise-finally">GitHub</a>.</span>] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
+There's a ((("promises", "Promise#finally proposal", id="p4pf")))((("Promise#finally", id="pf4")))TC39 proposalpass:[<span data-type="footnote" id="proposal-promise-finally">This proposal is in stage 2 at the time of this writing. You can find the proposal draft at <a href="https://mjavascript.com/out/proposal-promise-finally">GitHub</a>.</span>] for a `Promise#finally` method, which would invoke a reaction when a promise settles, regardless of whether it was fulfilled or rejected.
 
 We can think of the following bit of code as a rough ponyfill for `Promise#finally`. We pass the reaction callback to `p.then` as both a fulfillment reaction and a rejection reaction.
 
@@ -517,7 +517,7 @@ const p3 = p2.catch(err => console.log(err))
 // <- 'oops'
 ----
 
-As we can observe after carefully reading the code for our ponyfill, if either reaction results in an exception being thrown then the promise would be rejected. At the same time, returning a rejected promise via `Promise.reject` or some other means would imply `resove(fn())` results in a rejected promise, which won't follow the `.then` reactions used to return the original settlement value of the promise ((("promises", "  Promise#finally", startref="p4pf")))we're calling `.finally` on.
+As we can observe after carefully reading the code for our ponyfill, if either reaction results in an exception being thrown then the promise would be rejected. At the same time, returning a rejected promise via `Promise.reject` or some other means would imply `resove(fn())` results in a rejected promise, which won't follow the `.then` reactions used to return the original settlement value of the promise ((("promises", "Promise#finally proposal", startref="p4pf")))((("Promise#finally", startref="pf4")))we're calling `.finally` on.
 
 ==== Leveraging Promise.all and Promise.race
 
