@@ -1069,7 +1069,7 @@ console.log(Object.isExtensible(proxy))
 
 ==== isExtensible Trap
 
-An extensible object is an object that you can add new properties to, an object you can extend.
+An ((("preventExtensions trap", startref="pet6")))((("traps", "preventExtensions trap", startref="t6pet")))((("proxies", "preventExtensions trap", startref="prox6pet")))extensible object is an object that you can add new properties to, an object you can extend.
 
 The `handler.isExtensible` method can be used for logging or auditing calls to `Object.isExtensible`, but not to decide whether an object is extensible. That's because this trap is subject to a harsh invariant that puts a hard limit to what you can do with it: a `TypeError` is thrown if `Object.isExtensible(proxy) !== Object.isExtensible(target)`.
 
