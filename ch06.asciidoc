@@ -377,7 +377,7 @@ console.log('furBall' in cat)
 // <- false
 ----
 
-The code in the last example where we prevented access to prefixed properties has a problem: you can't change the value of a `_secret` property, nor even use `in` to learn about its existence, but you still can remove the property entirely using the `delete` operator through the `proxy` object. The following code sample shows that shortcoming in action.
+The code in the last example where we prevented access to prefixed properties has a problem: you can't change the value of a `_secret` property, ((("  _secret   properties", id="sp6")))nor even use `in` to learn about its existence, but you still can remove the property entirely using the `delete` operator through the `proxy` object. The following code sample shows that shortcoming in action.
 
 [source,javascript]
 ----
@@ -430,7 +430,7 @@ delete proxy._secret
 // <- Error: Can't delete private "_secret" property
 ----
 
-Consumers interacting with `target` through the `proxy` can no longer delete properties in the `_secret` property space. That's one less thing to worry ((("proxies", "deleteProperty trap", startref="prox6dpt")))((("traps", "deleteProperty trap", startref="trap6dpt")))((("deleteProperty trap", startref="dpt6")))about!
+Consumers interacting with `target` through the `proxy` can no longer delete properties in the `_secret` property space. That's one less thing to worry ((("proxies", "deleteProperty trap", startref="prox6dpt")))((("traps", "deleteProperty trap", startref="trap6dpt")))((("deleteProperty trap", startref="dpt6")))((("  _secret   properties", startref="sp6")))about!
 
 ==== defineProperty Trap
 
