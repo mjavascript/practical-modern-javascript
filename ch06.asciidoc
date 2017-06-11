@@ -25,7 +25,7 @@ We can make the proxy object a bit more interesting by adding ((("traps", id="tr
 
 ==== Trapping get Accessors
 
-The `proxy` ((("get traps", id="gt6")))in ((("traps", "get traps", id="trap6gt")))((("proxies", "get traps and", id="prox6gta")))the following code listing is able to track any and every property access event because it has a `handler.get` trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor.
+The `proxy` ((("get traps", id="gt6")))in ((("traps", "get traps", id="trap6gt")))((("proxies", "get traps and", id="prox6gta")))the following code listing is able to track any and every property access event because it has ((("handler.get")))a `handler.get` trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor.
 
 [source,javascript]
 ----
@@ -46,7 +46,7 @@ proxy['something-else']
 // <- undefined
 ----
 
-As a complement to proxies, ES6 introduces a `Reflect` built-in object. The traps in ES6 proxies are mapped one-to-one to the `Reflect` API: For every trap, there’s a matching reflection method in `Reflect`. These methods can be particularly useful when we want the default behavior of proxy traps, but we don't want to concern ourselves with the implementation of that behavior.
+As a complement to proxies, ES6 introduces a `Reflect` ((("Reflect")))built-in object. The traps in ES6 proxies are mapped one-to-one to the `Reflect` API: For every trap, there’s a matching reflection method in `Reflect`. These methods can be particularly useful when we want the default behavior of proxy traps, but we don't want to concern ourselves with the implementation of that behavior.
 
 In the following code snippet we use `Reflect.get` to provide the default behavior for `get` operations, while not worrying about accessing the `key` property in `target` by hand. While in this case the operation may seem trivial, the default behavior for other traps may be harder to remember and implement correctly. We can forward every parameter in the trap to the reflection API and return its result.
 
@@ -85,7 +85,7 @@ To the keen observer, it may be apparent that disallowing access to certain prop
 [[trapping_set_accessors]]
 ==== Trapping set Accessors
 
-As the counterpart of `get` traps, `set` traps can intercept property assignment. Suppose we wanted to prevent assignment on properties starting with an underscore. We could replicate the `get` trap we implemented earlier to block assignment as well.
+As the ((("set traps", id="st6")))in ((("traps", "set traps", id="trap6st")))((("proxies", "set traps and", id="prox6sta")))counterpart of `get` traps, `set` traps can intercept property assignment. Suppose we wanted to prevent assignment on properties starting with an underscore. We could replicate the `get` trap we implemented earlier to block assignment as well.
 
 The `Proxy` in the next example prevents underscored property access for both `get` and `set` when accessing `target` through `proxy`. Note how the `set` trap returns `true` here? Returning `true` in a `set` trap means that setting the property `key` to the provided `value` should succeed. If the return value for the `set` trap is `false`, setting the property value will throw a `TypeError` under strict mode, and otherwise fail silently. If we were using `Reflect.set` instead, as brought up earlier, we wouldn't need to concern ourselves with these implementation details: we could just `return Reflect.set(target, key, value)`. That way, when somebody reads our code later, they'll be able to understand that we're using `Reflect.set`, which is equivalent to the default operation, equivalent to the case where a `Proxy` object isn't part of the equation.
 
@@ -185,7 +185,7 @@ const proxy = concealWithPrefix(target)
 // expose proxy to consumers
 ----
 
-You might be tempted to argue that you could achieve the same behavior in ES5 simply by using variables privately scoped to the `concealWithPrefix` function, without the need for the `Proxy` itself. The difference is that proxies allow you to "privatize" property access dynamically. Without relying on `Proxy`, you couldn't mark every property that starts with an underscore as private. You could use `Object.freeze`​footnoteref:[object-freeze,The `Object.freeze` method prevents adding new properties, removing existing ones, and modifying property value references. Note that it doesn't make the values themselves immutable: their properties can still change provided `Object.freeze` isn't called on those objects as well.] on the object, but then you wouldn't be able to modify the property references yourself, either. Or you could define get and set accessors for every property, but then again you wouldn't be able to block access on every single property, only the ones you explicitly configured getters and ((("traps", startref="trap6")))setters for.
+You might be tempted to argue that you could achieve the same behavior in ES5 simply by using variables privately scoped to the `concealWithPrefix` function, without the need for the `Proxy` itself. The difference is that proxies allow you to "privatize" property access dynamically. Without relying on `Proxy`, you couldn't mark every property that starts with an underscore as private. You could use `Object.freeze`​footnoteref:[object-freeze,The `Object.freeze` method prevents adding new properties, removing existing ones, and modifying property value references. Note that it doesn't make the values themselves immutable: their properties can still change provided `Object.freeze` isn't called on those objects as well.] on the object, but then you wouldn't be able to modify the property references yourself, either. Or you could define get and set accessors for every property, but then again you wouldn't be able to block access on every single property, only the ones you explicitly configured getters and ((("traps", startref="trap6")))((("set traps", startref="st6")))in ((("traps", "set traps", startref="trap6st")))((("proxies", "set traps and", startref="prox6sta")))setters for.
 
 ==== Schema Validation with Proxies
 
