@@ -631,7 +631,7 @@ For the most part, the traps that we discussed so far have to do with property a
 [[getownpropertydescriptor_trap]]
 ==== getOwnPropertyDescriptor Trap
 
-The `getOwnPropertyDescriptor` trap is triggered when querying an object for the property descriptor for some `key`. It should return a property descriptor or `undefined` when the property doesn't exist. There is also the option of throwing an exception, aborting the operation entirely.
+The `getOwnPropertyDescriptor` trap is ((("getOwnPropertyDescriptor trap", id="gopdt6")))((("proxies", "getOwnPropertyDescriptor trap", id="prox6gopdt")))((("traps", "getOwnPropertyDescriptor trap", id="t6gopdt")))triggered when querying an object for the property descriptor for some `key`. It should return a property descriptor or `undefined` when the property doesn't exist. There is also the option of throwing an exception, aborting the operation entirely.
 
 If we go back to the canonical private property space example, we could implement a trap, such as the one in the next code snippet, to prevent consumers from learning about property descriptors of private properties.
 
@@ -697,7 +697,7 @@ console.log(proxy.hasOwnProperty('_secret'))
 
 When you're trying to hide things, it's best to have them try and behave as if they fell in some other category than the category they're actually in, thus concealing their behavior and passing it off for something else. Throwing, however, sends the wrong message when we want to conceal something: why does a property throw instead of return `undefined`? It must exist but be inaccessible. This is not unlike situations in HTTP API design where we might prefer to return "404 Not Found" responses for sensitive resources, such as an administration backend, when the user is unauthorized to access them, instead of the technically correct "401 Unauthorized" status code.
 
-When debugging concerns outweight security concerns, you should at least consider the `throw` statement. In any case, it's important to understand your use case in order to figure out the optimal and least surprising behavior for a given component.
+When debugging concerns outweight security concerns, you should at least consider the `throw` statement. In any case, it's important to understand your use case in order to figure out the optimal and least surprising behavior for a given ((("getOwnPropertyDescriptor trap", startref="gopdt6")))((("proxies", "getOwnPropertyDescriptor trap", startref="prox6gopdt")))((("traps", "getOwnPropertyDescriptor trap", startref="t6gopdt")))component.
 
 ==== apply Trap
 
