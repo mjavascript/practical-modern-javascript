@@ -1832,7 +1832,7 @@ Let's go over a quick recap comparing promises, callbacks, and generators. After
 
 ==== Flavors of Async Code
 
-Let's suppose ((("asynchronous functions", "flavors of async code", id="af4foac")))we had code like the following. Here I'm wrapping a `fetch` request in a `getRandomArticle` function. The promise fulfills with the JSON `body` when successful, and follows standard `fetch` rejection mechanics otherwise.
+Let's suppose ((("asynchronous functions", "async code types", id="af4act")))we had code like the following. Here I'm wrapping a `fetch` request in a `getRandomArticle` function. The promise fulfills with the JSON `body` when successful, and follows standard `fetch` rejection mechanics otherwise.
 
 [source,javascript]
 ----
@@ -1928,7 +1928,7 @@ Generators may not be the most straightforward way of accomplishing the results 
 
 Besides involving an unintuitive syntax into the mix, your iterator code will be highly coupled to the generator function that's being consumed. That means you'll have to change it often as you add new `yield` expressions to the generator code.
 
-A better alternative would be to use an async function.
+A better alternative would be to use an ((("asynchronous functions", "async code types", startref="af4act")))async function.
 
 ==== Using async/await
 
