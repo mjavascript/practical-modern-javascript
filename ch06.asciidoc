@@ -223,7 +223,7 @@ function validateAge(value) {
 }
 ----
 
-The following piece of code shows how we could consume the `validator` handler. This general-purpose proxy handler is passed into a `Proxy` for the `person` object. The handler then enforces our schema by ensuring that values set through the proxy pass the schema validation rules for any given property. In this case, we've added a validation rule that says `age` must be a positive numeric value.
+The following piece of code shows how we could consume the `validator` handler. ((("validator handler")))This general-purpose proxy handler is passed into a `Proxy` for the `person` object. The handler then enforces our schema by ensuring that values set through the proxy pass the schema validation rules for any given property. In this case, we've added a validation rule that says `age` must be a positive numeric value.
 
 [source,javascript]
 ----
