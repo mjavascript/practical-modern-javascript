@@ -1,7 +1,7 @@
 [[leveraging-ecmascript-collections]]
 == Leveraging ECMAScript Collections
 
-JavaScript data structures are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map npm package names to their metadata, as shown next.
+JavaScript data structures ((("ECMAScript", id="ecmas5")))are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map npm package names to their metadata, as shown next.
 
 [source,javascript]
 ----
@@ -690,4 +690,4 @@ function dommy(target) {
 
 Whatever the reason, whenever we want to keep flags associated with a DOM element without visibly altering that DOM element, `WeakSet` is probably the way to go. If instead you wanted to associate arbitrary data instead of a simple flag, then maybe you should use `WeakMap`. When it comes to deciding whether to use `Map`, `WeakMap`, `Set`, or `WeakSet`, there's a series of questions you should ask yourself. For instance, if you need to keep object-related data, then you should know to look at weak collections. If your only concern is whether something is present, then you probably need a `Set`. If you are looking to create a cache, you should probably use a `Map`.
 
-Collections in ES6 provide built-in solutions for common use cases that were previously cumbersome to implement by users, such as the case of `Map`, or hard to execute correctly, as in the case of `WeakMap` where we allow references to be released if they're no longer interesting, avoiding memory leaks.
+Collections in ES6 provide built-in solutions for common use cases that were previously cumbersome to implement by users, such as the case of `Map`, or hard to execute correctly, as in the case of `WeakMap` where we allow references to be released if they're no longer interesting, avoiding memory ((("ECMAScript", startref="ecmas5")))leaks.
