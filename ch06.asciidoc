@@ -1,13 +1,13 @@
 [[managing-property-access-with-proxies]]
 == Managing Property Access pass:[<span class="keep-together">with Proxies</span>]
 
-Proxies ((("proxies", id="prox6")))are an interesting and powerful feature in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a `Proxy` to determine the desired behavior whenever the properties of an underlying `target` object are accessed. A `handler` object can be used to configure traps for your `Proxy`, which define and restrict how the underlying object is accessed, as we'll see in a bit.
+Proxies ((("proxies", id="prox6")))are an interesting and powerful feature in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a `Proxy` to determine the desired behavior whenever the properties of an underlying `target` ((("target")))object are accessed. A `handler` ((("handler")))object can be used to configure traps for your `Proxy`, which define and restrict how the underlying object is accessed, as we'll see in a bit.
 
 === Getting Started with Proxy
 
-By default, proxies don't do much--in fact they don't do anything. If you don't provide any configuration, your proxy will just work as a pass-through to the `target` object, also known as a "no-op forwarding proxy," meaning that all operations on the proxy object defer to the underlying object.
+By ((("proxies", "overview", id="prox6o")))default, proxies don't do much--in fact they don't do anything. If you don't provide any configuration, your proxy will just work as a pass-through to the `target` object, also known as ((("proxies", "no-op forwarding proxy")))a "no-op forwarding proxy," meaning that all operations on the proxy object defer to the underlying object.
 
-In the following piece of code, we create a no-op forwarding `Proxy`. You can observe how by assigning a value to `proxy.exposed`, that value is passed onto `target.exposed`. You could think of proxies as the gatekeepers of their underlying objects: they may allow certain operations to go through and prevent others from passing, but they carefully inspect every single interaction with their underlying objects.
+In the following piece of code, we create a no-op forwarding `Proxy`. You can observe how by assigning a value to `proxy.exposed`, ((("  proxy.exposed")))that value is passed ((("target.exposed")))onto `target.exposed`. You could think of proxies as the gatekeepers of their underlying objects: they may allow certain operations to go through and prevent others from passing, but they carefully inspect every single interaction with their underlying objects.
 
 [source,javascript]
 ----
@@ -21,7 +21,7 @@ console.log(proxy.somethingElse)
 // <- undefined
 ----
 
-We can make the proxy object a bit more interesting by adding traps. Traps allow you to intercept interactions with `target` in several different ways, as long as those interactions happen through the `proxy` object. For instance, we could use a `get` trap to log every attempt to pull a value out of a property in `target`, or a `set` trap to prevent certain properties from being written to. Let's kick things off by learning more about `get` traps.
+We can make the proxy object a bit more interesting by adding traps. Traps allow you to intercept interactions with `target` in several different ways, as long as those interactions happen through the `proxy` object. For instance, we could use a `get` trap to log every attempt to pull a value out of a property in `target`, or a `set` trap to prevent certain properties from being written to. Let's kick things off by learning ((("proxies", "overview", startref="prox6o")))more about `get` traps.
 
 ==== Trapping get Accessors
 
