@@ -2002,7 +2002,7 @@ What ((("asynchronous functions", "async/await", startref="af4a")))about concurr
 
 ==== Concurrent Async Flows
 
-In asynchronous code flows, it is commonplace to execute two or more tasks concurrently. While async functions make it easier to write asynchronous code, they also lend themselves to code that executes one asynchronous operation at a time. A function with multiple `await` expressions in it will be suspended one at a time on each `await` expression until that `Promise` is settled, before unsuspending execution and moving onto the next `await` expression--this is a similar case to what we observe with generators and `yield`.
+In ((("asynchronous functions", "concurrent async flows", id="af4caf")))asynchronous code flows, it is commonplace to execute two or more tasks concurrently. While async functions make it easier to write asynchronous code, they also lend themselves to code that executes one asynchronous operation at a time. A function with multiple `await` expressions in it will be suspended one at a time on each `await` expression until that `Promise` is settled, before unsuspending execution and moving onto the next `await` expression--this is a similar case to what we observe with generators and `yield`.
 
 [source,javascript]
 ----
@@ -2044,7 +2044,7 @@ async function concurrent() {
 }
 ----
 
-We could use `Promise.race` to get the result from the promise that fulfills quicker.
+We could use `Promise.race` to get the result from the promise that fulfills ((("asynchronous functions", "concurrent async flows", startref="af4caf")))quicker.
 
 [source,javascript]
 ----
