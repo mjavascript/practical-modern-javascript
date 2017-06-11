@@ -1932,7 +1932,7 @@ A better alternative would be to use an ((("asynchronous functions", "async code
 
 ==== Using async/await
 
-Async functions ((("asynchronous functions", "await", id="af4a")))let us take a promise-based implementation and take advantage of the synchronous-looking generator style. A huge benefit in this approach is that you won't have to change the original `getRandomArticle` at all: as long as it returns a promise it can be awaited.
+Async functions ((("asynchronous functions", "async/await", id="af4a")))let us take a promise-based implementation and take advantage of the synchronous-looking generator style. A huge benefit in this approach is that you won't have to change the original `getRandomArticle` at all: as long as it returns a promise it can be awaited.
 
 Note that `await` may only be used inside async functions, marked with the `async` keyword. Async functions work similarly to generators, by suspending execution in the local context until a promise settles. If the awaited expression isn't originally a promise, it gets casted into a promise.
 
@@ -1998,7 +1998,7 @@ async function write() {
 }
 ----
 
-What ((("asynchronous functions", "await", startref="af4a")))about concurrent asynchronous flows?
+What ((("asynchronous functions", "async/await", startref="af4a")))about concurrent asynchronous flows?
 
 ==== Concurrent Async Flows
 
