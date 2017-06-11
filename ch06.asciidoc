@@ -25,7 +25,7 @@ We can make the proxy object a bit more interesting by adding ((("traps", id="tr
 
 ==== Trapping get Accessors
 
-The `proxy` in the following code listing is able to track any and every property access event because it has a `handler.get` trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor.
+The `proxy` ((("get traps", id="gt6")))in ((("traps", "get traps", id="trap6gt")))((("proxies", "get traps and", id="prox6gta")))the following code listing is able to track any and every property access event because it has a `handler.get` trap. It can also be used to transform the value returned by accessing any given property before returning a value to the accessor.
 
 [source,javascript]
 ----
@@ -80,7 +80,7 @@ proxy._secret
 // <- Uncaught Error: Property "_secret" is inaccessible.
 ----
 
-To the keen observer, it may be apparent that disallowing access to certain properties through the proxy becomes most useful when creating a proxy with clearly defined access rules for the underlying `target` object, and exposing that proxy instead of the `target` object. That way you can still access the underlying object freely, but consumers are forced to go through the proxy and play by its rules, putting you in control of exactly how they can interact with the object. This wasn't possible before proxies were introduced in ES6.
+To the keen observer, it may be apparent that disallowing access to certain properties through the proxy becomes most useful when creating a proxy with clearly defined access rules for the underlying `target` object, and exposing that proxy instead of the `target` object. That way you can still access the underlying object freely, but consumers are forced to go through the proxy and play by its rules, putting you in control of exactly how they can interact with the object. This wasn't possible before proxies were introduced ((("get traps", startref="gt6")))in ((("traps", "get traps", startref="trap6gt")))((("proxies", "get traps and", startref="prox6gta")))in ES6.
 
 [[trapping_set_accessors]]
 ==== Trapping set Accessors
