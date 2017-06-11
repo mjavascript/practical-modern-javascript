@@ -244,7 +244,7 @@ While ((("proxies", "schema validation with", startref="prox6svw")))((("schema v
 
 === Revocable Proxies
 
-Revocable proxies offer more fine-grained control than plain `Proxy` objects. The API is a bit different in that there is no `new` keyword involved, as opposed to `new Proxy(target, handler)`; and a `{ proxy, revoke }` object is returned, instead of just the `proxy` object being returned. Once `revoke()` is called, the `proxy` will throw an error on any operation.
+Revocable ((("proxies", "revokable", id="prox6r")))((("revokable proxies", id="rp6")))proxies offer more fine-grained control than plain `Proxy` objects. The API is a bit different in that there is no `new` keyword involved, as opposed to `new Proxy(target, handler)`; and a `{ proxy, revoke }` object is returned, instead of just the `proxy` object being returned. Once `revoke()` is called, the `proxy` will throw an error on any operation.
 
 Let's go back to our pass-through `Proxy` example and make it revocable. Note how we're no longer using `new`, how calling `revoke()` over and over has no effect, and how an error is thrown if we attempt to interact with the underlying object in any way.
 
@@ -285,7 +285,7 @@ function revokeStorage(proxy) {
 }
 ----
 
-Given that `revoke` is available on the same scope where your `handler` traps are defined, you could set up unforgiving access rules such that if a consumer attempts to access a private property more than once you revoke their `proxy` access entirely.
+Given that `revoke` is available on the same scope where your `handler` traps are defined, you could set up unforgiving access rules such that if a consumer attempts to access a private property more than once you revoke their `proxy` ((("proxies", "revokable", startref="prox6r")))((("revokable proxies", startref="rp6")))access entirely.
 
 === Proxy Trap Handlers
 
