@@ -975,11 +975,11 @@ console.log(proxy)
 // <- { 0: 'first', 1: 'second', length: 2 }
 ----
 
-Conversely to the `getPrototypeOf` trap, there's `setPrototypeOf`.
+Conversely to the `getPrototypeOf` trap, ((("getPrototypeOf trap", startref="gptot6")))((("traps", "getPrototypeOf", startref="t6gpto")))((("proxies", "getPrototypeOf trap", startref="prox6gptot")))there's `setPrototypeOf`.
 
 ==== setPrototypeOf Trap
 
-There is an `Object.setPrototypeOf` method in ES6 that can be used to change the prototype of an object into a reference to another object. It's considered the proper way of setting the prototype, as opposed to setting the special `__proto__` property, which is a feature that's supported in most browsers but was deprecated in ES6.
+There is an `Object.setPrototypeOf` ((("setPrototypeOf trap", id="sptot6")))((("traps", "setPrototypeOf", id="t6spto")))((("proxies", "setPrototypeOf trap", id="prox6sptot")))method in ES6 that can be used to change the prototype of an object into a reference to another object. It's considered the proper way of setting the prototype, as opposed to setting the special `__proto__` property, which is a feature that's supported in most browsers but was deprecated in ES6.
 
 Deprecation means that browser vendors are discouraging the use of `__proto__`. In other contexts, deprecation also means that the feature might be removed in the future. The web platform, however, doesn't break backward compatibility, and `__proto__` is unlikely to ever be removed. That being said, deprecation also means you're discouraged from using the feature. Thus, using the `Object.setPrototypeOf` method is preferable to changing `__proto__` when we want to modify the underlying prototype for an object.
 
@@ -1018,7 +1018,7 @@ proxy.setPrototypeOf(proxy, base)
 // <- Error: Changing the prototype is forbidden
 ----
 
-In these cases, it's best to fail with an exception so that consumers can understand what is going on. By explicitly disallowing prototype changes, the consumer can start looking elsewhere. If we didn't throw an exception, the consumer could still eventually learn that the prototype isn't changing through debugging. You might as well save them from that pain!
+In these cases, it's best to fail with an exception so that consumers can understand what is going on. By explicitly disallowing prototype changes, the consumer can start looking elsewhere. If we didn't throw an exception, the consumer could still eventually learn that the prototype isn't changing through debugging. You might as well save them ((("setPrototypeOf trap", startref="sptot6")))((("traps", "setPrototypeOf", startref="t6spto")))((("proxies", "setPrototypeOf trap", startref="prox6sptot")))from that pain!
 
 ==== preventExtensions Trap
 
