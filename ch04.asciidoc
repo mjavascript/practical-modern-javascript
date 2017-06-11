@@ -1681,7 +1681,7 @@ In the following section, we'll build an iterator that leverages differences in 
 
 ==== Asynchronous I/O Using Generators
 
-The ((("generators", "and asynchronous input/output", secondary-sortas="asynchronous", id="gen4aaio")))((("asynchronous code", "with generators", secondary-sortas="generators", id="ac4wg")))following piece of code shows a self-describing generator function where we indicate input sources and an output destination. This hypothetical method could be used to pull product information from the yielded endpoints, which could then be saved to the returned endpoint. An interesting aspect of this interface is that as a user you don't have to spend any time figuring out how to read and write information. You merely determine the sources and destination, and the underlying implementation figures out the rest.
+The ((("generators", "and asynchronous input/output", secondary-sortas="asynchronous", id="gen4aaio")))((("asynchronous functions", "with generators", secondary-sortas="generators", id="ac4wg")))following piece of code shows a self-describing generator function where we indicate input sources and an output destination. This hypothetical method could be used to pull product information from the yielded endpoints, which could then be saved to the returned endpoint. An interesting aspect of this interface is that as a user you don't have to spend any time figuring out how to read and write information. You merely determine the sources and destination, and the underlying implementation figures out the rest.
 
 [source,javascript]
 ----
@@ -1822,17 +1822,17 @@ function saveProducts(productList) {
 
 As you may have noticed, the implementation doesn't hardcode any important aspects of the operation, which means you could use the inputs and output pattern in a generic way as long as you have zero or more inputs you want to pipe into one output. The consumer ends up with an elegant-looking method that's easy to understand--they `yield` input stores and `return` an output store. Furthermore, our use of promises makes it easy to concatenate this operation with others. This way, we're keeping a potential tangle of conditional statements and flow control mechanisms in check, by abstracting away flow control into the iteration mechanism under the `saveProducts` method.
 
-We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into `async`/`await`, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this ((("generators", startref="gen4")))((("generators", "and asynchronous input/output", secondary-sortas="asynchronous", startref="gen4aaio")))((("asynchronous code", "with generators", secondary-sortas="generators", startref="ac4wg")))chapter.
+We've looked into flow control mechanisms such as callbacks, events, promises, iterators, and generators. The following two sections delve into `async`/`await`, async iterators, and async generators, all of which build upon a mixture of the flow control mechanisms we've uncovered thus far in this ((("generators", startref="gen4")))((("generators", "and asynchronous input/output", secondary-sortas="asynchronous", startref="gen4aaio")))((("asynchronous functions", "with generators", secondary-sortas="generators", startref="ac4wg")))chapter.
 
 === Async Functions
 
-Languages like Python and C# have had `async`/`await` for a while. In ES2017, JavaScript gained native syntax that can be used to describe asynchronous operations.
+Languages ((("asynchronous functions", id="af4")))like Python and C# have had `async`/`await` for a while. In ES2017, JavaScript gained native syntax that can be used to describe asynchronous operations.
 
 Let's go over a quick recap comparing promises, callbacks, and generators. Afterwards we'll look into async functions in JavaScript, and how this new feature can help make our code more readable.
 
 ==== Flavors of Async Code
 
-Let's suppose we had code like the following. Here I'm wrapping a `fetch` request in a `getRandomArticle` function. The promise fulfills with the JSON `body` when successful, and follows standard `fetch` rejection mechanics otherwise.
+Let's suppose ((("asynchronous functions", "flavors of async code", id="af4foac")))we had code like the following. Here I'm wrapping a `fetch` request in a `getRandomArticle` function. The promise fulfills with the JSON `body` when successful, and follows standard `fetch` rejection mechanics otherwise.
 
 [source,javascript]
 ----
@@ -2337,7 +2337,7 @@ function getUserProfiles() {
 }
 ----
 
-Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows together.
+Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows ((("asynchronous functions", startref="af4")))together.
 
 === Asynchronous Iteration
 
