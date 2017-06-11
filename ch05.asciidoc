@@ -480,7 +480,7 @@ In so many words, then: no, `WeakMap` is definitely not worse than `Map`--they j
 
 === Sets in ES6
 
-The `Set` built-in is a new collection type in ES6 used to represent a grouping of values. In several aspects, `Set` is similar to `Map`:
+The `Set` ((("ES6 sets", id="ess5")))((("Set", id="set5")))built-in is a new collection type in ES6 used to represent a grouping of values. In several aspects, `Set` is similar to `Map`:
 
 - `Set` is also iterable
 - `Set` constructor also accepts an iterable
@@ -571,7 +571,7 @@ console.log(set.keys === set.values)
 
 === ES6 WeakSets
 
-In a similar fashion to `Map` and `WeakMap`, `WeakSet` is the weak version of `Set` that can't be iterated over. The values in a `WeakSet` must be unique object references. If nothing else is referencing a `value` found in a `WeakSet`, it'll be subject to garbage collection.
+In a ((("ES6 sets", startref="ess5")))((("Set", startref="set5")))similar fashion to `Map` and `WeakMap`, `WeakSet` is the weak version of `Set` that can't be iterated over. The values in a `WeakSet` must be unique object references. If nothing else is referencing a `value` found in a `WeakSet`, it'll be subject to garbage collection.
 
 You can only `.set`, `.delete`, and check if the `WeakSet` `.has` a given `value`. Just like in `Set`, there's no `.get` because sets are one-dimensional.
 
