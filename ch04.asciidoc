@@ -1554,7 +1554,7 @@ While generators let us write asynchronous code that appears synchronous, this i
 
 ==== Throwing Errors at a Generator
 
-Before shifting our thinking into user-provided generators, where they retain control of seemingly synchronous functions thanks to `yield` and suspension, we would've been hard pressed to find a use case for `g.throw`, a method that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between `yield` expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to `throw` that error into the generator.
+Before shifting our thinking into user-provided generators, where they retain control of seemingly synchronous functions thanks to `yield` and suspension, we would've been hard pressed to find a use case for `g.throw`, a ((("g.throw")))method that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between `yield` expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to `throw` that error into the generator.
 
 In the case of `modelProvider`, the iterator may experience network issues--or a malformed HTTP response--and fail to provide a piece of the model. In the following snippet of code, the `fetch` step was modified by adding an error callback that will be executed if parsing fails in `response.json()`, in which case we'll throw the exception at the generator function.
 
@@ -1566,7 +1566,7 @@ fetch(`/model?query=${ encodeURIComponent(value) }`)
   .catch(err => g.throw(err))
 ----
 
-When `g.next` is called, execution in generator code is unsuspended. The `g.throw` method also unsuspends the generator, but it causes an exception to be thrown at the location of the `yield` expression. An unhandled exception in a generator would stop iteration by preventing other `yield` expressions from being reachable. Generator code could wrap `yield` expressions in `try`/`catch` blocks to gracefully manage exceptions forwarded by iteration code--as shown in the following code snippet. This would allow subsequent `yield` expressions to be reached, suspending the generator and putting the iterator in charge once again.
+When `g.next` is called, execution in generator code is unsuspended. The `g.throw` method also unsuspends the generator, but it causes an exception to be thrown at the location of the `yield` expression. An unhandled exception in a generator would stop iteration by preventing other `yield` ((("yield")))expressions from being reachable. Generator code could wrap `yield` expressions in `try`/`catch` blocks to gracefully manage exceptions forwarded by iteration code--as shown in the following code snippet. This would allow subsequent `yield` expressions to be reached, suspending the generator and putting the iterator in charge once again.
 
 [source,javascript]
 ----
