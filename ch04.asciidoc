@@ -1077,7 +1077,7 @@ function* abc() {
 }
 ----
 
-Generator ((("iterator protocol", "in generators", see="generators", secondary-sortas="generators")))objects conform to both the iterable protocol and the iterator protocol:
+Generator ((("iteration protocol", "in generators", see="generators", secondary-sortas="generators")))objects conform to both the iterable protocol and the iterator protocol:
 
 - A generator object `chars` is built using the `abc` function
 - Object `chars` is an iterable because it has a `Symbol.iterator` method
