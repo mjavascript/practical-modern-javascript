@@ -364,7 +364,7 @@ The `getOwnPropertyDescriptor` trap in <<getownpropertydescriptor_trap>> offers 
 
 ==== deleteProperty Trap
 
-Setting ((("proxies", "deleteProperty trap", id="prox6dpt")))((("traps", "deleteProperty trap", id="trap6dpt")))a property to `undefined` clears its value, but the property is still part of the object. Using the `delete` operator on a property with code like `delete cat.furBall` means that the `furBall` property will be completely gone from the `cat` object.
+Setting ((("proxies", "deleteProperty trap", id="prox6dpt")))((("traps", "deleteProperty trap", id="trap6dpt")))((("deleteProperty trap", id="dpt6")))a property to `undefined` clears its value, but the property is still part of the object. Using the `delete` operator on a property with code like `delete cat.furBall` means that the `furBall` property will be completely gone from the `cat` object.
 
 [source,javascript]
 ----
@@ -430,7 +430,7 @@ delete proxy._secret
 // <- Error: Can't delete private "_secret" property
 ----
 
-Consumers interacting with `target` through the `proxy` can no longer delete properties in the `_secret` property space. That's one less thing to worry about!
+Consumers interacting with `target` through the `proxy` can no longer delete properties in the `_secret` property space. That's one less thing to worry ((("proxies", "deleteProperty trap", startref="prox6dpt")))((("traps", "deleteProperty trap", startref="trap6dpt")))((("deleteProperty trap", startref="dpt6")))about!
 
 ==== defineProperty Trap
 
