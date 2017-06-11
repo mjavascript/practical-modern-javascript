@@ -236,7 +236,7 @@ Creating a copy of a map is even easier: you feed the map you want to copy into 
 const copy = new Map(map)
 ----
 
-Just like maps are easily fed into other maps because they're iterable objects, they're also easy to consume. The following piece of code demonstrates how we can use the spread operator to this effect.
+Just like maps are easily fed into other maps because they're iterable objects, they're also easy to consume. The following piece of code demonstrates how we can use the ((("spread operator")))spread operator to this effect.
 
 [source,javascript]
 ----
@@ -276,7 +276,7 @@ console.log([...map])
 // <- [['a', 3]]
 ----
 
-ES6 maps compare keys using an algorithm called `SameValueZero` in the specification, where `NaN` equals `NaN` but `-0` equals `+0`. The following piece of code shows how even though `NaN` is typically evaluated to be different than itself, `Map` considers `NaN` to be a constant value that's always the same.
+ES6 maps compare ((("ES6 maps", "keys")))keys using an algorithm called `SameValueZero` in ((("SameValueZero")))the specification, where `NaN` equals `NaN` but `-0` equals `+0`. The following piece of code shows how even though `NaN` is typically evaluated to be different than itself, `Map` considers `NaN` to be a constant value that's always the same.
 
 [source,javascript]
 ----
@@ -293,7 +293,7 @@ console.log([...map])
 // <- [[NaN, 'two'], [0, 'four']]
 ----
 
-When you iterate over a `Map`, you are actually looping over its `.entries()`. That means that you don't need to explicitly iterate over `.entries()`. It'll be done on your behalf anyway: `map[Symbol.iterator]` points to `map.entries`. The `.entries()` method returns an iterator for the key/value pairs in the map.
+When you ((("iteration protocol", "in maps")))iterate over a `Map`, you are actually looping over its `.entries()`. That means that you don't need to explicitly iterate over `.entries()`. It'll be done on your behalf anyway: `map[Symbol.iterator]` points to `map.entries`. The `.entries()` method returns an iterator for the key/value pairs in the map.
 
 [source,javascript]
 ----
@@ -301,7 +301,7 @@ console.log(map[Symbol.iterator] === map.entries)
 // <- true
 ----
 
-There are two other `Map` iterators you can leverage: `.keys()` and `.values()`. The first enumerates keys in a map while the second enumerates values, as opposed to `.entries()`, which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
+There are two other `Map` iterators you can leverage: `.keys()` (((".keys()", primary-sortas="keys")))and `.values()`. (((".values()", primary-sortas="values")))The first enumerates keys in a map while the second enumerates values, as opposed to `.entries()`, which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
 
 [source,javascript]
 ----
@@ -337,7 +337,7 @@ Earlier, we brought up the ability of providing arbitrary object references as t
 
 ==== Hash-Maps and the DOM
 
-In ES5, whenever we wanted to associate a DOM element with an API object connecting that element with some library, we had to implement a verbose and slow pattern such as the one in the following code listing. That code returns an API object with a few methods associated to a given DOM element, allowing us to put DOM elements on a map from which we can later retrieve the API object for a DOM element.
+In ES5, ((("ES6 maps", "hash maps and the DOM", id="es5hmatdom")))whenever we wanted to associate a DOM element with an API object connecting that element with some library, we had to implement a verbose and slow pattern such as the one in the following code listing. That code returns an API object with a few methods associated to a given DOM element, allowing us to put DOM elements on a map from which we can later retrieve the API object for a DOM element.
 
 [source,javascript]
 ----
@@ -421,7 +421,7 @@ function customThing(el) {
 }
 ----
 
-Maps aren't the only kind of built-in collection in ES6, there's also `WeakMap`, `Set`, and `WeakSet`. Let's proceed by digging into `WeakMap`.
+Maps aren't ((("ES6 maps", "hash maps and the DOM", startref="es5hmatdom")))the only kind of built-in collection in ES6, there's also `WeakMap`, `Set`, and `WeakSet`. Let's proceed by digging into `WeakMap`.
 
 === Understanding and Using WeakMap
 
