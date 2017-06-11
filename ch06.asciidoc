@@ -981,7 +981,7 @@ Conversely to the `getPrototypeOf` trap, ((("getPrototypeOf trap", startref="gpt
 
 There is an `Object.setPrototypeOf` ((("setPrototypeOf trap", id="sptot6")))((("traps", "setPrototypeOf", id="t6spto")))((("proxies", "setPrototypeOf trap", id="prox6sptot")))method in ES6 that can be used to change the prototype of an object into a reference to another object. It's considered the proper way of setting the prototype, as opposed to setting the special `__proto__` property, which is a feature that's supported in most browsers but was deprecated in ES6.
 
-Deprecation means that browser vendors are discouraging the use of `__proto__`. In other contexts, deprecation also means that the feature might be removed in the future. The web platform, however, doesn't break backward compatibility, and `__proto__` is unlikely to ever be removed. That being said, deprecation also means you're discouraged from using the feature. Thus, using the `Object.setPrototypeOf` method is preferable to changing `__proto__` when we want to modify the underlying prototype for an object.
+Deprecation ((("deprecation")))means that browser vendors are discouraging the use of `__proto__`. In other contexts, deprecation also means that the feature might be removed in the future. The web platform, however, doesn't break backward compatibility, and `__proto__` is unlikely to ever be removed. That being said, deprecation also means you're discouraged from using the feature. Thus, using the `Object.setPrototypeOf` method is preferable to changing `__proto__` when we want to modify the underlying prototype for an object.
 
 You can use `handler.setPrototypeOf` to set up a trap for `Object.setPrototypeOf`. The following snippet of code doesn't alter the default behavior of changing a prototype into `base`. Note that, for completeness, there is a `Reflect.setPrototypeOf` method that's equivalent to `Object.setPrototypeOf`.
 
@@ -1022,7 +1022,7 @@ In these cases, it's best to fail with an exception so that consumers can unders
 
 ==== preventExtensions Trap
 
-You can use `handler.preventExtensions` to trap the `Object.preventExtensions` method introduced in ES5. When extensions are prevented on an object, new properties can't be added any longer: the object can't be extended.
+You can use `handler.preventExtensions` ((("preventExtensions trap", id="pet6")))((("traps", "preventExtensions trap", id="t6pet")))((("proxies", "preventExtensions trap", id="prox6pet")))to trap the `Object.preventExtensions` method introduced in ES5. When extensions are prevented on an object, new properties can't be added any longer: the object can't be extended.
 
 Imagine a scenario where you want to be able to selectively `preventExtensions` on some objects, but not all of them. In that scenario, you could use a `WeakSet` to keep track of the objects that should be extensible. If an object is in the set, then the `preventExtensions` trap should be able to capture those requests and discard them.
 
