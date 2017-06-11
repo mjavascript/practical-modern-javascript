@@ -102,7 +102,7 @@ map.set('woofmark', {
 console.log([...map])
 ----
 
-Once you have a map, you can query whether it contains an entry by a `key` provided via the `map.has` ((("map.has")))method.
+Once you have a map, ((("ES6 maps", "keys", id="es5k")))you can query whether it contains an entry by a `key` provided via the `map.has` ((("map.has")))method.
 
 [source,javascript]
 ----
@@ -123,7 +123,7 @@ map.has('1')
 // <- false
 ----
 
-The `map.get` method takes a map entry `key` and returns the `value` if an entry by the provided key is found.
+The `map.get` ((("map.get")))method takes a map entry `key` and returns the `value` if an entry by the provided key is found.
 
 [source,javascript]
 ----
@@ -131,7 +131,7 @@ map.get('contra')
 // <- { description: 'Asynchronous flow control' }
 ----
 
-Deleting values from the map is possible through the `map.delete` method, providing the `key` for the entry you want to remove.
+Deleting values from the map is possible through ((("map.delete")))the `map.delete` method, providing the `key` for the entry you want to remove.
 
 [source,javascript]
 ----
@@ -192,7 +192,7 @@ map.get(key)
 // <- [1, 2]
 ----
 
-Assuming an array of key/value pair `items` you want to include on a map, we could use a `for..of` loop to iterate over those `items` and add each pair to the map using `map.set`, as shown in the following code snippet. Note how we're using destructuring during the `for..of` loop in order to effortlessly pull the `key` and `value` out of each two-dimensional item in `items`.
+Assuming an array of key/value pair `items` you want to include on a map, we could use a `for..of` ((("for..of")))loop to iterate over those `items` and add each pair to the map ((("map.set")))using `map.set`, as shown in the following code snippet. Note how we're using ((("destructuring")))destructuring during the `for..of` loop in order to effortlessly pull the `key` and `value` out of each two-dimensional item in `items`.
 
 [source,javascript]
 ----
@@ -207,7 +207,7 @@ for (const [key, value] of items) {
 }
 ----
 
-Maps are iterable objects as well, because they implement a `Symbol.iterator` method. Thus, a copy of the map can be created using a `for..of` loop using similar code to what we've just used to create a map out of the `items` array.
+Maps are ((("ES6 maps", "keys", startref="es5k")))iterable objects as well, because they implement a `Symbol.iterator` method. Thus, a copy of the map can be created using a `for..of` loop using similar code to what we've just used to create a map out of the `items` array.
 
 [source,javascript]
 ----
