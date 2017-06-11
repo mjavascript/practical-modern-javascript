@@ -1588,7 +1588,7 @@ Even though generator functions allow us to suspend execution and then resume as
 
 ==== Returning on Behalf of a Generator
 
-Besides `g.next` and `g.throw`, generator objects have one more method at their disposal to determine how a generator sequence is iterated: `g.return(value)`. ((("g.return(value)", id="grv4")))This method unsuspends the generator function and executes `return value` at the location of `yield`, typically ending the sequence being iterated by the generator object. This is no different to what would occur if the generator function actually had a `return` statement in it.
+Besides `g.next` and `g.throw`, ((("generators", "returns in", id="gen4ri")))generator objects have one more method at their disposal to determine how a generator sequence is iterated: `g.return(value)`. ((("g.return(value)", id="grv4")))This method unsuspends the generator function and executes `return value` at the location of `yield`, typically ending the sequence being iterated by the generator object. This is no different to what would occur if the generator function actually had a `return` statement in it.
 
 [source,javascript]
 ----
@@ -1677,7 +1677,7 @@ console.log(g.next())
 
 Due to the confusing nature of the differences between `yield` expressions and `return` statements, `return` in generators would be best avoided except in cases where a specific method wants to treat `yield` and `return` differently, the end goal always being to provide an abstraction in exchange for a simplified development experience.
 
-In the following section, we'll build an iterator that leverages differences in `yield` versus `return` to perform both input and output based on the same generator ((("g.return(value)", startref="grv4")))function.
+In the following section, we'll build an iterator that leverages differences in `yield` versus `return` to perform both input and output based on the same generator ((("generators", "returns in", startref="gen4ri")))((("g.return(value)", startref="grv4")))function.
 
 ==== Asynchronous I/O Using Generators
 
