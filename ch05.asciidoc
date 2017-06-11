@@ -85,7 +85,7 @@ Let's plunge into their practical usage and inner workings.
 
 === Using ES6 Maps
 
-ES6 ((("ECMAScript", "using ES6 maps", id="ecma5ues6m")))((("ES6", "maps", id="es5m")))introduces built-in collections, such as `Map`, meant to alleviate implementation of patterns such as those we outlined earlier when building our own hash-map from scratch. `Map` is a key/value data structure in ES6 that more naturally and efficiently lends itself to creating maps in JavaScript without the need for object literals.
+ES6 ((("ECMAScript", "using ES6 maps", id="ecma5ues6m")))((("ES6 maps", id="es5m")))introduces built-in collections, such as `Map`, meant to alleviate implementation of patterns such as those we outlined earlier when building our own hash-map from scratch. `Map` ((("Map", seealso="ES6 maps")))is a key/value data structure in ES6 that more naturally and efficiently lends itself to creating maps in JavaScript without the need for object literals.
 
 ==== First Look into ES6 Maps
 
@@ -102,7 +102,7 @@ map.set('woofmark', {
 console.log([...map])
 ----
 
-Once you have a map, you can query whether it contains an entry by a `key` provided via the `map.has` method.
+Once you have a map, you can query whether it contains an entry by a `key` provided via the `map.has` ((("map.has")))method.
 
 [source,javascript]
 ----
@@ -333,7 +333,7 @@ map.forEach((value, key) => console.log(key, value))
 // <- { name: 'Kent' } 'is a person'
 ----
 
-Earlier, we brought up the ability of providing arbitrary object references as the key to a `Map` entry. Let's go into a concrete use case for that ((("ECMAScript", "using ES6 maps", startref="ecma5ues6m")))((("ES6", "maps", startref="es5m")))API.
+Earlier, we brought up the ability of providing arbitrary object references as the key to a `Map` entry. Let's go into a concrete use case for that ((("ECMAScript", "using ES6 maps", startref="ecma5ues6m")))((("ES6 maps", startref="es5m")))API.
 
 ==== Hash-Maps and the DOM
 
