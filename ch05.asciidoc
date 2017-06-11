@@ -337,7 +337,7 @@ Earlier, we brought up the ability of providing arbitrary object references as t
 
 ==== Hash-Maps and the DOM
 
-In ES5, ((("ES6 maps", "hash maps and the DOM", id="es5hmatdom")))whenever we wanted to associate a DOM element with an API object connecting that element with some library, we had to implement a verbose and slow pattern such as the one in the following code listing. That code returns an API object with a few methods associated to a given DOM element, allowing us to put DOM elements on a map from which we can later retrieve the API object for a DOM element.
+In ES5, ((("ES6 maps", "hash maps and the DOM", id="es5hmatdom")))((("DOM elements", "in maps", secondary-sortas="maps", id="dom5im")))whenever we wanted to associate a DOM element with an API object connecting that element with some library, we had to implement a verbose and slow pattern such as the one in the following code listing. That code returns an API object with a few methods associated to a given DOM element, allowing us to put DOM elements on a map from which we can later retrieve the API object for a DOM element.
 
 [source,javascript]
 ----
@@ -421,7 +421,7 @@ function customThing(el) {
 }
 ----
 
-Maps aren't ((("ES6 maps", "hash maps and the DOM", startref="es5hmatdom")))the only kind of built-in collection in ES6, there's also `WeakMap`, `Set`, and `WeakSet`. Let's proceed by digging into `WeakMap`.
+Maps aren't ((("ES6 maps", "hash maps and the DOM", startref="es5hmatdom")))((("DOM elements", "in maps", secondary-sortas="maps", startref="dom5im")))the only kind of built-in collection in ES6, there's also `WeakMap`, `Set`, and `WeakSet`. Let's proceed by digging into `WeakMap`.
 
 === Understanding and Using WeakMap
 
