@@ -2337,7 +2337,7 @@ function getUserProfiles() {
 }
 ----
 
-Noting that async functions are syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows ((("asynchronous functions", startref="af4")))((("asynchronous functions", "internals of", startref="af4io")))((("asynchronous functions", "async/await", startref="af4a")))together.
+Noting that async functions are ((("syntactic sugar")))syntactic sugar on top of generators and promises, we can also make a point about the importance of learning how each of these constructs work in order to get better insight into how you can mix, match, and combine all the different flavors of asynchronous code flows ((("asynchronous functions", startref="af4")))((("asynchronous functions", "internals of", startref="af4io")))((("asynchronous functions", "async/await", startref="af4a")))together.
 
 === Asynchronous Iteration
 
