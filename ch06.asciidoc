@@ -531,7 +531,7 @@ There's one more trap that can help conceal `_secret` properties.
 
 ==== ownKeys Trap
 
-The `handler.ownKeys` method may be used to return an `Array` of properties that will be used as a result for `Reflect.ownKeys()`. It should include all properties of `target`: enumerable, non-enumerable, and symbols as well. A default implementation, as always, could pass through to the reflection method on the proxied `target` object.
+The `handler.ownKeys` method ((("proxies", "ownKeys trap", id="prox6okt")))((("traps", "ownKeys trap", id="trap6okt")))((("ownKeys trap", id="okt6")))may be used to return an `Array` of properties that will be used as a result for `Reflect.ownKeys()`. It should include all properties of `target`: enumerable, non-enumerable, and symbols as well. A default implementation, as always, could pass through to the reflection method on the proxied `target` object.
 
 [source,javascript]
 ----
@@ -622,7 +622,7 @@ for (const key of Object.getOwnPropertySymbols(proxy)) {
 }
 ----
 
-We were able to hide properties prefixed with `_` from key enumeration while leaving symbols and other properties unaffected. What's more, there's no need to repeat ourselves in several trap handlers: a single `ownKeys` trap took care of all different enumeration methods. The only caveat is that we need to be careful about handling `Symbol` property keys.
+We were able to hide properties prefixed with `_` from key enumeration while leaving symbols and other properties unaffected. What's more, there's no need to repeat ourselves in several trap handlers: a single `ownKeys` trap took care of all different enumeration methods. The only caveat is that we need to be ((("proxies", "ownKeys trap", startref="prox6okt")))((("traps", "ownKeys trap", startref="trap6okt")))((("ownKeys trap", startref="okt6")))careful about handling `Symbol` property keys.
 
 === Advanced Proxy Traps
 
