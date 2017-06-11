@@ -1,7 +1,7 @@
 [[managing-property-access-with-proxies]]
 == Managing Property Access pass:[<span class="keep-together">with Proxies</span>]
 
-Proxies are an interesting and powerful feature in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a `Proxy` to determine the desired behavior whenever the properties of an underlying `target` object are accessed. A `handler` object can be used to configure traps for your `Proxy`, which define and restrict how the underlying object is accessed, as we'll see in a bit.
+Proxies ((("proxies", id="prox6")))are an interesting and powerful feature in ES6 that act as intermediaries between API consumers and objects. In a nutshell, you can use a `Proxy` to determine the desired behavior whenever the properties of an underlying `target` object are accessed. A `handler` object can be used to configure traps for your `Proxy`, which define and restrict how the underlying object is accessed, as we'll see in a bit.
 
 === Getting Started with Proxy
 
@@ -1093,4 +1093,4 @@ As we've learned over the last few pages, there are myriad use cases for proxies
 
 Proxies are an extremely powerful feature in ES6, with many potential applications, and they're well equipped for code instrumentation and introspection. However, they also have a significant performance impact in JavaScript engine execution as they're virtually impossible to optimize for. This makes proxies impractical for applications where speed is of the essence.
 
-At the same time it's easy to confuse consumers by providing complicated proxies that attempt to do too much. It may be a good idea to avoid them for most use cases, or at least develop consistent and uncomplicated access rules. Make sure you're not producing many side-effects in property access, which can lead to confusion even if properly documented.
+At the same time it's easy to confuse consumers by providing complicated proxies that attempt to do too much. It may be a good idea to avoid them for most use cases, or at least develop consistent and uncomplicated access rules. Make sure you're not producing many side-effects in property access, which can lead to confusion even if properly ((("proxies", startref="prox6")))documented.
