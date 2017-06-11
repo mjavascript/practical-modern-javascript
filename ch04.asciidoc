@@ -2088,7 +2088,7 @@ async function example(a, b, c) {
 }
 ----
 
-The next bit shows how the `example` declaration could be converted into a plain old `function` that returns the result of feeding a generator function to a `spawn` helper.
+The next bit shows how the `example` declaration could be converted into a plain old `function` that returns the result of feeding a generator function to a `spawn` ((("spawn", id="spawn4")))helper.
 
 [source,javascript]
 ----
@@ -2198,7 +2198,7 @@ function spawn(generator) {
 }
 ----
 
-The first thing that happens in the `step` function is calling the `nextFn` function inside a `try`/`catch` block. This resumes execution in the generator function. If the generator function were to produce an error, we'd fall into the `catch` clause, and the underlying promise for our async function would be rejected without any further steps, as shown next.
+The first thing that ((("spawn", startref="spawn4")))happens in the `step` function is calling the `nextFn` function inside a `try`/`catch` block. This resumes execution in the generator function. If the generator function were to produce an error, we'd fall into the `catch` clause, and the underlying promise for our async function would be rejected without any further steps, as shown next.
 
 [source,javascript]
 ----
