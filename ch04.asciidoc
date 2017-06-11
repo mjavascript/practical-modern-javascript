@@ -2438,7 +2438,7 @@ Note that async iterators--as well as async generators--are in stage 3 of the EC
 
 ==== Async Generators
 
-Like with regular iterators, there are async generators to complement async iterators. An async generator function is like a generator function, except that it also supports `await` and `for await..of` declarations. The following example shows a `fetchInterval` generator that fetches a resource periodically at an interval.
+Like ((("asynchronous iteration", "async generators")))((("generators", "async")))with regular iterators, there are async generators to complement async iterators. An async generator function is like a generator function, except that it also supports `await` and `for await..of` declarations. The following example shows a `fetchInterval` generator that fetches a resource periodically at an interval.
 
 [source,javascript]
 ----
