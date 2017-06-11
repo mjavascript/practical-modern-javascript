@@ -1455,7 +1455,7 @@ Generators are useful due to their expressiveness, while the iterator protocol a
 
 ==== Consuming Generator Functions for Flexibility
 
-Thus far in the chapter we've talked about generators in terms of constructing a consumable sequence. Generators can also be presented as an interface to a piece of code that decides how the generator function is to be iterated over.
+Thus ((("generators", "consuming generator functions for flexibility", id="gen4cgfff")))far in the chapter we've talked about generators in terms of constructing a consumable sequence. Generators can also be presented as an interface to a piece of code that decides how the generator function is to be iterated over.
 
 In this section, we'll be writing a generator function that gets passed to a method, which loops over the generator consuming elements of its sequence. Even though you might think that writing code like this is unconventional at first, most libraries built around generators have their users write the generators while the library retains control over the iteration.
 
@@ -1507,7 +1507,7 @@ function followCrumbs(data, crumb) {
 }
 ----
 
-The largest benefit of asking consumers to provide a generator function is that providing them with the `yield` keyword opens up a world of possibilities where execution in their code may be suspended while the iterator performs an asynchronous operation in between `g.next` calls. Let's explore more asynchronous uses of generators in the next section.
+The largest benefit of asking consumers to provide a generator function is that providing them with the `yield` keyword opens up a world of possibilities where execution in their code may be suspended while the iterator performs an asynchronous operation in between `g.next` calls. Let's explore more asynchronous uses of generators in the ((("generators", "consuming generator functions for flexibility", startref="gen4cgfff")))next section.
 
 ==== Dealing with Asynchronous Flows
 
