@@ -2103,7 +2103,7 @@ Inside the generator function, we'll assume `yield` to be the syntactic equivale
 
 In `spawn`, a promise is wrapped around code that will step through the generator function--made out of user code--in series, forwarding values to the generator code (the `async` function's body).
 
-The following listing should aid you in understanding how the `async`/`await` algorithm ((("asynchronous functions", "await", id="af4ax")))iterates over a sequence of `await` expressions using a generator. Each item in the sequence is wrapped in a promise and then gets chained with the next step in the sequence. The promise returned by the underlying generator function becomes settled when the sequence ends or one of the promises is rejected.
+The following listing should aid you in understanding how the `async`/`await` algorithm iterates over a sequence of `await` expressions using a generator. Each item in the sequence is wrapped in a promise and then gets chained with the next step in the sequence. The promise returned by the underlying generator function becomes settled when the sequence ends or one of the promises is rejected.
 
 [source,javascript]
 ----
