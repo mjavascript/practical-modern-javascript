@@ -1554,7 +1554,7 @@ While generators let us write asynchronous code that appears synchronous, this i
 
 ==== Throwing Errors at a Generator
 
-Before ((("generators", "throwing errors at", id="gen4tea")))shifting our thinking into user-provided generators, where they retain control of seemingly synchronous functions thanks to `yield` ((("yield", id="y4")))and suspension, we would've been hard pressed to find a use case for `g.throw`, a ((("g.throw")))method that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between `yield` expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to `throw` that error into the generator.
+Before ((("generators", "throwing errors at", id="gen4tea")))shifting our thinking into user-provided generators, where they retain control of seemingly synchronous functions thanks to `yield` ((("yield", id="y4")))and suspension, we would've been hard pressed to find a use case for `g.throw`, a ((("g.throw", id="gt4")))method that can be used to report errors that take place while the generator is suspended. Its applications become apparent when we think in terms of the flow control code driving the moments spent in between `yield` expressions, where things could go wrong. When something goes wrong processing an item in the sequence, the code that's consuming the generator needs to be able to `throw` that error into the generator.
 
 In the case of `modelProvider`, the iterator may experience network issues--or a malformed HTTP response--and fail to provide a piece of the model. In the following snippet of code, the `fetch` step was modified by adding an error callback that will be executed if parsing fails in `response.json()`, in which case we'll throw the exception at the generator function.
 
@@ -1584,7 +1584,7 @@ modelProvider(function* () {
 })
 ----
 
-Even though generator functions allow us to suspend execution and then resume asynchronously, we can use the same error handling semantics—++try++, `catch`, and ++throw++—as with regular functions. Having the ability to use `try`/`catch` blocks in generator code lets us treat the code as if it were synchronous, even when there are HTTP requests sitting behind `yield` expressions, ((("yield", startref="y4")))((("generators", "throwing errors at", startref="gen4tea")))in iterator code.
+Even though generator functions allow us to suspend execution and then resume asynchronously, we can use the same error handling semantics—++try++, `catch`, and ++throw++—as with regular functions. Having the ability to use `try`/`catch` blocks in generator code lets us treat the code as if it were synchronous, even when there are HTTP requests sitting behind `yield` expressions, ((("g.throw", startref="gt4")))((("yield", startref="y4")))((("generators", "throwing errors at", startref="gen4tea")))in iterator code.
 
 ==== Returning on Behalf of a Generator
 
