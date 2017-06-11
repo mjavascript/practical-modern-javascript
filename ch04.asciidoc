@@ -2341,7 +2341,7 @@ Noting that async functions are ((("syntactic sugar")))syntactic sugar on top of
 
 === Asynchronous Iteration
 
-As explained in <<iterator_protocol_and_iterable_protocol>>, you may recall how iterators leverage `Symbol.iterator` as an interface to define how an object is to be iterated.
+As ((("asynchronous iteration", id="ai4")))((("iteration protocol", "asychronous iterators", see="asynchronous iterators")))explained in <<iterator_protocol_and_iterable_protocol>>, you may recall how iterators leverage `Symbol.iterator` as ((("Symbol.iterator")))an interface to define how an object is to be iterated.
 
 [source,javascript]
 ----
@@ -2358,7 +2358,7 @@ const sequence = {
 }
 ----
 
-You may also recall that the `sequence` object can be iterated in a number of different ways such as the spread operator, `Array.from` and `for..of`, among others.
+You may also recall that the `sequence` object ((("sequence")))can be iterated in a number of different ways such as the spread operator, `Array.from` ((("Array.from")))and `for..of`, among others.
 
 [source,javascript]
 ----
@@ -2380,11 +2380,11 @@ for (const item of sequence) {
 }
 ----
 
-The contract for an iterator mandates that the `next` method of `Symbol.iterator` instances returns an object with `value` and `done` properties. The `value` property indicates the current value in the sequence, while `done` is a boolean indicating whether the sequence has ended.
+The contract for an iterator mandates that the `next` ((("next")))method of `Symbol.iterator` instances returns an object with `value` and `done` properties. The `value` ((("value")))property indicates the current value in the sequence, while `done` ((("done")))is a boolean indicating whether the sequence has ended.
 
 ==== Async Iterators
 
-In async iterators, the contract has a subtle difference: `next` is supposed to return a `Promise` that resolves to an object containing `value` and `done` properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new `Symbol.asyncIterator` is introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing `Symbol.iterator`.
+In async iterators, the contract has a subtle difference: `next` is supposed to return a `Promise` that resolves to an object containing `value` and `done` properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new `Symbol.asyncIterator` is ((("Symbol.asyncIterator")))introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing `Symbol.iterator`.
 
 The `sequence` iterable could be made compatible with the async iterator interface with two small changes: we replace `Symbol.iterator` with `Symbol.asyncIterator`, and we wrap the return value for the `next` method in `Promise.resolve`, thus returning a `Promise`.
 
