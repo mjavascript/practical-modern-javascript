@@ -434,7 +434,7 @@ Consumers interacting with `target` through the `proxy` can no longer delete pro
 
 ==== defineProperty Trap
 
-The `Object.defineProperty` function--introduced in ES5--can be used to add new properties to a `target` object, using a property `key` and a property `descriptor`. For the most part, `Object.defineProperty(target, key, descriptor)` is used in two kinds of situations:
+The `Object.defineProperty` ((("proxies", "defineProperty trap", id="prox6defpt")))((("traps", "defineProperty trap", id="t6defpt")))((("defineProperty trap", id="defpt6")))function--introduced in ES5--can be used to add new properties to a `target` object, using a property `key` and a property `descriptor`. For the most part, `Object.defineProperty(target, key, descriptor)` is used in two kinds of situations:
 
 1. When we need to ensure cross-browser support of getters and setters
 2. When we want to define a custom property accessor
@@ -525,7 +525,7 @@ proxy._secretIngredient = 'salsa'
 // <- Error: Can't define private "_secretIngredient" property
 ----
 
-The `proxy` object is safely hiding `_secret` properties behind a trap that guards them from definition through either `proxy[key] = value` or `Object.defineProperty(proxy, key, { value })`. If we factor in the previous traps we saw, we could prevent `_secret` properties from being read, written, queried, and created.
+The `proxy` object is safely hiding `_secret` properties behind a trap that guards them from definition through either `proxy[key] = value` or `Object.defineProperty(proxy, key, { value })`. If we factor in the previous traps we saw, we could prevent `_secret` properties from being read, written, queried, and ((("proxies", "defineProperty trap", startref="prox6defpt")))((("traps", "defineProperty trap", startref="t6defpt")))((("defineProperty trap", startref="defpt6")))created.
 
 There's one more trap that can help conceal `_secret` properties.
 
