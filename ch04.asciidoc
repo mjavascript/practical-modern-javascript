@@ -1225,13 +1225,13 @@ while (true) {
 }
 ----
 
-Using iterators to loop over a generator might look like a complicated way of implementing a `for..of` loop, but it also allows for some interesting use cases. Particularly: `for..of` is always a synchronous loop, whereas with iterators we're in charge of deciding when to invoke `g.next`. In turn, that translates into additional opportunities such as running an asynchronous operation and then calling `g.next` once we have a result.
+Using iterators to loop over a generator might look like a complicated way of implementing a `for..of` loop, but it also allows for some interesting use cases. Particularly: `for..of` ((("for..of")))is always a synchronous loop, whereas with iterators we're in charge of deciding when to invoke `g.next`. In turn, that translates into additional opportunities such as running an asynchronous operation and then calling `g.next` once we have a result.
 
-Whenever `.next()` is called on a generator, there are four different kinds of "events" that can suspend execution in the generator while returning a result to the caller of `.next()`. We'll promptly explore each of these scenarios:
+Whenever `.next()` is (((".next()", primary-sortas="next")))called on a generator, there are four different kinds of "events" that can suspend execution in the generator while returning a result to the caller of `.next()`. We'll promptly explore each of these scenarios:
 
-- A `yield` expression returning the next value in the sequence
-- A `return` statement returning the last value in the sequence
-- A `throw` statement halts execution in the generator entirely
+- A `yield` expression ((("yield")))returning the next value in the sequence
+- A `return` statement ((("return")))returning the last value in the sequence
+- A `throw` statement ((("throw")))halts execution in the generator entirely
 - Reaching the end of the generator function signals `{ done: true }`, as the function implicitly returns `undefined`
 
 Once the `g` generator finishes iterating over a sequence, subsequent calls to `g.next()` will have no effect and just return `{ done: true }`. The following code snippet demonstrates the idempotence we can observe when calling `g.next` repeatedly once a sequence has ended.
@@ -1252,7 +1252,7 @@ console.log(g.next())
 
 ==== Mixing Generators into Iterables
 
-Let's ((("generators", "iterating over by hand", startref="gen4iobh")))do a quick recap of generators. Generator functions return generator objects when invoked. A generator object has a `next` method, which returns the next element in the sequence. The `next` method returns objects with a `{ value, done }` shape.
+Let's ((("generators", "iterating over by hand", startref="gen4iobh")))((("generators", "mixing into iterables", id="gen4mii")))do a quick recap of generators. Generator functions return generator objects when invoked. A generator object has a `next` method, which returns the next element in the sequence. The `next` ((("next")))method returns objects with a `{ value, done }` shape.
 
 The following example shows an infinite Fibonacci number generator. We then instantiate a generator object and read the first eight values in the sequence.
 
@@ -1338,7 +1338,7 @@ console.log(g.next()) // <- { value: 13, done: false }
 console.log(g.next()) // <- { value: 21, done: false }
 ----
 
-Meanwhile, the iterable protocol also holds up. To verify that, you might use a construct like `for..of`, instead of manually creating the generator object. The following example uses `for..of` and introduces a circuit breaker to prevent an infinite loop from crashing the program.
+Meanwhile, the iterable protocol also holds up. To verify that, you might use a construct like `for..of`, instead of manually creating the generator object. The following example uses `for..of` and ((("for..of")))introduces a circuit breaker to prevent an infinite loop from crashing the program.
 
 [source,javascript]
 ----
@@ -1362,7 +1362,7 @@ Moving onto more practical examples, let's see how generators can help us iterat
 
 ==== Tree Traversal Using Generators
 
-Algorithms to work with tree structures can be tricky to understand, often involving recursion. Consider the following bit of code, where we define a `Node` class that can hold a `value` and an arbitrary amount of child nodes.
+Algorithms ((("generators", "in tree traversal", secondary-sortas="tree", id="gen4itt")))((("tree traversal", id="tt4")))to work with tree structures can be tricky to understand, often involving recursion. Consider the following bit of code, where we define a `Node` class that can hold a `value` and an arbitrary amount of child nodes.
 
 [source,javascript]
 ----
@@ -1451,7 +1451,7 @@ console.log([...root])
 // <- [1, 2, 3, 8, 4, 9, 10, 5, 7, 6]
 ----
 
-Generators are useful due to their expressiveness, while the iterator protocol allows us to define a sequence we can iterate at our own pace, which comes in handy when a tree has thousands of nodes and we need to throttle iteration for performance reasons.
+Generators are useful due to their expressiveness, while the iterator protocol allows us to define a sequence we can iterate at our own pace, which comes in handy when a tree has thousands of nodes and we need to throttle iteration for performance ((("generators", "in tree traversal", secondary-sortas="tree", startref="gen4itt")))((("tree traversal", startref="tt4")))reasons.
 
 ==== Consuming Generator Functions for Flexibility
 
