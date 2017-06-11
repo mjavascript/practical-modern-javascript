@@ -1511,7 +1511,7 @@ The largest benefit of asking consumers to provide a generator function is that 
 
 ==== Dealing with Asynchronous Flows
 
-Going back to the example where we call `modelProvider` with a user-provided generator, let's consider what would change about our code if the model parts were to be provided asynchronously. The beauty of generators is that if the way we iterate over the sequence of paths were to become asynchronous, the user-provided function wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch a piece of the model, and all it'd take would be to ask a service for the answer to the current path, return that value via an intermediary `yield` statement or in some other way, and then call `g.next` on the generator object.
+Going ((("generators", "asynchronous flows", id="gen4af")))back to the example where we call `modelProvider` with a user-provided generator, let's consider what would change about our code if the model parts were to be provided asynchronously. The beauty of generators is that if the way we iterate over the sequence of paths were to become asynchronous, the user-provided function wouldn't have to change at all. We already have the ability to suspend execution in the generator while we fetch a piece of the model, and all it'd take would be to ask a service for the answer to the current path, return that value via an intermediary `yield` statement or in some other way, and then call `g.next` on the generator object.
 
 Let's assume we're back at the following usage of `modelProvider`.
 
@@ -1550,7 +1550,7 @@ function modelProvider(paths) {
 
 Always keep in mind that, while a `yield` expression is being evaluated, execution of the generator function is paused until the next item in the sequence--the next query for the model, in our example--is requested to the iterator. In this sense, code in a generator function looks and feels as if it were synchronous, even though `yield` pauses execution in the generator until `g.next` resumes execution.
 
-While generators let us write asynchronous code that appears synchronous, this introduces an inconvenience. How do we handle errors that arise in the iteration? If an HTTP request fails, for instance, how do we notify the generator and then handle the error notification in the generator function?
+While generators let us write asynchronous code that appears synchronous, this introduces an inconvenience. How do we handle errors that arise in the iteration? If an HTTP request fails, for instance, how do we notify the generator and then handle the error notification in the ((("generators", "asynchronous flows", startref="gen4af")))generator function?
 
 ==== Throwing Errors at a Generator
 
