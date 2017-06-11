@@ -916,7 +916,7 @@ Note that arrow functions can't be used as constructors, and thus we can't use t
 
 ==== getPrototypeOf Trap
 
-We can use the `handler.getPrototypeOf` method as a trap for all of the following operations:
+We can ((("getPrototypeOf trap", id="gptot6")))((("traps", "getPrototypeOf", id="t6gpto")))((("proxies", "getPrototypeOf trap", id="prox6gptot")))use the `handler.getPrototypeOf` method as a trap for all of the following operations:
 
 - `Object#__proto__` property
 - `Object#isPrototypeOf` method
