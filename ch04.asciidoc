@@ -1998,7 +1998,7 @@ async function write() {
 }
 ----
 
-What ((("asynchronous functions", "async/await", startref="af4a")))about concurrent asynchronous flows?
+What about concurrent asynchronous flows?
 
 ==== Concurrent Async Flows
 
@@ -2022,9 +2022,9 @@ async function concurrent() {
 }
 ----
 
-We can use `Promise.all` to work around that issue, creating a single promise that we can `await` on. This way, our code blocks until every promise in a list is settled, and they can be resolved concurrently.
+We can use `Promise.all` to ((("Promise.all")))work around that issue, creating a single promise that we can `await` on. This way, our code blocks until every promise in a list is settled, and they can be resolved concurrently.
 
-The following example shows how you could `await` on three different promises that could be resolved concurrently. Given that `await` suspends your `async` function and the `await Promise.all` expression ultimately resolves into a `results` array, we can take advantage of destructuring to pull individual results out of that array.
+The following example shows how you could `await` on three different promises that could be resolved concurrently. Given that `await` suspends your `async` function and the `await Promise.all` expression ultimately resolves into a `results` array, we can take advantage of destructuring to pull individual results out of that ((("asynchronous functions", "async/await", startref="af4a")))array.
 
 [source,javascript]
 ----
@@ -2044,7 +2044,7 @@ async function concurrent() {
 }
 ----
 
-We could use `Promise.race` to get the result from the promise that fulfills ((("asynchronous functions", "concurrent async flows", startref="af4caf")))quicker.
+We could use `Promise.race` to ((("Promise.race")))get the result from the promise that fulfills ((("asynchronous functions", "concurrent async flows", startref="af4caf")))quicker.
 
 [source,javascript]
 ----
