@@ -389,7 +389,7 @@ When it comes to checking whether an integer is safe, a `Number.isSafeInteger` f
 
 ==== Number.isSafeInteger
 
-This method returns `true` for any integer in the `[MIN_SAFE_INTEGER, MAX_SAFE_INTEGER]` range. Like with other `Number` methods introduced in ES6, there's no type coercion involved. The input must be numeric, an integer, and within the aforementioned bounds in order for the method to return `true`. The next snippet shows a comprehensive set of inputs and outputs.
+This method returns `true` for any ((("Number.isSafeInteger", id="nisi7")))integer in the `[MIN_SAFE_INTEGER, MAX_SAFE_INTEGER]` range. Like with other `Number` methods introduced in ES6, there's no type coercion involved. The input must be numeric, an integer, and within the aforementioned bounds in order for the method to return `true`. The next snippet shows a comprehensive set of inputs and outputs.
 
 [source,javascript]
 ----
@@ -506,7 +506,7 @@ safeOp(1 + 2, 1, 2)
 // <- 3
 ----
 
-That's all there is when it comes to `Number`, but we're not done with arithmetics-related improvements quite yet. Let's turn our attention to the `Math` built-in.
+That's all there is ((("Number.isSafeInteger", startref="nisi7")))when it comes to `Number`, but we're not done with arithmetics-related improvements quite yet. Let's turn our attention to the `Math` built-in.
 
 [[math_section]]
 === Math
