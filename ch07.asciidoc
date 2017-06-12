@@ -637,7 +637,7 @@ Math.log1p(1.00000000005e-10)
 
 ==== Math.log10
 
-Base 10 logarithm of a number—++log~10~(value)++.
+Base 10 ((("Math.log10")))logarithm of a number—++log~10~(value)++.
 
 [source,javascript]
 ----
@@ -658,7 +658,7 @@ And then there's `Math.log2`.
 
 ==== Math.log2
 
-Base 2 logarithm of a number—++log~2~(value)++.
+Base 2 logarithm ((("Math.log2")))of a number—++log~2~(value)++.
 
 [source,javascript]
 ----
@@ -666,7 +666,7 @@ Math.log2(1024)
 // <- 10
 ----
 
-You could ponyfill `Math.log2` using the `Math.LN2` constant.
+You could ponyfill `Math.log2` using the `Math.LN2` ((("Math.LN2")))constant.
 
 [source,javascript]
 ----
