@@ -106,7 +106,7 @@ isNaN(new Date())
 
 First off, `isNaN` casts input through `Number(value)` before comparison, while `Number.isNaN` doesn't. Neither `Number.isNaN` nor `isNaN` answer the "is this not a number?" question, but instead they answer whether ++value++—or ++Number(value)++—is `NaN`.
 
-In most cases, what you actually want to know is whether a value identifies as a number—++typeof NaN === 'number'++—and is a number. The `isNumber` function in the following code snippet does just that. Note that it'd work with both `isNaN` and `Number.isNaN` due to type checking. Everything that reports a `typeof` value of `'number'` is a number, except for `NaN`, so we filter out those out as false positive results.
+In most cases, what you actually want to know is whether a value identifies as a number—++typeof NaN === 'number'++—and is a number. The `isNumber` ((("isNumber")))function in the following code snippet does just that. Note that it'd work with both `isNaN` and `Number.isNaN` due to type checking. Everything that reports a `typeof` value of `'number'` is a number, except for `NaN`, so we filter out those out as false positive results.
 
 [source,javascript]
 ----
