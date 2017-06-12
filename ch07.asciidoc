@@ -517,7 +517,7 @@ Let's get right to it.
 
 ==== Math.sign
 
-Many languages have a mathematical `sign` method that returns a vector (`-1`, `0`, or `1`) representation for the sign of the provided input. JavaScript's `Math.sign` method does exactly that. However, the JavaScript flavor of this method has two more possible return values: `-0`, and `NaN`. Check out the examples in the following code snippet.
+Many languages ((("Math.sign")))have a ((("sign")))mathematical `sign` method that returns a vector (`-1`, `0`, or `1`) representation for the sign of the provided input. JavaScript's `Math.sign` method does exactly that. However, the JavaScript flavor of this method has two more possible return values: `-0`, and `NaN`. Check out the examples in the following code snippet.
 
 [source,javascript]
 ----
@@ -535,7 +535,7 @@ Note how `Math.sign` casts its input into numeric values? While methods introduc
 
 ==== Math.trunc
 
-We already had `Math.floor` and `Math.ceil` in JavaScript, with which we can round a number down or up, respectively. Now we also have `Math.trunc` as an alternative, which discards the decimal part without any rounding. Here, too, the input is coerced into a numeric value through `Number(value)`.
+We already ((("Math.floor")))had `Math.floor` and `Math.ceil` ((("Math.ceil")))in JavaScript, with which we can round a number down or up, respectively. Now we also have `Math.trunc` as ((("Math.trunc")))an alternative, which discards the decimal part without any rounding. Here, too, the input is coerced into a numeric value through `Number(value)`.
 
 [source,javascript]
 ----
@@ -558,7 +558,7 @@ function mathTrunc(value) {
 
 ==== Math.cbrt
 
-The `Math.cbrt` method is short for "cubic root," similarly to how `Math.sqrt` is short for "square root." The following snippet has a few usage examples.
+The `Math.cbrt` method ((("Math.cbrt")))is short for "cubic root," similarly to how `Math.sqrt` is short ((("Math.sqrt")))for "square root." The following snippet has a few usage examples.
 
 [source,javascript]
 ----
@@ -580,7 +580,7 @@ Let's move on.
 
 ==== Math.expm1
 
-This operation is the result of computing `e` to the `value` minus `1`. In JavaScript, the `e` constant is defined as `Math.E`. The function in the following snippet is a rough equivalent of `Math.expm1`.
+This operation is the result of computing `e` to the `value` minus `1`. In JavaScript, the `e` ((("Math.E")))constant is defined as `Math.E`. The function in the following snippet is a ((("Math.expm1")))rough equivalent of `Math.expm1`.
 
 [source,javascript]
 ----
@@ -616,7 +616,7 @@ The inverse function of `Math.expm1` is `Math.log1p`.
 
 ==== Math.log1p
 
-This is the natural logarithm of `value` plus ++1++—++ln(value + 1)++—and the inverse function of `Math.expm1`. The base `e` logarithm of a number can be expressed as `Math.log` in JavaScript.
+This is the ((("Math.log1p")))natural logarithm of `value` plus ++1++—++ln(value + 1)++—and the inverse function of `Math.expm1`. The base `e` logarithm of a number can be expressed as `Math.log` in JavaScript.
 
 [source,javascript]
 ----
