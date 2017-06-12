@@ -353,7 +353,7 @@ Using floating-point representation, not every integer can be ((("Number.EPSILON
 
 ==== Number.MAX_SAFE_INTEGER and Number.MIN_SAFE_INTEGER
 
-This is the largest integer that can be safely and precisely represented in JavaScript, or any language that represents integers using floating point as specified by the IEEE-754 standard,pass:[<span data-type="footnote" id="floating-point">IEEE 754 is the <a href="https://mjavascript.com/out/floating-point">Floating Point Standard</a>.</span>] for that matter. The next bit of code shows exactly how large `Number.MAX_SAFE_INTEGER` is.
+This is the largest integer that can be safely and precisely represented in JavaScript, or ((("Number.MAX_SAFE_INTEGER")))any language that represents integers using floating point as specified by the IEEE-754 standard,pass:[<span data-type="footnote" id="floating-point">IEEE 754 is the <a href="https://mjavascript.com/out/floating-point">Floating Point Standard</a>.</span>] for that matter. The next bit of code shows exactly how large `Number.MAX_SAFE_INTEGER` is.
 
 [source,javascript]
 ----
@@ -363,7 +363,7 @@ Number.MAX_SAFE_INTEGER === 9007199254740991
 // <- true
 ----
 
-As you might expect, there's also the opposite constant: the minimum. It's the negative value of `Number.MAX_SAFE_INTEGER`.
+As you might expect, there's also the opposite constant: the minimum. It's the ((("Number.MIN_SAFE_INTEGER")))negative value of `Number.MAX_SAFE_INTEGER`.
 
 [source,javascript]
 ----
