@@ -73,7 +73,7 @@ Besides these minor syntax changes where octal and binary literals were introduc
 
 ==== Number.isNaN
 
-This method is ((("Number.isNaN", id="nisn7")))almost identical to the global `isNaN` method. `Number.isNaN` returns whether the provided `value` is `NaN`, whereas `isNaN` returns whether `value` is not a number. These two questions have slightly different answers.
+This method is ((("Number.isNaN", id="nisn7")))almost identical to the global `isNaN` method. `Number.isNaN` returns whether the provided `value` is `NaN`, whereas `isNaN` ((("isNaN")))returns whether `value` is not a number. These two questions have slightly different answers.
 
 The next snippet quickly shows that, when passed to `Number.isNaN`, anything that's not `NaN` will return `false`, while `NaN` will produce `true`. Note how in the last case we're already passing `NaN` to `Number.isNaN`, as that's the result of dividing two strings.
 
@@ -131,7 +131,7 @@ isNumber(new Date())
 // <- false
 ----
 
-There is a function, which was already in the language, that somewhat resembles our ((("Number.isNaN", startref="nisn7")))custom `isNumber` function: `isFinite`.
+There ((("Number.isNaN", startref="nisn7")))is a function, which was already in the language, that somewhat resembles our ((("Number.isNaN", startref="nisn7")))custom `isNumber` function: `isFinite`.
 
 ==== Number.isFinite
 
