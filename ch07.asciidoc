@@ -703,18 +703,18 @@ The `<<` operator performs a https://mjavascript.com/out/bitwise-shift["bitwise 
 
 ==== Trigonometric Functions
 
-The `Math` object is getting trigonometric functions in ES6:
+The `Math` object is ((("trigonometric functions")))getting trigonometric functions in ES6:
 
-- `Math.sinh(value)` returns the hyperbolic sine of `value`
-- `Math.cosh(value)` returns the hyperbolic cosine of `value`
-- `Math.tanh(value)` returns the hyperbolic tangent of `value`
-- `Math.asinh(value)` returns the hyperbolic arc-sine of `value`
-- `Math.acosh(value)` returns the hyperbolic arc-cosine of `value`
-- `Math.atanh(value)` returns the hyperbolic arc-tangent of `value`
+- `Math.sinh(value)` returns ((("Math.sinh(value)")))the hyperbolic sine of `value`
+- `Math.cosh(value)` returns ((("Math.cosh(value)")))the hyperbolic cosine of `value`
+- `Math.tanh(value)` returns the ((("Math.tanh(value)")))hyperbolic tangent of `value`
+- `Math.asinh(value)` returns the ((("Math.asinh(value)")))hyperbolic arc-sine of `value`
+- `Math.acosh(value)` returns the ((("Math.acosh(value)")))hyperbolic arc-cosine of `value`
+- `Math.atanh(value)` returns the ((("Math.atanh(value)")))hyperbolic arc-tangent of `value`
 
 ==== Math.hypot
 
-Using `Math.hypot` returns the square root of the sum of the squares of every provided argument.
+Using `Math.hypot` returns ((("Math.hypot")))the square root of the sum of the squares of every provided argument.
 
 [source,javascript]
 ----
@@ -746,7 +746,7 @@ mathHypot(1, 2, 3) // ponyfill implementation
 
 ==== Bitwise Computation Helpers
 
-At the beginning of <<math_section>>, we talked about how some of the new `Math` methods are specifically engineered towards making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
+At the ((("bitwise computation helpers")))beginning of <<math_section>>, we talked about how some of the new `Math` methods are specifically engineered towards making it easier to compile C into JavaScript. Those are the last three methods we'll cover, and they help us deal with 32-bit numbers.
 
 ===== Math.clz32
 
