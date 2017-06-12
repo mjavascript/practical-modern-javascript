@@ -1024,7 +1024,7 @@ In these cases, it's best to fail with an exception so that consumers can unders
 
 You can use `handler.preventExtensions` ((("preventExtensions trap", id="pet6")))((("traps", "preventExtensions trap", id="t6pet")))((("proxies", "preventExtensions trap", id="prox6pet")))to trap the `Object.preventExtensions` method introduced in ES5. When extensions are prevented on an object, new properties can't be added any longer: the object can't be extended.
 
-Imagine a scenario where you want to be able to selectively `preventExtensions` on some objects, but not all of them. In that scenario, you could use a `WeakSet` to keep track of the objects that should be extensible. If an object is in the set, then the `preventExtensions` trap should be able to capture those requests and discard them.
+Imagine a scenario where you want to be able to selectively `preventExtensions` on some objects, but not all of them. In that scenario, you could use a `WeakSet` ((("WeakSet")))to keep track of the objects that should be extensible. If an object is in the set, then the `preventExtensions` trap should be able to capture those requests and discard them.
 
 The following snippet does exactly that: it keeps objects that can be extended in a `WeakSet` and prevents the rest from being extended.
 
@@ -1069,7 +1069,7 @@ console.log(Object.isExtensible(proxy))
 
 ==== isExtensible Trap
 
-An ((("preventExtensions trap", startref="pet6")))((("traps", "preventExtensions trap", startref="t6pet")))((("proxies", "preventExtensions trap", startref="prox6pet")))extensible object is an object that you can add new properties to, an object you can extend.
+An ((("preventExtensions trap", startref="pet6")))((("traps", "preventExtensions trap", startref="t6pet")))((("proxies", "preventExtensions trap", startref="prox6pet")))((("isExtensible trap", id="iet6")))((("traps", "isExtensible trap", id="t6iet")))((("proxies", "isExtensible trap", id="prox6iet")))extensible object is an object that you can add new properties to, an object you can extend.
 
 The `handler.isExtensible` method can be used for logging or auditing calls to `Object.isExtensible`, but not to decide whether an object is extensible. That's because this trap is subject to a harsh invariant that puts a hard limit to what you can do with it: a `TypeError` is thrown if `Object.isExtensible(proxy) !== Object.isExtensible(target)`.
 
