@@ -188,7 +188,7 @@ function numberIsFinite(value) {
 
 ==== Number.parseInt
 
-The `Number.parseInt` method works the same as `parseInt`. It is, in fact, the same.
+The `Number.parseInt` method ((("Number.parseInt", id="npi7")))works the same as `parseInt`. It ((("parseInt")))is, in fact, the same.
 
 [source,javascript]
 ----
@@ -240,7 +240,7 @@ parseInt('0o110'.slice(2), 8)
 // <- 72
 ----
 
-In contrast, the `Number` function is perfectly able to cast these strings into the correct numbers.
+In contrast, the `Number` function is perfectly able to cast these strings into the correct ((("Number.parseInt", startref="npi7")))numbers.
 
 [source,javascript]
 ----
