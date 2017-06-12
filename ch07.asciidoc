@@ -260,13 +260,13 @@ console.log(Number.parseFloat === parseFloat)
 // <- true
 ----
 
-Luckily, `parseFloat` didn't have any special behavior with regard to hexadecimal literal strings, meaning that `Number.parseFloat` is unlikely to introduce any confusion.
+Luckily, `parseFloat` didn't have any special behavior with regard to hexadecimal literal strings, ((("parseFloat")))((("Number.parseFloat")))meaning that `Number.parseFloat` is unlikely to introduce any confusion.
 
 The `parseFloat` function was added to `Number` for completeness. In future versions of the language, there will be less global namespace pollution. When a function serves a specific purpose, it'll be added to the relevant built-in, rather than as a global.
 
 ==== Number.isInteger
 
-This is a new method coming in ES6, and it wasn't previously available as a global function. The `isInteger` method returns `true` if the provided `value` is a finite number that doesn't have a decimal part.
+This is a ((("Number.isInteger")))new method coming in ES6, and it wasn't previously available as a global function. The `isInteger` ((("isInteger")))method returns `true` if the provided `value` is a finite number that doesn't have a decimal part.
 
 [source,javascript]
 ----
@@ -292,7 +292,7 @@ Next up we'll dive into floating-point arithmetic, which is well-documented as h
 
 ==== Number.EPSILON
 
-The `EPSILON` property is a new constant value being added to the `Number` built-in. The following snippet shows its value.
+The `EPSILON` property ((("Number.EPSILON", id="ne7")))is a ((("EPSILON")))new constant value being added to the `Number` built-in. The following snippet shows its value.
 
 [source,javascript]
 ----
@@ -349,7 +349,7 @@ withinMarginOfError(0.2 + 0.2, 0.3)
 // <- false
 ----
 
-Using floating-point representation, not every integer can be represented precisely.
+Using floating-point representation, not every integer can be ((("Number.EPSILON", startref="ne7")))represented precisely.
 
 ==== Number.MAX_SAFE_INTEGER and Number.MIN_SAFE_INTEGER
 
