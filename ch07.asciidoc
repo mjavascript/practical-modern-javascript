@@ -1778,7 +1778,7 @@ console.log(...parseAttributes(html))
 // ]
 ----
 
-One problem with this approach is that it's tailor-made for our regular expression and its capturing groups. We could fix that issue by creating a `matchAll` generator that is only concerned about looping over matches and collecting sets of captured groups, as shown in the following snippet.
+One problem with this approach is that it's tailor-made for our regular expression and its capturing groups. We could fix that issue by creating a `matchAll` ((("matchAll", id="ma7")))generator that is only concerned about looping over matches and collecting sets of captured groups, as shown in the following snippet.
 
 [source,javascript]
 ----
@@ -1861,7 +1861,7 @@ console.log(addressMatcher.next().value)
 // <- ['placeholder', 'Enter your business address']
 ----
 
-The `String#matchAll` proposalpass:[<span data-type="footnote" id="string-matchall">Check out the <a href="https://mjavascript.com/out/string-matchall"><code>String#matchAll</code> proposal document</a>.</span>] (in stage 1 at the time of this writing) introduces a new method for the string prototype that would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` objects as opposed to just the `captures` in the preceding example. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the ((("String#matchAll  proposal", startref="smap7")))((("regular expressions", startref="rege7")))sequence.
+The `String#matchAll` proposalpass:[<span data-type="footnote" id="string-matchall">Check out the <a href="https://mjavascript.com/out/string-matchall"><code>String#matchAll</code> proposal document</a>.</span>] (in stage 1 at the time of this writing) introduces a new method for the string prototype that would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` objects as opposed to just the `captures` in the preceding example. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the ((("String#matchAll  proposal", startref="smap7")))((("regular expressions", startref="rege7")))((("matchAll", startref="ma7")))sequence.
 
 [source,javascript]
 ----
