@@ -1011,7 +1011,7 @@ c`, 2)
 
 ==== String Padding and Trimming
 
-At ((("String#repeat", startref="sr7")))((("strings", "padding and trimming", id="s7pat")))the time of this writing, there are two new string padding methods slated for publication in ES2017: `String#padStart` and `String#padEnd`. Using these methods, we wouldn't have to implement something like `indent` in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
+At ((("String#repeat", startref="sr7")))((("strings", "padding and trimming", id="s7pat")))the time of this writing, there are two new string padding methods slated for publication in ES2017: `String#padStart` ((("String#padStart", id="sps7")))((("String#padEnd", id="spe7")))and `String#padEnd`. Using these methods, we wouldn't have to implement something like `indent` in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
 
 Using `padStart`, we will specify the desired length for the target string and the padding string, which defaults to a single space character. If the original string is at least as long as the specified length, `padStart` will result in a null operation, returning the original string unchanged.
 
@@ -1076,7 +1076,7 @@ At the time of this writing, there's a proposal for string trimming in stage 2, 
 // <- '   this should be right-aligned'
 ----
 
-Let's switch protocols and learn ((("strings", "padding and trimming", startref="s7pat")))about Unicode.
+Let's switch protocols and learn ((("String#padStart", startref="sps7")))((("String#padEnd", startref="spe7")))((("strings", "padding and trimming", startref="s7pat")))about Unicode.
 
 ==== Unicode
 
