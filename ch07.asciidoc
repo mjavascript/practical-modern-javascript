@@ -1503,7 +1503,7 @@ When the `u` flag is set, similar Unicode awareness improvements can be found in
 
 ==== Named Capture Groups
 
-Up until now, JavaScript regular expressions could group matches in numbered capturing groups and noncapturing groups. In the next snippet we're using a couple of groups to extract a key and value from an input string containing a key/value pair delimited by `'='`.
+Up until now, ((("named capture groups", id="ncg7")))JavaScript regular expressions could group matches in numbered capturing groups and noncapturing groups. In the next snippet we're using a couple of groups to extract a key and value from an input string containing a key/value pair delimited by `'='`.
 
 [source,javascript]
 ----
@@ -1592,7 +1592,7 @@ americanDateToHungarianFormat('06/09/1988')
 // <- '1988-09-06'
 ----
 
-If the second argument to `String#replace` is a function, then the named groups can be accessed via a new parameter called `groups` that is at the end of the parameter list. The signature for that function now is `(match, ...captures, groups)`. In the following example, note how we're using a template literal that's similar to the replacement string found in the last example. The fact that replacement strings follow a `$<groupName>` syntax as opposed to a +`${ groupName }`+ syntax means we can name groups in replacement strings without having to resort to escape codes if we were using template literals.
+If the second argument to `String#replace` is a function, then the named groups can be accessed via a new parameter called `groups` that is at the end of the parameter list. The signature for that function now is `(match, ...captures, groups)`. In the following example, note how we're using a template literal that's similar to the replacement string found in the last example. The fact that replacement strings follow a `$<groupName>` syntax as opposed to a +`${ groupName }`+ syntax means we can name groups in replacement strings without having to resort to escape codes if we were using ((("named capture groups", startref="ncg7")))template literals.
 
 [source,javascript]
 ----
