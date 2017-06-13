@@ -1013,7 +1013,7 @@ c`, 2)
 
 At ((("String#repeat", startref="sr7")))((("strings", "padding and trimming", id="s7pat")))the time of this writing, there are two new string padding methods slated for publication in ES2017: `String#padStart` ((("String#padStart", id="sps7")))((("String#padEnd", id="spe7")))and `String#padEnd`. Using these methods, we wouldn't have to implement something like `indent` in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
 
-Using `padStart`, we will specify the desired length for the target string and the padding string, which defaults to a single space character. If the original string is at least as long as the specified length, `padStart` will result in a null operation, returning the original string unchanged.
+Using `padStart`, we will ((("padStart")))specify the desired length for the target string and the padding string, which defaults to a single space character. If the original string is at least as long as the specified length, `padStart` will result in a null operation, returning the original string unchanged.
 
 In the following example, the desired length of a properly padded string is 5, and the original string already has a length of at least 5, so it's returned unchanged.
 
@@ -1055,7 +1055,7 @@ However, if the padding string is too long, it may be truncated. The provided le
 // <- 'abc1.23'
 ----
 
-The `padEnd` method has a similar API, but it adds the padding at the end of the original string, instead of at the beginning. The following snippet illustrates the difference.
+The `padEnd` method ((("padEnd")))has a similar API, but it adds the padding at the end of the original string, instead of at the beginning. The following snippet illustrates the difference.
 
 [source,javascript]
 ----
@@ -1066,7 +1066,7 @@ The `padEnd` method has a similar API, but it adds the padding at the end of the
 '1.23'.padEnd(7, 'abcdef') // <- '1.23abc'
 ----
 
-At the time of this writing, there's a proposal for string trimming in stage 2, containing the `String#trimStart` and `String#trimEnd` methods. Using `trimStart` removes any whitespace from the beginning of a string, while using `trimEnd` removes any whitespace from the end of a string.
+At the time of this writing, there's a proposal for string trimming in stage 2, containing the `String#trimStart` and `String#trimEnd` ((("String#trimStart")))((("String#trimEnd")))methods. Using `trimStart` removes any whitespace from the beginning of a string, while using `trimEnd` ((("trimStart")))((("trimEnd")))removes any whitespace from the end of a string.
 
 [source,javascript]
 ----
