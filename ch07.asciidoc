@@ -787,7 +787,7 @@ Besides the template literal syntax, strings got a number of new methods in ES6.
 
 ==== String#startsWith
 
-Prior to ES6, whenever we wanted to check if a string begins with a certain other string, we'd use the `String#indexOf` method, as shown in the following code snippet. A result of `0` means that the string starts with the provided value.
+Prior to ES6, ((("String#startsWith", id="ssw7")))whenever we wanted to check if a string begins with a certain other string, we'd use the `String#indexOf` method, as shown in the following code snippet. A result of `0` means that the string starts with the provided value.
 
 [source,javascript]
 ----
@@ -847,7 +847,7 @@ We could use the `startIndex` parameter for `indexOf` to get around this problem
 // <- true
 ----
 
-Instead of keeping all of these string searching implementation details in your head and writing code that's most concerned with how to search, as opposed to what is being searched, we could use `String#startsWith` passing in the optional `startIndex` parameter as well.
+Instead of keeping all of these string searching implementation details in your head and writing code that's most concerned with how to search, as opposed to what is being searched, we could use `String#startsWith` passing in the optional `startIndex` parameter as ((("String#startsWith", startref="ssw7")))well.
 
 [source,javascript]
 ----
