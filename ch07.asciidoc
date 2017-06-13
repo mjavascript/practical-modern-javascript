@@ -787,7 +787,7 @@ Besides the template literal syntax, strings got a number of new methods in ES6.
 
 ==== String#startsWith
 
-Prior to ES6, ((("String#startsWith", id="ssw7")))whenever we wanted to check if a string begins with a certain other string, we'd use the `String#indexOf` method, ((("String#indexOf")))as shown in the following code snippet. A result of `0` means that the string starts with the provided value.
+Prior to ES6, ((("StringstartsWith", id="ssw7")))whenever we wanted to check if a string begins with a certain other string, we'd use the `String#indexOf` method, ((("String#indexOf")))as shown in the following code snippet. A result of `0` means that the string starts with the provided value.
 
 [source,javascript]
 ----
@@ -847,7 +847,7 @@ We could use the `startIndex` ((("startIndex")))parameter for `indexOf` to get a
 // <- true
 ----
 
-Instead of keeping all of these string searching implementation details in your head and writing code that's most concerned with how to search, as opposed to what is being searched, we could use `String#startsWith` passing in the optional `startIndex` parameter as ((("String#startsWith", startref="ssw7")))well.
+Instead of keeping all of these string searching implementation details in your head and writing code that's most concerned with how to search, as opposed to what is being searched, we could use `String#startsWith` passing in the optional `startIndex` parameter as ((("StringstartsWithx", startref="ssw7")))well.
 
 [source,javascript]
 ----
@@ -857,7 +857,7 @@ Instead of keeping all of these string searching implementation details in your 
 
 ==== String#endsWith
 
-This method mirrors `String#startsWith` ((("String#startsWith")))in the same way that `String#lastIndexOf` ((("String#lastIndexOf")))mirrors `String#indexOf`. It tells us whether a string ends with another string.
+This method ((("StringendsWithx")))mirrors `String#startsWith` in the same way that `String#lastIndexOf` mirrors `String#indexOf`. It tells us whether a string ends with another string.
 
 [source,javascript]
 ----
@@ -883,7 +883,7 @@ As the opposite of `String#startsWith`, there's a position index that indicates 
 
 ==== String#includes
 
-You can use `String#includes` to figure ((("String#includes")))out whether a string contains another one, as shown in the following piece of code.
+You can use `String#includes` to figure ((("Stringincludesx")))out whether a string contains another one, as shown in the following piece of code.
 
 [source,javascript]
 ----
@@ -895,7 +895,7 @@ You can use `String#includes` to figure ((("String#includes")))out whether a str
 // <- false
 ----
 
-This is equivalent to the ES5 use case of `String#indexOf` where ((("String#indexOf")))we'd test the result against `-1`, checking to see whether the search string was anywhere to be found, as demonstrated in the next code snippet.
+This is equivalent to the ES5 use case of `String#indexOf` where ((("StringindexOfx")))we'd test the result against `-1`, checking to see whether the search string was anywhere to be found, as demonstrated in the next code snippet.
 
 [source,javascript]
 ----
@@ -919,7 +919,7 @@ Let's move onto something that's not just an `String#indexOf` alternative.
 
 ==== String#repeat
 
-This handy ((("String#repeat", id="sr7")))method allows you to repeat a string `count` times.
+This handy ((("Stringrepeatx", id="sr7")))method allows you to repeat a string `count` times.
 
 [source,javascript]
 ----
@@ -1011,7 +1011,7 @@ c`, 2)
 
 ==== String Padding and Trimming
 
-At ((("String#repeat", startref="sr7")))((("strings", "padding and trimming", id="s7pat")))the time of this writing, there are two new string padding methods slated for publication in ES2017: `String#padStart` ((("String#padStart", id="sps7")))((("String#padEnd", id="spe7")))and `String#padEnd`. Using these methods, we wouldn't have to implement something like `indent` in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
+At ((("Stringrepeatx", startref="sr7")))((("strings", "padding and trimming", id="s7pat")))the time of this writing, there are two new string padding methods slated for publication in ES2017: `String#padStart` ((("StringpadStartx", id="sps7")))((("StringpadEndx", id="spe7")))and `String#padEnd`. Using these methods, we wouldn't have to implement something like `indent` in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
 
 Using `padStart`, we will ((("padStart")))specify the desired length for the target string and the padding string, which defaults to a single space character. If the original string is at least as long as the specified length, `padStart` will result in a null operation, returning the original string unchanged.
 
@@ -1066,7 +1066,7 @@ The `padEnd` method ((("padEnd")))has a similar API, but it adds the padding at 
 '1.23'.padEnd(7, 'abcdef') // <- '1.23abc'
 ----
 
-At the time of this writing, there's a proposal for string trimming in stage 2, containing the `String#trimStart` and `String#trimEnd` ((("String#trimStart")))((("String#trimEnd")))methods. Using `trimStart` removes any whitespace from the beginning of a string, while using `trimEnd` ((("trimStart")))((("trimEnd")))removes any whitespace from the end of a string.
+At the time of this writing, there's a proposal for string trimming in stage 2, containing the `String#trimStart` and `String#trimEnd` ((("StringtrimStartx")))((("StringtrimEndx")))methods. Using `trimStart` removes any whitespace from the beginning of a string, while using `trimEnd` ((("trimStart")))((("trimEnd")))removes any whitespace from the end of a string.
 
 [source,javascript]
 ----
@@ -1076,7 +1076,7 @@ At the time of this writing, there's a proposal for string trimming in stage 2, 
 // <- '   this should be right-aligned'
 ----
 
-Let's switch protocols and learn ((("String#padStart", startref="sps7")))((("String#padEnd", startref="spe7")))((("strings", "padding and trimming", startref="s7pat")))about Unicode.
+Let's switch protocols and learn ((("StringpadStartx", startref="sps7")))((("StringpadEndx", startref="spe7")))((("strings", "padding and trimming", startref="s7pat")))about Unicode.
 
 ==== Unicode
 
@@ -1138,7 +1138,7 @@ Given ((("String.prototype[Symbol.iterator]", id="spsi7")))((("strings", "splitt
 }</pre>
 ++++
 
-Measuring the length of a string in terms of code points, as we saw earlier, is impossible with `String#length`, because ((("String#length")))it counts code units instead. We can, however, use an iterator to split the string into its code points, like we did in the `for..of` example.
+Measuring the length of a string in terms of code points, as we saw earlier, is impossible with `String#length`, because ((("Stringlengthx")))it counts code units instead. We can, however, use an iterator to split the string into its code points, like we did in the `for..of` example.
 
 We could use the spread operator, which relies on the iterator protocol, to split a string into an array made up of its conforming code points and then pull that array's `length`, getting the correct code point count, as seen next.
 
@@ -1212,7 +1212,7 @@ Let's look at more Unicode-related methods introduced in ES6.
 
 ==== String#codePointAt
 
-We can use `String#codePointAt` to ((("String#codePointAt", id="scpa7")))((("Unicode", "String#codePointAt", id="u7scpa")))get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the following example we print the code points for each of the three emoji in our demo 'pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ/><img src="images/1f471.png" style="width: 12px" alt="ߑᢠdata-emoji-embed="ߑᢠ/><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" /></code>]' string.
+We can use `String#codePointAt` to ((("StringcodePointAtx", id="scpa7")))((("Unicode", "StringcodePointAtx", id="u7scpa")))get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the following example we print the code points for each of the three emoji in our demo 'pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ/><img src="images/1f471.png" style="width: 12px" alt="ߑᢠdata-emoji-embed="ߑᢠ/><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" /></code>]' string.
 
 
 [source,javascript]
@@ -1272,7 +1272,7 @@ We could wrap those base-16 values in `'\u{codePoint}'` and voilá: you'd get th
 
 ==== String.fromCodePoint
 
-This ((("String#codePointAt", startref="scpa7")))((("String.fromCodePoint")))((("Unicode", "String#codePointAt", startref="u7scpa")))((("Unicode", "String.fromCodePoint")))method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
+This ((("StringcodePointAtx", startref="scpa7")))((("String.fromCodePoint")))((("Unicode", "StringcodePointAtx", startref="u7scpa")))((("Unicode", "String.fromCodePoint")))method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
@@ -1347,7 +1347,7 @@ The last Unicode-related method we'll be addressing is `.normalize`.
 
 ==== String#normalize
 
-There are ((("String#normalize")))((("Unicode", "String#normalize")))different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
+There are ((("Stringnormalizex")))((("Unicode", "Stringnormalizex")))different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
 
 [source,javascript]
 ----
@@ -1574,7 +1574,7 @@ hasSameUserAndPassword('root:pF6GGlyPhoy1!9i') // <- false
 
 The `\k<groupName>` reference ((("\k&lt;groupName&gt;", primary-sortas="k&lt;groupName&gt;")))((("\k&lt;groupName&gt;")))can be used in tandem with numbered references, but the latter are better avoided when already using named references.
 
-Lastly, named groups can be referenced from the replacement passed to `String#replace`. In ((("String#replace")))the next code snippet we use `String#replace` and named groups to change an American date string to use Hungarian formatting.
+Lastly, named groups can be referenced from the replacement passed to `String#replace`. In ((("Stringreplacex")))the next code snippet we use `String#replace` and named groups to change an American date string to use Hungarian formatting.
 
 [source,javascript]
 ----
@@ -1754,7 +1754,7 @@ rcharacter.test('\n') // <- true
 
 ==== String#matchAll
 
-Often, when we ((("String#matchAll  proposal", id="smap7")))have a regular expression with a global or sticky flag, we want to iterate over the set of captured groups for each match. Currently, it can be a bit of a hassle to produce the list of matches: we need to collect the captured groups using `String#match` or `RegExp#exec` in a loop, until the regular expression doesn't match the input starting at the `lastIndex` position property. In the following piece of code, the `parseAttributes` generator function does just that for a given regular expression.
+Often, when we ((("StringmatchAll  proposalx", id="smap7")))have a regular expression with a global or sticky flag, we want to iterate over the set of captured groups for each match. Currently, it can be a bit of a hassle to produce the list of matches: we need to collect the captured groups using `String#match` or `RegExp#exec` in a loop, until the regular expression doesn't match the input starting at the `lastIndex` position property. In the following piece of code, the `parseAttributes` generator function does just that for a given regular expression.
 
 [source,javascript]
 ----
@@ -1861,7 +1861,7 @@ console.log(addressMatcher.next().value)
 // <- ['placeholder', 'Enter your business address']
 ----
 
-The `String#matchAll` proposalpass:[<span data-type="footnote" id="string-matchall">Check out the <a href="https://mjavascript.com/out/string-matchall"><code>String#matchAll</code> proposal document</a>.</span>] (in stage 1 at the time of this writing) introduces a new method for the string prototype that would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` objects as opposed to just the `captures` in the preceding example. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the ((("String#matchAll  proposal", startref="smap7")))((("regular expressions", startref="rege7")))((("matchAll", startref="ma7")))sequence.
+The `String#matchAll` proposalpass:[<span data-type="footnote" id="string-matchall">Check out the <a href="https://mjavascript.com/out/string-matchall"><code>String#matchAll</code> proposal document</a>.</span>] (in stage 1 at the time of this writing) introduces a new method for the string prototype that would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` objects as opposed to just the `captures` in the preceding example. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the ((("StringmatchAll  proposalx", startref="smap7")))((("regular expressions", startref="rege7")))((("matchAll", startref="ma7")))sequence.
 
 [source,javascript]
 ----
@@ -1942,7 +1942,7 @@ Array.from($('div'))
 // <- [<div>, <div>, <div>, …]
 ----
 
-The one thing you cannot do with either `Array.from` nor the spread operator is to pick a start index. Suppose you wanted to pull every `<div>` after the first one. With `Array#slice`, you ((("Array#slice")))could do the following.
+The one thing you cannot do with either `Array.from` nor the spread operator is to pick a start index. Suppose you wanted to pull every `<div>` after the first one. With `Array#slice`, you ((("Arrayslicex")))could do the following.
 
 [source,javascript]
 ----
@@ -2050,7 +2050,7 @@ console.log(Array.of(-1)) // <- [-1]
 
 ==== Array#copyWithin
 
-Let's start with the ((("Array#copyWithin", id="acw7")))signature of `Array#copyWithin`.
+Let's start with the ((("ArraycopyWithinx", id="acw7")))signature of `Array#copyWithin`.
 
 [source,javascript]
 ----
@@ -2078,7 +2078,7 @@ items.copyWithin(6, 1, 3)
 
 Reasoning about `Array#copyWithin` is hard. Let's break it down.
 
-If we consider that the items to be copied were taken from the `[start, end)` range, then we could express that ((("Array#slice")))using an `Array#slice` call. These are the items that were pasted at the `target` position. We can use `.slice` to grab the copy.
+If we consider that the items to be copied were taken from the `[start, end)` range, then we could express that ((("Arrayslicex")))using an `Array#slice` call. These are the items that were pasted at the `target` position. We can use `.slice` to grab the copy.
 
 [source,javascript]
 ----
@@ -2087,7 +2087,7 @@ const copy = items.slice(1, 3)
 // <- [2, 3]
 ----
 
-We could also consider the pasting part of the operation as an advanced usage of `Array#splice`. The ((("Array#splice")))next code snippet does just that, passing the paste position to splice, telling it to remove as many items as we want to copy, and inserting the pasted items. Note that we're using the spread operator so that elements are inserted individually, and not as an array, through `.splice`.
+We could also consider the pasting part of the operation as an advanced usage of `Array#splice`. The ((("Arraysplicex")))next code snippet does just that, passing the paste position to splice, telling it to remove as many items as we want to copy, and inserting the pasted items. Note that we're using the spread operator so that elements are inserted individually, and not as an array, through `.splice`.
 
 [source,javascript]
 ----
@@ -2111,7 +2111,7 @@ function copyWithin(items, target, start = 0, end = items.length) {
 }
 ----
 
-The example we've been trying so far would work just as well with our custom `copyWithin` ((("Array#copyWithin", startref="acw7")))function.
+The example we've been trying so far would work just as well with our custom `copyWithin` ((("ArraycopyWithinx", startref="acw7")))function.
 
 [source,javascript]
 ----
@@ -2121,7 +2121,7 @@ copyWithin([1, 2, 3, , , , , , , , ], 6, 1, 3)
 
 ==== Array#fill
 
-A convenient ((("Array#fill")))utility method to replace all items in an array with the provided `value`. Note that sparse arrays will be filled in their entirety, while existing items will be replaced by the fill value.
+A convenient ((("Arrayfillx")))utility method to replace all items in an array with the provided `value`. Note that sparse arrays will be filled in their entirety, while existing items will be replaced by the fill value.
 
 [source,javascript]
 ----
@@ -2158,7 +2158,7 @@ new Array(3).fill(map)
 
 ==== Array#find and Array#findIndex
 
-The `Array#find` method ((("Array#find")))((("Array#findIndex")))runs a `callback` for each `item` in an array until the first one that returns `true`, and then returns that `item`. The method follows the signature of `(callback(item, i, array), context)` that's also present in `Array#map`, `Array#filter`, and others. You can think of `Array#find` as a version of `Array#some` that returns the matching element instead of just `true`.
+The `Array#find` method ((("Arrayfindx")))((("ArrayfindIndexx")))runs a `callback` for each `item` in an array until the first one that returns `true`, and then returns that `item`. The method follows the signature of `(callback(item, i, array), context)` that's also present in `Array#map`, `Array#filter`, and others. You can think of `Array#find` as a version of `Array#some` that returns the matching element instead of just `true`.
 
 [source,javascript]
 ----
@@ -2184,7 +2184,7 @@ There's an `Array#findIndex` method as well, and it leverages the same signature
 
 ==== Array#keys
 
-Returns an ((("Array#keys")))iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with `for..of`, the spread operator, or by manually calling `.next()`.
+Returns an ((("Arraykeysx")))iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with `for..of`, the spread operator, or by manually calling `.next()`.
 
 [source,javascript]
 ----
@@ -2219,7 +2219,7 @@ Now onto values.
 
 ==== Array#values
 
-Same thing ((("Array#values")))as `Array#keys()`, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
+Same thing ((("Arrayvaluesx")))as `Array#keys()`, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
 
 [source,javascript]
 ----
@@ -2239,7 +2239,7 @@ Note that omitting the `.values()` method call would still produce a copy of the
 
 ==== Array#entries
 
-Similar ((("Array#entries")))to both preceding methods, except `Array#entries` returns an iterator with a sequence of key/value pairs.
+Similar ((("Arrayentriesx")))to both preceding methods, except `Array#entries` returns an iterator with a sequence of key/value pairs.
 
 [source,javascript]
 ----
