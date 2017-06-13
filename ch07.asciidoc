@@ -2184,7 +2184,7 @@ There's an `Array#findIndex` method as well, and it leverages the same signature
 
 ==== Array#keys
 
-Returns an iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with `for..of`, the spread operator, or by manually calling `.next()`.
+Returns an ((("Array#keys")))iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with `for..of`, the spread operator, or by manually calling `.next()`.
 
 [source,javascript]
 ----
@@ -2219,7 +2219,7 @@ Now onto values.
 
 ==== Array#values
 
-Same thing as `Array#keys()`, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
+Same thing ((("Array#values")))as `Array#keys()`, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
 
 [source,javascript]
 ----
@@ -2239,7 +2239,7 @@ Note that omitting the `.values()` method call would still produce a copy of the
 
 ==== Array#entries
 
-Similar to both preceding methods, except `Array#entries` returns an iterator with a sequence of key/value pairs.
+Similar ((("Array#entries")))to both preceding methods, except `Array#entries` returns an iterator with a sequence of key/value pairs.
 
 [source,javascript]
 ----
@@ -2259,7 +2259,7 @@ Great, one last method left!
 
 ==== Array.prototype[Symbol.iterator]
 
-This is exactly the same as the `Array#values` method.
+This is ((("Array.prototype[Symbol.iterator]")))exactly the same as the `Array#values` method.
 
 [source,javascript]
 ----
