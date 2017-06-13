@@ -750,7 +750,7 @@ At the ((("bitwise computation helpers")))beginning of <<math_section>>, we talk
 
 ===== Math.clz32
 
-The name for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number." Keeping in mind that the `<<` operator performs a "bitwise left shift," let's take a look at the next code snippet describing sample input and output for `Math.clz32`.
+The name ((("Math.clz32")))for this method is an acronym for "count leading zero bits in 32-bit binary representations of a number." Keeping in mind that the `<<` operator performs a "bitwise left shift," let's take a look at the next code snippet describing sample input and output for `Math.clz32`.
 
 [source,javascript]
 ----
@@ -764,15 +764,15 @@ Math.clz32(1 << 31) // <- 0
 
 ===== Math.imul
 
-Returns the result of a C-like 32-bit multiplication.
+Returns the result ((("Math.imul")))of a C-like 32-bit multiplication.
 
 ===== Math.fround
 
-Rounds `value` to the nearest 32-bit float representation of a number.
+Rounds `value` to ((("Math.fround")))the nearest 32-bit float representation of a number.
 
 === Strings and Unicode
 
-You may recall template literals from <<template_literals>>, and how those can be used to mix strings and variables, or any valid JavaScript expression, to produce string output.
+You may ((("strings", "ES6 improvements", id="s7esi")))recall template literals from <<template_literals>>, and how those can be used to mix strings and variables, or any valid JavaScript expression, to produce string output.
 
 [source,javascript]
 ----
@@ -1403,7 +1403,7 @@ compare(normal, irregular)
 
 === Regular Expressions
 
-In this section we'll take a look at regular expressions in and after ES6. There are a couple of regular expressions flags that were introduced in ES6: the `/y` or sticky flag, and the `/u` or Unicode flag. Then we'll discuss five proposals that are making their way through the ECMAScript specification development process at TC39.
+In ((("strings", "ES6 improvements", startref="s7esi")))this section we'll take a look at regular expressions in and after ES6. There are a couple of regular expressions flags that were introduced in ES6: the `/y` or sticky flag, and the `/u` or Unicode flag. Then we'll discuss five proposals that are making their way through the ECMAScript specification development process at TC39.
 
 ==== Sticky Matching Flag /y
 
