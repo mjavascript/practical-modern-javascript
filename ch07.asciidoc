@@ -1722,7 +1722,7 @@ getNonDollarAmount('€12.34') // <- '12.34'
 
 ==== A New /s "dotAll" Flag
 
-When ((("dotAll   proposal")))((("/s flag")))((("/s flag", primary-sortas="s flag")))using the `.` pattern, we typically expect to match every single character. In JavaScript, however, a `.` expression doesn't match astral characters (which can be fixed by adding the `u` flag) nor line terminators.
+When ((("dotAll   proposal")))((("s flagx")))((("s flagx", primary-sortas="s flag")))using the `.` pattern, we typically expect to match every single character. In JavaScript, however, a `.` expression doesn't match astral characters (which can be fixed by adding the `u` flag) nor line terminators.
 
 [source,javascript]
 ----
