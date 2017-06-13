@@ -1885,7 +1885,7 @@ ES6 brings a few more methods that will help manipulate, fill, and filter arrays
 ==== Array.from
 
 
-Before ((("Array.from", id="af7")))ES6, JavaScript developers often needed to cast `arguments` to a function into an array.
+Before ((("Array.from", id="af7")))ES6, JavaScript developers often needed to cast `arguments` to a ((("arguments", id="arg7")))function into an array.
 
 [source,javascript]
 ----
@@ -1973,7 +1973,7 @@ typesOf(null, [], NaN)
 // <- ['object', 'object', 'number']
 ----
 
-Do note that, for the specific case of dealing with `arguments`, you could also combine rest parameters and `Array#map`. In this case in particular, we may be better off just doing something like the snippet of code found next. It's not as verbose as the previous example. Like with the `Array#slice` example we saw earlier, the mapping is more explicit in this case.
+Do note that, for the specific case of dealing with `arguments`, you could also combine rest parameters and `Array#map`. In this case in particular, we may be better off just doing something like the snippet of code found next. It's not as verbose as the previous example. Like with the `Array#slice` example we saw earlier, ((("arguments", startref="arg7")))the mapping is more explicit in this case.
 
 [source,javascript]
 ----
