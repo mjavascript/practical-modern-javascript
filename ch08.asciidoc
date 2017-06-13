@@ -3,15 +3,15 @@
 
 Over the years, we've seen multiple different ways in which to split code into more manageable units. For the longest time we've had the module pattern where you simply wrapped pieces of code in self-invoking function expressions. You had to be careful to sort your scripts so that each script came after all of its dependencies.
 
-A while later, the RequireJS library was born. It provided a way of defining the dependencies of each module programmatically, so that a dependency graph is created and you wouldn't have to worry about sorting your scripts anymore. RequireJS demands that you provide an array of strings used to identify your dependencies and also wrap modules in a function call, which would then receive those dependencies as parameters. Many other libraries provide similar functionality but offer a slightly different API.
+A while later, the ((("RequireJS")))RequireJS library was born. It provided a way of defining the dependencies of each module programmatically, so that a dependency graph is created and you wouldn't have to worry about sorting your scripts anymore. RequireJS demands that you provide an array of strings used to identify your dependencies and also wrap modules in a function call, which would then receive those dependencies as parameters. Many other libraries provide similar functionality but offer a slightly different API.
 
-Other complexity management mechanisms exist, such as the dependency injection mechanism in AngularJS, where you define named components using functions where you can, in turn, specify other named component dependencies. AngularJS carries the load of dependency injection on your behalf, so you only have to name components and specify dependencies.
+Other complexity management mechanisms exist, such as the dependency injection mechanism in ((("AngularJS")))AngularJS, where you define named components using functions where you can, in turn, specify other named component dependencies. AngularJS carries the load of dependency injection on your behalf, so you only have to name components and specify dependencies.
 
 CommonJS (CJS) surfaced as an alternative to RequireJS, and it was swiftly popularized by Node.js soon afterwards. In this chapter we'll take a look at CommonJS, which is still heavily in use today. We'll then cover the module system introduced to native JavaScript in ES6, and lastly we'll explore interoperability between CommonJS and native JavaScript modules--also known as ECMAScript modules (ESM).
 
 === CommonJS
 
-Unlike other module formats where modules are declared programmatically, in CommonJS every file is a module. CommonJS modules have an implicit local scope, while the `global` scope needs to be accessed explicitly. CommonJS modules can dynamically export a public interface consumers can interact with. CommonJS modules import their dependencies dynamically as well, resolving dependencies through `require` function calls. These `require` function calls are synchronous and return the interface exposed by required modules.
+Unlike ((("CommonJS", id="cjs8")))other module formats where modules are declared programmatically, in CommonJS every file is a module. CommonJS modules have an implicit local scope, while the `global` scope needs to be accessed explicitly. CommonJS modules can dynamically export a public interface consumers can interact with. CommonJS modules import their dependencies dynamically as well, resolving dependencies through `require` function calls. These `require` function calls are synchronous and return the interface exposed by required modules.
 
 Interpreting the definition of a module format without looking at some code can be confusing. The following code snippet shows what a reusable CommonJS module file may look like. Both the `has` and `union` functions are local to our module's scope. Given that we've assigned `union` to `module.exports`, that'll be the public API for our module.
 
@@ -163,7 +163,7 @@ console.log(render('list', [{
 .Creating a bare bones HTML rendering application is made easy by template literals
 image::images/pmjs_0803.png["Printing different views through a normalized render function."]
 
-Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. In the next few sections we'll look at `export` and `import` statements, and learn how ESM is compatible with CJS.
+Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. In the next few sections we'll look at `export` and `import` statements, and learn how ESM is compatible ((("CommonJS", startref="cjs8")))with CJS.
 
 === JavaScript Modules
 
