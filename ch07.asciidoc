@@ -1080,7 +1080,7 @@ Let's switch protocols and learn ((("String#padStart", startref="sps7")))((("Str
 
 ==== Unicode
 
-JavaScript strings are represented using UTF-16 code units.pass:[<span data-type="footnote" id="unicode-encodings">Learn more about <a href="https://mjavascript.com/out/unicode-encodings">UCS-2, UCS-4, UTF-16, and UTF-32</a>.</span>] Each code unit can be used to represent a code point in the `[U+0000, U+FFFF]` range--also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the `'\u3456'` syntax. You could also represent code units in the `[U+0000, U+0255]` range using the `\x00..\xff` notation. For instance, `'\xbb'` represents `'»'`, the `U+00BB` code point, as you can also verify by doing `String.fromCharCode(0xbb)`.
+JavaScript strings ((("unicode", id="u7")))are represented using UTF-16 code units.pass:[<span data-type="footnote" id="unicode-encodings">Learn more about <a href="https://mjavascript.com/out/unicode-encodings">UCS-2, UCS-4, UTF-16, and UTF-32</a>.</span>] Each code unit can be used to represent a code point in the `[U+0000, U+FFFF]` range--also known as the BMP, short for Basic Multilingual Plane. You can represent individual code points in the BMP plane using the `'\u3456'` syntax. You could also represent code units in the `[U+0000, U+0255]` range using the `\x00..\xff` notation. For instance, `'\xbb'` represents `'»'`, the `U+00BB` code point, as you can also verify by doing `String.fromCharCode(0xbb)`.
 
 For code points beyond `U+FFFF`, you'd represent them as a surrogate pair. That is to say, two contiguous code units. For instance, the horse emoji (pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ></code>]) code point is represented with the `'\ud83d\udc0e'` contiguous code units. In ES6 notation you can also represent code points using the `'\u{1f40e}'` notation (that example is also the horse emoji).
 
@@ -1123,7 +1123,7 @@ for (let i = 0; i &lt; text.length; i++) {
 }</pre>
 ++++
 
-Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the string iterator to go over code points, even when those code points are made of surrogate pairs.
+Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the string iterator to go over code points, even when those code points are made of surrogate ((("unicode", startref="u7")))pairs.
 
 ==== String.prototype[Symbol.iterator]
 
