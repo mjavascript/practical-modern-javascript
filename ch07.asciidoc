@@ -1572,9 +1572,9 @@ hasSameUserAndPassword('root:root') // <- true
 hasSameUserAndPassword('root:pF6GGlyPhoy1!9i') // <- false
 ----
 
-The `\k<groupName>` reference can be used in tandem with numbered references, but the latter are better avoided when already using named references.
+The `\k<groupName>` reference ((("\k&lt;groupName&gt;", primary-sortas="k&lt;groupName&gt;")))((("\k&lt;groupName&gt;")))can be used in tandem with numbered references, but the latter are better avoided when already using named references.
 
-Lastly, named groups can be referenced from the replacement passed to `String#replace`. In the next code snippet we use `String#replace` and named groups to change an American date string to use Hungarian formatting.
+Lastly, named groups can be referenced from the replacement passed to `String#replace`. In ((("String#replace")))the next code snippet we use `String#replace` and named groups to change an American date string to use Hungarian formatting.
 
 [source,javascript]
 ----
@@ -1612,7 +1612,7 @@ americanDateToHungarianFormat('06/09/1988') // <- '1988-09-06'
 
 ==== Unicode Property Escapes
 
-The proposed Unicode property escapespass:[<span data-type="footnote" id="unicode-property-escapes">Check out the <a href="https://mjavascript.com/out/unicode-property-escapes">Unicode property escapes proposal document</a>.</span>] (currently in stage 3) are a new kind of escape sequence that's available in regular expressions marked with the `u` flag. This proposal adds an escape in the form of `\p{LoneUnicodePropertyNameOrValue}` for binary Unicode properties and `\p{UnicodePropertyName=UnicodePropertyValue}` for nonbinary Unicode properties. In addition, `\P` is the negated version of a `\p` escape sequence.
+The proposed Unicode property escapespass:[<span data-type="footnote" id="unicode-property-escapes">Check out the <a href="https://mjavascript.com/out/unicode-property-escapes">Unicode property escapes proposal document</a>.</span>] (currently in stage 3) are a ((("Unicode property escapes")))((("escapes")))new kind of escape sequence that's available in regular expressions marked with the `u` flag. This proposal adds an escape in the form of `\p{LoneUnicodePropertyNameOrValue}` for binary Unicode properties and `\p{UnicodePropertyName=UnicodePropertyValue}` for nonbinary Unicode properties. In addition, `\P` is the negated version of a `\p` escape sequence.
 
 The Unicode standard defines properties for every symbol. Armed with these properties, one may make advanced queries about Unicode characters. For example, symbols in the Greek alphabet have a `Script` property set to `Greek`. We could use the new escapes to match any Greek Unicode symbol.
 
@@ -1650,7 +1650,7 @@ isDecimalNumber('ݟﰝퟑݟ찝ퟞݟ鰝練ퟫݟ찝ﭰퟮݟﰝﺰퟻݟ짩
 // <- true
 ----
 
-Check out this exhaustive overview of https://mjavascript.com/out/unicode-property-list[supported Unicode properties and values].
+Check out this exhaustive ((("Unicode", "supported Unicode properties and values")))overview of https://mjavascript.com/out/unicode-property-list[supported Unicode properties and values].
 
 ==== Lookbehind Assertions
 
