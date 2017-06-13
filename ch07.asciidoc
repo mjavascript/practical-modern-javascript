@@ -1127,7 +1127,7 @@ Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the s
 
 ==== String.prototype[Symbol.iterator]
 
-Given the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
+Given ((("String.prototype[Symbol.iterator]", id="spsi7")))the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">for (const codePoint of '<img src="images/1f40e.png" alt="ߐdata-emoji-embed="ߐ/><img src="images/1f471.png" alt="ߑᢠdata-emoji-embed="ߑᢠ/><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />') {
@@ -1183,7 +1183,7 @@ Attempts to näively figure out the actual length by counting code points prove 
 // <- 16, should be 11
 ----
 
-As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iterator.pass:[<span data-type="footnote" id="unicode-problem">I recommend you read <a href="https://mjavascript.com/out/unicode-mathias">JavaScript has a Unicode problem"</a> from Mathias Bynens. In the article, Mathias analyzes JavaScript's relationship with Unicode.</span>] In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate string length.
+As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iterator.pass:[<span data-type="footnote" id="unicode-problem">I recommend you read <a href="https://mjavascript.com/out/unicode-mathias">JavaScript has a Unicode problem"</a> from Mathias Bynens. In the article, Mathias analyzes JavaScript's relationship with Unicode.</span>] In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate ((("String.prototype[Symbol.iterator]", startref="spsi7")))string length.
 
 ==== A Proposal to Split Grapheme Segments
 
