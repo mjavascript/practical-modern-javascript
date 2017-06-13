@@ -1918,7 +1918,7 @@ cast('a', 'b')
 // <- ['a', 'b']
 ----
 
-You may also want to cast `NodeList` DOM element collections, like those returned from `document.querySelectorAll`, through the spread operator. This can be helpful when we need access to native array methods like `Array#map` or `Array#filter`. This is possible because the DOM standard upgraded `NodeList` to an iterable, after ES6 defined the iterator protocol.
+You may also want to cast `NodeList` DOM element ((("DOM elements", "in arrays")))collections, like those returned from `document.querySelectorAll`, through the spread operator. This can be helpful when we need access to native array methods like `Array#map` or `Array#filter`. This is possible because the DOM standard upgraded `NodeList` to an iterable, after ES6 defined the iterator protocol.
 
 [source,javascript]
 ----
@@ -1926,7 +1926,7 @@ You may also want to cast `NodeList` DOM element collections, like those returne
 // <- [<div>, <div>, <div>, …]
 ----
 
-What happens when we try to cast a jQuery collection through the spread operator? If you're on a modern version of jQuery that implements the iterator protocol, spreading a jQuery object will work, otherwise you may get an exception.
+What happens when we try to cast a jQuery collection through the ((("spread operator")))spread operator? If you're on a modern version of jQuery that implements the iterator protocol, spreading a jQuery object will work, otherwise you may get an exception.
 
 [source,javascript]
 ----
@@ -1942,7 +1942,7 @@ Array.from($('div'))
 // <- [<div>, <div>, <div>, …]
 ----
 
-The one thing you cannot do with either `Array.from` nor the spread operator is to pick a start index. Suppose you wanted to pull every `<div>` after the first one. With `Array#slice`, you could do the following.
+The one thing you cannot do with either `Array.from` nor the spread operator is to pick a start index. Suppose you wanted to pull every `<div>` after the first one. With `Array#slice`, you ((("Array#slice")))could do the following.
 
 [source,javascript]
 ----
@@ -2011,7 +2011,7 @@ Array.from(groceries, grocery => grocery.type)
 
 ==== Array.of
 
-The `Array.of` method ((("Array.from", startref="af7")))is exactly like the `cast` function we played around with earlier. Next is a code snippet that shows how `Array.of` might be ponyfilled.
+The `Array.of` method ((("Array.from", startref="af7")))((("Array.of")))is exactly like the `cast` function we played around with earlier. Next is a code snippet that shows how `Array.of` might be ponyfilled.
 
 [source,javascript]
 ----
@@ -2020,7 +2020,7 @@ function arrayOf(...items) {
 }
 ----
 
-The `Array` constructor has two overloads: `...items`, where you provide the items for the new array; and `length`, where you provide its numeric length. You can think about `Array.of` as a flavor of `new Array` that doesn't support a `length` overload. In the following code snippet, you'll find some of the unexpected ways in which `new Array` behaves thanks to its single-argument `length` overloaded constructor. If you're confused about the `undefined x ${ count }` notation in the browser console, that's indicating there are array holes in those positions. This is also known as a sparse array.
+The `Array` constructor has two overloads: `...items`, where you provide the items for the new array; and `length`, where you provide its numeric length. You can think about `Array.of` as a flavor of `new Array` that doesn't support a `length` overload. In the following code snippet, you'll find some of the unexpected ways in ((("new Array")))which `new Array` behaves thanks to its single-argument `length` overloaded constructor. If you're confused about the `undefined x ${ count }` notation in the browser console, that's indicating there are array holes in those positions. This is also known as a sparse array.
 
 [source,javascript]
 ----
@@ -2050,7 +2050,7 @@ console.log(Array.of(-1)) // <- [-1]
 
 ==== Array#copyWithin
 
-Let's start with the signature of `Array#copyWithin`.
+Let's start with the ((("Array#copyWithin", id="acw7")))signature of `Array#copyWithin`.
 
 [source,javascript]
 ----
@@ -2111,7 +2111,7 @@ function copyWithin(items, target, start = 0, end = items.length) {
 }
 ----
 
-The example we've been trying so far would work just as well with our custom `copyWithin` function.
+The example we've been trying so far would work just as well with our custom `copyWithin` ((("Array#copyWithin", startref="acw7")))function.
 
 [source,javascript]
 ----
