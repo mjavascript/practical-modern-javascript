@@ -1272,7 +1272,7 @@ We could wrap those base-16 values in `'\u{codePoint}'` and voilá: you'd get th
 
 ==== String.fromCodePoint
 
-This ((("String#codePointAt", startref="scpa7")))((("String.fromCodePoint")))((("Unicode", "String#codePointAt", startref="u7scpa")))method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
+This ((("String#codePointAt", startref="scpa7")))((("String.fromCodePoint")))((("Unicode", "String#codePointAt", startref="u7scpa")))((("Unicode", "String.fromCodePoint")))method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
@@ -1316,7 +1316,7 @@ Reversing an string has potential to cause issues as well.
 
 ==== Unicode-Aware String Reversal
 
-Consider ((("strings", "Unicode-Aware String Reversal")))the following piece of code.
+Consider ((("strings", "Unicode-Aware String Reversal")))((("Unicode", "Unicode-Aware String Reversal")))the following piece of code.
 
 [source,javascript]
 ----
@@ -1347,7 +1347,7 @@ The last Unicode-related method we'll be addressing is `.normalize`.
 
 ==== String#normalize
 
-There are ((("String#normalize")))different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
+There are ((("String#normalize")))((("Unicode", "String#normalize")))different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
 
 [source,javascript]
 ----
@@ -1403,7 +1403,7 @@ compare(normal, irregular)
 
 === Regular Expressions
 
-In ((("Unicode", startref="u7")))((("strings", "and Unicode", startref="s7au")))((("strings", "ES6 improvements", startref="s7esi")))this section we'll take a look at regular expressions in and after ES6. There are a couple of regular expressions flags that were introduced in ES6: the `/y` or sticky flag, and the `/u` or Unicode flag. Then we'll discuss five proposals that are making their way through the ECMAScript specification development process at TC39.
+In ((("Unicode", startref="u7")))((("strings", "and Unicode", startref="s7au")))((("strings", "ES6 improvements", startref="s7esi")))((("regular expressions", id="rege7")))this section we'll take a look at regular expressions in and after ES6. There are a couple of regular expressions flags that were introduced in ES6: the `/y` or sticky flag, and the `/u` or Unicode flag. Then we'll discuss five proposals that are making their way through the ECMAScript specification development process at TC39.
 
 ==== Sticky Matching Flag /y
 
@@ -1861,7 +1861,7 @@ console.log(addressMatcher.next().value)
 // <- ['placeholder', 'Enter your business address']
 ----
 
-The `String#matchAll` proposalpass:[<span data-type="footnote" id="string-matchall">Check out the <a href="https://mjavascript.com/out/string-matchall"><code>String#matchAll</code> proposal document</a>.</span>] (in stage 1 at the time of this writing) introduces a new method for the string prototype that would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` objects as opposed to just the `captures` in the preceding example. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the sequence.
+The `String#matchAll` proposalpass:[<span data-type="footnote" id="string-matchall">Check out the <a href="https://mjavascript.com/out/string-matchall"><code>String#matchAll</code> proposal document</a>.</span>] (in stage 1 at the time of this writing) introduces a new method for the string prototype that would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` objects as opposed to just the `captures` in the preceding example. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the ((("regular expressions", startref="rege7")))sequence.
 
 [source,javascript]
 ----
