@@ -1187,7 +1187,7 @@ As Unicode expert Mathias Bynens points out, splitting by code points isn't enou
 
 ==== A Proposal to Split Grapheme Segments
 
-Multiple ((("strings", "splitting into iterable sequence")))((("grapheme segments")))code points that combine into a single visual glyph are getting more common.pass:[<span data-type="footnote" id="emoji">Emoji popularize this with glyphs sometimes made up of four code points. See <a href="https://mjavascript.com/out/emoji">this list of emoji</a> made up of several code points.</span>] There is a new proposal in the works (currently in stage 2) that may settle the matter of iterating over grapheme clusters once and for all. It introduces an `Intl.Segmenter` built-in, ((("Intl.Segmenter")))which can be used to split a string into an iterable sequence.
+Multiple ((("strings", "splitting into iterable sequence")))((("grapheme segments")))((("Unicode", "getGraphemes")))code points that combine into a single visual glyph are getting more common.pass:[<span data-type="footnote" id="emoji">Emoji popularize this with glyphs sometimes made up of four code points. See <a href="https://mjavascript.com/out/emoji">this list of emoji</a> made up of several code points.</span>] There is a new proposal in the works (currently in stage 2) that may settle the matter of iterating over grapheme clusters once and for all. It introduces an `Intl.Segmenter` built-in, ((("Intl.Segmenter")))which can be used to split a string into an iterable sequence.
 
 To use the `Segmenter` API, we start by creating an instance of `Intl.Segmenter` specifying a locale and the granularity level we want: per grapheme, word, sentence, or line. The segmenter instance can be used to produce an iterator for any given string, splitting it by the specified `granularity`. Note that the segmenting algorithm may vary depending on the locale, which is why it is a part of the API.
 
@@ -1212,7 +1212,7 @@ Let's look at more Unicode-related methods introduced in ES6.
 
 ==== String#codePointAt
 
-We can use `String#codePointAt` to ((("String#codePointAt", id="scpa7")))get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the following example we print the code points for each of the three emoji in our demo 'pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ/><img src="images/1f471.png" style="width: 12px" alt="ߑᢠdata-emoji-embed="ߑᢠ/><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" /></code>]' string.
+We can use `String#codePointAt` to ((("String#codePointAt", id="scpa7")))((("Unicode", "String#codePointAt")))get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the following example we print the code points for each of the three emoji in our demo 'pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="ߐdata-emoji-embed="ߐ/><img src="images/1f471.png" style="width: 12px" alt="ߑᢠdata-emoji-embed="ߑᢠ/><img src="images/2764.png" style="width: 12px" alt="❤️" data-emoji-embed="❤️" /></code>]' string.
 
 
 [source,javascript]
