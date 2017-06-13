@@ -1407,7 +1407,7 @@ In ((("Unicode", startref="u7")))((("strings", "and Unicode", startref="s7au")))
 
 ==== Sticky Matching Flag /y
 
-The sticky matching `y` flag introduced in ES6 is similar to the global `g` flag. Like global regular expressions, sticky ones are typically used to match several times until the input string is exhausted. Sticky regular expressions move `lastIndex` to the position after the last match, just like global regular expressions. The only difference is that a sticky regular expression must start matching where the previous match left off, unlike global regular expressions that move onto the rest of the input string when the regular expression goes unmatched at any given position.
+The sticky matching `y` flag ((("sticky matching (y)")))((("y flag")))introduced in ES6 is similar to the global `g` flag. Like global regular expressions, sticky ones are typically used to match several times until the input string is exhausted. Sticky regular expressions move `lastIndex` to the position after the last match, just like global regular expressions. The only difference is that a sticky regular expression must start matching where the previous match left off, unlike global regular expressions that move onto the rest of the input string when the regular expression goes unmatched at any given position.
 
 The following example illustrates the difference between the two. Given an input string like `'haha haha haha'` and the `/ha/` regular expression, the global flag will match every occurrence of `'ha'`, while the sticky flag will only match the first two, since the third occurrence doesn't match starting at index `4`, but rather at index `5`.
 
@@ -1447,7 +1447,7 @@ Sticky matching was added to JavaScript as a way of improving the performance of
 
 ==== Unicode Flag /u
 
-ES6 also introduced a `u` flag. The `u` stands for Unicode, but this flag can also be thought of as a more strict version of regular expressions.
+ES6 also ((("Unicode", "u flag", id="u7uf")))((("u flag", id="uf7")))introduced a `u` flag. The `u` stands for Unicode, but this flag can also be thought of as a more strict version of regular expressions.
 
 Without the `u` flag, the following snippet has a regular expression containing an `'a'` character literal that was unnecessarily escaped.
 
@@ -1499,7 +1499,7 @@ rdot.test('\n') // <- false
 rdot.test('\u{1d11e}') // <- true
 ----
 
-When the `u` flag is set, similar Unicode awareness improvements can be found in quantifiers and character classes, both of which treat each Unicode code point as a single symbol, instead of matching on the first code unit only. Insensitive case matching with the `i` flag performs Unicode case folding when the `u` flag is set as well, which is used to normalize code points in both the input string and the regular expression.pass:[<span data-type="footnote" id="regexp-unicode">For more details around the <code>u</code> flag in regular expressions, read <a href="https://mjavascript.com/out/regexp-unicode">"Unicode-aware regular expressions in ECMAScript 6"</a> from Mathias Bynens.</span>]
+When the `u` flag is set, similar Unicode awareness improvements can be found in quantifiers and character classes, both of which treat each Unicode code point as a single symbol, instead of matching on the first code unit only. Insensitive case matching with the `i` flag performs Unicode case folding when the `u` flag is set as well, which is used to normalize code points in both the input string and the ((("Unicode", "u flag", startref="u7uf")))((("u flag", startref="uf7")))regular expression.pass:[<span data-type="footnote" id="regexp-unicode">For more details around the <code>u</code> flag in regular expressions, read <a href="https://mjavascript.com/out/regexp-unicode">"Unicode-aware regular expressions in ECMAScript 6"</a> from Mathias Bynens.</span>]
 
 ==== Named Capture Groups
 
