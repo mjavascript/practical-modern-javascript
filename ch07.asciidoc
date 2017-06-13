@@ -1878,14 +1878,14 @@ for (const match of email.matchAll(rattributes)) {
 
 === Array
 
-Over the years, libraries like Underscore and Lodash spoke loudly of missing features when it came to arrays. As a result, ES5 brought in heaps of functional methods to arrays: `Array#filter`, `Array#map`, `Array#reduce`, `Array#reduceRight`, `Array#forEach`, `Array#some`, and `Array#every`.
+Over ((("arrays", primary-sortas="array", id="array7")))the years, libraries like Underscore and Lodash spoke loudly of missing features when it came to arrays. As a result, ES5 brought in heaps of functional methods to arrays: `Array#filter`, `Array#map`, `Array#reduce`, `Array#reduceRight`, `Array#forEach`, `Array#some`, and `Array#every`.
 
 ES6 brings a few more methods that will help manipulate, fill, and filter arrays.
 
 ==== Array.from
 
 
-Before ES6, JavaScript developers often needed to cast `arguments` to a function into an array.
+Before ((("Array.from", id="af7")))ES6, JavaScript developers often needed to cast `arguments` to a function into an array.
 
 [source,javascript]
 ----
@@ -2011,7 +2011,7 @@ Array.from(groceries, grocery => grocery.type)
 
 ==== Array.of
 
-The `Array.of` method is exactly like the `cast` function we played around with earlier. Next is a code snippet that shows how `Array.of` might be ponyfilled.
+The `Array.of` method ((("Array.from", startref="af7")))is exactly like the `cast` function we played around with earlier. Next is a code snippet that shows how `Array.of` might be ponyfilled.
 
 [source,javascript]
 ----
@@ -2294,7 +2294,7 @@ Then we get an iterator.
 // <- ArrayIterator {}
 ----
 
-Last, we spread the iterator over a new array, creating a copy.
+Last, we spread the iterator over a new array, ((("arrays", primary-sortas="array", startref="array7")))creating a copy.
 
 [source,javascript]
 ----
