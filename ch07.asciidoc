@@ -1644,7 +1644,7 @@ function isDecimalNumber(input) {
   const rdigits = /^\p{Decimal_Number}+$/u
   return rdigits.test(input)
 }
-isDecimalNumber('ݟﰝퟑݟ찝ퟞݟ鰝練ퟫݟ찝ﭰퟮݟﰝﺰퟻݟ짩
+isDecimalNumber('1234567890123456')
 // <- true
 ----
 
