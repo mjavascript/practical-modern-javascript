@@ -1296,7 +1296,7 @@ You can pass in as many code points as you'd like to `String.fromCodePoint`.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e, 0x1f471, 0x2764)
-// &lt;- '<img src="images/1f40e.png" alt="horse"/><img src="images/1f471.png" alt="man" data-emoji-embed="smiling idiot"/><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
+// &lt;- '<img src="images/1f40e.png" alt="horse" data-emoji-embed="running horse" /><img src="images/1f471.png" alt="man" data-emoji-embed="smiling idiot"/><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
 As an exercise in futility, we could map a string to their numeric representation of code points, and back to the code points themselves.
