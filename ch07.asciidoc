@@ -1307,7 +1307,7 @@ As an exercise in futility, we could map a string to their numeric representatio
   .map(cp =&gt; cp.codePointAt(0))
   .map(cp =&gt; String.fromCodePoint(cp))
   .join('')
-// &lt;- '<img src="images/1f40e.png" alt="ߐߐdata-emoji-embed="ߐߐ/><img src="images/1f471.png" alt="ߑߑᢠdata-emoji-embed="ߑߑᢠ/><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
+// &lt;- '<img src="images/1f40e.png" alt="horse"/><img src="images/1f471.png" alt="man"/><img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
 
 Reversing an string has potential to cause issues as well.
