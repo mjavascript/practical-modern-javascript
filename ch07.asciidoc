@@ -1330,7 +1330,7 @@ The problem is that we're reversing individual code units, while we'd have to re
 ++++
 <pre data-type="programlisting" data-code-language="javascript">const text = '\ud83d\udc0e\ud83d\udc71\u2764'
 [...text].reverse().join('')
-// &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" /><img src="images/1f471.png" alt="ߑߑᢠdata-emoji-embed="ߑߑᢠ/><img src="images/1f40e.png" alt="ߐߐdata-emoji-embed="ߐߐ/>'</pre>
+// &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" /><img src="images/1f471.png" alt="man"/><img src="images/1f40e.png" alt="horse"/>'</pre>
 ++++
 
 This way we avoid breaking up code points. Once again, keep in mind that this won't work for all grapheme clusters.
@@ -1466,7 +1466,7 @@ Using an escape sequence for an unreserved character such as `a` in a regular ex
 The following example attempts to embed the horse emoji in a regular expression by way of the `\u{1f40e}` notation that ES6 introduced for strings like `'\u{1f40e}'`, but the regular expression fails to match against the horse emoji. Without the `u` flag, the `\u{…}` pattern is interpreted as having an unnecessarily escaped `u` character followed by the rest of the sequence.
 
 ++++
-<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/.test('<img src="images/1f40e.png" alt="ߐߐdata-emoji-embed="ߐߐ/>') // &lt;- false
+<pre data-type="programlisting" data-code-language="javascript">/\u{1f40e}/.test('<img src="images/1f40e.png" alt="horse"/>') // &lt;- false
 /\u{1f40e}/.test('u{1f40e}') // &lt;- true</pre>
 ++++
 
