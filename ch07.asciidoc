@@ -1261,9 +1261,9 @@ We could wrap those base-16 values in `'\u{codePoint}'` and voilá: you'd get th
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">'\u{1f40e}'
-// &lt;- '<img src="images/1f40e.png" alt="ߐdata-emoji-embed="ߐ/>'
+// &lt;- '<img src="images/1f40e.png" alt="horse"/>'
 '\u{1f471}'
-// &lt;- '<img src="images/1f471.png" alt="ߑᢠdata-emoji-embed="ߑᢠ/>'
+// &lt;- '<img src="images/1f471.png" alt="man"/>'
 '\u{2764}'
 // &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
@@ -1274,9 +1274,9 @@ This ((("StringcodePointAtx", startref="scpa7")))((("String.fromCodePoint")))(((
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
-// &lt;- '<img src="images/1f40e.png" alt="ߐdata-emoji-embed="ߐ/>'
+// &lt;- '<img src="images/1f40e.png" alt="horse"/>'
 String.fromCodePoint(0x1f471)
-// &lt;- '<img src="images/1f471.png" alt="ߑᢠdata-emoji-embed="ߑᢠ/>'
+// &lt;- '<img src="images/1f471.png" alt="man"/>'
 String.fromCodePoint(0x2764)
 // &lt;- '<img src="images/2764.png" alt="❤️" data-emoji-embed="❤️" />'</pre>
 ++++
