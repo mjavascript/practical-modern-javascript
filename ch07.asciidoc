@@ -1274,7 +1274,7 @@ This ((("StringcodePointAtx", startref="scpa7")))((("String.fromCodePoint")))(((
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
-// &lt;- '<img src="images/1f40e.png" alt="horse"/>'
+// &lt;- '<img src="images/1f40e.png" alt="horse" data-emoji-embed="running horse" />'
 String.fromCodePoint(0x1f471)
 // &lt;- '<img src="images/1f471.png" alt="man" data-emoji-embed="smiling idiot"/>'
 String.fromCodePoint(0x2764)
