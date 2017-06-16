@@ -232,7 +232,7 @@ In order for the reaction to handle the rejection in `p2`, we'd have to attach t
 .By attaching a rejection handler on the branch where an error is produced, we're able to handle the rejection.
 image::images/pmjs_0403.png["In this example, p3 reacts to p2. This enables p3 to handle the rejection that arises in p2."]
 
-We've established that the promise you attach your reactions onto is important, as it determines what errors it can capture and what errors it cannot. It's also worth noting that as long as an error remains uncaught in a promise chain, a rejection handler will be able to capture it. In the following example we've introduced an intermediary `.then` call in between `p2`, where the error originated; and `p4`, where we attach the rejection reaction. When `p2` settles with a rejection, `p3` becomes settled with a rejection as it depends on `p2` directly. When `p3` settles with a rejection, the rejection handler in `p4` fires.
+We've established that the promise you attach your reactions onto is important, as it determines what errors it can capture and what errors it cannot. It's also worth noting that as long as an error remains uncaught in a promise chain, a rejection handler will be able to capture it. In the following example we've introduced an intermediary `.then` call in between `p2`, where the error originated, and `p4`, where we attach the rejection reaction. When `p2` settles with a rejection, `p3` becomes settled with a rejection, as it depends on `p2` directly. When `p3` settles with a rejection, the rejection handler in `p4` fires.
 
 [source,javascript]
 ----
@@ -310,7 +310,7 @@ Here is an enumeration of what is going on as that piece of code is executed:
 8. The `p3` promise from `p2.catch` is fulfilled, because it doesn't produce an error or result in a rejected promise.
 9. Because `p3` was fulfilled, the `p3.catch` is never followed. The `p3.then` branch would've been used instead.
 
-You should ((("promises", "as tree structure")))think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure.pass:[<span data-type="footnote" id="promisees">I wrote an online visualization tool called Promisees where you can see the <a href="https://mjavascript.com/out/promisees">tree structure underlying a `Promise` chain</a>.</span>] Let's reinforce this concept with <<Fig4-4>>.
+You should ((("promises", "as tree structure")))think of promises as a tree structure. This bears repetition: you should think of promises as a tree structure.pass:[<span data-type="footnote" id="promisees">I wrote an online visualization tool called Promisees where you can see the <a href="https://mjavascript.com/out/promisees">tree structure underlying a <code>Promise</code> chain</a>.</span>] Let's reinforce this concept with <<Fig4-4>>.
 
 [[Fig4-4]]
 .Given the tree structure, we realize that p3 is fulfilled, as it doesn't produce an exception nor is it rejected. For that reason, p4 can never follow the rejection branch, given its parent was fulfilled.
