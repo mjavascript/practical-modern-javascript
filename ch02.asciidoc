@@ -155,7 +155,7 @@ The last enhancement coming to object literals is ((("object literals", "compute
 
 ==== Method Definitions
 
-Typically, ((("object literals", "method definitions", id="ol2md")))((("method definitions", id="mdef2")))you can declare methods on an object by adding properties to it. In the next snippet, we're creating an small event emitter that supports multiple kinds of events. It comes with an `emitter#on` method ((("emitter object", id="eo2")))that can be used to register event listeners, and an `emitter#emit` method that can be used to raise events:
+Typically, ((("object literals", "method definitions", id="ol2md")))((("method definitions", id="mdef2")))you can declare methods on an object by adding properties to it. In the next snippet, we're creating a small event emitter that supports multiple kinds of events. It comes with an `emitter#on` method ((("emitter object", id="eo2")))that can be used to register event listeners, and an `emitter#emit` method that can be used to raise events:
 
 [source,javascript]
 ----
@@ -178,7 +178,7 @@ var emitter = {
 }
 ----
 
-Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the `function` keyword. This is meant as a terse alternative to traditional method declarations where you need to use the `function` ((("function keyword")))keyword. The following example shows how our `emitter` object looks like when using method definitions.
+Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the `function` keyword. This is meant as a terse alternative to traditional method declarations where you need to use the `function` ((("function keyword")))keyword. The following example shows how our `emitter` object looks when using method definitions.
 
 [source,javascript]
 ----
@@ -215,7 +215,7 @@ function name(parameters) {
 }
 ----
 
-You could also create ((("arrow functions", "anonymous")))((("anonymous functions")))anonymous functions, by omitting the name, when assigning the function to a variable, a property, or a function call.
+You could also create ((("arrow functions", "anonymous")))((("anonymous functions")))anonymous functions, by omitting the name when assigning the function to a variable, a property, or a function call.
 
 [source,javascript]
 ----
@@ -224,7 +224,7 @@ var example = function (parameters) {
 }
 ----
 
-Starting with ES6, you can use arrow functions as another way of writing anonymous functions. Keep in mind, there's several slightly different ways of writing them. The following piece of code shows an arrow function that's very similar to the anonymous function we just saw. The only difference seems to be the missing `function` keyword and the `=>` arrow to the right of the parameter list.
+Starting with ES6, you can use arrow functions as another way of writing anonymous functions. Keep in mind, there are several slightly different ways of writing them. The following piece of code shows an arrow function that's very similar to the anonymous function we just saw. The only difference seems to be the missing `function` keyword and the `=>` arrow to the right of the parameter list.
 
 [source,javascript]
 ----
@@ -382,7 +382,7 @@ throwError('this is a warning')
   at throwError
 ----
 
-Arrow functions are neat when it comes to defining anonymous functions that should probably be lexically bound anyway, and they can definitely make your code more terse in some situations. They are particularly useful in most functional programming situations such as when using `.map`, `.filter`, or `.reduce` on collections, as shown in the following example:
+Arrow functions are neat when it comes to defining anonymous functions that should probably be lexically bound anyway, and they can definitely make your code more terse in some situations. They are particularly useful in most functional programming situations, such as when using `.map`, `.filter`, or `.reduce` on collections, as shown in the following example:
 
 [source,javascript]
 ----
@@ -444,7 +444,7 @@ In a similar fashion, you could mix and match destructuring with regular variabl
 var { pseudonym } = character, two = 2
 ----
 
-If you want to extract a property named `pseudonym` but would like to declare it as a variable named `alias`, you can use the following destructuring syntax known as aliasing. Note that you can use `alias` or any other valid variable name:
+If you want to extract a property named `pseudonym` but would like to declare it as a variable named `alias`, you can use the following destructuring syntax, known as _aliasing_. Note that you can use `alias` or any other valid variable name:
 
 [source,javascript]
 ----
@@ -453,7 +453,7 @@ console.log(alias)
 // <- 'Batman'
 ----
 
-While aliases don't look any simpler than the ES5 flavor, `alias = character.pseudonym`, ((("aliases", id="al2")))they start making sense when you consider the fact that destructuring supports deep structures as in the following example:
+While aliases don't look any simpler than the ES5 flavor, `alias = character.pseudonym`, ((("aliases", id="al2")))they start making sense when you consider the fact that destructuring supports deep structures, as in the following example:
 
 [source,javascript]
 ----
@@ -469,7 +469,7 @@ var { metadata: { gender: characterGender } } = character
 
 The scenario we just saw repeats itself frequently, because properties are often named in the context of their host object. While `palette.color.code` is perfectly descriptive, `code` on its own could mean a wide variety of things, and aliases such as `colorCode` can help you bring context back into the variable name while still using destructuring.
 
-Whenever you access an nonexistent property in ES5 notation, you get a value of `undefined`:
+Whenever you access a nonexistent property in ES5 notation, you get a value of `undefined`:
 
 [source,javascript]
 ----
@@ -746,7 +746,7 @@ console.log(random({ max: 24 }))
 // <- 18
 ----
 
-Regular ((("assignment destructuring", "function parameters", startref="ad2fpd")))((("destructuring", "function parameters", startref="d2fpd")))((("function parameters", startref="fpd2")))expressions are another great fit for destructuring. Destructuring empowers you to name groups from a match without having to resort to index numbers. Here's an example `RegExp` that could be used for parsing simple dates, and an example of destructuring those dates into each of its components. The first entry in the resulting array is reserved for the raw input string, and we can discard it.
+Regular ((("assignment destructuring", "function parameters", startref="ad2fpd")))((("destructuring", "function parameters", startref="d2fpd")))((("function parameters", startref="fpd2")))expressions are another great fit for destructuring. Destructuring empowers you to name groups from a match without having to resort to index numbers. Here's an example `RegExp` that could be used for parsing simple dates, and an example of destructuring those dates into each of their components. The first entry in the resulting array is reserved for the raw input string, and we can discard it.
 
 [source,javascript]
 ----
