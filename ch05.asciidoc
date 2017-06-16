@@ -439,7 +439,7 @@ map.set(Symbol(), 2)
 // <- TypeError
 ----
 
-In exchange for having a more limited feature set, `WeakMap` key references are weakly held, meaning that the objects referenced by `WeakMap` keys are subject to garbage collection if there are no references to them--other than weak references. This kind of behavior is useful when you have metadata about a `person`, for example, but you want the `person` to be garbage collected when and if the only reference back to `person` is their associated metadata. You can now keep that metadata in a `WeakMap` using `person` as the key.
+In exchange for having a more limited feature set, `WeakMap` key references are weakly held, meaning that the objects referenced by `WeakMap` keys are subject to garbage collection if there are no references to them--other than weak references. This kind of behavior is useful when you have metadata about a `person`, for example, but you want the `person` to be garbage-collected when and if the only reference back to `person` is their associated metadata. You can now keep that metadata in a `WeakMap` using `person` as the key.
 
 In that sense, a `WeakMap` is most useful when the component maintaining it doesn't own the mapped objects, but wants to assign its own information to them without modifying the original objects or their lifecycle; letting memory be reclaimed when, for example, a DOM node is removed from the document.
 
@@ -470,13 +470,13 @@ map.has(date)
 
 ==== Is WeakMap a Worse Map?
 
-The distinction that makes `WeakMap` worth the trouble is in its name. Given that `WeakMap` holds references to its keys weakly, those objects are subject to garbage collection if there are no other references to them other than as `WeakMap` keys. This is in contrast with `Map`, which holds strong object references, preventing `Map` keys and values from being garbage collected.
+The distinction that makes `WeakMap` worth the trouble is in its name. Given that `WeakMap` holds references to its keys weakly, those objects are subject to garbage collection if there are no other references to them other than as `WeakMap` keys. This is in contrast with `Map`, which holds strong object references, preventing `Map` keys and values from being garbage-collected.
 
-Correspondingly, use cases for `WeakMap` revolve around the need to specify metadata or extend an object while still being able to garbage collect that object if there are no other references to it. A perfect example might be the underlying implementation for `process.on('unhandledRejection')` in Node.js, which uses a `WeakMap` to keep track of rejected promises that weren't dealt with yet. By using `WeakMap`, the implementation prevents memory leaks because the `WeakMap` won't be grabbing onto the state related to those promises strongly. In this case, we have a simple map that weakly holds onto state, but is flexible enough to handle entries being removed from the map when promises are no longer referenced anywhere else.
+Correspondingly, use cases for `WeakMap` revolve around the need to specify metadata or extend an object while still being able to garbage-collect that object if there are no other references to it. A perfect example might be the underlying implementation for `process.on('unhandledRejection')` in Node.js, which uses a `WeakMap` to keep track of rejected promises that weren't dealt with yet. By using `WeakMap`, the implementation prevents memory leaks because the `WeakMap` won't be grabbing onto the state related to those promises strongly. In this case, we have a simple map that weakly holds onto state, but is flexible enough to handle entries being removed from the map when promises are no longer referenced anywhere else.
 
 Keeping data about DOM elements that should be released from memory when they're no longer of interest is another important use case, and in this regard using `WeakMap` is an even better solution to the DOM-related API caching solution we implemented earlier using `Map`.
 
-In so many words, then: no, `WeakMap` is definitely not worse than `Map`--they just cater to different ((("WeakMap", startref="wm5")))((("ES6 maps", "WeakMap", startref="es5wm")))use cases.
+In so many words, then: no, `WeakMap` is definitely not worse than ++Map++—they just cater to different ((("WeakMap", startref="wm5")))((("ES6 maps", "WeakMap", startref="es5wm")))use cases.
 
 === Sets in ES6
 
