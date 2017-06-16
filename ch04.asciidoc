@@ -333,7 +333,7 @@ new Promise(resolve => resolve('result'))
 new Promise((resolve, reject) => reject(new Error('reason')))
 ----
 
-Resolving and rejecting promises without a value is possible, but not that useful. Usually promises will fulfill with a `result` such as the response from an Ajax call as we've seen with `fetch`. You'll definitely want to state the `reason` for your rejections--typically wrapping them in an `Error` object so that you can report back a stack trace.
+Resolving and rejecting promises without a value is possible, but not that useful. Usually promises will fulfill with a `result` such as the response from an Ajax call, as we've seen with `fetch`. You'll definitely want to state the `reason` for your rejections--typically wrapping them in an `Error` object so that you can report back a stack trace.
 
 As you may have guessed, there's nothing inherently synchronous about promise resolvers. Settlement can be completely asynchronous for fulfillment and rejection alike. Even if the resolver calls `resolve` right away, the result won't trickle down to reactions until the next tick. That's the whole point of promises! The following example creates a promise that becomes fulfilled after two seconds elapse.
 
@@ -517,7 +517,7 @@ const p3 = p2.catch(err => console.log(err))
 // <- 'oops'
 ----
 
-As we can observe after carefully reading the code for our ponyfill, if either reaction results in an exception being thrown then the promise would be rejected. At the same time, returning a rejected promise via `Promise.reject` or some other means would imply `resove(fn())` results in a rejected promise, which won't follow the `.then` reactions used to return the original settlement value of the promise ((("promises", "Promise#finally proposal", startref="p4pf")))((("Promise#finally", startref="pf4")))we're calling `.finally` on.
+As we can observe after carefully reading the code for our ponyfill, if either reaction results in an exception being thrown then the promise would be rejected. At the same time, returning a rejected promise via `Promise.reject` or some other means would imply `resolve(fn())` results in a rejected promise, which won't follow the `.then` reactions used to return the original settlement value of the promise ((("promises", "Promise#finally proposal", startref="p4pf")))((("Promise#finally", startref="pf4")))we're calling `.finally` on.
 
 ==== Leveraging Promise.all and Promise.race
 
@@ -645,7 +645,7 @@ const example = {
 The method assigned to `Symbol.iterator` must return an object that adheres to the iterator protocol. That protocol defines how to get values out of an iterable sequence. The protocol dictates iterators must be objects with a `next` method. The `next` method takes no arguments and should return an object with these two properties found below:
 
 - `value` is the current item in the sequence
-- `done` is a boolean indicating whether the sequence has ended
+- `done` is a Boolean indicating whether the sequence has ended
 
 Let's use the following piece of code as a crutch to understand the concepts behind iteration protocols. We're turning ((("iteration protocol", "sequence object", id="ip4so")))the `sequence` object into an iterable by adding a `Symbol.iterator` property. The iterable returns an iterator object. Each time `next` is asked for the following value in the sequence, an element from the `items` array is provided. When `i` goes beyond the last index on the `items` array, we return `done: true`, indicating the sequence has ended.
 
@@ -824,7 +824,7 @@ Iterators ((("infinite sequences", "identifying")))don't have any knowledge that
 
 [[fig0405]]
 .The halting problem depicted in an https://mjavascript.com/out/xkcd-1266[XKCD comic]
-image::images/pmjs0405.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
+image::images/pmjs_0405.png["The halting problem depicted in an XKCD comic: https://mjavascript.com/out/xkcd-1266."]
 
 You typically have a good idea of whether a sequence is infinite or not. Whenever you have an infinite sequence it's up to you to add an escape condition that ensures the program won't crash in an attempt to loop over every single value in the sequence. While `for..of` won't ((("for..of", startref="fo4")))run into the problem unless there's no escape condition, using mechanisms such as spread or `Array.from` would immediately result in the program crashing into an infinite loop in the case of infinite sequences.
 ****
