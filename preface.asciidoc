@@ -5,7 +5,7 @@ Back in 1988, when I was using FrontPage for all my web development needs at sch
 
 === Who Should Read This Book
 
-This book is meant for web developers, enthusiasts, and professionals with a working knowledge of plain JavaScript. These developers and anyone looking to further their understanding of the JavaScript language shall benefit from reading Modern JavaScript.
+This book is meant for web developers, enthusiasts, and professionals with a working knowledge of plain JavaScript. These developers and anyone looking to further their understanding of the JavaScript language shall benefit from reading _Practical Modern JavaScript_.
 
 === Why Modern JavaScript?
 
