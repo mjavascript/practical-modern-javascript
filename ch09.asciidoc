@@ -1034,9 +1034,9 @@ The beauty of `async`/`await` lies in the fact that it fixes the biggest problem
 
 While using `await` expressions optimizes toward reducing complexity in serial asynchronous code, it becomes hard to reason about concurrent asynchronous code flows when replacing promises with `async`/`await`. This can be mitigated by using `await Promise.all(tasks)` and firing those tasks concurrently before the `await` expression is reached. Given, however, that async functions don't optimize for this use case, reading this kind of code can be confusing, so this is something to look out for. If our code is highly concurrent, we might want to consider a callback-based approach.
 
-Once again, this leads us to critical thinking. New language features aren't always necessarily better, for all use cases. While sticking to conventions is important so that our code remains consistent and we don't spend most of our time deciding on how to better represent a small portion of a program, it is also important to have a fine balance.
+Once again, this leads us to critical thinking. New language features aren't always necessarily better for all use cases. While sticking to conventions is important so that our code remains consistent and we don't spend most of our time deciding on how to better represent a small portion of a program, it is also important to have a fine balance.
 
-When we don't spend at least some of our time on figuring out what feature or flow style is the most appropriate for the code we're writing, we risk treating every problem as a nail because all we have is a hammer. Picking the right tool for the problem at hand is even more important than being a stickler for conventions and hard rules.
+When we don't spend at least some of our time figuring out what feature or flow style is the most appropriate for the code we're writing, we risk treating every problem as a nail because all we have is a hammer. Picking the right tool for the problem at hand is even more important than being a stickler for conventions and hard rules.
 
 === Complexity Creep, Abstractions, and Conventions
 
