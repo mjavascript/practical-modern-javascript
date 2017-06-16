@@ -1,7 +1,7 @@
 [[javascript-modules]]
 == JavaScript Modules
 
-Over the years, we've seen multiple different ways in which to split code into more manageable units. For the longest time we've had the module pattern where you simply wrapped pieces of code in self-invoking function expressions. You had to be careful to sort your scripts so that each script came after all of its dependencies.
+Over the years, we've seen multiple different ways in which to split code into more manageable units. For the longest time we've had the module pattern, where you simply wrapped pieces of code in self-invoking function expressions. You had to be careful to sort your scripts so that each script came after all of its dependencies.
 
 A while later, the ((("RequireJS")))RequireJS library was born. It provided a way of defining the dependencies of each module programmatically, so that a dependency graph is created and you wouldn't have to worry about sorting your scripts anymore. RequireJS demands that you provide an array of strings used to identify your dependencies and also wrap modules in a function call, which would then receive those dependencies as parameters. Many other libraries provide similar functionality but offer a slightly different API.
 
@@ -44,7 +44,7 @@ console.log(union([1, 2], 2))
 ====
 We can omit the file extension as long as it's _.js_ or _.json_, but this is discouraged.
 
-While the file extension is optional for `require` statements and when using the `node` CLI, we should strongly consider getting into the habit of including it nevertheless. Browser implementations of ESM won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. You can learn more in the specification at https://mjavascript.com/out/esm-integration.
+While the file extension is optional for `require` statements and when using the `node` CLI, we should strongly consider getting into the habit of including it nevertheless. https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-module-system[Browser implementations of ESM] won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. 
 ====
 
 We could run `_app.js_` in its current state through the CLI for Node.js, `node`, as seen in the next snippet.
