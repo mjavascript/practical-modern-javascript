@@ -125,12 +125,12 @@ console.log(html)
 <<Fig8_2>> shows our updated application in all its glory.
 
 [[Fig8_2]]
-.Composing components made with template literals can be as simple as we choose to make them.
+.Composing components made with template literals can be as simple as we choose to make them
 image::images/pmjs_0802.png["Printing a grocery shopping list"]
 
 In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a `model` object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the _item.js_ templating function, and joining their HTML representations with newlines.
 
-Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` function that could render any template, we could easily do that thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls don't necessarily need to be on the top level of a module. Calls to `require` can be anywhere, even embedded within other functions.
+Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` function that could render any template, we could easily do that, thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls don't necessarily need to be on the top level of a module. Calls to `require` can be anywhere, even embedded within other functions.
 
 [source,javascript]
 ----
@@ -171,7 +171,7 @@ As we explored the CommonJS module system, you might've noticed how the API is s
 
 ==== Strict Mode
 
-In the ES6 module system, strict mode is turned on by default. Strict mode is a featurefootnoteref:[strict-mode,Read a comprehensive article about strict mode on Mozilla's MDN: https://mjavascript.com/out/strict-mode.] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can enable optimizations making JavaScript runtime faster and safer.
+In the ES6 module system, strict mode is turned on by default. Strict mode is a featurepass:[<span data-type="footnote">Read this comprehensive article about <a href="https://mjavascript.com/out/strict-mode">strict mode on Mozilla's MDN</a>.</span>] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can enable optimizations, making JavaScript runtime faster and safer.
 
 - Variables must be declared
 - Function parameters must have unique names
