@@ -2,15 +2,15 @@
 [[ecmascript-and-the-future-of-javascript]]
 == ECMAScript and the pass:[<span class="keep-together">Future of JavaScript</span>]
 
-JavaScript has gone from being a 1995 marketing ploy to gain a tactical advantage, to becoming the core programming experience in the world's most widely used application runtime platform in 2017. The language doesn't merely run in browsers anymore, but is also used to create desktop and mobile applications, in hardware devices, and even in space suit design at NASA.
+JavaScript has gone from being a 1995 marketing ploy to gain a tactical advantage to becoming the core programming experience in the world's most widely used application runtime platform in 2017. The language doesn't merely run in browsers anymore, but is also used to create desktop and mobile applications, in hardware devices, and even in space suit design at NASA.
 
 How did JavaScript get here, and where is it going next?
 
 === A Brief History of JavaScript Standards
 
-Back ((("JavaScript", "standards evolution", id="js1se")))((("standards evolution", id="se1")))in 1995, ((("Netscape", id="net1")))Netscape envisioned a dynamic web beyond what HTML could offer. Brendan Eich was initially brought into Netscape to develop a language that was functionally akin to Scheme, but for the browser. Once he joined, he learned that upper management wanted it to look like Java and a deal to that effect was already underway.
+Back ((("JavaScript", "standards evolution", id="js1se")))((("standards evolution", id="se1")))in 1995, ((("Netscape", id="net1")))Netscape envisioned a dynamic web beyond what HTML could offer. Brendan Eich was initially brought into Netscape to develop a language that was functionally akin to Scheme, but for the browser. Once he joined, he learned that upper management wanted it to look like Java, and a deal to that effect was already underway.
 
-Brendan created the first JavaScript prototype in ten days, taking Scheme's first-class functions and Self's prototypes as its main ingredients. The initial version of JavaScript was code-named Mocha. It didn't have array or object literals, and every error resulted in an alert. The lack of exception handling is why, to this day, many operations result in `NaN` or `undefined`. Brendan's work on DOM level 0 and the first edition of JavaScript set the stage for standards work.
+Brendan created the first JavaScript prototype in 10 days, taking Scheme's first-class functions and Self's prototypes as its main ingredients. The initial version of JavaScript was code-named Mocha. It didn't have array or object literals, and every error resulted in an alert. The lack of exception handling is why, to this day, many operations result in `NaN` or `undefined`. Brendan's work on DOM level 0 and the first edition of JavaScript set the stage for standards work.
 
 This revision of JavaScript was marketed as ((("LiveScript")))LiveScript when it started shipping with a beta release of Netscape Navigator 2.0, in September 1995. It was rebranded as JavaScript (trademarked by Sun, now owned by Oracle) when Navigator 2.0 beta 3 was released in December 1995. Soon after this release, Netscape introduced a server-side JavaScript implementation for scripting in Netscape Enterprise Server, and named it ((("LiveWire")))LiveWire.footnote:[A booklet from 1998 explains the intricacies of Server-Side JavaScript with LiveWire, https://mjavascript.com/out/livewire.] ((("JScript")))JScript, Microsoft's reverse-engineered implementation of JavaScript, was bundled with IE3 in 1996. JScript was available for Internet Information Server (IIS) in the server-side.
 
