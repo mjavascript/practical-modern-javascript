@@ -788,7 +788,7 @@ ES6 has a better solution to the problem, and that's rest parameters.
 
 ==== Rest Parameters
 
-You ((("rest parameters", id="rp2")))can now precede the last parameter in any JavaScript function with three dots, converting it into an special "rest parameter." When the rest parameter is the only parameter in a function, it gets all arguments passed to the function: it works just like the `.slice` solution we saw earlier, but you avoid the need for a complicated construct like `arguments`, and it's specified in the parameter list.
+You ((("rest parameters", id="rp2")))can now precede the last parameter in any JavaScript function with three dots, converting it into a special "rest parameter." When the rest parameter is the only parameter in a function, it gets all arguments passed to the function: it works just like the `.slice` solution we saw earlier, but you avoid the need for a complicated construct like `arguments`, and it's specified in the parameter list.
 
 [source,javascript]
 ----
@@ -1100,7 +1100,7 @@ The template we've just prepared would produce output like what's shown in the f
 </article>
 ----
 
-A downside when it comes to multiline template literals is indentation. The following example shows a typically indented piece of code with a template literal contained in a function. While we may have expected no indentation, the string is has four spaces of indentation.
+A downside when it comes to multiline template literals is indentation. The following example shows a typically indented piece of code with a template literal contained in a function. While we may have expected no indentation, the string has four spaces of indentation.
 
 [source,javascript]
 ----
@@ -1130,7 +1130,7 @@ function unindent(text) {
 }
 ----
 
-Sometimes, it might be a good idea to pre-process the results of interpolated expressions before inserting them into your templates. For these advanced kinds of use cases, it's possible to use another feature of template literals called tagged ((("template literals", "multiline string representation", startref="templ2msr")))((("mulitline strings", startref="ms2")))((("strings, multiline", startref="sm2")))templates.
+Sometimes, it might be a good idea to pre-process the results of interpolated expressions before inserting them into your templates. For these advanced kinds of use cases, it's possible to use another feature of template literals called _tagged templates_.((("template literals", "multiline string representation", startref="templ2msr")))((("mulitline strings", startref="ms2")))((("strings, multiline", startref="sm2")))
 
 ==== Tagged Templates
 
