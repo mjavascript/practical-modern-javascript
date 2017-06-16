@@ -901,7 +901,7 @@ function keyValueIterable(target) {
 }
 ----
 
-We could then call `keyValueIterable` passing in the `colors` object, turning `colors` into an iterable object. You could in fact use `keyValueIterable` on any objects where you want to iterate over key-value pairs, as the iteration behavior doesn't make assumptions about the object. Once we've attached a `Symbol.iterator` behavior, we'll be able to treat the object as an iterable. ((("Symbol.iterator", startref="si4")))In the next code snippet, we iterate over the key/value pairs and print only the color codes.
+We could then call `keyValueIterable` passing in the `colors` object, turning `colors` into an iterable object. You could in fact use `keyValueIterable` on any objects where you want to iterate over key/value pairs, as the iteration behavior doesn't make assumptions about the object. Once we've attached a `Symbol.iterator` behavior, we'll be able to treat the object as an iterable. ((("Symbol.iterator", startref="si4")))In the next code snippet, we iterate over the key/value pairs and print only the color codes.
 
 [source,javascript]
 ----
@@ -1100,7 +1100,7 @@ console.log([...chars])
 
 When you create a generator object, you'll get an iterator that uses the generator function to produce an iterable sequence. Whenever a `yield` expression is reached, its value is emitted by the iterator and generator function execution becomes suspended.
 
-The following example shows how iteration can trigger side-effects within the generator function. The `console.log` ((("console.log")))statements after each `yield` statement will be executed when generator function execution becomes unsuspended and asked for the next element in the sequence.
+The following example shows how iteration can trigger side effects within the generator function. The `console.log` ((("console.log")))statements after each `yield` statement will be executed when generator function execution becomes unsuspended and asked for the next element in the sequence.
 
 [source,javascript]
 ----
@@ -1114,7 +1114,7 @@ function* numbers() {
 }
 ----
 
-Suppose you created a generator object for `numbers`, spread its contents onto an array, and printed it to the console. Taking into account the side-effects in `numbers`, can you guess what the console output would look like for the following piece of code? Given that the spread operator iterates over the sequence to completion in order to give you an array, all side-effects would be executed while constructing the array via destructuring, before the `console.log` statement printing the array is ever reached.
+Suppose you created a generator object for `numbers`, spread its contents onto an array, and printed it to the console. Taking into account the side effects in `numbers`, can you guess what the console output would look like for the following piece of code? Given that the spread operator iterates over the sequence to completion in order to give you an array, all side effects would be executed while constructing the array via destructuring, before the `console.log` statement printing the array is ever reached.
 
 [source,javascript]
 ----
@@ -1125,7 +1125,7 @@ console.log([...numbers()])
 // <- [1, 2, 3]
 ----
 
-If we now used a `for..of` loop ((("for..of")))instead, we'd be able to preserve the order declared in the `numbers` generator function. In the next example, elements in the `numbers` sequence are printed one at a time in a `for..of` loop. The first time the generator function is asked for a `number`, it yields `1` and execution becomes suspended. The second time, execution is unsuspended where the generator left off, `'a'` is printed to the console as a side-effect, and `2` is yielded. The third time, `'b'` is the side-effect, and `3` is yielded. The fourth time, `'c'` is a side-effect and the generator signals that the sequence has ended.
+If we now used a `for..of` loop ((("for..of")))instead, we'd be able to preserve the order declared in the `numbers` generator function. In the next example, elements in the `numbers` sequence are printed one at a time in a `for..of` loop. The first time the generator function is asked for a `number`, it yields `1` and execution becomes suspended. The second time, execution is unsuspended where the generator left off, `'a'` is printed to the console as a side effect, and `2` is yielded. The third time, `'b'` is the side effect, and `3` is yielded. The fourth time, `'c'` is a side effect and the generator signals that the sequence has ended.
 
 [source,javascript]
 ----
@@ -1167,7 +1167,7 @@ console.log([...salute('you')])
 // <- ['h', 'e', 'l', 'l', 'o', ' ', 'y', 'o', 'u']
 ----
 
-To reiterate, you can `yield*` anything that adheres to the iterable protocol, not merely strings. That includes generator objects, arrays, `arguments`, `NodeList` in the browser, and just about anything provided it implements `System.iterator`. The following example demonstrates how you could mix `yield` and `yield*` statements to describe a sequence of values using generator functions, an iterable object, and the spread operator. Can you deduce what the `console.log` statement would print?
+To reiterate, you can `yield*` anything that adheres to the iterable protocol, not merely strings. That includes generator objects, arrays, `arguments`, `NodeList` in the browser, and just about anything, provided it implements `System.iterator`. The following example demonstrates how you could mix `yield` and `yield*` statements to describe a sequence of values using generator functions, an iterable object, and the spread operator. Can you deduce what the `console.log` statement would print?
 
 [source,javascript]
 ----
@@ -1754,7 +1754,7 @@ function saveProducts(productList) {
 }
 ----
 
-Thus far we're pulling all inputs and passing their details back to the generator via `g.next(product)`--an item at a time. In order to leverage the `return` statement, we'll save the products in a temporary array and then `POST` the list onto the output endpoint present on the iterator `item` when the sequence is marked as having ended.
+Thus far we're pulling all inputs and passing their details back to the generator via ++g.next(product)++—an item at a time. In order to leverage the `return` statement, we'll save the products in a temporary array and then `POST` the list onto the output endpoint present on the iterator `item` when the sequence is marked as having ended.
 
 [source,javascript]
 ----
