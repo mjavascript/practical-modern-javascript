@@ -89,7 +89,7 @@ ES6 ((("ECMAScript", "using ES6 maps", id="ecma5ues6m")))((("ES6 maps", id="es5m
 
 ==== First Look into ES6 Maps
 
-Here's how what we had earlier would have looked like when using ES6 maps. As you can see, the implementation details we've had to come up with for our custom ES5 hash-map are already built into `Map`, vastly simplifying our use case.
+Here's how what we had earlier would have looked when using ES6 maps. As you can see, the implementation details we've had to come up with for our custom ES5 hash-map are already built into `Map`, vastly simplifying our use case.
 
 [source,javascript]
 ----
@@ -314,7 +314,7 @@ console.log([...map.entries()])
 // <- [[1, 2], [3, 4], [5, 6]]
 ----
 
-Map entries are always iterated in insertion order. This contrasts with `Object.keys`, which is specified to follow an arbitrary order. Although, in practice, insertion order is typically preserved by JavaScript engines regardless of the specification.
+Map entries are always iterated in insertion order. This contrasts with `Object.keys`, which is specified to follow an arbitrary order. Although in practice, insertion order is typically preserved by JavaScript engines regardless of the specification.
 
 Maps have a `.forEach` method that's equivalent in behavior to that in ES5 `Array` objects. The signature is `(value, key, map)`, where `value` and `key` correspond to the current item in the iteration, while `map` is the map being iterated. Once again, keys do not get cast into strings in the case of `Map`, as demonstrated here.
 
@@ -421,13 +421,13 @@ function customThing(el) {
 }
 ----
 
-Maps aren't ((("ES6 maps", "hash maps and the DOM", startref="es5hmatdom")))((("DOM elements", "in maps", secondary-sortas="maps", startref="dom5im")))the only kind of built-in collection in ES6, there's also `WeakMap`, `Set`, and `WeakSet`. Let's proceed by digging into `WeakMap`.
+Maps aren't ((("ES6 maps", "hash maps and the DOM", startref="es5hmatdom")))((("DOM elements", "in maps", secondary-sortas="maps", startref="dom5im")))the only kind of built-in collection in ES6; there's also `WeakMap`, `Set`, and `WeakSet`. Let's proceed by digging into `WeakMap`.
 
 === Understanding and Using WeakMap
 
-For ((("WeakMap", id="wm5")))((("ES6 maps", "WeakMap", id="es5wm")))the most part, you can think of `WeakMap` as a subset of `Map`. The `WeakMap` collection has a reduced API surface with less affordances than what we could find in `Map`. Collections created using `WeakMap` are not iterable like `Map`, meaning there is no iterable protocol in `WeakMap`, no `WeakMap#entries`, no `WeakMap#keys`, no `WeakMap#values`, no `WeakMap#forEach` and no `WeakMap#clear` methods.
+For ((("WeakMap", id="wm5")))((("ES6 maps", "WeakMap", id="es5wm")))the most part, you can think of `WeakMap` as a subset of `Map`. The `WeakMap` collection has a reduced API surface with fewer affordances than what we could find in `Map`. Collections created using `WeakMap` are not iterable like `Map`, meaning there is no iterable protocol in `WeakMap`, no `WeakMap#entries`, no `WeakMap#keys`, no `WeakMap#values`, no `WeakMap#forEach`, and no `WeakMap#clear` methods.
 
-Another distinction found in `WeakMap` is that every `key` must be an object. This is in contrast with `Map` where, while object references were allowed as keys, they weren't enforced. Remember that `Symbol` is a value type, and as such, they're not allowed either.
+Another distinction found in `WeakMap` is that every `key` must be an object. This is in contrast with `Map`, where, while object references were allowed as keys, they weren't enforced. Remember that `Symbol` is a value type, and as such, isn't allowed either.
 
 [source,javascript]
 ----
