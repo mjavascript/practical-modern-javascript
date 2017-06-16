@@ -7,7 +7,7 @@ Object literals get a few syntax changes in ES6, and they're a good place to sta
 
 === Object Literals
 
-An ((("object literals", id="ol2")))object literal is any object declaration using the `{}` shorthand syntax, such as the following example:
+An ((("object literals", id="ol2")))_object literal_ is any object declaration using the `{}` shorthand syntax, such as the following example:
 
 [source,javascript]
 ----
