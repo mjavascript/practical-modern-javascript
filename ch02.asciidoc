@@ -1226,7 +1226,7 @@ Phew, ((("template literals", "tagged templates", startref="tl2tt")))((("tagged 
 
 The `let` statement ((("let statements", id="lets2")))is one of the most well-known features in ES6. It works like a `var` statement, but it has different scoping rules.
 
-JavaScript has always had a complicated ruleset when it comes to scoping, driving many programmers crazy when they were first trying to figure out how variables work in JavaScript. Eventually, you discover ((("hoisting")))hoisting, and JavaScript starts making a bit more sense to you. Hoisting means that variables get pulled from anywhere they were declared in user code to the top of their scope. For example, see the following code.
+JavaScript has always had a complicated ruleset when it comes to scoping, driving many programmers crazy when they were first trying to figure out how variables work in JavaScript. Eventually, you discover ((("hoisting")))hoisting, and JavaScript starts making a bit more sense to you. _Hoisting_ means that variables get pulled from anywhere they were declared in user code to the top of their scope. For example, see the following code.
 
 [source,javascript]
 ----
@@ -1268,7 +1268,7 @@ console.log(deep)
 // <- 'This is available from outer scope.'
 ----
 
-With `var`, because of lexical scoping, one could still access the `deep` variable from outside those blocks, and not get an error. Sometimes it can be very useful to get errors in these situations, particularly if one or more of the following is trueL:
+With `var`, because of lexical scoping, one could still access the `deep` variable from outside those blocks, and not get an error. Sometimes it can be very useful to get errors in these situations, particularly if one or more of the following is true:
 
 - Accessing the inner variable breaks some sort of encapsulation principle in our code
 - The inner variable doesn't belong in the outer scope at all
