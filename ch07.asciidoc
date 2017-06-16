@@ -1205,7 +1205,7 @@ function getGraphemes(locale, text) {
 getGraphemes('es', 'Esto está bien bueno!')
 ----
 
-Using the segmenter proposal, we wouldn't have any trouble splitting strings containing emoji or other combining code units. You can learn more about the `Segmenter` proposal at https://mjavascript.com/out/segmenter.
+Using the https://mjavascript.com/out/segmenter[+Segmenter+] proposal, we wouldn't have any trouble splitting strings containing emoji or other combining code units. 
 
 Let's look at more Unicode-related methods introduced in ES6.
 
