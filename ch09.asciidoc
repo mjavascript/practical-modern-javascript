@@ -938,7 +938,7 @@ In <<iteration-and-flow-control>> we discussed how many of the different ways in
 
 Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
 
-When it comes to callbacks, libraries like `async` can help reduce complexity when we have three or more related tasks that need to be executed asynchronously.pass:[<span data-type="footnote">A popular flow control library. You can find async on <a href="https://mjavascript.com/out/async-library">GitHub</a>.</span>] Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
+When it comes to callbacks, libraries like `async` can help reduce complexity when we have three or more related tasks that need to be executed asynchronously.pass:[<span data-type="footnote">A popular flow control library. You can find <code>async</code> on <a href="https://mjavascript.com/out/async-library">GitHub</a>.</span>] Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
 
 Events are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Events don't lend themselves well to managing the complexity of asynchronous tasks, however.
 
@@ -967,15 +967,15 @@ Promises were around for a long time, in user libraries, before TC39 decided to 
 
 Promises are a bit more expensive than callbacks in terms of commitment, because promise chains involve more promises, so they are hard to interleave with plain callbacks. At the same time, you don't want to interleave promises with callback-based code, because that leads to complex applications. For any given portion of code, it's important to pick one paradigm and stick with it. Relying on a single paradigm produces code that doesn't focus as much on the mechanics as it does on task processing.
 
-Committing to promises isn't inherently bad, however, but merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators, and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
+Committing to promises isn't inherently bad, however; it's merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators, and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
 
 Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the language.
 
-We could use iterators to lazily describe sequences that don't necessarily need to be finite. Futher, their asynchronous counterpart could be used to describe sequences that require out-of-band processing, such as `GET` requests, to produce elements. Those sequences can be consumed by using a `for await..of` loop, hiding away the complexity of their asynchronous nature.
+We could use iterators to lazily describe sequences that don't necessarily need to be finite. Further, their asynchronous counterpart could be used to describe sequences that require out-of-band processing, such as `GET` requests, to produce elements. Those sequences can be consumed by using a `for await..of` loop, hiding away the complexity of their asynchronous nature.
 
 An iterator is a useful way of describing how an object is iterated to produce a sequence. When there isn't an object to describe, generators offer a way of describing standalone sequences. Implementing an iterator is the ideal way of describing how a `Movie` object should be iterated, perhaps using `Symbol.asyncIterator` and fetching information about each actor and their roles for every credited actor in a movie. Without the context of a `Movie` object, however, such an iterator would make more sense as a generator.
 
-Another case where generators are useful are infinite sequences. Consider the following iterator, where we produce an infinite stream of integer numbers.
+Another case where generators are useful is infinite sequences. Consider the following iterator, where we produce an infinite stream of integer numbers.
 
 [source,javascript]
 ----
