@@ -1195,7 +1195,7 @@ Multiple use cases apply to tagged templates. One possible use case might be to 
 ----
 function upper(parts, ...values) {
   return parts.reduce((all, part, index) =>
-  all + values[index - 1].toUpperCase() + part
+    all + values[index - 1].toUpperCase() + part
   )
 }
 var name = 'Maurice'
@@ -1210,10 +1210,11 @@ A decidedly more useful use case would be to sanitize expressions interpolated i
 ----
 function sanitized(parts, ...values) {
   return parts.reduce((all, part, index) =>
-  all + sanitize(values[index - 1]) + part
+    all + sanitize(values[index - 1]) + part
   )
 }
-var comment = 'Evil comment<iframe src="http://evil.corp"></iframe>'
+var comment = 'Evil comment<iframe src="http://evil.corp">
+    </iframe>'
 var html = sanitized`<div>${ comment }</div>`
 console.log(html)
 // <- '<div>Evil comment</div>'
