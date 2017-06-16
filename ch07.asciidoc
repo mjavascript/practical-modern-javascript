@@ -1805,7 +1805,7 @@ console.log(...parseAttributes(html))
 
 A bigger source of confusion is that `rattributes` mutates its `lastIndex` property on each call to `RegExp#exec`, which is how it can track the position after the last match. When there are no matches left, `lastIndex` is reset back to `0`. A problem arises when we don't iterate over all possible matches for a piece of input in one go--which would reset `lastIndex` to ++0++—and then we use the regular expression on a second piece of input, obtaining unexpected results.
 
-While it looks like our `matchAll` implementation wouldn't fall victim of this given it loops over all matches, it's be possible to iterate over the generator by hand, meaning that we'd run into trouble if we reused the same regular expression, as shown in the next bit of code. Note how the second matcher should report `['type', 'text']` but instead starts at an index much further ahead than `0`, even misreporting the `'placeholder'` key as `'laceholder'`.
+While it looks like our `matchAll` implementation wouldn't fall victim of this given it loops over all matches, it'd be possible to iterate over the generator by hand, meaning that we'd run into trouble if we reused the same regular expression, as shown in the next bit of code. Note how the second matcher should report `['type', 'text']` but instead starts at an index much further ahead than `0`, even misreporting the `'placeholder'` key as `'laceholder'`.
 
 [source,javascript]
 ----
@@ -1894,7 +1894,7 @@ cast('a', 'b')
 // <- ['a', 'b']
 ----
 
-We've already explored more terse ways of doing this in <<es6-essentials>>, when we first learned about rest and spread. You could, for instance, use the spread operator. As you no doubt remember, the spread operator leverages the iterator protocol to produce a sequence of values in arbitrary objects. The downside is that the objects we want to cast with spread must adhere to the iterator protocol by having implemeted `Symbol.iterator`. Luckily for us, `arguments` does implement the iterator protocol in ES6.
+We've already explored more terse ways of doing this in <<es6-essentials>>, when we first learned about rest and spread. You could, for instance, use the spread operator. As you no doubt remember, the spread operator leverages the iterator protocol to produce a sequence of values in arbitrary objects. The downside is that the objects we want to cast with spread must adhere to the iterator protocol by having implemented `Symbol.iterator`. Luckily for us, `arguments` does implement the iterator protocol in ES6.
 
 [source,javascript]
 ----
@@ -2018,7 +2018,7 @@ function arrayOf(...items) {
 }
 ----
 
-The `Array` constructor has two overloads: `...items`, where you provide the items for the new array; and `length`, where you provide its numeric length. You can think about `Array.of` as a flavor of `new Array` that doesn't support a `length` overload. In the following code snippet, you'll find some of the unexpected ways in ((("new Array")))which `new Array` behaves thanks to its single-argument `length` overloaded constructor. If you're confused about the `undefined x ${ count }` notation in the browser console, that's indicating there are array holes in those positions. This is also known as a sparse array.
+The `Array` constructor has two overloads: `...items`, where you provide the items for the new array; and `length`, where you provide its numeric length. You can think about `Array.of` as a flavor of `new Array` that doesn't support a `length` overload. In the following code snippet, you'll find some of the unexpected ways in ((("new Array")))which `new Array` behaves, thanks to its single-argument `length` overloaded constructor. If you're confused about the `undefined x ${ count }` notation in the browser console, that's indicating there are array holes in those positions. This is also known as a _sparse array_.
 
 [source,javascript]
 ----
