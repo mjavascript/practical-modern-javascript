@@ -2222,7 +2222,7 @@ Now onto values.
 
 ==== Array#values
 
-Same thing ((("Arrayvaluesx")))as `Array#keys()`, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
+`Array#values` is the same ((("Arrayvaluesx")))as `Array#keys()`, but the returned iterator is a sequence of values instead of keys. In practice, you'll want to iterate over the array itself most of the time, but getting an iterator can come in handy sometimes.
 
 [source,javascript]
 ----
