@@ -43,7 +43,7 @@ function listen() {}
 var events = { listeners, listen }
 ----
 
-As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without dilluting its meaning. In the following snippet, I reimplemented part of `localStorage`, a browser API for persistent storage, as an in-memory ponyfill. If it weren't for the shorthand syntax, the `storage` object would be more verbose to type out:
+As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without diluting its meaning. In the following snippet, I reimplemented part of `localStorage`, a browser API for persistent storage, as an in-memory ponyfill. If it weren't for the shorthand syntax, the `storage` object would be more verbose to type out:
 
 [source,javascript]
 ----
@@ -126,7 +126,7 @@ var groceries = {
 }
 ----
 
-Another case may be whenever a function receives a parameter that it should then use to build out an object. In ES5 code, you'd need to allocate a variable declaring an object literal, then add the dynamic property, and then return the object. The following example shows exactly that, when creating an envelope that could later be used for AJAX messages that follow a convention: they have an `error` property with a description when something goes wrong, and a `success` property ((("error property")))((("success property")))when things turn out okay:
+Another case may be whenever a function receives a parameter that it should then use to build out an object. In ES5 code, you'd need to allocate a variable declaring an object literal, then add the dynamic property, and then return the object. The following example shows exactly that, when creating an envelope that could later be used for Ajax messages that follow a convention: they have an `error` property with a description when something goes wrong, and a `success` property ((("error property")))((("success property")))when things turn out okay:
 
 [source,javascript]
 ----
