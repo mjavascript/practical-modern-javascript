@@ -27,7 +27,7 @@ Granted, there are more rules to a `const` declaration than to a `var` declarati
 
 The more constrained statements are, the simpler a piece of code becomes. As we add constraints to what a statement might mean, code becomes less unpredictable. This is one of the reasons why statically typed programs are, generally speaking, a bit easier to read than their dynamically typed counterparts. Static typing places a big constraint on the program writer, but it also places a big constraint on how the program can be interpreted, making its code easier to understand.
 
-With these arguments in mind, it is recommended that you use `const` where possible, as it's the statement that gives us the least possibilities to think about.
+With these arguments in mind, it is recommended that you use `const` where possible, as it's the statement that gives us the fewest possibilities to think about.
 
 [source,javascript]
 ----
