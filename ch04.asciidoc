@@ -2183,7 +2183,7 @@ exercise().then(result => console.log(result))
 // <- ['slowest', 'slow']
 ----
 
-When `spawn` is called with the generator function, it immediately creates a generator object and executes `step` a first time, as seen in the next code snippet. The `step` function will also be used whenever we reach a `yield` expression, which are equivalent to the `await` expressions in our async function.
+When `spawn` is called with the generator function, it immediately creates a generator object and executes `step` a first time, as seen in the next code snippet. The `step` function will also be used whenever we reach a `yield` expression; those are equivalent to the `await` expressions in our async function.
 
 [source,javascript]
 ----
