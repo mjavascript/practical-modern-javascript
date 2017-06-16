@@ -496,7 +496,7 @@ Destructuring is as valuable as the amount of references to host objects it elim
 
 Matches for regular expressions are represented as an array. The matched portion of the input is placed in the first position, while each captured group is placed in subsequent elements in the array. Often, we are interested in specific captures such as the first one.
 
-In the following example, array destructuring helps us omit the whole match and place the `integer` and `fractional` parts of a number into corresponding variables. This way, we avoid resorting to magic numbers pointing at the indices where captured groups will reside at in the match result.
+In the following example, array destructuring helps us omit the whole match and place the `integer` and `fractional` parts of a number into corresponding variables. This way, we avoid resorting to magic numbers pointing at the indices where captured groups will reside in the match result.
 
 [source,javascript]
 ----
@@ -530,7 +530,7 @@ getNumberParts('1234.56')
 // <- ['1234', '56']
 ----
 
-When we need to concatenate lists, we use `.concat` to create a new array. The spread operator improves code readability by making it immediately obvious that we want to create a new collection comprised of each list of inputs, while preserving the ease of adding new elements declaratively in array literals.
+When we need to concatenate lists, we use `.concat` to create a new array. The spread operator improves code readability by making it immediately obvious that we want to create a new collection comprising each list of inputs, while preserving the ease of adding new elements declaratively in array literals.
 
 [source,javascript]
 ----
