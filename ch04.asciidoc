@@ -316,7 +316,7 @@ You should ((("promises", "as tree structure")))think of promises as a tree stru
 .Given the tree structure, we realize that p3 is fulfilled, as it doesn't produce an exception nor is it rejected. For that reason, p4 can never follow the rejection branch, given its parent was fulfilled.
 image::images/pmjs_0404.png["Promisees can help us visualize how the fetch promise is fulfilled, but p2 is rejected, thus triggering any rejection reactions attached to it. Given p3 is fulfilled, rejection reactions like p4 are never executed."]
 
-It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches, and ((("promises", "chaining", startref="p4c")))((("chaining", startref="ch4")))so on.
+It all starts with a single promise, which we'll next learn how to construct. Then you add branches with `.then` or `.catch`. You can tack as many `.then` or `.catch` calls as you want onto each branch, creating new branches and ((("promises", "chaining", startref="p4c")))((("chaining", startref="ch4")))so on.
 
 [[creating_a_promise_from_scratch]]
 ==== Creating a Promise from Scratch
@@ -333,7 +333,7 @@ new Promise(resolve => resolve('result'))
 new Promise((resolve, reject) => reject(new Error('reason')))
 ----
 
-Resolving and rejecting promises without a value is possible, but not that useful. Usually promises will fulfill with a `result` such as the response from an AJAX call as we've seen with `fetch`. You'll definitely want to state the `reason` for your rejections--typically wrapping them in an `Error` object so that you can report back a stack trace.
+Resolving and rejecting promises without a value is possible, but not that useful. Usually promises will fulfill with a `result` such as the response from an Ajax call as we've seen with `fetch`. You'll definitely want to state the `reason` for your rejections--typically wrapping them in an `Error` object so that you can report back a stack trace.
 
 As you may have guessed, there's nothing inherently synchronous about promise resolvers. Settlement can be completely asynchronous for fulfillment and rejection alike. Even if the resolver calls `resolve` right away, the result won't trickle down to reactions until the next tick. That's the whole point of promises! The following example creates a promise that becomes fulfilled after two seconds elapse.
 
