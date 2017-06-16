@@ -524,7 +524,7 @@ import(`./localizations/${ navigator.language }.json`)
 
 Note that writing code like this is generally a bad idea for a number of reasons:
 
-- It can be challenging to statically analyze, given that static analysis is executed at build-time, when it can be hard or impossible to infer the value of interpolations such as `${ navigator.language }`.
+- It can be challenging to statically analyze, given that static analysis is executed at build time, when it can be hard or impossible to infer the value of interpolations such as `${ navigator.language }`.
 - It can't be packaged up as easily by JavaScript bundlers, meaning the module would probably be loaded asynchronously while the bulk of our application has been loaded.
 - It can't be tree-shaken by tools like Rollup, which can be used to remove module code that's never imported anywhere in the codebase--and thus never used--reducing bundle size and improving performance.
 - It can't be linted by `eslint-plugin-import` or similar tools that help identify module import statements where the imported module file doesn't exist.
@@ -562,7 +562,7 @@ Promise
   })
 ----
 
-In a similar fashion, you could load modules using synchonous loops or even `async`/`await`, as demonstrated next.
+In a similar fashion, you could load modules using synchronous loops or even `async`/`await`, as demonstrated next.
 
 [source,javascript]
 ----
@@ -596,7 +596,7 @@ const random = (function() {
 })()
 ----
 
-Compare that to the following piece of code, used in an ESM module called `random`. The immediately-invoking function expression (IIFE) wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
+Compare that to the following piece of code, used in an ESM module called `random`. The Immediately Invoked Function Expression (IIFE) wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
 
 [source,javascript]
 ----
