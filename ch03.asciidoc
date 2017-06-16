@@ -953,23 +953,23 @@ function readonlyMembers(ctor, heritage, members) {
 }
 ----
 
-==== Stacking Decorators and a Warning about Immutability
+==== Stacking Decorators and a Warning About Immutability
 
 With all ((("Decorators", "stacking")))the fluff around immutability you may be tempted to return a new property descriptor from your decorators, without modifying the original descriptor. While well-intentioned, this may have an undesired effect, as it is possible to decorate the same `class` or class member several times.
 
 If any decorators in a piece of code returned an entirely new `descriptor` without taking into consideration the `descriptor` parameter they receive, they'd effectively lose all the decoration that took place before the different descriptor was returned.
 
-We should be careful to write decorators that take into account the supplied `descriptor`. ALways create one that's based on the original `descriptor` that's provided as a ((("Decorators", "descriptors in", startref="dec3d")))((("descriptors", startref="d3")))parameter.
+We should be careful to write decorators that take into account the supplied `descriptor`. Always create one that's based on the original `descriptor` that's provided as a ((("Decorators", "descriptors in", startref="dec3d")))((("descriptors", startref="d3")))parameter.
 
 ==== Use Case By Example: Attributes in C#
 
-A long time ago, ((("Decorators", "versus C# attributes", secondary-sortas="c", id="dec3vca")))I was first getting acquainted with C# by way of an Ultima Onlinefootnoteref:[uo,Ultima Online is a decades-old fantasy role playing game based on the Ultima universe.] server emulator written in open-source C# code--RunUO. ((("RunUO", id="ruo3")))RunUO was one of the most beautiful codebases I've ever worked with, and it was written in C# to boot.
+A long time ago, ((("Decorators", "versus C# attributes", secondary-sortas="c", id="dec3vca")))I was first getting acquainted with C# by way of an Ultima Onlinefootnoteref:[uo,Ultima Online is a decades-old fantasy role playing game based on the Ultima universe.] server emulator written in open source C# code--RunUO. ((("RunUO", id="ruo3")))RunUO was one of the most beautiful codebases I've ever worked with, and it was written in C# to boot.
 
-They distributed the server software as an executable and a series of `.cs` files. The `runuo` executable would compile those `.cs` scripts at runtime and dynamically mix them into the application. The result was that you didn't need the Visual Studio IDE (nor `msbuild`), or anything other than just enough programming knowledge to edit one of the "scripts" in those `.cs` files. All of the above made RunUO the perfect learning environment for the newcomer developer.
+They distributed the server software as an executable and a series of `.cs` files. The `runuo` executable would compile those `.cs` scripts at runtime and dynamically mix them into the application. The result was that you didn't need the Visual Studio IDE (nor `msbuild`), or anything other than just enough programming knowledge to edit one of the "scripts" in those `.cs` files. All of the above made RunUO the perfect learning environment for the new developer.
 
-RunUO relied heavily in reflection. They made significant efforts to be customizable by players who were not necessarily invested in programming but were nevertheless interested in changing a few details of the game, such as how much damage a Dragon's fire breath inflicts or how often they shot fireballs. Great developer experience was a big part of their philosophy, and you could create a new kind of `Dragon` just by copying one of the monster files, changing it to inherit from the `Dragon` class, and overriding a few properties to change its color hue, its damage output, and so on.
+RunUO relied heavily on reflection. RunUO's developers made significant efforts to make it customizable by players who were not necessarily invested in programming, but were nevertheless interested in changing a few details of the game, such as how much damage a dragon's fire breath inflicts or how often it shot fireballs. Great developer experience was a big part of their philosophy, and you could create a new kind of `Dragon` just by copying one of the monster files, changing it to inherit from the `Dragon` class, and overriding a few properties to change its color hue, its damage output, and so on.
 
-Just as they made it easy to create new monsters--or "non-player characters" (NPC) in gaming slang--they also relied in reflection to provide functionality to in-game administrators. Administrators could run an in-game command and click on an item or a monster to visualize or change properties without ever leaving the game.
+Just as they made it easy to create new monsters--or "non-player characters" (_NPC_ in gaming slang)--they also relied on reflection to provide functionality to in-game administrators. Administrators could run an in-game command and click on an item or a monster to visualize or change properties without ever leaving the game.
 
 [[fig0301]]
 .Modifying properties for a RunUO item in-game from the Ultima Online client
