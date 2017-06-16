@@ -2101,7 +2101,12 @@ Now that we better understand the internals of `Array#copyWithin`, we can genera
 
 [source,javascript]
 ----
-function copyWithin(items, target, start = 0, end = items.length) {
+function copyWithin(
+  items,
+  target,
+  start = 0,
+  end = items.length
+) {
   const copy = items.slice(start, end)
   const removed = end - start
   items.splice(target, removed, ...copy)
