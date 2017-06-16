@@ -1310,7 +1310,7 @@ As an exercise in futility, we could map a string to their numeric representatio
 // &lt;- '<img src="images/1f40e.png" alt="horse" data-emoji-embed="running horse" /><img src="images/1f471.png" alt="man" data-emoji-embed="smiling idiot" /><img src="images/2764.png" alt="heart" data-emoji-embed="heart" />'</pre>
 ++++
 
-Reversing an string has potential to cause issues as well.
+Reversing a string has potential to cause issues as well.
 
 ==== Unicode-Aware String Reversal
 
@@ -1401,7 +1401,7 @@ compare(normal, irregular)
 
 === Regular Expressions
 
-In ((("Unicode", startref="u7")))((("strings", "and Unicode", startref="s7au")))((("strings", "ES6 improvements", startref="s7esi")))((("regular expressions", id="rege7")))this section we'll take a look at regular expressions in and after ES6. There are a couple of regular expressions flags that were introduced in ES6: the `/y` or sticky flag, and the `/u` or Unicode flag. Then we'll discuss five proposals that are making their way through the ECMAScript specification development process at TC39.
+In ((("Unicode", startref="u7")))((("strings", "and Unicode", startref="s7au")))((("strings", "ES6 improvements", startref="s7esi")))((("regular expressions", id="rege7")))this section we'll take a look at regular expressions in and after ES6. There are a couple of regular expressions flags that were introduced in ES6: the `/y`, or sticky flag, and the `/u`, or Unicode flag. Then we'll discuss five proposals that are making their way through the ECMAScript specification development process at TC39.
 
 ==== Sticky Matching Flag /y
 
