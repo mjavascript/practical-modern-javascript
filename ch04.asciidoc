@@ -2024,7 +2024,7 @@ async function concurrent() {
 
 We can use `Promise.all` to ((("Promise.all")))work around that issue, creating a single promise that we can `await` on. This way, our code blocks until every promise in a list is settled, and they can be resolved concurrently.
 
-The following example shows how you could `await` on three different promises that could be resolved concurrently. Given that `await` suspends your `async` function and the `await Promise.all` expression ultimately resolves into a `results` array, we can take advantage of destructuring to pull individual results out of that array.
+The following example shows how you could `await` on three different promises that could be resolved concurrently. Given that `await` suspends your `async` function and the `await Promise.all` expression ultimately resolves into a `results` array, you can take advantage of destructuring to pull individual results out of that array.
 
 [source,javascript]
 ----
@@ -2122,7 +2122,8 @@ function spawn(generator) {
         resolve(next.value)
         return
       }
-      // not finished, chain off the yielded promise and run next step
+      // not finished, chain off the yielded promise 
+      // and run next step
       Promise
         .resolve(next.value)
         .then(
@@ -2162,7 +2163,7 @@ exercise().then(result => console.log(result))
 // <- ['slowest', 'slow']
 ----
 
-First, we could translate the function to our `spawn` based-logic. We wrap the body of our async function in a generator passed to `spawn`, and replace any `await` expressions with `yield`.
+First, we could translate the function to our ++spawn++–based logic. We wrap the body of our async function in a generator passed to `spawn`, and replace any `await` expressions with `yield`.
 
 [source,javascript]
 ----
