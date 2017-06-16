@@ -1,7 +1,7 @@
 [[classes-symbols-objects-and-decorators]]
 == Classes, Symbols, Objects, pass:[<span class="keep-together">and Decorators</span>]
 
-Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript, like strings, booleans, and numbers. They can be used for defining protocols, and in this chapter we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the `Object` built-in in ES6.
+Now that we've covered the basic improvements to the syntax, we're in good shape to take aim at a few other additions to the language: classes and symbols. Classes provide syntax to represent prototypal inheritance under the traditional class-based programming paradigm. Symbols are a new primitive value type in JavaScript, like strings, Booleans, and numbers. They can be used for defining protocols, and in this chapter we'll investigate what that means. When we're done with classes and symbols, we'll discuss a few new static methods added to the `Object` built-in in ES6.
 
 === Classes
 
@@ -81,7 +81,7 @@ class Fruit {
 }
 ----
 
-A not-so-minor detail you might have missed is that there aren't any commas in ((("classes", "commas in class syntax")))between method declarations of the `Fruit` class. That's not a mistake our copious copy editors missed, but rather part of the `class` syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as public and private class fields.
+A not-so-minor detail you might have missed is that there aren't any commas in ((("classes", "commas in class syntax")))between method declarations of the `Fruit` class. That's not a mistake our copious copyeditors missed, but rather part of the `class` syntax. The distinction can help avoid mistakes where we treat plain objects and classes as interchangeable even though they're not, and at the same time it makes classes better suited for future improvements to the syntax such as public and private class fields.
 
 The class-based solution is equivalent to the prototype-based piece of code we wrote earlier. Consuming a fruit wouldn't change in the slightest; the API for `Fruit` remains unchanged. The previous piece of code where we instantiated an apple, chopped it into smaller pieces, and ate most of it would work well with our `class`-flavored `Fruit` as well.
 
@@ -595,9 +595,9 @@ There are trade-offs in using widely available symbols. On the one hand, they ma
 
 There's one more kind of symbol: built-in well-known symbols.
 
-==== Well-known Symbols
+==== Well-Known Symbols
 
-So ((("symbols", "well-known", id="sym3wk")))far we've covered symbols you can create using the `Symbol` function and those you can create through `Symbol.for`. The third and last kind of symbols we're going to cover are the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
+So ((("symbols", "well-known", id="sym3wk")))far we've covered symbols you can create using the `Symbol` function and those you can create through `Symbol.for`. The third and last kind of symbols we're going to cover are the well-known symbols. These are built into the language instead of created by JavaScript developers, and they provide hooks into internal language behavior, allowing you to extend or customize aspects of the language that weren't accessible prior to ES6.
 
 A great example of how symbols can add extensibility to the language without breaking existing code is the `Symbol.toPrimitive` ((("symbols", "  Symbol.toPrimitive")))well-known symbol. It can be assigned a function to determine how an object is cast into a primitive value. The function receives a `hint` parameter that can be `'string'`, `'number'`, or `'default'`, indicating what type of primitive value is expected.
 
@@ -698,7 +698,7 @@ function md(input, options) {
 }
 ----
 
-.Understanding the target of Object.assign
+.Understanding the Target of Object.assign
 ****
 The `Object.assign` function mutates its first argument. Its signature is `(target, ...sources)`. Every source is applied onto the target object, source by source and property by property.
 
@@ -884,13 +884,13 @@ ____
 
 === Decorators
 
-Decorators are, ((("Decorators", id="dec3")))as most things programming, definitely not a new concept. They pattern is fairly commonplace in modern programming languages: you have attributes in C#, they're called annotations in Java, there are decorators in Python, and the list goes on. There's a JavaScript decorators proposalpass:[<span data-type="footnote" id="decorators">You can find the proposal draft online at <a href="https://mjavascript.com/out/decorators">GitHub</a>.</span>] in the works. It is currently sitting at stage 2 of the TC39 process.
+Decorators are, ((("Decorators", id="dec3")))as most things programming, definitely not a new concept. The pattern is fairly commonplace in modern programming languages: you have _attributes_ in C#, they're called _annotations_ in Java, there are _decorators_ in Python, and the list goes on. There's a JavaScript decorators proposalpass:[<span data-type="footnote" id="decorators">You can find the proposal draft online at <a href="https://mjavascript.com/out/decorators">GitHub</a>.</span>] in the works. It is currently sitting at stage 2 of the TC39 process.
 
 ==== A Primer on JavaScript Decorators
 
 The syntax for JavaScript decorators is fairly similar to that of Python decorators. JavaScript decorators may be applied to classes and any statically defined properties, such as those found on an object literal declaration or in a `class` declaration--even if they are `get` accessors, `set` accessors, or `static` properties.
 
-The proposal defines a decorator as an `@` followed by a sequence of dotted identifiersfootnoteref:[no-dynamic-access, Accessing properties via `[]` notation is disallowed due to the difficulty it would present when disambiguating grammar at the compiler level.] and an optional argument list. Here are a few examples:
+The proposal defines a _decorator_ as an `@` followed by a sequence of dotted identifiersfootnoteref:[no-dynamic-access, Accessing properties via `[]` notation is disallowed due to the difficulty it would present when disambiguating grammar at the compiler level.] and an optional argument list. Here are a few examples:
 
 - `@decorators.frozen` is a valid decorator
 - `@decorators.frozen(true)` is a valid decorator
@@ -916,7 +916,6 @@ class View {
 
 Decorators are implemented by way of functions. Member decorator functions take a member ((("Decorators", "descriptors in", id="dec3d")))((("descriptors", id="d3")))descriptor and return a member descriptor. Member descriptors are similar to property descriptors, but with a different shape. The following bit of code has the member descriptor interface, as defined by the decorators proposal. An optional `finisher` function receives the class constructor, allowing us to perform operations related to the class whose property is being decorated.
 
-[source]
 ----
 interface MemberDescriptor {
   kind: "Property"
