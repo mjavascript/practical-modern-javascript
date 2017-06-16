@@ -2307,7 +2307,7 @@ exercise().then(result => console.log(result))
 // <- ['slowest', 'slow']
 ----
 
-Async functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the `spawn` function—used to iterate over the sequence of yielded expressions, and `yield` becomes `await`.
+Async functions, then, are little more than a sensible default when it comes to iterating generator functions in such a way that makes passing values back and forth as frictionless as possible. Some syntactic sugar hides away the generator function, the `spawn` function used to iterate over the sequence of yielded expressions, and `yield` becomes `await`.
 
 Another way of thinking of async functions is in terms of promises. Consider the following example, where we have an async function that awaits for a promise that's the result of a function call, and then awaits on mapping every user through a function. How would you translate it, in terms of promises?
 
@@ -2358,7 +2358,7 @@ const sequence = {
 }
 ----
 
-You may also recall that the `sequence` object ((("sequence")))can be iterated in a number of different ways such as the spread operator, `Array.from` ((("Array.from")))and `for..of`, among others.
+You may also recall that the `sequence` object ((("sequence")))can be iterated in a number of different ways, such as the spread operator, `Array.from`, ((("Array.from")))and `for..of`, among others.
 
 [source,javascript]
 ----
@@ -2380,11 +2380,11 @@ for (const item of sequence) {
 }
 ----
 
-The contract for an iterator mandates that the `next` ((("next")))method of `Symbol.iterator` instances returns an object with `value` and `done` properties. The `value` ((("value")))property indicates the current value in the sequence, while `done` ((("done")))is a boolean indicating whether the sequence has ended.
+The contract for an iterator mandates that the `next` ((("next")))method of `Symbol.iterator` instances returns an object with `value` and `done` properties. The `value` ((("value")))property indicates the current value in the sequence, while `done` ((("done")))is a Boolean indicating whether the sequence has ended.
 
 ==== Async Iterators
 
-In ((("asynchronous iteration", "async iterators", id="ai4ai")))async iterators, the contract has a subtle difference: `next` is supposed to return a `Promise` that resolves to an object containing `value` and `done` properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new `Symbol.asyncIterator` is ((("Symbol.asyncIterator")))introduced to declare asynchronous iterators, in order to avoid confusion that would result of reusing `Symbol.iterator`.
+In ((("asynchronous iteration", "async iterators", id="ai4ai")))async iterators, the contract has a subtle difference: `next` is supposed to return a `Promise` that resolves to an object containing `value` and `done` properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new `Symbol.asyncIterator` is ((("Symbol.asyncIterator")))introduced to declare asynchronous iterators, in order to avoid confusion that would result from reusing `Symbol.iterator`.
 
 The `sequence` ((("sequence")))iterable could be made compatible with the async iterator interface with two small changes: we replace `Symbol.iterator` with `Symbol.asyncIterator`, and we wrap the return value for the `next` method in `Promise.resolve`, thus returning a `Promise`.
 
@@ -2428,7 +2428,7 @@ In order to consume an async iterator, we can leverage the new `for await..of` c
 ----
 async function print() {
   for await (const i of interval(1000)) {
-    console.log(`${ i } seconds ellapsed.`)
+    console.log(`${ i } seconds elapsed.`)
   }
 }
 print()
