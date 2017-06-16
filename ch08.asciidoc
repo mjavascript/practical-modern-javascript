@@ -401,7 +401,7 @@ We've now covered every way in which we can expose an API in ES6 modules. Let's 
 
 ==== import Statements
 
-We can load a module from another one using `import` statements. The way modules are loaded is implementation-specifically; that is, it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
+We can load a module from another one using `import` statements. The way modules are loaded is implementation-specific; that is, it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
 Compilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means `import` statements in Babel mostly follow the same semantics as `require` statements in CommonJS.
 
@@ -415,7 +415,7 @@ const decrement = () => counter--
 export { counter as default, increment, decrement }
 ----
 
-The statement in the following code snippet could be used to load the `counter` module into our `app` module. It won't create any variables in the `app` scope, though. It will execute any code in the top level of the `counter` module, though, including that module's own `import` statements.
+The statement in the following code snippet could be used to load the `counter` module into our `app` module. It won't create any variables in the `app` scope. It will execute any code in the top level of the `counter` module, though, including that module's own `import` statements.
 
 [source,javascript]
 ----
@@ -509,7 +509,7 @@ console.log(counter.default) // <- 2
 
 ==== Dynamic import()
 
-At the time of this writing, a proposal for dynamic `import()`​footnoteref:[dynamic-import,You can find the proposal specification draft here: https://mjavascript.com/out/dynamic-import.] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike `import` statements, which are statically analyzed and linked, `import()` loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
+At the time of this writing, a proposal for dynamic `import()`​pass:[<span data-type="footnote">You can find the proposal <a href="https://mjavascript.com/out/dynamic-import">specification draft online</a>.</span>] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike `import` statements, which are statically analyzed and linked, `import()` loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
 
 The module specifier can be any string, like with `import` statements. Keep in mind `import` statements only allow statically defined plain string literals as module specifiers. In contrast, we're able to use template literals or any valid JavaScript expression to produce the module specifier string for `import()` function calls.
 
