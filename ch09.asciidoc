@@ -557,7 +557,7 @@ Compare that to the equivalent snippet using object spread declaratively. We hav
 }
 ----
 
-Being able to visualize object spread as an `Object.assign` helps internalize how the feature works. In the following example we've replaced the `defaults` and `options` variables with object literals. Since object spread relies on the same operation as `Object.assign` for every property, we can observe how the `options` literal overrides `speed`, with the number `3`; and why `important` remains `true` even when the `options` literal attempts to override it, due to precedence.
+Being able to visualize object spread as an `Object.assign` helps internalize how the feature works. In the following example we've replaced the `defaults` and `options` variables with object literals. Since object spread relies on the same operation as `Object.assign` for every property, we can observe how the `options` literal overrides `speed` with the number `3`, and why `important` remains `true` even when the `options` literal attempts to override it, due to precedence.
 
 [source,javascript]
 ----
@@ -574,7 +574,7 @@ Being able to visualize object spread as an `Object.assign` helps internalize ho
 }
 ----
 
-Object spread comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a `player` object and a function call that casts a healing spell and returns a new, healthier, player object.
+Object spread comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a `player` object and a function call that casts a healing spell and returns a new, healthier, +player+ object.
 
 [source,javascript]
 ----
@@ -713,7 +713,7 @@ const double = x => x * 2
 const print = x => { console.log(x) }
 ----
 
-Arrow functions can return arrays using tiny expressions. The first example in the next snippet implicitly returns an array comprised of two elements, while the second example discards the first parameter and returns all other parameters held in the rest operator's bag.
+Arrow functions can return arrays using tiny expressions. The first example in the next snippet implicitly returns an array comprising two elements, while the second example discards the first parameter and returns all other parameters held in the rest operator's bag.
 
 [source,javascript]
 ----
