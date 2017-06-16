@@ -46,7 +46,7 @@ proxy['something-else']
 // <- undefined
 ----
 
-As a complement to proxies, ES6 introduces a `Reflect` ((("Reflect")))built-in object. The traps in ES6 proxies are mapped one-to-one to the `Reflect` API: For every trap, there’s a matching reflection method in `Reflect`. These methods can be particularly useful when we want the default behavior of proxy traps, but we don't want to concern ourselves with the implementation of that behavior.
+As a complement to proxies, ES6 introduces a `Reflect` ((("Reflect")))built-in object. The traps in ES6 proxies are mapped one-to-one to the `Reflect` API: for every trap, there’s a matching reflection method in `Reflect`. These methods can be particularly useful when we want the default behavior of proxy traps, but we don't want to concern ourselves with the implementation of that behavior.
 
 In the following code snippet we use `Reflect.get` to provide the default behavior for `get` operations, while not worrying about accessing the `key` property in `target` by hand. While in this case the operation may seem trivial, the default behavior for other traps may be harder to remember and implement correctly. We can forward every parameter in the trap to the reflection API and return its result.
 
@@ -185,7 +185,7 @@ const proxy = concealWithPrefix(target)
 // expose proxy to consumers
 ----
 
-You might be tempted to argue that you could achieve the same behavior in ES5 simply by using variables privately scoped to the `concealWithPrefix` function, without the need for the `Proxy` itself. The difference is that proxies allow you to "privatize" property access dynamically. Without relying on `Proxy`, you couldn't mark every property that starts with an underscore as private. You could use `Object.freeze`​footnoteref:[object-freeze,The `Object.freeze` method prevents adding new properties, removing existing ones, and modifying property value references. Note that it doesn't make the values themselves immutable: their properties can still change provided `Object.freeze` isn't called on those objects as well.] on the object, but then you wouldn't be able to modify the property references yourself, either. Or you could define get and set accessors for every property, but then again you wouldn't be able to block access on every single property, only the ones you explicitly configured getters and ((("traps", startref="trap6")))((("set traps", startref="st6")))in ((("traps", "set traps", startref="trap6st")))((("proxies", "set traps and", startref="prox6sta")))setters for.
+You might be tempted to argue that you could achieve the same behavior in ES5 simply by using variables privately scoped to the `concealWithPrefix` function, without the need for the `Proxy` itself. The difference is that proxies allow you to "privatize" property access dynamically. Without relying on `Proxy`, you couldn't mark every property that starts with an underscore as private. You could use `Object.freeze`​footnoteref:[object-freeze,The `Object.freeze` method prevents adding new properties, removing existing ones, and modifying property value references. Note that it doesn't make the values themselves immutable: their properties can still change, provided `Object.freeze` isn't called on those objects as well.] on the object, but then you wouldn't be able to modify the property references yourself, either. Or you could define get and set accessors for every property, but then again you wouldn't be able to block access on every single property, only the ones you explicitly configured getters and ((("traps", startref="trap6")))((("set traps", startref="st6")))in ((("traps", "set traps", startref="trap6st")))((("proxies", "set traps and", startref="prox6sta")))setters for.
 
 ==== Schema Validation with Proxies
 
@@ -285,7 +285,7 @@ function revokeStorage(proxy) {
 }
 ----
 
-Given that `revoke` is available on the same scope where your `handler` traps are defined, you could set up unforgiving access rules such that if a consumer attempts to access a private property more than once you revoke their `proxy` ((("proxies", "revokable", startref="prox6r")))((("revokable proxies", startref="rp6")))access entirely.
+Given that `revoke` is available on the same scope where your `handler` traps are defined, you could set up unforgiving access rules such that if a consumer attempts to access a private property more than once, you revoke their `proxy` ((("proxies", "revokable", startref="prox6r")))((("revokable proxies", startref="rp6")))access entirely.
 
 === Proxy Trap Handlers
 
@@ -697,7 +697,7 @@ console.log(proxy.hasOwnProperty('_secret'))
 
 When you're trying to hide things, it's best to have them try and behave as if they fell in some other category than the category they're actually in, thus concealing their behavior and passing it off for something else. Throwing, however, sends the wrong message when we want to conceal something: why does a property throw instead of return `undefined`? It must exist but be inaccessible. This is not unlike situations in HTTP API design where we might prefer to return "404 Not Found" responses for sensitive resources, such as an administration backend, when the user is unauthorized to access them, instead of the technically correct "401 Unauthorized" status code.
 
-When debugging concerns outweight security concerns, you should at least consider the `throw` statement. In any case, it's important to understand your use case in order to figure out the optimal and least surprising behavior for a given ((("getOwnPropertyDescriptor trap", startref="gopdt6")))((("proxies", "getOwnPropertyDescriptor trap", startref="prox6gopdt")))((("traps", "getOwnPropertyDescriptor trap", startref="t6gopdt")))component.
+When debugging concerns outweigh security concerns, you should at least consider the `throw` statement. In any case, it's important to understand your use case in order to figure out the optimal and least surprising behavior for a given ((("getOwnPropertyDescriptor trap", startref="gopdt6")))((("proxies", "getOwnPropertyDescriptor trap", startref="prox6gopdt")))((("traps", "getOwnPropertyDescriptor trap", startref="t6gopdt")))component.
 
 ==== apply Trap
 
@@ -1093,4 +1093,4 @@ As we've learned over the last few pages, there are myriad use cases for proxies
 
 Proxies are an extremely powerful feature in ES6, with many potential applications, and they're well equipped for code instrumentation and introspection. However, they also have a significant performance impact in JavaScript engine execution as they're virtually impossible to optimize for. This makes proxies impractical for applications where speed is of the essence.
 
-At the same time it's easy to confuse consumers by providing complicated proxies that attempt to do too much. It may be a good idea to avoid them for most use cases, or at least develop consistent and uncomplicated access rules. Make sure you're not producing many side-effects in property access, which can lead to confusion even if properly ((("proxies", startref="prox6")))documented.
+At the same time it's easy to confuse consumers by providing complicated proxies that attempt to do too much. It may be a good idea to avoid them for most use cases, or at least develop consistent and uncomplicated access rules. Make sure you're not producing many side effects in property access, which can lead to confusion even if properly ((("proxies", startref="prox6")))documented.
