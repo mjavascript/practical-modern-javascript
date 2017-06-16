@@ -71,7 +71,7 @@ p.then(null, err => {
 .Promises as an Alternative to Callbacks and Events
 ****
 
-Traditionally ((("promises", "as alternative to callbacks and events", id="p4aatcae")))((("callbacks")))JavaScript relied on callbacks instead of promises and chaining. If the `fetch` function asked for a callback, you'd have to add one that would then get executed whenever the fetch operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors--that may or may not occur--during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how `fetch` would look if it had a callback-based API.
+Traditionally ((("promises", "as alternative to callbacks and events", id="p4aatcae")))((("callbacks")))JavaScript relied on callbacks instead of promises and chaining. If the `fetch` function asked for a callback, you'd have to add one that would then get executed whenever the +fetch+ operation ends. Typical asynchronous code flow conventions in Node.js established a best practice of reserving the first parameter in the callback for errors--that may or may not occur--during the fetching process. The rest of the parameters can be used to read the results of the asynchronous operation. Most commonly, a single data parameter is used. The next bit of code shows how `fetch` would look if it had a callback-based API.
 
 [source,javascript]
 ----
