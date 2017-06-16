@@ -39,7 +39,7 @@ if (condition) {
 // can't access `isReady` outside of its containing block scope
 ----
 
-When `const` isn't an option, because the variable needs to be reassigned later, we may resort to a `let` statement. Using `let` carries all the benefits of `const`, except that the variable can be reassigned. This may be necessary in order to increment a counter, flip a boolean flag, or to defer initialization.
+When `const` isn't an option, because the variable needs to be reassigned later, we may resort to a `let` statement. Using `let` carries all the benefits of `const`, except that the variable can be reassigned. This may be necessary in order to increment a counter, flip a Boolean flag, or defer initialization.
 
 Consider the following example, where we take a number of megabytes and return a string such as `1.2 GB`. We're using `let`, as the values need to change if a condition is met.
 
@@ -229,7 +229,7 @@ When it comes to quotes, `'` and `"` are more likely to be necessary when writin
 `Alfred's cat suit is "slick".`
 ----
 
-As we've discovered in <<es6-essentials>>, there are also other features such as tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multiline support, expression interpolation, or reduced escaping.
+As we discovered in <<es6-essentials>>, there are also other features such as tagged templates, which make it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multiline support, expression interpolation, or reduced escaping.
 
 The combination of all of these features warrants considering template literals as the default string flavor over single- or double-quoted strings. There are a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
 
@@ -259,7 +259,7 @@ We've already settled that interpolated expressions are better than quoted strin
 
 When it comes to the `suitKind` variable, a template literal with no interpolation, no newlines, and no tags, the compiler simply turns it into a plain quoted string.
 
-Once we stop compiling template literals down to quoted strings, we can expect optimizing compilers to be able to interpet them as such with negligible slowdown.
+Once we stop compiling template literals down to quoted strings, we can expect optimizing compilers to be able to interpret them as such with negligible slowdown.
 
 Another often-cited concern is syntax: as of this writing, we can't use backtick strings in JSON, object keys, `import` declarations, or strict mode directives.
 
@@ -291,9 +291,9 @@ const alfred = { [`suit kind`]: `cat` }
 
 The preceding is far from ideal due to its verbosity, though, and in these cases it's best to use regular quoted strings.
 
-As always, the rule is to never take rules such as "template literals are the best option" too literally, and be open to use your best judgement as necessary and break the rules a little bit, if they don't quite fit your use cases, conventions, or view of how an application is best structured. Rules are often presented as such, but what may be a rule to someone need not be a rule to everyone. This is the main reason why modern linters make every rule optional: the rules we use should be enforced, but not every rule may fit every project.
+As always, the rule is to never take rules such as "template literals are the best option" too literally, and be open to use your best judgment as necessary and break the rules a little bit, if they don't quite fit your use cases, conventions, or view of how an application is best structured. Rules are often presented as such, but what may be a rule to someone need not be a rule to everyone. This is the main reason why modern linters make every rule optional: the rules we use should be enforced, but not every rule may fit every project.
 
-Perhaps some day we might get a flavor of computed property keys that doesn't rely on square brackets for template literals, saving us a couple of characters when we need to interpolate a string. For the foreseeable future, the following code snippet will result in a syntax error.
+Perhaps someday we might get a flavor of computed property keys that doesn't rely on square brackets for template literals, saving us a couple of characters when we need to interpolate a string. For the foreseeable future, the following code snippet will result in a syntax error.
 
 [source,javascript]
 ----
@@ -321,7 +321,7 @@ Strict mode directives have to be single- or double-quoted strings. As of this w
 `use strict` // nothing happens
 ----
 
-Lastly, it could be argued that turning an existing codebase from single-quoted strings to template literals would be error prone and a waste of time that could be otherwise used to develop features or fix bugs.
+Lastly, it could be argued that turning an existing codebase from single-quoted strings to template literals would be error-prone and a waste of time that could be otherwise used to develop features or fix bugs.
 
 Fortunately, we have `eslint` at our disposal, as discussed in <<ecmascript-and-the-future-of-javascript>>. To switch our codebase to backticks by default, we can set up an _.eslintrc.json_ configuration similar to the one in the following piece of code. Note how we turn the `quotes` rule into an error unless the code uses backticks.
 
@@ -490,7 +490,7 @@ const summary = `This is a ${ name } summary`
 const description = `${ name } is a grocery item`
 ----
 
-Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dillute value, because of increased repetition in the destructuring statement. In short, destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not that many host references being removed.
+Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dilute value, because of increased repetition in the destructuring statement. In short, destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there aren't that many host references being removed.
 
 === Rest and Spread
 
