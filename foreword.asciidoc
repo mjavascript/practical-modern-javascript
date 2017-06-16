@@ -13,7 +13,7 @@ So I did have a vague sense that JavaScript would either succeed over time and d
 
 The Modular JavaScript book series fulfills my hope for an incremental and straightforward pedagogy, starting with easily applicable code examples and scaling through design patterns to entire module-based applications. This series nicely covers best testing practices and winning techniques for deploying JavaScript applications. It is another jewel in O’Reilly’s crown of books on JavaScript.
 
-I am delighted to support Nicolás' endeavor because his book looks exactly like what people who are coming to JavaScript with fresh eyes need. I first met Nicolás at a dinner in Paris and got to know him a bit there, and over time online. His pragmatism combined with empathy for newcomers to the language and a great sense of humor convinced me to review this book in draft form. The finished work is easy to digest and fun. I encourage you to dive in, to discover and embrace JavaScript, and to contribute to developing a better Web for everyone.
+I am delighted to support Nicolás' endeavor because his book looks exactly like what people who are coming to JavaScript with fresh eyes need. I first met Nicolás at a dinner in Paris and got to know him a bit there, and over time online. His pragmatism combined with empathy for newcomers to the language and a great sense of humor convinced me to review this book in draft form. The finished work is easy to digest and fun. I encourage you to dive in, to discover and embrace JavaScript, and to contribute to developing a better web for everyone.
 
 [role="byline"]
 Brendan Eich, Inventor of JavaScript, CEO and cofounder of Brave Software
