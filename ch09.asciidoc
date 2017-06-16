@@ -721,7 +721,7 @@ const makeArray = (first, second) => [first, second]
 const makeSlice = (discarded, ...items) => items
 ----
 
-Implicitly returning an object literal is a bit tricky because they're hard to tell apart from block statements, which are also wrapped in curly braces. We'll have to add parenthesis around our object literal, turning it into an expression that evaluates into the object. This bit of indirection is just enough to help us disambiguate and tell JavaScript parsers that they're dealing with an object literal.
+Implicitly returning an object literal is a bit tricky because they're hard to tell apart from block statements, which are also wrapped in curly braces. We'll have to add parentheses around our object literal, turning it into an expression that evaluates into the object. This bit of indirection is just enough to help us disambiguate and tell JavaScript parsers that they're dealing with an object literal.
 
 Consider the following example, where we implicitly return an object expression. Without the parentheses, the parser would interpret our code as a block statement containing a label and the literal expression `'Nico'`.
 
@@ -807,7 +807,7 @@ const pistol = {
 pistol.trigger()
 ----
 
-As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, requires several lines of code, or involve recursion, then consider an arrow function.
+As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, requires several lines of code, or involves recursion, then consider an arrow function.
 
 === Classes and Proxies
 
@@ -915,17 +915,17 @@ JavaScript classes are less verbose than their prototype-based equivalents. Clas
 
 Statically typed languages typically offer and enforce the use of classes.footnote:[An exception should be made for most functional programming languages.] In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
 
-Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON, and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
+Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON, and they're more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
 
 Proxies empower many previously unavailable use cases, but we need to tread lightly. Solutions that involve a `Proxy` object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
 
 There may indeed be cases where using a `Proxy` is warranted, particularly when it comes to developer tooling meant for development environments, where a high degree of code introspection is desirable and complexity is hidden away in the developer tool's codebase. Using `Proxy` in application-level codebases is easily avoided, and leads to less enigmatic code.
 
-Readability hinges on code that has a clear purpose. Declarative code is readable: upon reading a piece of code, it becomes clear what it is intended to do. In contrast, using layers of indirection such as a `Proxy` on top of an object can result in highly complex access rules that may be hard to infer when reading a piece of code. It's not that a solution involving a `Proxy` is impossible to understand, but the fact that more code needs to be read and carefully considered before we fully understand the nuances of how the proxy layer behaves.
+Readability hinges on code that has a clear purpose. Declarative code is readable: upon reading a piece of code, it becomes clear what it is intended to do. In contrast, using layers of indirection such as a `Proxy` on top of an object can result in highly complex access rules that may be hard to infer when reading a piece of code. It's not that a solution involving a `Proxy` is impossible to understand, but the fact remains that more code needs to be read and carefully considered before we fully understand the nuances of how the proxy layer behaves.
 
 If we're considering proxies, then maybe objects aren't the tool for what we're trying to accomplish. Instead of going straight to a `Proxy` indirection layer, consider whether a simple function offers just enough indirection without causing an object to behave in a manner that's inconsistent with how plain objects typically behave in JavaScript.
 
-As such, always prefer boring, static, and declarative code over smart and elegant abstractions. Boring code might be a little more repetitive than using an abstraction, but it will also be simpler, easier to understand, and decidedly a safer bet in the short-term.
+As such, always prefer boring, static, and declarative code over smart and elegant abstractions. Boring code might be a little more repetitive than using an abstraction, but it will also be simpler, easier to understand, and decidedly a safer bet in the short term.
 
 Abstractions are costly. Once an abstraction is in place, it is often hard to go back and eliminate it. If an abstraction is created too early, it might not cover all common use cases, and we may end up having to handle special cases separately.
 
@@ -938,7 +938,7 @@ In <<iteration-and-flow-control>> we discussed how many of the different ways in
 
 Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
 
-When it comes to callbacks, libraries like `async` can help reduce complexity when we have three or more related tasks that need to be executed asynchronously.footnote:[A popular flow control library. You can find async on GitHub: https://mjavascript.com/out/async-library.] Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
+When it comes to callbacks, libraries like `async` can help reduce complexity when we have three or more related tasks that need to be executed asynchronously.pass:[<span data-type="footnote">A popular flow control library. You can find async on <a href="https://mjavascript.com/out/async-library">GitHub</a>.</span>] Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
 
 Events are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Events don't lend themselves well to managing the complexity of asynchronous tasks, however.
 
