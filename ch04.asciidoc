@@ -2281,11 +2281,10 @@ return [r1, r2]
 
 At this point, `next` evaluates to the following object.
 
-[source,json]
 ----
 {
-  "value": ["slowest", "slow"],
-  "done": true
+  value: ['slowest', 'slow'],
+  done: true
 }
 ----
 
