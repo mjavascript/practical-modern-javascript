@@ -135,7 +135,7 @@ There ((("Number.isNaN", startref="nisn7")))is a function, which was already in 
 
 ==== Number.isFinite
 
-The rarely promoted `isFinite` method has been available since ES3. It returns a boolean value indicating whether the provided `value` matches none of: `Infinity`, `-Infinity`, and `NaN`.
+The rarely promoted `isFinite` method has been available since ES3. It returns a Boolean value indicating whether the provided `value` matches none of `Infinity`, `-Infinity`, and `NaN`.
 
 The `isFinite` method ((("isFinite")))coerces values through `Number(value)`, while `Number.isFinite` ((("Number.isFinite", id="nisf7")))doesn't. This means that values that can be coerced into non-`NaN` numbers will be considered finite numbers by ++isNumber++—even though they aren't explicit numbers.
 
@@ -517,7 +517,7 @@ Let's get right to it.
 
 ==== Math.sign
 
-Many languages ((("Math.sign")))have a ((("sign")))mathematical `sign` method that returns a vector (`-1`, `0`, or `1`) representation for the sign of the provided input. JavaScript's `Math.sign` method does exactly that. However, the JavaScript flavor of this method has two more possible return values: `-0`, and `NaN`. Check out the examples in the following code snippet.
+Many languages ((("Math.sign")))have a ((("sign")))mathematical `sign` method that returns a vector (`-1`, `0`, or `1`) representation for the sign of the provided input. JavaScript's `Math.sign` method does exactly that. However, the JavaScript flavor of this method has two more possible return values: `-0` and `NaN`. Check out the examples in the following code snippet.
 
 [source,javascript]
 ----
@@ -722,7 +722,7 @@ Math.hypot(1, 2, 3)
 // <- 3.741657386773941, the square root of (1*1 + 2*2 + 3*3)
 ----
 
-We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.pass:[<span data-type="footnote" id="native-arrays">You can go deeper into functional <code>Array</code> methods by reading the article, <a href="https://mjavascript.com/out/native-arrays">"Fun with Native Arrays"</a>.</span>]
+We could ponyfill `Math.hypot` by performing these operations manually. We can use `Math.sqrt` to compute the square root and `Array#reduce`, combined with the spread operator, to sum the squares.pass:[<span data-type="footnote" id="native-arrays">You can go deeper into functional <code>Array</code> methods by reading the article <a href="https://mjavascript.com/out/native-arrays">"Fun with Native Arrays"</a>.</span>]
 
 [source,javascript]
 ----
@@ -1182,7 +1182,7 @@ Attempts to näively figure out the actual length by counting code points prove 
 // <- 16, should be 11
 ----
 
-As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iterator.pass:[<span data-type="footnote" id="unicode-problem">I recommend you read <a href="https://mjavascript.com/out/unicode-mathias">JavaScript has a Unicode problem"</a> from Mathias Bynens. In the article, Mathias analyzes JavaScript's relationship with Unicode.</span>] In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate ((("String.prototypex", startref="spsi7")))((("strings", "splitting into code points", startref="s7sicp")))((("Unicode", "String.prototypex", startref="u7spsi")))string length.
+As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iterator.pass:[<span data-type="footnote" id="unicode-problem">I recommend you read <a href="https://mjavascript.com/out/unicode-mathias">"JavaScript has a Unicode problem"</a> from Mathias Bynens. In the article, Mathias analyzes JavaScript's relationship with Unicode.</span>] In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate ((("String.prototypex", startref="spsi7")))((("strings", "splitting into code points", startref="s7sicp")))((("Unicode", "String.prototypex", startref="u7spsi")))string length.
 
 ==== A Proposal to Split Grapheme Segments
 
