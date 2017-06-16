@@ -272,7 +272,7 @@ Referencing the __node_modules/.bin__ directory, an implementation detail of how
 }
 ----
 
-As you might recall from the Babel example, `npm` adds __node_modules__ to the `PATH` when executing scripts. To lint our codebase, we can execute `npm run lint` and npm will find the ESLint CLI embedded deep in the __node_modules__ directory.
+As you might recall from the Babel example, `npm run` adds __node_modules__ to the `PATH` when executing scripts. To lint our codebase, we can execute `npm run lint` and npm will find the ESLint CLI embedded deep in the __node_modules__ directory.
 
 Let's consider the following _example.js_ file, which is purposely riddled with style issues, to demonstrate what ESLint does:
 
@@ -289,7 +289,7 @@ if(false){}
 When we run the `lint` script, ESLint describes everything that's wrong with the file, as shown in <<fig0102>>.
 
 [[fig0102]]
-.The eslint tool is a great way to keep your code free of syntax errors and, optionally, inconsistent coding style
+.The ESLint tool is a great way to keep your code free of syntax errors and, optionally, inconsistent coding style
 image::images/pmjs_0102.png["Validating a piece of source code through ESLint."]
 
 ESLint is able to fix most style problems automatically if we pass in a `--fix` flag. Add the following script to your _package.json_:
