@@ -85,7 +85,7 @@ Let's talk about how you can use Babel as part of your workflow.
 
 Babel can compile modern JavaScript code that relies on ES6 features into ES5. It produces human-readable code, making it more welcoming when we don't have a firm grasp on all of the new features we're using.
 
-The online https://mjavascript.com/out/babel-repl[Babel REPL (Read-Evaluate-Print Loop)] is an excellent way of jumping right into learning ES6, without any of the hassle of installing Node.js, the `babel` CLI, and manually compiling source code. You can find the REPL at: .
+The online https://mjavascript.com/out/babel-repl[Babel REPL (Read-Evaluate-Print Loop)] is an excellent way of jumping right into learning ES6, without any of the hassle of installing Node.js and the `babel` CLI, and manually compiling source code. 
 
 The REPL provides us with a source code input area that gets automatically compiled in real time. We can see the compiled code to the right of our source code.
 
@@ -199,7 +199,7 @@ If you execute `npm run build` in your terminal now, you'll note that a _dist/ex
 }
 ----
 
-The `env` preset, ((("Babel", "env preset")))which we had installed earlier via `npm`, adds a series of plugins to Babel that transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our _example.js_ file into ES5 code. The `env` Babel preset works by convention, enabling Babel transformation plugins according to feature support in the latest browsers. This preset is configurable, meaning we can decide how far back we want to cover browser support. The more browsers we support, the larger our transpiled bundle. The fewer browsers we support, the fewer customers we can satisfy. As always, research is of the essence to identify what the correct configuration for the Babel `env` preset is. By default, every transform is enabled, providing broad runtime support.
+The `env` preset, ((("Babel", "env preset")))which we installed earlier via `npm`, adds a series of plugins to Babel that transform different bits of ES6 code into ES5. Among other things, this preset transforms arrow functions like the one in our _example.js_ file into ES5 code. The `env` Babel preset works by convention, enabling Babel transformation plugins according to feature support in the latest browsers. This preset is configurable, meaning we can decide how far back we want to cover browser support. The more browsers we support, the larger our transpiled bundle. The fewer browsers we support, the fewer customers we can satisfy. As always, research is of the essence to identify what the correct configuration for the Babel `env` preset is. By default, every transform is enabled, providing broad runtime support.
 
 Once we run our build script again, we'll observe that the output is now valid ES5 code:
 
@@ -220,7 +220,7 @@ Let's jump into a different kind of tool, the `eslint` code linter, which can he
 
 ==== Code Quality and Consistency with ESLint
 
-As ((("ESLint", id="esl1")))((("lint tools", id="lt1")))we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accomodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
+As ((("ESLint", id="esl1")))((("lint tools", id="lt1")))we develop a codebase we factor out snippets that are redundant or no longer useful, write new pieces of code, delete features that are no longer relevant or necessary, and shift chunks of code around while accommodating a new architecture. As the codebase grows, the team working on it changes as well: at first it may be a handful of people or even one person, but as the project grows in size so might the team.
 
 A lint tool can be used to identify syntax errors. Modern linters are often customizable, helping establish a ((("coding style conventions")))coding style convention that works for everyone on the team. By adhering to a consistent set of style rules and a quality baseline, we bring the team closer together in terms of coding style. Every team member has different opinions about coding styles, but those opinions can be condensed into style rules once we put a linter in place and agree upon a configuration.
 
