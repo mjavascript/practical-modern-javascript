@@ -2173,7 +2173,7 @@ The `Array#find` method ((("Arrayfindx")))((("ArrayfindIndexx")))runs a `callbac
 // <- undefined
 ----
 
-There's an `Array#findIndex` method as well, and it leverages the same signature. Instead of returning a boolean value, or the element itself, `Array.findIndex` returns the index of the matching element, or `-1` if no matches occur. Here are a few examples.
+There's an `Array#findIndex` method as well, and it leverages the same signature. Instead of returning a Boolean value, or the element itself, `Array.findIndex` returns the index of the matching element, or `-1` if no matches occur. Here are a few examples.
 
 [source,javascript]
 ----
@@ -2187,7 +2187,7 @@ There's an `Array#findIndex` method as well, and it leverages the same signature
 
 ==== Array#keys
 
-Returns an ((("Arraykeysx")))iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with `for..of`, the spread operator, or by manually calling `.next()`.
+++Array#keys++ returns an ((("Arraykeysx")))iterator that yields a sequence holding the keys for the array. The returned value is an iterator, meaning you can iterate over it with `for..of`, the spread operator, or by manually calling `.next()`.
 
 [source,javascript]
 ----
