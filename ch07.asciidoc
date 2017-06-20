@@ -1211,7 +1211,7 @@ Let's look at more Unicode-related methods introduced in ES6.
 
 ==== String#codePointAt
 
-We can use `String#codePointAt` to get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the following example we print the code points for each of the three emoji in our demo 'pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="horse" data-emoji-embed="running horse" /><img src="images/1f471.png" style="width: 12px" alt="man" data-emoji-embed="smiling idiot" /><img src="images/2764.png" style="width: 12px" alt="heart" data-emoji-embed="heart" /></code>]' string.
+We can use `String#codePointAt` to ((("String#codePointAt", id="scpa7")))get the numeric representation of a code point at a given position in a string. Note that the expected start position is indexed by code unit, not by code point. In the following example we print the code points for each of the three emoji in our demo 'pass:[<code><img src="images/1f40e.png" style="width: 12px" alt="horse" data-emoji-embed="running horse" /><img src="images/1f471.png" style="width: 12px" alt="man" data-emoji-embed="smiling idiot" /><img src="images/2764.png" style="width: 12px" alt="heart" data-emoji-embed="heart" /></code>]' string.
 
 [source,javascript]
 ----
@@ -1270,7 +1270,7 @@ We could wrap those base-16 values in `'\u{codePoint}'` and voilá: you'd get th
 
 ==== String.fromCodePoint
 
-This ((("StringcodePointAtx", startref="scpa7")))((("String.fromCodePoint")))((("Unicode", "StringcodePointAtx", startref="u7scpa")))((("Unicode", "String.fromCodePoint")))method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
+This ((("String#codePointAt", startref="scpa7")))((("String.fromCodePoint")))((("Unicode", "StringcodePointAtx", startref="u7scpa")))((("Unicode", "String.fromCodePoint")))method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
