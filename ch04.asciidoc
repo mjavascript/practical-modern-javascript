@@ -521,7 +521,7 @@ As we can observe after carefully reading the code for our ponyfill, if either r
 
 ==== Leveraging Promise.all and Promise.race
 
-When ((("promises", "and concurrent tasks", secondary-sortas="concurrent", id="p4act")))((("Promise.all")))((("Promise.race", id="prace4")))writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There are also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excel at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API ((("Promise.all", id="pall4")))methods: `Promise.all` and `Promise.race`.
+When ((("promises", "and concurrent tasks", secondary-sortas="concurrent", id="p4act")))((("Promise.race", id="prace4")))writing asynchronous code flows, there are pairs of tasks where one of them depends on the outcome of another, so they must run in series. There are also pairs of tasks that don't need to know the outcome of each other in order to run, so they can be executed concurrently. Promises already excel at asynchronous series flows, as a single promise can trigger a chain of events that happen one after another. Promises also offer a couple of solutions for concurrent tasks, in the form of two API ((("Promise.all", id="pall4")))methods: `Promise.all` and `Promise.race`.
 
 In most cases you'll want code that can be executed concurrently to take advantage of that, as it could make your code run much faster. Suppose you wanted to pull the description of two products in your catalog, using two distinct API calls, and then print out both of them to the console. The following piece of code would run both operations concurrently, but it would need separate print statements. In the case of printing to the console, that wouldn't make much of a difference, but if we needed to make single function call passing in both products, we couldn't do that with two separate `fetch` requests.
 
@@ -1227,7 +1227,7 @@ while (true) {
 
 Using iterators to loop over a generator might look like a complicated way of implementing a `for..of` loop, but it also allows for some interesting use cases. Particularly: `for..of` ((("for..of")))is always a synchronous loop, whereas with iterators we're in charge of deciding when to invoke `g.next`. In turn, that translates into additional opportunities such as running an asynchronous operation and then calling `g.next` once we have a result.
 
-Whenever `.next()` is (((".next()", primary-sortas="next")))called on a generator, there are four different kinds of "events" that can suspend execution in the generator while returning a result to the caller of `.next()`. We'll promptly explore each of these scenarios:
+Whenever `.next()` is (((".next()", primary-sortas="next")))(((".next()")))called on a generator, there are four different kinds of "events" that can suspend execution in the generator while returning a result to the caller of `.next()`. We'll promptly explore each of these scenarios:
 
 - A `yield` expression ((("yield")))returning the next value in the sequence
 - A `return` statement ((("return")))returning the last value in the sequence
@@ -2386,7 +2386,7 @@ The contract for an iterator mandates that the `next` ((("next")))method of `Sym
 
 In ((("asynchronous iteration", "async iterators", id="ai4ai")))async iterators, the contract has a subtle difference: `next` is supposed to return a `Promise` that resolves to an object containing `value` and `done` properties. The promise enables the sequence to define asynchronous tasks before the next item in the series is resolved. A new `Symbol.asyncIterator` is ((("Symbol.asyncIterator")))introduced to declare asynchronous iterators, in order to avoid confusion that would result from reusing `Symbol.iterator`.
 
-The `sequence` ((("sequence")))iterable could be made compatible with the async iterator interface with two small changes: we replace `Symbol.iterator` with `Symbol.asyncIterator`, and we wrap the return value for the `next` method in `Promise.resolve`, thus returning a `Promise`.
+The `sequence` iterable could be made compatible with the async iterator interface with two small changes: we replace `Symbol.iterator` with `Symbol.asyncIterator`, and we wrap the return value for the `next` method in `Promise.resolve`, thus returning a `Promise`.
 
 [source,javascript]
 ----
