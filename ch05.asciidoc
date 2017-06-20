@@ -301,7 +301,7 @@ console.log(map[Symbol.iterator] === map.entries)
 // <- true
 ----
 
-There are two other `Map` iterators you can leverage: `.keys()` (((".keys()", primary-sortas="keys")))(((".keys()")))and `.values()`. (((".values()", primary-sortas="values")))The first enumerates keys in a map while the second enumerates values, as opposed to `.entries()`, which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
+There are two other `Map` iterators you can leverage: `.keys()` (((".keys()", primary-sortas="keys")))(((".keys()")))and `.values()`. (((".values()", primary-sortas="values")))(((".values()")))The first enumerates keys in a map while the second enumerates values, as opposed to `.entries()`, which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
 
 [source,javascript]
 ----
@@ -560,7 +560,7 @@ console.log(set[Symbol.iterator] === set.values)
 // <- true
 ----
 
-The `Set#keys` method ((("Setkeysx")))also returns an iterator for values, again for consistency, and it's in fact a reference to the `Set#values` iterator.
+The `Set#keys` method ((("Set#keys")))also returns an iterator for values, again for consistency, and it's in fact a reference to the `Set#values` iterator.
 
 [source,javascript]
 ----
