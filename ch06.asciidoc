@@ -805,7 +805,7 @@ console.log(proxy.test !== proxy.test)
 // <- true
 ----
 
-This could be resolved using a `WeakMap`. ((("WeakMap")))((("ES6 Maps", "WeakMap")))We'll go back to our `selfish` trap handler options, and move that into a factory function. Within that function we'll keep a `cache` of bound methods, so that we create the bound version of each function only once. While we're at it, we'll make our `selfish` function receive the `target` object we want to be proxying, so that the details of how we are binding every method become an implementation concern.
+This could be resolved using a `WeakMap`. ((("WeakMap")))((("ES6 maps", "WeakMap")))We'll go back to our `selfish` trap handler options, and move that into a factory function. Within that function we'll keep a `cache` of bound methods, so that we create the bound version of each function only once. While we're at it, we'll make our `selfish` function receive the `target` object we want to be proxying, so that the details of how we are binding every method become an implementation concern.
 
 [source,javascript]
 ----
