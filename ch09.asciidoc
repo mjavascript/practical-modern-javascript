@@ -165,7 +165,7 @@ if (completionPercent >= 85) {
 
 In these cases, it makes sense to extract the logic into a pure function. This way we avoid the initialization complexity near the top of the larger function, while clustering all the logic about computing the completion text in one place.
 
-The following piece of code shows how we could extract the completion text logic into its own function. We can then move `getCompletionText` out of the way, making the code more linear in terms of readability.
+The following piece of code shows how we could extract the completion text logic into its own function. We can then move `getCompletionText` out of the way, making the code more linear in terms of ((("variable declarations", startref="vd9")))((("let statements", startref="ls9")))((("const statements", startref="cs9")))readability.
 
 [source,javascript]
 ----
