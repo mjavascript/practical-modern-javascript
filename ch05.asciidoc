@@ -546,7 +546,7 @@ console.log([...set.entries()])
 
 The `Set#entries` method ((("Set#entries")))is consistent with `Map#entries`, which ((("Map#entries")))returns an iterator of `[key, value]` pairs. Using `Set#entries` as the default iterator for `Set` collections wouldn't be valuable, since it's used in `for..of`, when spreading a `set`, and in `Array.from`. In all of those cases, you probably want to iterate over a sequence of values in the set, but not a sequence of `[value, value]` pairs.
 
-As demonstrated next, the default `Set` iterator ((("Set#values")))uses `Set#values`, as opposed to `Map`, which defined its iterator ((("Map#entries")))as `Map#entries`.
+As demonstrated next, the default `Set` iterator ((("Set#values")))uses `Set#values`, as opposed to `Map`, which defined its iterator as `Map#entries`.
 
 [source,javascript]
 ----
