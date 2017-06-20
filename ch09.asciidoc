@@ -416,7 +416,7 @@ function getGroceryModel({ name, unitPrice }, units) {
 }
 ----
 
-Conversely, destructuring a function's output gives the reader an immediate feel for what aspect of that output a particular piece of code is interested in. In the next snippet, we'll use only the product name and total price so that's what we destructure out of the output.
+Conversely, ((("shorthand notation", startref="sn9")))destructuring a function's ((("destructuring", "objects", id="d9")))output gives the reader an immediate feel for what aspect of that output a particular piece of code is interested in. In the next snippet, we'll use only the product name and total price so that's what we destructure out of the output.
 
 [source,javascript]
 ----
@@ -490,7 +490,7 @@ const summary = `This is a ${ name } summary`
 const description = `${ name } is a grocery item`
 ----
 
-Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dilute value, because of increased repetition in the destructuring statement. In short, destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there aren't that many host references being removed.
+Destructuring is as valuable as the amount of references to host objects it eliminates, but the amount of properties being referenced can dillute value, because of increased repetition in the destructuring statement. In short, destructuring is a great feature but it doesn't necessarily lead to more readable code every time. Use it judiciously, especially when there's not that many host references being ((("destructuring", "objects", startref="d9")))removed.
 
 === Rest and Spread
 
