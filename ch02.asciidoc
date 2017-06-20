@@ -547,7 +547,7 @@ That's it, as far as objects go, in terms of destructuring. ((("assignment destr
 
 ==== Destructuring Arrays
 
-The ((("assignment destructuring", "arrays", id="ad2a")))((("destructuring", "arrays", id="d2a")))((("arrays", "destructuring", id="a2d")))syntax for destructuring arrays is similar to that of objects. The ((("coordinates   object")))following example shows a `coordinates` object that's destructured into two variables: `x` and `y`. Note how the notation uses square brackets instead of curly braces; this denotes we're using array destructuring instead of object destructuring. Instead of having to sprinkle your code with implementation details like `x = coordinates[0]`, with destructuring you can convey your meaning clearly and without explicitly referencing the indices, naming the values instead.
+The ((("assignment destructuring", "arrays", id="ad2a")))((("destructuring", "arrays", id="d2a")))((("arrays", id="a2d")))syntax for destructuring arrays is similar to that of objects. The ((("coordinates   object")))following example shows a `coordinates` object that's destructured into two variables: `x` and `y`. Note how the notation uses square brackets instead of curly braces; this denotes we're using array destructuring instead of object destructuring. Instead of having to sprinkle your code with implementation details like `x = coordinates[0]`, with destructuring you can convey your meaning clearly and without explicitly referencing the indices, naming the values instead.
 
 [source,javascript]
 ----
@@ -597,7 +597,7 @@ var right = 7
 [left, right] = [right, left]
 ----
 
-The last area of destructuring we'll be covering is ((("assignment destructuring", "arrays", startref="ad2a")))((("destructuring", "arrays", startref="d2a")))((("arrays", "destructuring", startref="a2d")))function parameters.
+The last area of destructuring we'll be covering is ((("assignment destructuring", "arrays", startref="ad2a")))((("destructuring", "arrays", startref="d2a")))((("arrays", startref="a2d")))function parameters.
 
 ==== Function Parameter Defaults
 
