@@ -447,7 +447,7 @@ Besides default exports, you could also import named exports and alias them.
 
 ===== Importing named exports
 
-The following bit of code shows how we can import the `increment` method from our `counter` module. Reminiscent of assignment destructuring, the syntax for importing named exports is wrapped in braces.
+The ((("import statements", "named exports", id="is8ne")))following bit of code shows how we can import the `increment` method from our `counter` module. Reminiscent of assignment destructuring, the syntax for importing named exports is wrapped in braces.
 
 [source,javascript]
 ----
@@ -494,7 +494,8 @@ increment()
 console.log(counter) // <- 2
 ----
 
-Lastly, there are also namespace imports.
+Lastly, there are also namespace ((("import statements", "named exports", startref="is8ne")))imports.
+
 
 ===== Wildcard import statements
 
