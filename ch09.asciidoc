@@ -701,7 +701,7 @@ console.log(sum())
 // <- ReferenceError: sum is not defined
 ----
 
-Arrow functions, introduced in <<arrow_functions>>, are similar to function expressions. The syntax is made shorter by dropping the `function` keyword. In arrow functions, parentheses around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
+Arrow ((("arrow functions", id="af9")))functions, introduced in <<arrow_functions>>, are similar to function expressions. The syntax is made shorter by dropping the `function` keyword. In arrow functions, parentheses around the parameter list are optional when there's a single parameter that's not destructured nor the rest parameter. It is possible to implicitly return any valid JavaScript expression from an arrow function without declaring a block statement.
 
 The following snippet shows an arrow function explicitly returning an expression in a block statement, one that implicitly returns the expression, one that drops the parentheses around its only parameter, and one that uses a block statement but doesn't return a value.
 
@@ -759,7 +759,7 @@ function wait(delay) {
 }
 ----
 
-When switching to arrow functions, we should stick with the top-level `wait` function declaration so that we don't need to hoist it to the top of our scope. We can turn every other function into arrows to improve readability, thus removing many `function` keywords that got in the way of interpreting what those functions do.
+When switching to arrow functions, we should stick with the top-level `wait` function declaration ((("function declarations")))so that we don't need to hoist it to the top of our scope. We can turn every other function into arrows to improve readability, thus removing many `function` keywords that got in the way of interpreting what those functions do.
 
 The next snippet shows what that code would look like using arrow functions. With all the keywords out of the way after refactoring, it's easier to understand the relationship between the `delay` parameter of `wait` and the second argument to `setTimeout`.
 
@@ -807,11 +807,11 @@ const pistol = {
 pistol.trigger()
 ----
 
-As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, requires several lines of code, or involves recursion, then consider an arrow function.
+As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, requires several lines of code, or involve recursion, ((("arrow functions", startref="af9")))((("function expressions", startref="fe9")))then consider an arrow function.
 
 === Classes and Proxies
 
-Most modern programming languages have classes in one form or another. JavaScript classes are syntactic sugar on top of prototypal inheritance. Using classes turns prototypes more idiomatic and easier for tools to statically analyze.
+Most modern programming ((("classes", id="class9")))languages have classes in one form or another. JavaScript classes are syntactic sugar on top of prototypal inheritance. Using classes turns prototypes more idiomatic and easier for tools to statically analyze.
 
 When writing prototype-based solutions the constructor code is the function itself, while declaring instance methods involves quite a bit of boilerplate code, as shown in the following code snippet.
 
@@ -913,7 +913,7 @@ console.log(items.last)
 
 JavaScript classes are less verbose than their prototype-based equivalents. Class sugar is thus a most welcome improvement over raw prototypal inheritance. As for the merits of using JavaScript classes, it depends. Even though classes may be compelling to use due to their improved syntax, sugar alone doesn't instantly promote classes to a wider variety of use cases.
 
-Statically typed languages typically offer and enforce the use of classes.footnote:[An exception should be made for most functional programming languages.] In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
+Statically typed languages typically offer and enforce the use of classes.footnote:[An exception should be made for most functional programming languages.] In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using ((("classes", startref="class9")))plain objects.
 
 Plain objects ((("objects", "plain")))are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON, and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
 
