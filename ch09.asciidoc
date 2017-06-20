@@ -9,7 +9,7 @@ We'll take a look at a few different features, the use cases where they shine, a
 
 === Variable Declarations
 
-When developing software, most of our time is spent reading code, instead of writing it. ES6 offers `let` and `const` as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
+When ((("variable declarations", id="vd9")))developing software, most of our time is spent reading code, instead of writing it. ES6 ((("let statements", id="ls9")))((("const statements", id="cs9")))offers `let` and `const` as new flavors of variable declaration, and part of the value in these statements is that they can signal how a variable is used. When reading a piece of code, others can take cues from these signals in order to better understand what we did. Cues like these are crucial to reducing the amount of time someone spends interpreting what a piece of code does, and as such we should try and leverage them whenever possible.
 
 A `let` statement indicates that a variable can't be used before its declaration, due to the Temporal Dead Zone rule. This isn't a convention, it is a fact: if we tried accessing the variable before its declaration statement was reached, the program would fail. These statements are block-scoped and not function-scoped; this means we need to read less code in order to fully grasp how a `let` variable is used.
 
@@ -184,7 +184,7 @@ function getCompletionText(progress) {
 
 === Template Literals
 
-For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multiline string was also a hassle, as was escaping single or double quotes--depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
+For ((("template literals", id="tl9")))the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multiline string was also a hassle, as was escaping single or double quotes--depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
 
 With a template literal, you can use ((("expression interpolation")))expression interpolation, which enables you to inline variables, function calls, or any other arbitrary JavaScript expressions in a string without relying on concatenation.
 
