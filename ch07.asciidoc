@@ -1720,7 +1720,7 @@ getNonDollarAmount('€12.34') // <- '12.34'
 
 ==== A New /s "dotAll" Flag
 
-When ((("dotAll proposal")))((("s flagx")))((("s flagx", primary-sortas="s flag")))using the `.` pattern, we typically expect to match every single character. In JavaScript, however, a `.` expression doesn't match astral characters (which can be fixed by adding the `u` flag) nor line terminators.
+When ((("dotAll proposal")))((("/s flag")))((("/s flag", primary-sortas="s flag")))using the `.` pattern, we typically expect to match every single character. In JavaScript, however, a `.` expression doesn't match astral characters (which can be fixed by adding the `u` flag) nor line terminators.
 
 [source,javascript]
 ----
@@ -1752,7 +1752,7 @@ rcharacter.test('\n') // <- true
 
 ==== String#matchAll
 
-Often, when we ((("StringmatchAll proposalx", id="smap7")))have a regular expression with a global or sticky flag, we want to iterate over the set of captured groups for each match. Currently, it can be a bit of a hassle to produce the list of matches: we need to collect the captured groups using `String#match` or `RegExp#exec` in a loop, until the regular expression doesn't match the input starting at the `lastIndex` position property. In the following piece of code, the `parseAttributes` generator function does just that for a given regular expression.
+Often, when we ((("String#matchAll proposal", id="smap7")))have a regular expression with a global or sticky flag, we want to iterate over the set of captured groups for each match. Currently, it can be a bit of a hassle to produce the list of matches: we need to collect the captured groups using `String#match` or `RegExp#exec` in a loop, until the regular expression doesn't match the input starting at the `lastIndex` position property. In the following piece of code, the `parseAttributes` generator function does just that for a given regular expression.
 
 [source,javascript]
 ----
@@ -1859,7 +1859,7 @@ console.log(addressMatcher.next().value)
 // <- ['placeholder', 'Enter your business address']
 ----
 
-The `String#matchAll` proposalpass:[<span data-type="footnote" id="string-matchall">Check out the <a href="https://mjavascript.com/out/string-matchall"><code>String#matchAll</code> proposal document</a>.</span>] (in stage 1 at the time of this writing) introduces a new method for the string prototype that would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` objects as opposed to just the `captures` in the preceding example. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the ((("StringmatchAll proposalx", startref="smap7")))((("regular expressions", startref="rege7")))((("matchAll", startref="ma7")))sequence.
+The `String#matchAll` proposalpass:[<span data-type="footnote" id="string-matchall">Check out the <a href="https://mjavascript.com/out/string-matchall"><code>String#matchAll</code> proposal document</a>.</span>] (in stage 1 at the time of this writing) introduces a new method for the string prototype that would behave in a similar fashion as our `matchAll` implementation, except the returned iterable is a sequence of `match` objects as opposed to just the `captures` in the preceding example. Note that the `String#matchAll` sequence contains entire `match` objects, and not just numbered captures. This means we could access named captures through `match.groups` for each `match` in the ((("String#matchAll proposal", startref="smap7")))((("regular expressions", startref="rege7")))((("matchAll", startref="ma7")))sequence.
 
 [source,javascript]
 ----
@@ -1940,7 +1940,7 @@ Array.from($('div'))
 // <- [<div>, <div>, <div>, …]
 ----
 
-The one thing you cannot do with either `Array.from` nor the spread operator is to pick a start index. Suppose you wanted to pull every `<div>` after the first one. With `Array#slice`, you ((("Arrayslicex")))could do the following.
+The one thing you cannot do with either `Array.from` nor the spread operator is to pick a start index. Suppose you wanted to pull every `<div>` after the first one. With `Array#slice`, you ((("Array#slice")))could do the following.
 
 [source,javascript]
 ----
@@ -2048,7 +2048,7 @@ console.log(Array.of(-1)) // <- [-1]
 
 ==== Array#copyWithin
 
-Let's start with the ((("ArraycopyWithinx", id="acw7")))signature of `Array#copyWithin`.
+Let's start with the ((("Array#copyWithin", id="acw7")))signature of `Array#copyWithin`.
 
 [source,javascript]
 ----
