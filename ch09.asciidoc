@@ -936,11 +936,11 @@ When we prefer boring code, patterns flourish gradually and naturally. Once a pa
 
 In <<iteration-and-flow-control>> we discussed how many of the different ways in which we can manage complexity in asynchronous operations work, and how we can use them. Callbacks, events, promises, generators, async functions and async iterators, external libraries, and the list goes on. You should now be comfortable with how these constructs work, but when should you use them?
 
-Callbacks are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
+Callbacks ((("callbacks")))are the most primitive solution. They require little knowledge beyond basic JavaScript, making callback-based code some of the easiest to read. Callbacks should be approached with care in cases where the flow of operations involves a long dependency chain, as a series of deeply nested asynchronous operations can lead to callback hell.
 
 When it comes to callbacks, libraries like `async` can help reduce complexity when we have three or more related tasks that need to be executed asynchronously.pass:[<span data-type="footnote">A popular flow control library. You can find <code>async</code> on <a href="https://mjavascript.com/out/async-library">GitHub</a>.</span>] Another positive aspect of these libraries is how they unobtrusively interoperate with plain callbacks, which is useful when we have a mix of complex flows that need to be abstracted through the library and simpler flows that you can articulate with plain callbacks.
 
-Events are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Events don't lend themselves well to managing the complexity of asynchronous tasks, however.
+Events ((("events")))are a cheap way of introducing extensibility into code flows, asynchronous or otherwise. Events don't lend themselves well to managing the complexity of asynchronous tasks, however.
 
 The following example shows how convoluted our code could become if we wanted to handle asynchronous tasks using events. Half of the lines of code are spent on defining the code flow, and even then the flow is quite hard to understand. This means we probably chose the wrong tool for the job.
 
@@ -963,7 +963,7 @@ function print(message) {
 }
 ----
 
-Promises were around for a long time, in user libraries, before TC39 decided to bring them into the core JavaScript language. They serve a similar purpose as callback libraries, offering an alternative way of writing asynchronous code flows.
+Promises ((("promises", id="prom9")))were around for a long time, in user libraries, before TC39 decided to bring them into the core JavaScript language. They serve a similar purpose as callback libraries, offering an alternative way of writing asynchronous code flows.
 
 Promises are a bit more expensive than callbacks in terms of commitment, because promise chains involve more promises, so they are hard to interleave with plain callbacks. At the same time, you don't want to interleave promises with callback-based code, because that leads to complex applications. For any given portion of code, it's important to pick one paradigm and stick with it. Relying on a single paradigm produces code that doesn't focus as much on the mechanics as it does on task processing.
 
@@ -1040,11 +1040,11 @@ When we don't spend at least some of our time figuring out what feature or flow 
 
 === Complexity Creep, Abstractions, and Conventions
 
-Picking the right abstractions is hard: we want to reduce complexity in our code flows by introducing complexity that's hidden away behind the constructs we use. Async functions borrow their foundation from generators. Generator objects are iterable. Async iterators use promises. Iterators are implemented using symbols. Promises use callbacks.
+Picking the right ((("abstractions")))abstractions is hard: we want to reduce complexity in our code flows by introducing ((("complexity creep")))complexity that's hidden away behind the constructs we use. Async functions borrow their foundation from generators. Generator objects are iterable. Async iterators use promises. Iterators are implemented using symbols. Promises use callbacks.
 
 Consistency is an important theme when it comes to maintainable code. An application might mostly use callbacks, or mostly use promises. Individually, both callbacks and promises can be used to reduce complexity in code flows. When mixing them together, however, we need to make sure we don't introduce context switching where developers reading different pieces of a codebase need to enter different mindsets to understand them.
 
-This is why conventions exist. A strong convention such as "use promises where possible" goes a long way toward augmenting consistency across a codebase. Conventions, more than anything, are what drive readability and maintainability in a codebase. Code is, after all, a communication device used to convey a message. This message is not only relevant to the computers executing the code, but most importantly to developers reading the code, maintaining and improving the application over time.
+This is why ((("conventions")))conventions exist. A strong convention such as "use promises where possible" goes a long way toward augmenting consistency across a codebase. Conventions, more than anything, are what drive readability and maintainability in a codebase. Code is, after all, a communication device used to convey a message. This message is not only relevant to the computers executing the code, but most importantly to developers reading the code, maintaining and improving the application over time.
 
 Without strong conventions, communication breaks down and developers have a hard time understanding how a program works, ultimately leading to reduced productivity.
 
