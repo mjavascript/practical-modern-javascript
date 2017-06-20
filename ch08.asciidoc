@@ -403,7 +403,7 @@ We've now covered every way in which we can expose an API in ES6 modules. Let's 
 
 We can load a module from another one using `import` statements. The way modules are loaded is implementation-specific; that is, it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
-Compilers like Babel are able to concatenate modules with the aid of a module system like CommonJS. That means `import` statements in Babel mostly follow the same semantics as `require` statements in CommonJS.
+Compilers like ((("Babel")))Babel are able to concatenate modules with the aid of a module system like CommonJS. That means `import` statements in Babel mostly follow the same semantics as `require` statements in CommonJS.
 
 Let's suppose we have the following code snippet in a _./counter.js_ module.
 
@@ -426,7 +426,8 @@ In the same fashion as `export` statements, `import` statements are only allowed
 
 ===== Importing default exports
 
-CommonJS modules let you import other modules using `require` statements. When we need a reference to the default export, all we'd have to do is assign that to a variable.
+CommonJS ((("import statements", "default exports")))((("default exports, importing")))modules let you import other modules using `require` statements. When we need a reference to the default export, all we'd have to do is assign that to a variable.
+
 
 [source,javascript]
 ----
@@ -497,7 +498,8 @@ Lastly, there are also namespace imports.
 
 ===== Wildcard import statements
 
-We can import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the `*` must be followed by an alias where all the bindings will be placed. If there was a `default` export, it'll be placed in the namespace binding as well.
+We can ((("import statements", "wildcards")))((("wildcard import statements")))import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the `*` must be followed by an alias where all the bindings will be placed. If there was a `default` export, it'll be placed in the namespace binding ((("ES6 modules", "import statements", startref="esm8is")))((("import statements", startref="is8")))as well.
+
 
 [source,javascript]
 ----
