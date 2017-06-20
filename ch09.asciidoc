@@ -971,7 +971,7 @@ Promises are a bit more expensive than callbacks in terms of commitment, because
 
 Committing to promises isn't inherently bad, however; it's merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators, and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
 
-Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the ((("promises", startref="prom9")))language.
+Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the language.
 
 We could use ((("iterators", seealso="iteration protocol")))iterators to lazily describe sequences that don't necessarily need to be finite. Futher, their asynchronous counterpart could be used to describe sequences that require out-of-band processing, such as `GET` requests, to produce elements. Those sequences can be consumed by using a `for await..of` loop, hiding away the complexity of their asynchronous nature.
 
@@ -1006,7 +1006,7 @@ function* integers(value = 0) {
 
 Not only is the generator code shorter, but it's also far more readable. The fact that it produces an infinite sequence becomes immediately obvious due to the `while` loop. The iterable requires us to understand that the sequence is infinite because the code never returns an element with the `done: true` flag. Setting the seed `value` is more natural and doesn't involve wrapping the object in a function that receives the initial parameters.
 
-Promises ((("promises")))were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows. Async functions present an elegant solution to this problem, where we can describe the same promise-based code using `await` expressions.
+Promises ((("promises", startref="prom9")))were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows. Async functions present an elegant solution to this problem, where we can describe the same promise-based code using `await` expressions.
 
 Consider the following piece of code.
 
