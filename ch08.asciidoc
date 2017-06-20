@@ -193,7 +193,8 @@ Let's now dive into the `export` statement.
 
 ==== export Statements
 
-In CommonJS modules, you export values by exposing them on `module.exports`. You can expose anything from a value type to an object, an array, or a function, as seen in the next few code snippets.
+In ((("CommonJS")))CommonJS ((("ES6 modules", "export statements", id="esm8es")))((("export statements", id="exs8")))modules, you export values by exposing them on `module.exports`. You can expose anything from a value type to an object, an array, or a function, as seen in the next few code snippets.
+
 
 [source,javascript]
 ----
@@ -219,7 +220,8 @@ ES6 modules are files that may expose an API through `export` statements. Declar
 
 ===== Exporting a default binding
 
-You can mimic the CommonJS code we just saw by replacing `module.exports =` with `export default` statements.
+You can mimic the ((("export statements", "default")))CommonJS code we just saw by replacing `module.exports =` with `export default` statements.
+
 
 [source,javascript]
 ----
@@ -265,7 +267,8 @@ There are a few other ways of exposing an API in ESM, besides `export default` s
 
 ===== Named exports
 
-When you want to expose multiple values from CJS modules you don't necessarily need to explicitly export an object containing every one of those values. You could simply add properties onto the implicit `module.exports` object. There's still a single binding being exported, containing all properties the `module.exports` object ends up holding. While the following example exports two individual values, both are exposed as properties on the exported object.
+When ((("export statements", "named exports")))((("named exports")))you want to expose multiple values from ((("CommonJS", "module.exports")))((("module.exports")))CJS modules you don't necessarily need to explicitly export an object containing every one of those values. You could simply add properties onto the implicit `module.exports` object. There's still a single binding being exported, containing all properties the `module.exports` object ends up holding. While the following example exports two individual values, both are exposed as properties on the exported object.
+
 
 [source,javascript]
 ----
@@ -295,7 +298,7 @@ By being rigid in how its declarative module syntax works, ESM favors static ana
 
 ===== Exporting lists
 
-ES6 modules let you `export` lists of named top-level members, as seen in the following snippet. The syntax for export lists is easy to parse, and presents a solution to the problem we observed in the last code snippet from the previous section.
+ES6 modules ((("export statements", "lists")))((("lists, exporting")))let you `export` lists of named top-level members, as seen in the following snippet. The syntax for export lists is easy to parse, and presents a solution to the problem we observed in the last code snippet from the previous section.
 
 [source,javascript]
 ----
@@ -336,7 +339,7 @@ It's important to keep in mind that we are exporting bindings, and not merely va
 
 ===== Bindings, not values
 
-ES6 modules export bindings, not values or references. This means that a `fungible` binding exported from a module would be bound into the `fungible` variable on the module, and its value would be subject to changes made to `fungible`. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
+ES6 modules ((("export statements", "bindings")))((("bindings, exporting")))export bindings, not values or references. This means that a `fungible` binding exported from a module would be bound into the `fungible` variable on the module, and its value would be subject to changes made to `fungible`. While unexpectedly changing the public interface of a module after it has initially loaded can lead to confusion, this can indeed be useful in some cases.
 
 In the next code snippet, our module's `fungible` export would be initially bound to an object and be changed into an array after five seconds.
 
@@ -367,7 +370,8 @@ The JavaScript module system also offers an `export..from` syntax, where you can
 
 ===== Exporting from another module
 
-We can expose another module's named exports using by adding a `from` clause to an `export` statement. The bindings are not imported into the local scope: our module acts as a pass-through where we expose another module's bindings without getting direct access to them.
+We can ((("export statements", "from")))expose another module's named exports using by adding a `from` clause to an `export` statement. The bindings are not imported into the local scope: our module acts as a pass-through where we expose another module's bindings without getting direct access to them.
+
 
 [source,javascript]
 ----
@@ -397,7 +401,8 @@ When we want to expose another module's `default` binding, we'll have to use the
 export { default as counter } from './counter.js'
 ----
 
-We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to `import` statements, which can be used to consume other modules.
+We've now covered every way in which we can expose an API in ES6 modules. Let's jump over to `import` statements, which can be used to ((("ES6 modules", "export statements", startref="esm8es")))((("export statements", startref="exs8")))consume other modules.
+
 
 ==== import Statements
 
