@@ -215,7 +215,7 @@ function name(parameters) {
 }
 ----
 
-You could also create ((("arrow functions", "anonymous")))((("anonymous functions")))anonymous functions, by omitting the name when assigning the function to a variable, a property, or a function call.
+You could also create ((("arrow functions", "anonymous", id="af2a")))((("anonymous functions", id="af2")))anonymous functions, by omitting the name when assigning the function to a variable, a property, or a function call.
 
 [source,javascript]
 ----
@@ -258,7 +258,7 @@ setTimeout(function () {
 // <- 3
 ----
 
-If we had defined the function passed to `setInterval` as a regular anonymous function instead of using an arrow function, `this` would've been bound to the context of the ((("arrow functions", "anonymous")))((("anonymous functions")))anonymous function, instead of the context of the `start` method. We could have implemented `timer` with a declaration like `var self = this` at the beginning of the `start` method, and then referencing `self` instead of `this`. With arrow functions, the added complexity of keeping context references around fades away and we can focus on the functionality of our code.
+If we had defined the function passed to `setInterval` as a regular anonymous function instead of using an arrow function, `this` would've been bound to the context of the ((("arrow functions", "anonymous", startref="af2a")))((("anonymous functions", startref="af2")))anonymous function, instead of the context of the `start` method. We could have implemented `timer` with a declaration like `var self = this` at the beginning of the `start` method, and then referencing `self` instead of `this`. With arrow functions, the added complexity of keeping context references around fades away and we can focus on the functionality of our code.
 
 In a similar fashion, lexical binding in ES6 arrow functions also means that function calls won't be able to change the `this` context when using `.call`, `.apply`, `.bind`, etc. That limitation is usually more useful than not, as it ensures that the context will always be preserved and constant.
 
