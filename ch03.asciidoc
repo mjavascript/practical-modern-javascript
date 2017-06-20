@@ -122,7 +122,7 @@ We'll dig deeper into class inheritance later. Let's take a more nuanced look at
 
 ==== Properties and Methods in Classes
 
-It ((("classes", "properties and methods in", id="class3pami")))((("properties", "in classes", id="p3ic")))((("methods", "in classes", id="m3ic")))should be noted that the `constructor` ((("constructor()")))method declaration is an optional member of a `class` declaration. The following bit of code shows an entirely valid `class` declaration that's comparable to an empty constructor function by the same name.
+It ((("classes", "properties and methods in", id="class3pami")))((("properties", "in classes", id="p3ic")))((("methods", id="m3ic")))should be noted that the `constructor` ((("constructor()")))method declaration is an optional member of a `class` declaration. The following bit of code shows an entirely valid `class` declaration that's comparable to an empty constructor function by the same name.
 
 [source,javascript]
 ----
@@ -622,7 +622,7 @@ console.log(morphling + ' is powerful')
 // <- '[object Morphling] is powerful'
 ----
 
-Another example of a well-known symbol is `Symbol.match`. A ((("symbols", "Symbol.match")))regular expression that sets `Symbol.match` to `false` will be treated as a string literal when passed to `.startsWith`, `.endsWith`, or `.includes`. These (((".startsWith()", primary-sortas="startsWith")))(((".endsWith()", primary-sortas="endsWith")))(((".includes()", primary-sortas="includes")))three functions are new string methods in ES6. First we have `.startsWith`, which can be used to determine if the string starts with another string. Then there's `.endsWith`, which finds out whether the string ends in another one. Lastly, the `.includes` method returns `true` if a string contains another one. The next snippet of code shows how `Symbol.match` can be used to compare a string with the string representation of a regular expression.
+Another example of a well-known symbol is `Symbol.match`. A ((("symbols", "Symbol.match")))regular expression that sets `Symbol.match` to `false` will be treated as a string literal when passed to `.startsWith`, `.endsWith`, or `.includes`. These (((".startsWith()", primary-sortas="startsWith")))(((".endsWith()", primary-sortas="endsWith")))(((".includes()", primary-sortas="includes")))(((".startsWith()")))(((".endsWith()")))(((".includes()")))three functions are new string methods in ES6. First we have `.startsWith`, which can be used to determine if the string starts with another string. Then there's `.endsWith`, which finds out whether the string ends in another one. Lastly, the `.includes` method returns `true` if a string contains another one. The next snippet of code shows how `Symbol.match` can be used to compare a string with the string representation of a regular expression.
 
 [source,javascript]
 ----
