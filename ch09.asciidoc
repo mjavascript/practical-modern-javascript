@@ -513,7 +513,7 @@ getNumberParts('1234.56')
 // <- { integer: '1234', fractional: '56' }
 ----
 
-The spread operator could be used to pick up every captured group, as part of destructuring the result of `.match`.
+The ((("spread operator", id="so9")))spread operator could be used to pick up every captured group, as part of destructuring the result of `.match`.
 
 [source,javascript]
 ----
@@ -574,7 +574,7 @@ Being able to visualize object spread as an `Object.assign` helps internalize ho
 }
 ----
 
-Object spread comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a `player` object and a function call that casts a healing spell and returns a new, healthier, +player+ object.
+Object spread ((("object spread")))comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a `player` object and a function call that casts a healing spell and returns a new, healthier, player object.
 
 [source,javascript]
 ----
@@ -587,7 +587,7 @@ const player = {
 castHealingSpell(player) // consumes 40 mana, gains 110 health
 ----
 
-The following snippet shows an implementation of `castHealingSpell` where we create a new `player` object without mutating the original `player` parameter. Every property in the original `player` object is copied over, and we can update individual properties as needed.
+The following ((("spread operator", startref="so9")))snippet shows an implementation of `castHealingSpell` where we create a new `player` object without mutating the original `player` parameter. Every property in the original `player` object is copied over, and we can update individual properties as needed.
 
 [source,javascript]
 ----
@@ -629,7 +629,7 @@ people.map(({ name, ssn, ...person }) => person)
 
 JavaScript already offered a number of ways in which we can declare functions before ES6.
 
-Function declarations are the most prominent kind of JavaScript function. The fact that declarations aren't hoisted means we can sort them based on how to improve code readability, instead of worrying about sorting them in the exact order they are used.
+Function declarations ((("function declarations")))are the most prominent kind of JavaScript function. The fact that declarations aren't hoisted means we can sort them based on how to improve code readability, instead of worrying about sorting them in the exact order they are used.
 
 The following snippet displays three function declarations arranged in such a way that the code is more linear to read.
 
@@ -647,7 +647,7 @@ function print(message) {
 }
 ----
 
-Function expressions, in contrast, must be assigned to a variable before we can execute them. Keeping with the preceding example, this means we would necessarily need to have all function expressions declared before any code can use them.
+Function expressions, ((("function expressions", id="fe9")))in contrast, must be assigned to a variable before we can execute them. Keeping with the preceding example, this means we would necessarily need to have all function expressions declared before any code can use them.
 
 The next snippet uses function expressions. Note that if we were to place the `printSum` function call anywhere other than after all three expression assignments, our code would fail because of a variable that hasn't been initialized yet.
 
