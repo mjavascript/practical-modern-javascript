@@ -186,7 +186,7 @@ function getCompletionText(progress) {
 
 For the longest time, JavaScript users have resorted to utility libraries to format strings, as that was never a part of the language until now. Creating a multiline string was also a hassle, as was escaping single or double quotes--depending on which quote style you were using. Template literals are different, and they fix all of these inconveniences.
 
-With a template literal, you can use expression interpolation, which enables you to inline variables, function calls, or any other arbitrary JavaScript expressions in a string without relying on concatenation.
+With a template literal, you can use ((("expression interpolation")))expression interpolation, which enables you to inline variables, function calls, or any other arbitrary JavaScript expressions in a string without relying on concatenation.
 
 [source,javascript]
 ----
@@ -229,13 +229,14 @@ When it comes to quotes, `'` and `"` are more likely to be necessary when writin
 `Alfred's cat suit is "slick".`
 ----
 
-As we discovered in <<es6-essentials>>, there are also other features such as tagged templates, which make it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multiline support, expression interpolation, or reduced escaping.
+As we discovered in <<es6-essentials>>, there are also other features such as ((("tagged templates")))tagged templates, which makes it easy to sanitize or otherwise manipulate interpolated expressions. While useful, tagged templates are not as pervasively beneficial as multiline support, expression interpolation, or reduced escaping.
 
-The combination of all of these features warrants considering template literals as the default string flavor over single- or double-quoted strings. There are a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
+The combination of all of these features warrants considering template literals as the default string flavor over ((("template literals", "quotes and backticks", id="tl9qab")))single- or double-quoted strings. There are a few concerns usually raised when template literals are proposed as the default style. We'll go over each concern and address each individually. You can then decide for yourself.
 
-Before we begin, let's set a starting point everyone agrees on: using template literals when an expression has to be interpolated in a string is better than using quoted string concatenation.
+Before we begin, let's set a starting point everyone agrees on: using template literals when an expression has to be interpolated in a string is better than using ((("quoted string concatenation")))quoted string concatenation.
 
-Performance is often one of the cited concerns: is using template literals everywhere going to harm my application's performance? When using a compiler like Babel, template literals are transformed into quoted strings and interpolated expressions are concatenated amid those strings.
+Performance is often one of the cited concerns: is using template literals everywhere going to harm my application's performance? When using a compiler like ((("Babel")))Babel, template literals are transformed into quoted strings and interpolated expressions are concatenated amid those strings.
+
 
 Consider the following example using template literals.
 
@@ -360,7 +361,7 @@ In conclusion, there are trade-offs to consider when using template literals. Yo
 
 === Shorthand Notation and Object Destructuring
 
-<<ecmascript-and-the-future-of-javascript>> introduced us to the concept of shorthand notation. Whenever we want to introduce a property and there's a binding by the same name in scope, we can avoid repetition.
+<<ecmascript-and-the-future-of-javascript>> introduced us to the concept of ((("shorthand notation", id="sn9")))shorthand notation. Whenever we want to introduce a property and there's a binding by the same name in scope, we can avoid repetition.
 
 [source,javascript]
 ----
