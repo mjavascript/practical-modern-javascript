@@ -5,6 +5,7 @@ Over the years, we've seen multiple different ways in which to split code into m
 
 A while later, the ((("RequireJS")))RequireJS library was born. It provided a way of defining the dependencies of each module programmatically, so that a dependency graph is created and you wouldn't have to worry about sorting your scripts anymore. RequireJS demands that you provide an array of strings used to identify your dependencies and also wrap modules in a function call, which would then receive those dependencies as parameters. Many other libraries provide similar functionality but offer a slightly different API.
 
+
 Other complexity management mechanisms exist, such as the dependency injection mechanism in ((("AngularJS")))AngularJS, where you define named components using functions where you can, in turn, specify other named component dependencies. AngularJS carries the load of dependency injection on your behalf, so you only have to name components and specify dependencies.
 
 CommonJS (CJS) surfaced as an alternative to RequireJS, and it was swiftly popularized by Node.js soon afterwards. In this chapter we'll take a look at CommonJS, which is still heavily in use today. We'll then cover the module system introduced to native JavaScript in ES6, and lastly we'll explore interoperability between CommonJS and native JavaScript modules--also known as ECMAScript modules (ESM).
