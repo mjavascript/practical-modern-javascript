@@ -172,7 +172,7 @@ console.log(counter.next)
 // <- 4
 ----
 
-When paired with ((("setters")))setters, though, accessors may provide an interesting bridge between an object and its underlying data store. Consider the following example where we define a class that can be used to store and retrieve JSON data from `localStorage` using the provided ((("accessors", startref="acc3")))storage `key`.
+When paired with ((("setters")))setters, though, accessors may provide an interesting bridge between an object and its underlying data store. Consider the following example where we define a class that can be used to store and retrieve JSON data from `localStorage` using the provided storage `key`.
 
 [source,javascript]
 ----
@@ -250,7 +250,7 @@ console.log(MathHelper.sum(1, 2, 3, 4, 5))
 // <- 15
 ----
 
-Finally, it's worth mentioning that you could also declare static property ((("accessors")))accessors, such as ((("getters")))((("setters")))getters or setters (`static get`, `static set`). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, ((("classes", "properties and methods in", startref="class3pami")))((("properties", "in classes", startref="p3ic")))((("methods", "in classes", startref="m3ic")))after all.
+Finally, it's worth mentioning that you could also declare static property ((("accessors", startref="acc3")))accessors, such as ((("getters")))((("setters")))getters or setters (`static get`, `static set`). These might come in handy when maintaining global configuration state for a class, or when a class is used under a singleton pattern. Of course, you're probably better off using plain old JavaScript objects at that point, rather than creating a class you never intend to instantiate or only intend to instantiate once. This is JavaScript, a highly dynamic language, ((("classes", "properties and methods in", startref="class3pami")))((("properties", "in classes", startref="p3ic")))((("methods", "in classes", startref="m3ic")))after all.
 
 ==== Extending JavaScript Classes
 
