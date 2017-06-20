@@ -787,7 +787,7 @@ Besides the template literal syntax, strings got a number of new methods in ES6.
 
 ==== String#startsWith
 
-Prior to ES6, ((("StringstartsWith", id="ssw7")))whenever we wanted to check if a string begins with a certain other string, we'd use the `String#indexOf` method, ((("StringindexOfx")))as shown in the following code snippet. A result of `0` means that the string starts with the provided value.
+Prior to ES6, ((("StringstartsWith", id="ssw7")))whenever we wanted to check if a string begins with a certain other string, we'd use the `String#indexOf` method, ((("String#indexOf")))as shown in the following code snippet. A result of `0` means that the string starts with the provided value.
 
 [source,javascript]
 ----
@@ -847,7 +847,7 @@ We could use the `startIndex` ((("startIndex")))parameter for `indexOf` to get a
 // <- true
 ----
 
-Instead of keeping all of these string searching implementation details in your head and writing code that's most concerned with how to search, as opposed to what is being searched, we could use `String#startsWith` passing in the optional `startIndex` parameter as ((("StringstartsWithx", startref="ssw7")))well.
+Instead of keeping all of these string searching implementation details in your head and writing code that's most concerned with how to search, as opposed to what is being searched, we could use `String#startsWith` passing in the optional `startIndex` parameter as ((("String#startsWith", startref="ssw7")))well.
 
 [source,javascript]
 ----
@@ -857,7 +857,7 @@ Instead of keeping all of these string searching implementation details in your 
 
 ==== String#endsWith
 
-This method ((("StringendsWithx")))mirrors `String#startsWith` in the same way that `String#lastIndexOf` mirrors `String#indexOf`. It tells us whether a string ends with another string.
+This method ((("String#endsWith")))mirrors `String#startsWith` in the same way that `String#lastIndexOf` mirrors `String#indexOf`. It tells us whether a string ends with another string.
 
 [source,javascript]
 ----
@@ -883,7 +883,7 @@ As the opposite of `String#startsWith`, there's a position index that indicates 
 
 ==== String#includes
 
-You can use `String#includes` to figure ((("Stringincludesx")))out whether a string contains another one, as shown in the following piece of code.
+You can use `String#includes` to figure ((("String#includes")))out whether a string contains another one, as shown in the following piece of code.
 
 [source,javascript]
 ----
@@ -895,7 +895,7 @@ You can use `String#includes` to figure ((("Stringincludesx")))out whether a str
 // <- false
 ----
 
-This is equivalent to the ES5 use case of `String#indexOf` where ((("StringindexOfx")))we'd test the result against `-1`, checking to see whether the search string was anywhere to be found, as demonstrated in the next code snippet.
+This is equivalent to the ES5 use case of `String#indexOf` where ((("String#indexOf")))we'd test the result against `-1`, checking to see whether the search string was anywhere to be found, as demonstrated in the next code snippet.
 
 [source,javascript]
 ----
@@ -919,7 +919,7 @@ Let's move onto something that's not just an `String#indexOf` alternative.
 
 ==== String#repeat
 
-This handy ((("Stringrepeatx", id="sr7")))method allows you to repeat a string `count` times.
+This handy ((("String#repeat", id="sr7")))method allows you to repeat a string `count` times.
 
 [source,javascript]
 ----
@@ -1011,7 +1011,7 @@ c`, 2)
 
 ==== String Padding and Trimming
 
-At ((("Stringrepeatx", startref="sr7")))((("strings", "padding and trimming", id="s7pat")))the time of this writing, there are two new string padding methods slated for publication in ES2017: `String#padStart` ((("StringpadStartx", id="sps7")))((("StringpadEndx", id="spe7")))and `String#padEnd`. Using these methods, we wouldn't have to implement something like `indent` in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
+At ((("String#repeat", startref="sr7")))((("strings", "padding and trimming", id="s7pat")))the time of this writing, there are two new string padding methods slated for publication in ES2017: `String#padStart` ((("String#padStart", id="sps7")))((("String#padEnd", id="spe7")))and `String#padEnd`. Using these methods, we wouldn't have to implement something like `indent` in the previous code snippet. When performing string manipulation, we often want to pad a string so that it's formatted consistently with a style we have in mind. This can be useful when formatting numbers, currency, HTML, and in a variety of other cases usually involving monospaced text.
 
 Using `padStart`, we will ((("padStart")))specify the desired length for the target string and the padding string, which defaults to a single space character. If the original string is at least as long as the specified length, `padStart` will result in a null operation, returning the original string unchanged.
 
