@@ -1270,7 +1270,7 @@ We could wrap those base-16 values in `'\u{codePoint}'` and voilá: you'd get th
 
 ==== String.fromCodePoint
 
-This ((("String#codePointAt", startref="scpa7")))((("String.fromCodePoint")))((("Unicode", "StringcodePointAtx", startref="u7scpa")))((("Unicode", "String.fromCodePoint")))method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
+This ((("String#codePointAt", startref="scpa7")))((("String.fromCodePoint")))((("Unicode", "String#codePointAt", startref="u7scpa")))((("Unicode", "String.fromCodePoint")))method takes in a number and returns a code point. Note how I can use the `0x` prefix with the terse base-16 code points we got from `String#codePointAt` moments ago.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">String.fromCodePoint(0x1f40e)
@@ -1345,7 +1345,7 @@ The last Unicode-related method we'll be addressing is `.normalize`.
 
 ==== String#normalize
 
-There are ((("Stringnormalizex")))((("Unicode", "Stringnormalizex")))different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
+There are ((("String#normalize")))((("Unicode", "String#normalize")))different ways of representing strings that look identical to humans even though their code points differ. Consider the following example, where two seemingly identical strings aren't deemed equal by any JavaScript runtime.
 
 [source,javascript]
 ----
@@ -1572,7 +1572,7 @@ hasSameUserAndPassword('root:pF6GGlyPhoy1!9i') // <- false
 
 The `\k<groupName>` reference can be used in tandem with numbered references, but the latter are better avoided when already using named references.
 
-Lastly, named groups can be referenced from the replacement passed to `String#replace`. In ((("Stringreplacex")))the next code snippet we use `String#replace` and named groups to change an American date string to use Hungarian formatting.
+Lastly, named groups can be referenced from the replacement passed to `String#replace`. In ((("String#replace")))the next code snippet we use `String#replace` and named groups to change an American date string to use Hungarian formatting.
 
 [source,javascript]
 ----
