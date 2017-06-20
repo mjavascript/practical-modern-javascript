@@ -63,7 +63,7 @@ We could run `_app.js_` in its current state through the CLI for Node.js, `node`
 After installing https://mjavascript.com/out/node[Node.js], you'll be able to use the `node` program in your terminal.((("Node.js")))
 ====
 
-The `require` function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of `require` is sometimes leveraged to dynamically `require` different modules that conform to one interface. As an example, let's conjure up a _templates_ directory with a number of view template functions. Our templates will take a model and return an HTML string.
+The `require` function ((("require")))in CJS can be treated dynamically, just like any other JavaScript function. This aspect of `require` is sometimes leveraged to dynamically `require` different modules that conform to one interface. As an example, let's conjure up a _templates_ directory with a number of view template functions. Our templates will take a model and return an HTML string.
 
 The template found in the following code snippet renders an item of a grocery shopping list by reading its attributes from a `model` object.
 
@@ -132,7 +132,7 @@ image::images/pmjs_0802.png["Printing a grocery shopping list"]
 
 In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a `model` object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the _item.js_ templating function, and joining their HTML representations with newlines.
 
-Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` function that could render any template, we could easily do that, thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls don't necessarily need to be on the top level of a module. Calls to `require` can be anywhere, even embedded within other functions.
+Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` ((("render")))function that could render any template, we could easily do that thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls don't necessarily need to be on the top level of a module. Calls to `require` ((("require")))can be anywhere, even embedded within other functions.
 
 [source,javascript]
 ----
@@ -169,7 +169,7 @@ Moving on, you'll notice that ES6 modules are somewhat influenced by CommonJS. I
 
 === JavaScript Modules
 
-As we explored the CommonJS module system, you might've noticed how the API is simple but powerful and flexible. ES6 modules offer an even simpler API that's almost as powerful at the expense of some flexibility.
+As ((("ES6 modules", id="esm8")))we explored the CommonJS module system, you might've noticed how the API is simple but powerful and flexible. ES6 modules offer an even simpler API that's almost as powerful at the expense of some flexibility.
 
 ==== Strict Mode
 
