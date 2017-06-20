@@ -915,9 +915,9 @@ JavaScript classes are less verbose than their prototype-based equivalents. Clas
 
 Statically typed languages typically offer and enforce the use of classes.footnote:[An exception should be made for most functional programming languages.] In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using plain objects.
 
-Plain objects are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON, and they're more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
+Plain objects ((("objects", "plain")))are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON, and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
 
-Proxies empower many previously unavailable use cases, but we need to tread lightly. Solutions that involve a `Proxy` object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
+Proxies ((("proxies", id="p9")))empower many previously unavailable use cases, but we need to tread lightly. Solutions that involve a `Proxy` object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
 
 There may indeed be cases where using a `Proxy` is warranted, particularly when it comes to developer tooling meant for development environments, where a high degree of code introspection is desirable and complexity is hidden away in the developer tool's codebase. Using `Proxy` in application-level codebases is easily avoided, and leads to less enigmatic code.
 
@@ -929,7 +929,7 @@ As such, always prefer boring, static, and declarative code over smart and elega
 
 Abstractions are costly. Once an abstraction is in place, it is often hard to go back and eliminate it. If an abstraction is created too early, it might not cover all common use cases, and we may end up having to handle special cases separately.
 
-When we prefer boring code, patterns flourish gradually and naturally. Once a pattern emerges, then we can decide whether an abstraction is warranted and refactor our code fittingly. A time-honed well-placed abstraction is likely to cover more use cases than it might have covered if we had gone for an abstraction as soon as we had two or three functionally comparable pieces of code.
+When we prefer boring code, patterns flourish gradually and naturally. Once a pattern emerges, then we can decide whether an abstraction is warranted and refactor our code fittingly. A time-honed well-placed abstraction is likely to cover more use cases than it might have covered if we had gone for an abstraction as soon as we had two or three functionally comparable pieces of ((("proxies", startref="p9")))code.
 
 [[asynchronous_code_flows]]
 === Asynchronous Code Flows
