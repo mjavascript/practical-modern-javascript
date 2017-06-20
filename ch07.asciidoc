@@ -1066,7 +1066,7 @@ The `padEnd` method ((("padEnd")))has a similar API, but it adds the padding at 
 '1.23'.padEnd(7, 'abcdef') // <- '1.23abc'
 ----
 
-At the time of this writing, there's a proposal for string trimming in stage 2, containing the `String#trimStart` and `String#trimEnd` ((("StringtrimStartx")))((("StringtrimEndx")))methods. Using `trimStart` removes any whitespace from the beginning of a string, while using `trimEnd` ((("trimStart")))((("trimEnd")))removes any whitespace from the end of a string.
+At the time of this writing, there's a proposal for string trimming in stage 2, containing the `String#trimStart` and `String#trimEnd` ((("String#trimStart")))((("String#trimEnd")))methods. Using `trimStart` removes any whitespace from the beginning of a string, while using `trimEnd` ((("trimStart")))((("trimEnd")))removes any whitespace from the end of a string.
 
 [source,javascript]
 ----
@@ -1076,7 +1076,7 @@ At the time of this writing, there's a proposal for string trimming in stage 2, 
 // <- '   this should be right-aligned'
 ----
 
-Let's switch protocols and learn ((("StringpadStartx", startref="sps7")))((("StringpadEndx", startref="spe7")))((("strings", "padding and trimming", startref="s7pat")))about Unicode.
+Let's switch protocols and learn ((("String#padStart", startref="sps7")))((("String#padEnd", startref="spe7")))((("strings", "padding and trimming", startref="s7pat")))about Unicode.
 
 ==== Unicode
 
@@ -1126,7 +1126,7 @@ Luckily for us, in ES6 strings adhere to the iterable protocol. We can use the s
 
 ==== String.prototype[Symbol.iterator]
 
-Given ((("String.prototypex", id="spsi7")))((("strings", "splitting into code points", id="s7sicp")))((("Unicode", "String.prototypex", id="u7spsi")))the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
+Given ((("String.prototype[Symbol.iterator]", id="spsi7")))((("strings", "splitting into code points", id="s7sicp")))((("Unicode", "String.prototype[Symbol.iterator]", id="u7spsi")))the problems with looping by code units, the iterables produced by the string iterator yield code points instead.
 
 ++++
 <pre data-type="programlisting" data-code-language="javascript">for (const codePoint of '<img src="images/1f40e.png" alt="horse" data-emoji-embed="running horse" /><img src="images/1f471.png" alt="man" data-emoji-embed="smiling idiot" /><img src="images/2764.png" alt="heart" data-emoji-embed="heart" />') {
