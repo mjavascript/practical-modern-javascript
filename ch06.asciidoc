@@ -525,7 +525,7 @@ proxy._secretIngredient = 'salsa'
 // <- Error: Can't define private "_secretIngredient" property
 ----
 
-The `proxy` object is safely hiding `_secret` properties ((("_secret   properties")))behind a trap that guards them from definition through either `proxy[key] = value` or `Object.defineProperty(proxy, key, { value })`. If we factor in the previous traps we saw, we could prevent `_secret` properties from being read, written, queried, and ((("proxies", "defineProperty trap", startref="prox6defpt")))((("traps", "defineProperty trap", startref="t6defpt")))((("defineProperty trap", startref="defpt6")))created.
+The `proxy` object is safely hiding `_secret` properties ((("_secret   properties")))((("_secret   properties", primary-sortas="secret")))behind a trap that guards them from definition through either `proxy[key] = value` or `Object.defineProperty(proxy, key, { value })`. If we factor in the previous traps we saw, we could prevent `_secret` properties from being read, written, queried, and ((("proxies", "defineProperty trap", startref="prox6defpt")))((("traps", "defineProperty trap", startref="t6defpt")))((("defineProperty trap", startref="defpt6")))created.
 
 There's one more trap that can help conceal `_secret` properties.
 
