@@ -581,11 +581,11 @@ load()
 
 Using `await import()` makes dynamic module loading look and feel like static `import` statements. We need to watch out and remind ourselves that the modules are asynchronously loaded one by one, though.
 
-Keep in mind that `import` is function-like, but it has different semantics from regular functions: `import` is not a function definition, it can't be extended, it can't be assigned properties, and it can't be destructured. In this sense, `import()` falls in a similar category as the `super()` call that's available in class constructors.
+Keep in mind that `import` is function-like, but it has different semantics from regular functions: `import` is not a function definition, it can't be extended, it can't be assigned properties, and it can't be destructured. In this sense, `import()` falls in a similar category as the `super()` call that's available in class ((("dynamic import()", startref="di8")))((("ES6 modules", "dynamic import()", startref="esm8di")))constructors.
 
 === Practical Considerations for ES Modules
 
-When using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought-out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a `random` module with a locally scoped `calc` function, which computes a random number in the `[0, n)` range; and a public API with the `range` method, which computes a random number in the `[min, max]` range.
+When ((("ES6 modules", "considerations for", id="esm8cf")))using a module system, any module system, we gain the ability of explicitly publishing an API while keeping everything that doesn't need to be public in the local scope. Perfect information hiding like this is a sought-out feature that was previously hard to reproduce: you'd have to rely on deep knowledge of JavaScript scoping rules, or blindly follow a pattern inside which you could hide information, as shown next. In this case, we create a `random` module with a locally scoped `calc` function, which computes a random number in the `[0, n)` range; and a public API with the `range` method, which computes a random number in the `[min, max]` range.
 
 [source,javascript]
 ----
@@ -596,7 +596,7 @@ const random = (function() {
 })()
 ----
 
-Compare that to the following piece of code, used in an ESM module called `random`. The Immediately Invoked Function Expression (IIFE) wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
+Compare that to the following piece of code, used in an ESM module called `random`. The immediately-invoking function expression (IIFE) (((" IIFE (immediately-invoking  function  expression)")))wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
 
 [source,javascript]
 ----
@@ -607,7 +607,7 @@ export { range }
 
 While we don't have the problem of having to wrap our modules in an IIFE anymore, we still have to be careful about how we define, test, document, and use each module.
 
-Deciding what constitutes a module is difficult. A lot of factors come into play, some of which I've outlined in the form of questions below:
+Deciding what constitutes a module is difficult. A lot of factors come into ((("ES6 modules", "defining")))play, some of which I've outlined in the form of questions below:
 
 - Is it highly complex?
 - Is it too large?
@@ -636,6 +636,7 @@ We'll plunge deeper into proper module design, effective module interaction, and
 
 Browsers are only scratching the surface of native JavaScript modules. At the time of this writing, some browsers already implement `import` and `export` statements. Some browsers have already implemented `<script type='module'>`, enabling them to consume modules when specifying the `module` script type. The module loader specification isn't finalized yet, and you can track its https://mjavascript.com/out/loader[current status].
 
-Meanwhile, Node.js hasn't yet shipped a working implementation of the JavaScript module system. Given that JavaScript ecosystem tooling relies on node, it's not yet clear how cross-compatibility will be attained. The dilemma of how to know whether a file is written in CJS or ESM is what's delaying a working implementation. A proposal to infer whether a file was ESM based on the presence of at least one `import` or `export` statement was abandoned, and it seems like the current course of action is to introduce a new file extension specifically tailored toward ESM modules. There is quite a bit of nuance given the variety of use cases and platforms Node.js runs on, making it tough to arrive at a solution that remains elegant, performant, and correct for every use case.
+Meanwhile, Node.js hasn't yet shipped a working implementation of the JavaScript module system. Given that JavaScript ecosystem tooling relies on node, it's not yet clear how cross-compatibility will be attained. The dilemma of how to know whether a file is written in CJS or ESM is what's delaying a working implementation. A proposal to infer whether a file was ESM based on the presence of at least one `import` or `export` statement was abandoned, and it seems like the current course of action is to introduce a new file extension specifically tailored toward ESM modules. There is quite a bit of nuance given the variety of use cases and platforms Node.js runs on, making it tough to arrive at a solution that remains elegant, performant, and correct for ((("ES6 modules", startref="esm8")))((("ES6 modules", "considerations for", startref="esm8cf")))every use case.
+
 
 With that said, let's turn over to the last chapter, on leveraging all of these new language features and syntax effectively.
