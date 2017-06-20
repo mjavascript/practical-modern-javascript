@@ -2076,7 +2076,7 @@ items.copyWithin(6, 1, 3)
 
 Reasoning about `Array#copyWithin` is hard. Let's break it down.
 
-If we consider that the items to be copied were taken from the `[start, end)` range, then we could express that ((("Arrayslicex")))using an `Array#slice` call. These are the items that were pasted at the `target` position. We can use `.slice` to grab the copy.
+If we consider that the items to be copied were taken from the `[start, end)` range, then we could express that ((("Array#slice")))using an `Array#slice` call. These are the items that were pasted at the `target` position. We can use `.slice` to grab the copy.
 
 [source,javascript]
 ----
@@ -2085,7 +2085,7 @@ const copy = items.slice(1, 3)
 // <- [2, 3]
 ----
 
-We could also consider the pasting part of the operation as an advanced usage of `Array#splice`. The ((("Arraysplicex")))next code snippet does just that, passing the paste position to splice, telling it to remove as many items as we want to copy, and inserting the pasted items. Note that we're using the spread operator so that elements are inserted individually, and not as an array, through `.splice`.
+We could also consider the pasting part of the operation as an advanced usage of `Array#splice`. The ((("Array#splice")))next code snippet does just that, passing the paste position to splice, telling it to remove as many items as we want to copy, and inserting the pasted items. Note that we're using the spread operator so that elements are inserted individually, and not as an array, through `.splice`.
 
 [source,javascript]
 ----
@@ -2114,7 +2114,7 @@ function copyWithin(
 }
 ----
 
-The example we've been trying so far would work just as well with our custom `copyWithin` ((("ArraycopyWithinx", startref="acw7")))function.
+The example we've been trying so far would work just as well with our custom `copyWithin` ((("Array#copyWithin", startref="acw7")))function.
 
 [source,javascript]
 ----
@@ -2161,7 +2161,7 @@ new Array(3).fill(map)
 
 ==== Array#find and Array#findIndex
 
-The `Array#find` method ((("Arrayfindx")))((("ArrayfindIndexx")))runs a `callback` for each `item` in an array until the first one that returns `true`, and then returns that `item`. The method follows the signature of `(callback(item, i, array), context)` that's also present in `Array#map`, `Array#filter`, and others. You can think of `Array#find` as a version of `Array#some` that returns the matching element instead of just `true`.
+The `Array#find` method ((("Array#find")))((("Array#findIndex")))runs a `callback` for each `item` in an array until the first one that returns `true`, and then returns that `item`. The method follows the signature of `(callback(item, i, array), context)` that's also present in `Array#map`, `Array#filter`, and others. You can think of `Array#find` as a version of `Array#some` that returns the matching element instead of just `true`.
 
 [source,javascript]
 ----
