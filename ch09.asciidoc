@@ -1019,7 +1019,7 @@ Promise
   .then(x => x * 2)
 ----
 
-When we use an `await` ((("async / await")))expression, the expression on its righthand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise--coerced or otherwise--has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
+When we use an `await` ((("async/await")))expression, the expression on its righthand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise--coerced or otherwise--has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
 
 [source,javascript]
 ----
