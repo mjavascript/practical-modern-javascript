@@ -1652,7 +1652,7 @@ Check out this exhaustive ((("Unicode", "supported Unicode properties and values
 
 ==== Lookbehind Assertions
 
-JavaScript has had positive ((("lookahead assertions")))((("Lookbehind assertions", id="la7")))lookahead assertions for a long time. That feature allows us to match an expression but only if it's followed by another expression. These assertions are expressed as `(?=…)`. Regardless of whether a lookahead assertion matches, the results of that match are discarded and no characters of the input string are consumed.
+JavaScript has had positive ((("lookahead assertions")))((("lookbehind assertions", id="la7")))lookahead assertions for a long time. That feature allows us to match an expression but only if it's followed by another expression. These assertions are expressed as `(?=…)`. Regardless of whether a lookahead assertion matches, the results of that match are discarded and no characters of the input string are consumed.
 
 The following example uses a positive lookahead to test whether an input string has a sequence of letters followed by `.js`, in which case it returns the filename without the `.js` part.
 
@@ -1702,7 +1702,7 @@ getDollarAmount('$12.34') // <- '12.34'
 getDollarAmount('€12.34') // <- null
 ----
 
-On the other hand, a negative lookbehind could be used to match numbers that aren't preceded by a ((("Lookbehind assertions", startref="la7")))dollar sign.
+On the other hand, a negative lookbehind could be used to match numbers that aren't preceded by a ((("lookbehind assertions", startref="la7")))dollar sign.
 
 [source,javascript]
 ----
