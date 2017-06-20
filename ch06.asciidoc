@@ -1018,7 +1018,7 @@ proxy.setPrototypeOf(proxy, base)
 // <- Error: Changing the prototype is forbidden
 ----
 
-In these cases, it's best to fail with an exception so that consumers can understand what is going on. By explicitly disallowing prototype changes, the consumer can start looking elsewhere. If we didn't throw an exception, the consumer could still eventually learn that the prototype isn't changing through debugging. You might as well save them ((("setPrototypeOf trap", startref="sptot6")))((("traps", "setPrototypeOf", startref="t6spto")))((("proxies", "setPrototypeOf trap", startref="prox6sptot")))from that pain!
+In these cases, it's best to fail with an exception so that consumers can understand what is going on. By explicitly disallowing prototype changes, the consumer can start looking elsewhere. If we didn't throw an exception, the consumer could still eventually learn that the prototype isn't changing through debugging. You might as well save them ((("setPrototypeOf trap", startref="sptot6")))((("traps", "setPrototypeOf trap", startref="t6spto")))((("proxies", "setPrototypeOf trap", startref="prox6sptot")))from that pain!
 
 ==== preventExtensions Trap
 
