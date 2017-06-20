@@ -1,7 +1,7 @@
 [[leveraging-ecmascript-collections]]
 == Leveraging ECMAScript Collections
 
-JavaScript data structures ((("ECMAScript", id="ecmas5")))are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map npm package names to their metadata, as shown next.
+JavaScript data structures ((("ECMAScript (ES)", id="ecmas5")))are flexible enough that we're able to turn any object into a hash-map, where we map string keys to arbitrary values. For example, one might use an object to map npm package names to their metadata, as shown next.
 
 [source,javascript]
 ----
@@ -85,7 +85,7 @@ Let's plunge into their practical usage and inner workings.
 
 === Using ES6 Maps
 
-ES6 ((("ECMAScript", "using ES6 maps", id="ecma5ues6m")))((("ES6 maps", id="es5m")))introduces built-in collections, such as `Map`, meant to alleviate implementation of patterns such as those we outlined earlier when building our own hash-map from scratch. `Map` ((("Map", seealso="ES6 maps")))is a key/value data structure in ES6 that more naturally and efficiently lends itself to creating maps in JavaScript without the need for object literals.
+ES6 ((("ECMAScript (ES)", "using ES6 maps", id="ecma5ues6m")))((("ES6 maps", id="es5m")))introduces built-in collections, such as `Map`, meant to alleviate implementation of patterns such as those we outlined earlier when building our own hash-map from scratch. `Map` ((("Map", seealso="ES6 maps")))is a key/value data structure in ES6 that more naturally and efficiently lends itself to creating maps in JavaScript without the need for object literals.
 
 ==== First Look into ES6 Maps
 
@@ -333,7 +333,7 @@ map.forEach((value, key) => console.log(key, value))
 // <- { name: 'Kent' } 'is a person'
 ----
 
-Earlier, we brought up the ability of providing arbitrary object references as the key to a `Map` entry. Let's go into a concrete use case for that ((("ECMAScript", "using ES6 maps", startref="ecma5ues6m")))((("ES6 maps", startref="es5m")))API.
+Earlier, we brought up the ability of providing arbitrary object references as the key to a `Map` entry. Let's go into a concrete use case for that ((("ECMAScript (ES)", "using ES6 maps", startref="ecma5ues6m")))((("ES6 maps", startref="es5m")))API.
 
 ==== Hash-Maps and the DOM
 
@@ -690,4 +690,4 @@ function dommy(target) {
 
 Whatever the reason, whenever we want to keep flags associated with a DOM element without visibly altering that DOM element, `WeakSet` is probably the way to go. If instead you wanted to associate arbitrary data instead of a simple flag, then maybe you should use `WeakMap`. When it comes to deciding whether to use `Map`, `WeakMap`, `Set`, or `WeakSet`, there's a series of questions you should ask yourself. For instance, if you need to keep object-related data, then you should know to look at weak collections. If your only concern is whether something is present, then you probably need a `Set`. If you are looking to create a cache, you should probably ((("WeakSet", startref="ws5")))use a `Map`.
 
-Collections in ES6 provide built-in solutions for common use cases that were previously cumbersome to implement by users, such as the case of `Map`, or hard to execute correctly, as in the case of `WeakMap`, where we allow references to be released if they're no longer interesting, avoiding memory ((("ES6 sets", startref="ess5")))((("Set", startref="set5")))((("ECMAScript", startref="ecmas5")))leaks.
+Collections in ES6 provide built-in solutions for common use cases that were previously cumbersome to implement by users, such as the case of `Map`, or hard to execute correctly, as in the case of `WeakMap`, where we allow references to be released if they're no longer interesting, avoiding memory ((("ES6 sets", startref="ess5")))((("Set", startref="set5")))((("ECMAScript (ES)", startref="ecmas5")))leaks.
