@@ -301,7 +301,7 @@ console.log(map[Symbol.iterator] === map.entries)
 // <- true
 ----
 
-There are two other `Map` iterators you can leverage: `.keys()` (((".keys()", primary-sortas="keys")))and `.values()`. (((".values()", primary-sortas="values")))The first enumerates keys in a map while the second enumerates values, as opposed to `.entries()`, which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
+There are two other `Map` iterators you can leverage: `.keys()` (((".keys()", primary-sortas="keys")))(((".keys()")))and `.values()`. (((".values()", primary-sortas="values")))The first enumerates keys in a map while the second enumerates values, as opposed to `.entries()`, which enumerates key/value pairs. The following snippet illustrates the differences between all three methods.
 
 [source,javascript]
 ----
@@ -544,9 +544,9 @@ console.log([...set.entries()])
 // <- [['a', 'a'], ['b', 'b'], ['c', 'c']]
 ----
 
-The `Set#entries` method ((("Setentriesx")))is consistent with `Map#entries`, which ((("Mapentriesx")))returns an iterator of `[key, value]` pairs. Using `Set#entries` as the default iterator for `Set` collections wouldn't be valuable, since it's used in `for..of`, when spreading a `set`, and in `Array.from`. In all of those cases, you probably want to iterate over a sequence of values in the set, but not a sequence of `[value, value]` pairs.
+The `Set#entries` method ((("Set#entries")))is consistent with `Map#entries`, which ((("Map#entries")))returns an iterator of `[key, value]` pairs. Using `Set#entries` as the default iterator for `Set` collections wouldn't be valuable, since it's used in `for..of`, when spreading a `set`, and in `Array.from`. In all of those cases, you probably want to iterate over a sequence of values in the set, but not a sequence of `[value, value]` pairs.
 
-As demonstrated next, the default `Set` iterator ((("Setvaluesx")))uses `Set#values`, as opposed to `Map`, which defined its iterator ((("Mapxentriesx")))as `Map#entries`.
+As demonstrated next, the default `Set` iterator ((("Set#values")))uses `Set#values`, as opposed to `Map`, which defined its iterator ((("Map#entries")))as `Map#entries`.
 
 [source,javascript]
 ----
