@@ -883,7 +883,7 @@ Note that the spread operator isn't limited to arrays and `arguments`. The sprea
 [role="pagebreak-before"]
 .Shifting and Spreading
 ****
-When you want to extract an element or two from the beginning of an array, the common approach is to (((".shift()", primary-sortas="shift")))use `.shift`. While functional, the following snippet of code can be hard to understand at a glance, because it uses `.shift` twice to grab a different item from the beginning of the `list` each time. The focus is, like in many other pre-ES6 situations, placed on getting the language to do what we want.
+When you want to extract an element or two from the beginning of an array, the common approach is to (((".shift()", primary-sortas="shift")))(((".shift()")))use `.shift`. While functional, the following snippet of code can be hard to understand at a glance, because it uses `.shift` twice to grab a different item from the beginning of the `list` each time. The focus is, like in many other pre-ES6 situations, placed on getting the language to do what we want.
 
 [source,javascript]
 ----
