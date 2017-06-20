@@ -1004,7 +1004,7 @@ function* integers(value = 0) {
 
 Not only is the generator code shorter, but it's also far more readable. The fact that it produces an infinite sequence becomes immediately obvious due to the `while` loop. The iterable requires us to understand that the sequence is infinite because the code never returns an element with the `done: true` flag. Setting the seed `value` is more natural and doesn't involve wrapping the object in a function that receives the initial parameters.
 
-Promises were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows. Async functions present an elegant solution to this problem, where we can describe the same promise-based code using `await` expressions.
+Promises ((("promises")))were originally hailed as a cure to callback hell ailments. Programs that rely heavily on promises can fall into the callback hell trap when we have deeply nested asynchronous series flows. Async functions present an elegant solution to this problem, where we can describe the same promise-based code using `await` expressions.
 
 Consider the following piece of code.
 
@@ -1017,7 +1017,7 @@ Promise
   .then(x => x * 2)
 ----
 
-When we use an `await` expression, the expression on its righthand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise--coerced or otherwise--has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
+When we use an `await` ((("async / await")))expression, the expression on its righthand side is coerced into a promise. When an `await` expression is reached, the async function will pause execution until the promise--coerced or otherwise--has been settled. When the promise is fulfilled, then execution in the async function continues, but if the promise is rejected then the rejection will bubble up to the promise returned by the async function call, unless that rejection is suppressed by a `catch` handler.
 
 [source,javascript]
 ----
