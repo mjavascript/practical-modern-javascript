@@ -1137,7 +1137,7 @@ Given ((("String.prototype[Symbol.iterator]", id="spsi7")))((("strings", "splitt
 }</pre>
 ++++
 
-Measuring the length of a string in terms of code points, as we saw earlier, is impossible with `String#length`, because ((("Stringlengthx")))it counts code units instead. We can, however, use an iterator to split the string into its code points, like we did in the `for..of` example.
+Measuring the length of a string in terms of code points, as we saw earlier, is impossible with `String#length`, because ((("String#length")))it counts code units instead. We can, however, use an iterator to split the string into its code points, like we did in the `for..of` example.
 
 We could use the spread operator, which relies on the iterator protocol, to split a string into an array made up of its conforming code points and then pull that array's `length`, getting the correct code point count, as seen next.
 
@@ -1182,7 +1182,7 @@ Attempts to näively figure out the actual length by counting code points prove 
 // <- 16, should be 11
 ----
 
-As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iterator.pass:[<span data-type="footnote" id="unicode-problem">I recommend you read <a href="https://mjavascript.com/out/unicode-mathias">"JavaScript has a Unicode problem"</a> from Mathias Bynens. In the article, Mathias analyzes JavaScript's relationship with Unicode.</span>] In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate ((("String.prototypex", startref="spsi7")))((("strings", "splitting into code points", startref="s7sicp")))((("Unicode", "String.prototypex", startref="u7spsi")))string length.
+As Unicode expert Mathias Bynens points out, splitting by code points isn't enough. Unlike surrogate pairs like the emojis we've used in our earlier examples, other grapheme clusters aren't taken into account by the string iterator.pass:[<span data-type="footnote" id="unicode-problem">I recommend you read <a href="https://mjavascript.com/out/unicode-mathias">"JavaScript has a Unicode problem"</a> from Mathias Bynens. In the article, Mathias analyzes JavaScript's relationship with Unicode.</span>] In those cases we're out of luck, and have to fall back to regular expressions or utility libraries to correctly calculate ((("String.prototype[Symbol.iterator]", startref="spsi7")))((("strings", "splitting into code points", startref="s7sicp")))((("Unicode", "String.prototype[Symbol.iterator]", startref="u7spsi")))string length.
 
 ==== A Proposal to Split Grapheme Segments
 
