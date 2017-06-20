@@ -462,7 +462,7 @@ There is an ((("symbols", "for DOM element mapping", startref="sym3fdomem")))ES6
 
 ===== Defining protocols through symbols
 
-Earlier, ((("symbols", "defining protocols through", id="sym3dpt")))((("protocols", "defining through symbols", id="p3dts")))we posited that a use case for symbols is to define protocols. A protocol is a communication contract or convention that defines behavior. In less abstract terms, a library could use a symbol that could then be used by objects that adhere to a convention from the library.
+Earlier, ((("symbols", "defining protocols through", id="sym3dpt")))((("protocols", id="p3dts")))we posited that a use case for symbols is to define protocols. A protocol is a communication contract or convention that defines behavior. In less abstract terms, a library could use a symbol that could then be used by objects that adhere to a convention from the library.
 
 Consider the following bit of code, where we use the special `toJSON` method to determine the object serialized by `JSON.stringify`. As you can see, stringifying the `character` object produces a serialized version of the object returned by `toJSON`.
 
@@ -523,7 +523,7 @@ When it comes to the merits of using a symbol to describe behavior, as opposed t
 
 A benefit of defining behavior via symbols is that you could augment and customize the behavior of objects without changing anything other than the value assigned to a symbol property and perhaps the internal implementation of the piece of code that leverages that behavior. The benefit of using symbols over properties is that you're not subject to name clashes when new language features are introduced.
 
-Besides local symbols, there's also a global symbol registry, accessible from across code realms. Let's look into what ((("symbols", "use cases for", startref="sym3ucf")))((("symbols", "defining protocols through", startref="sym3dpt")))((("protocols", "defining through symbols", startref="p3dts")))that means.
+Besides local symbols, there's also a global symbol registry, accessible from across code realms. Let's look into what ((("symbols", "use cases for", startref="sym3ucf")))((("symbols", "defining protocols through", startref="sym3dpt")))((("protocols", startref="p3dts")))that means.
 
 ==== Global Symbol Registry
 
