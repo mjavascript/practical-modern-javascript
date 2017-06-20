@@ -847,7 +847,7 @@ const colors = {
 }
 ----
 
-The following code snippet implements an iterable that produces a `[key, value]` sequence for each color in the `colors` map. Given that that's assigned to the `Symbol.iterator` ((("Symbol.iterator", id="si4")))property, we'd be able to go over the list with minimal effort.
+The following code snippet implements an iterable that produces a `[key, value]` sequence for each color in the `colors` map. Given that that's assigned to the `Symbol.iterator` ((("Symbol.iterator", id="si4x")))property, we'd be able to go over the list with minimal effort.
 
 [source,javascript]
 ----
@@ -901,7 +901,7 @@ function keyValueIterable(target) {
 }
 ----
 
-We could then call `keyValueIterable` passing in the `colors` object, turning `colors` into an iterable object. You could in fact use `keyValueIterable` on any objects where you want to iterate over key/value pairs, as the iteration behavior doesn't make assumptions about the object. Once we've attached a `Symbol.iterator` behavior, we'll be able to treat the object as an iterable. ((("Symbol.iterator", startref="si4")))In the next code snippet, we iterate over the key/value pairs and print only the color codes.
+We could then call `keyValueIterable` passing in the `colors` object, turning `colors` into an iterable object. You could in fact use `keyValueIterable` on any objects where you want to iterate over key/value pairs, as the iteration behavior doesn't make assumptions about the object. Once we've attached a `Symbol.iterator` behavior, we'll be able to treat the object as an iterable. ((("Symbol.iterator", startref="si4x")))In the next code snippet, we iterate over the key/value pairs and print only the color codes.
 
 [source,javascript]
 ----
