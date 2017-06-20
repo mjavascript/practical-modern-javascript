@@ -969,13 +969,13 @@ Promises are a bit more expensive than callbacks in terms of commitment, because
 
 Committing to promises isn't inherently bad, however; it's merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators, and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
 
-Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the language.
+Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the ((("promises", startref="prom9")))language.
 
-We could use iterators to lazily describe sequences that don't necessarily need to be finite. Further, their asynchronous counterpart could be used to describe sequences that require out-of-band processing, such as `GET` requests, to produce elements. Those sequences can be consumed by using a `for await..of` loop, hiding away the complexity of their asynchronous nature.
+We could use ((("iterators", seealso="iteration protocol")))iterators to lazily describe sequences that don't necessarily need to be finite. Futher, their asynchronous counterpart could be used to describe sequences that require out-of-band processing, such as `GET` requests, to produce elements. Those sequences can be consumed by using a `for await..of` loop, hiding away the complexity of their asynchronous nature.
 
 An iterator is a useful way of describing how an object is iterated to produce a sequence. When there isn't an object to describe, generators offer a way of describing standalone sequences. Implementing an iterator is the ideal way of describing how a `Movie` object should be iterated, perhaps using `Symbol.asyncIterator` and fetching information about each actor and their roles for every credited actor in a movie. Without the context of a `Movie` object, however, such an iterator would make more sense as a generator.
 
-Another case where generators are useful is infinite sequences. Consider the following iterator, where we produce an infinite stream of integer numbers.
+Another case where ((("generators")))generators are useful are infinite sequences. Consider the following iterator, where we produce an infinite stream of integer numbers.
 
 [source,javascript]
 ----
