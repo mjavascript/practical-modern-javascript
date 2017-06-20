@@ -281,9 +281,10 @@ When it comes to object keys, we're out of luck. Attempting to use a template li
 const alfred = { `suit kind`: `cat` }
 ----
 
-Object property keys accept value types, which are then cast into plain strings, but template literals aren't value types, and thus it's not possible to use them as property keys.
+Object property keys ((("object property keys")))accept value types, which are then cast into plain strings, but template literals aren't value types, and thus it's not possible to use them as property keys.
 
-As you might recall from <<es6-essentials>>, ES6 introduces computed property names, as seen in the following code snippet. In a computed property key we can use any expression we want to produce the desired property key, including template literals.
+
+As you might recall from <<es6-essentials>>, ES6 introduces computed property names, as seen in the following code snippet. In a ((("computed property keys")))computed property key we can use any expression we want to produce the desired property key, including template literals.
 
 [source,javascript]
 ----
@@ -313,7 +314,7 @@ Attempts to import a module using template literals will also result in a syntax
 import { SayHello } from `./World`
 ----
 
-Strict mode directives have to be single- or double-quoted strings. As of this writing, there's no plan to allow template literals for `'use strict'` directives. The following piece of code does not result in a syntax error, but it also does not enable strict mode. This is the biggest caveat when heavily using template literals.
+Strict mode directives have to be single- or double-quoted strings. As of this writing, there's no plan to allow template literals for `'use strict'` directives. The following piece of code does not result in a syntax error, but it also does not enable ((("strict mode")))strict mode. This is the biggest caveat when heavily using template literals.
 
 [source,javascript]
 ----
@@ -324,7 +325,7 @@ Strict mode directives have to be single- or double-quoted strings. As of this w
 
 Lastly, it could be argued that turning an existing codebase from single-quoted strings to template literals would be error-prone and a waste of time that could be otherwise used to develop features or fix bugs.
 
-Fortunately, we have `eslint` at our disposal, as discussed in <<ecmascript-and-the-future-of-javascript>>. To switch our codebase to backticks by default, we can set up an _.eslintrc.json_ configuration similar to the one in the following piece of code. Note how we turn the `quotes` rule into an error unless the code uses backticks.
+Fortunately, we ((("ESLint")))have `eslint` at our disposal, as discussed in <<ecmascript-and-the-future-of-javascript>>. To switch our codebase to backticks by default, we can set up an _.eslintrc.json_ configuration similar to the one in the following piece of code. Note how we turn the `quotes` rule into an error unless the code uses backticks.
 
 [source,json]
 ----
@@ -357,7 +358,7 @@ Once we run the following command, we're ready to start experimenting with a cod
 » npm run lint
 ----
 
-In conclusion, there are trade-offs to consider when using template literals. You're invited to experiment with the backtick-first approach and gauge its merits. Always prefer convenience, over convention, over configuration.
+In conclusion, there are trade-offs to consider when using template literals. You're invited to experiment with the backtick-first approach and gauge its merits. Always prefer convenience, over ((("template literals", startref="tl9")))((("template literals", "quotes and backticks", startref="tl9qab")))convention, over configuration.
 
 === Shorthand Notation and Object Destructuring
 
