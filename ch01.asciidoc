@@ -216,7 +216,7 @@ console.log(double(3))
 // <- 6
 ----
 
-Let's jump into a different kind of tool, the `eslint` code linter, which can help us establish a code quality baseline for our ((("transpilers", seealso="Babel", id="t1")))((("Babel", startref="b1")))applications.
+Let's jump into a different kind of tool, the `eslint` code linter, which can help us establish a code quality baseline for our ((("transpilers", seealso="Babel", startref="t1")))((("Babel", startref="b1")))applications.
 
 ==== Code Quality and Consistency with ESLint
 
