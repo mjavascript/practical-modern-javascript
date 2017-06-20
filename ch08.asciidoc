@@ -42,7 +42,7 @@ console.log(union([1, 2], 2))
 
 [WARNING]
 ====
-We can omit the file extension as long as it's _.js_ or _.json_, but this is discouraged.
+We can omit the ((("CommonJS", "file extension use")))file extension as long as it's _.js_ or _.json_, but this is discouraged.
 
 While the file extension is optional for `require` statements and when using the `node` CLI, we should strongly consider getting into the habit of including it nevertheless. https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-module-system[Browser implementations of ESM] won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. 
 ====
@@ -171,7 +171,7 @@ As we explored the CommonJS module system, you might've noticed how the API is s
 
 ==== Strict Mode
 
-In the ES6 module system, strict mode is turned on by default. Strict mode is a featurepass:[<span data-type="footnote">Read this comprehensive article about <a href="https://mjavascript.com/out/strict-mode">strict mode on Mozilla's MDN</a>.</span>] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can enable optimizations, making JavaScript runtime faster and safer.
+In the ((("ES6 modules", "strict mode", id="es8sm")))((("strict mode", id="sm8")))ES6 module system, strict mode is turned on by default. Strict mode is a featurepass:[<span data-type="footnote">Read this comprehensive article about <a href="https://mjavascript.com/out/strict-mode">strict mode on Mozilla's MDN</a>.</span>] that disallows bad parts of the language, and turns some silent errors into loud exceptions being thrown. Taking into account these disallowed features, compilers can enable optimizations, making JavaScript runtime faster and safer.
 
 - Variables must be declared
 - Function parameters must have unique names
@@ -187,7 +187,7 @@ In the ES6 module system, strict mode is turned on by default. Strict mode is a 
 - `arguments.caller` is no longer supported, throws a `TypeError`
 - Context passed as `this` in method invocations is not "boxed" into an `Object`
 - No longer able to use `fn.caller` and `fn.arguments` to access the JavaScript stack
-- Reserved words (e.g., `protected`, `static`, `interface`, etc.) cannot be bound
+- Reserved words (e.g., `protected`, `static`, `interface`, etc.) cannot be ((("ES6 modules", "strict mode", startref="es8sm")))((("strict mode", startref="sm8")))bound
 
 Let's now dive into the `export` statement.
 
