@@ -975,7 +975,7 @@ console.log(proxy)
 // <- { 0: 'first', 1: 'second', length: 2 }
 ----
 
-Conversely to the `getPrototypeOf` trap, ((("getPrototypeOf trap", startref="gptot6")))((("traps", "getPrototypeOf", startref="t6gpto")))((("proxies", "getPrototypeOf trap", startref="prox6gptot")))there's `setPrototypeOf`.
+Conversely to the `getPrototypeOf` trap, ((("getPrototypeOf trap", startref="gptot6")))((("traps", "getPrototypeOf trap", startref="t6gpto")))((("proxies", "getPrototypeOf trap", startref="prox6gptot")))there's `setPrototypeOf`.
 
 ==== setPrototypeOf Trap
 
