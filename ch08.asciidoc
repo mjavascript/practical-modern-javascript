@@ -56,9 +56,11 @@ We could run `_app.js_` in its current state through the CLI for Node.js, `node`
 # [1, 2]
 ----
 
+
+
 [NOTE]
 ====
-After installing https://mjavascript.com/out/node[Node.js], you'll be able to use the `node` program in your terminal.
+After installing https://mjavascript.com/out/node[Node.js], you'll be able to use the `node` program in your terminal.((("Node.js")))
 ====
 
 The `require` function in CJS can be treated dynamically, just like any other JavaScript function. This aspect of `require` is sometimes leveraged to dynamically `require` different modules that conform to one interface. As an example, let's conjure up a _templates_ directory with a number of view template functions. Our templates will take a model and return an HTML string.
