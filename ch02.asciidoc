@@ -43,7 +43,7 @@ function listen() {}
 var events = { listeners, listen }
 ----
 
-As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without diluting its meaning. In the following snippet, I reimplemented part of `localStorage`, a browser API for persistent storage, as an in-memory ponyfill. If it weren't for the shorthand syntax, the `storage` object would be more verbose to type out:
+As we'll further explore in the second part of the book, property value shorthands help de-duplicate the code we write without diluting its meaning. In the following snippet, I reimplemented part of `localStorage`, a browser API for persistent storage, as an in-memory ponyfillpass:[<span data-type="footnote" id="ponyfills">Like polyfills, <a href="https://mjavascript.com/out/ponyfills">ponyfills</a> are user-land implementations of features that aren't available in every JavaScript runtime. While polyfills try to patch the runtime environment so that it behaves as if the feature was indeed available on the runtime, ponyfills implement the missing functionality as standalone modules that don't pollute the runtime environment. This has the benefit of not breaking expectations third-party libraries (that don't know about your polyfill) may have about the environment.</span>]. If it weren't for the shorthand syntax, the `storage` object would be more verbose to type out:
 
 [source,javascript]
 ----
