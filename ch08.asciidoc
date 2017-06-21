@@ -133,7 +133,7 @@ image::images/pmjs_0802.png["Printing a grocery shopping list"]
 
 In the examples so far, we've written short modules that are only concerned with producing an HTML view after matching a `model` object with the corresponding view template. A simple API encourages reusability, which is why we're easily able to render the items for a list by mapping their models to the _item.js_ templating function, and joining their HTML representations with newlines.
 
-Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` ((("render")))function that could render any template, we could easily do that thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls don't necessarily need to be on the top level of a module. Calls to `require` ((("require")))can be anywhere, even embedded within other functions.
+Given that the views all have a similar API where they take a model and return an HTML string, we can treat them uniformly. If we wanted a `render` ((("render")))function that could render any template, we could easily do that, thanks to the dynamic nature of `require`. The next example shows how we can construct the path to a template module. An important distinction is how `require` calls don't necessarily need to be on the top level of a module. Calls to `require` ((("require")))can be anywhere, even embedded within other functions.
 
 [source,javascript]
 ----
@@ -409,7 +409,7 @@ We've now covered every way in which we can expose an API in ES6 modules. Let's 
 
 ==== import Statements
 
-We ((("ES6 modules", "import statements", id="esm8is")))((("import statements", id="is8")))can load a module from another one using `import` statements. The way modules are loaded is implementation-specifically; that is, it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
+We ((("ES6 modules", "import statements", id="esm8is")))((("import statements", id="is8")))can load a module from another one using `import` statements. The way modules are loaded is implementation-specific; that is, it's not defined by the specification. We can write spec-compliant ES6 code today while smart people figure out how to deal with module loading in browsers.
 
 Compilers like ((("Babel")))Babel are able to concatenate modules with the aid of a module system like CommonJS. That means `import` statements in Babel mostly follow the same semantics as `require` statements in CommonJS.
 
@@ -607,7 +607,7 @@ const random = (function() {
 })()
 ----
 
-Compare that to the following piece of code, used in an ESM module called `random`. The immediately-invoking function expression (IIFE) ((("IIFE (immediately invoking  function  expression)")))wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
+Compare that to the following piece of code, used in an ESM module called `random`. The Immediately Invoked Function Expression (IIFE) ((("IIFE (immediately invoking  function  expression)")))wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
 
 [source,javascript]
 ----
