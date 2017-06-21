@@ -7,9 +7,9 @@ pre, code { font-family: UbuntuMono, monospace, ArialUnicodeMS, Symbola }
 
 /* ----emoji handling (STYL-952) ----*/
 pre > img { 
-  margin-bottom: -3pt;
-  height: 8pt;
-  width: 8pt;
+  margin-bottom: -2pt;
+  height: 10pt;
+  width: 10pt;
 }
 
 .emoji {
