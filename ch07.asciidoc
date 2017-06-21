@@ -1638,15 +1638,14 @@ isNonGreekSymbol('π')
 
 When we need to match every Unicode decimal number symbol, and not just `[0-9]` like `\d` does, we could use `\p{Decimal_Number}` as shown next.
 
-[source,javascript]
-----
-function isDecimalNumber(input) {
+++++
+<pre data-type="programlisting" data-code-language="javascript">function isDecimalNumber(input) {
   const rdigits = /^\p{Decimal_Number}+$/u
   return rdigits.test(input)
 }
 isDecimalNumber('0x1d7cf0x1d7d00x1d7d10x1d7dc0x1d7dd0x1d7de0x1d7e90x1d7ea0x1d7eb0x1d7ec0x1d7ed0x1d7ee0x1d7ef0x1d7fa0x1d7fb0x1d7fc')
-// <- true
-----
+// <- true</pre>
+++++
 
 Check out this exhaustive ((("Unicode", "supported Unicode properties and values")))overview of https://mjavascript.com/out/unicode-property-list[supported Unicode properties and values].
 
