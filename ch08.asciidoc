@@ -607,7 +607,7 @@ const random = (function() {
 })()
 ----
 
-Compare that to the following piece of code, used in an ESM module called `random`. The Immediately Invoked Function Expression (IIFE) ((("IIFE (immediately invoking  function  expression)")))wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
+Compare that to the following piece of code, used in an ESM module called `random`. The Immediately Invoked Function Expression (IIFE) ((("IIFE (Immediately Invoked Function Expression)")))wrapper trick went away, along with the name for our module, which now resides in its filename. We've regained the simplicity from back in the day, when we wrote raw JavaScript inside plain HTML `<script>` tags.
 
 [source,javascript]
 ----
