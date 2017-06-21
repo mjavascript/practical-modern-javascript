@@ -8,14 +8,14 @@ pre, code { font-family: UbuntuMono, monospace, ArialUnicodeMS, Symbola }
 /* ----emoji handling (STYL-952) ----*/
 pre > img { 
   margin-bottom: -6pt;
-  height: 12pt;
-  width: 12pt;
+  height: 10pt;
+  width: 10pt;
 }
 
 .emoji {
-   margin-bottom: -6pt;
-  height: 12pt;
-  width: 12pt;
+  margin-bottom: 0pt;
+  height: 10pt;
+  width: 10pt;
 }
 
 
