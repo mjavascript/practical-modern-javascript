@@ -18,6 +18,12 @@ pre > img {
   width: 10pt;
 }
 
+/* Unicode numbers in ch07 (STYL-974) */
+span.unicode-nums 
+  { content: '\1D7CF\1D7D0\1D7D1\1D7DC\1D7DD\1D7DE\1D7E9\1D7EA\1D7EB\1D7EC\1D7ED\1D7EE\1D7EF\1D7FA\1D7FB\1D7FC';
+  color: #CC3300; 
+}
+
 
 /*--- This oneoff overrides the code in https://github.com/oreillymedia/animal_theme/blob/master/pdf/pdf.css---*/
 
