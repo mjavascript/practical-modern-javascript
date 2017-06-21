@@ -1643,7 +1643,7 @@ When we need to match every Unicode decimal number symbol, and not just `[0-9]` 
   const rdigits = /^\p{Decimal_Number}+$/u
   return rdigits.test(input)
 }
-isDecimalNumber('&#x1D7CF;&#x1D7D0;&#x1D7D1;&#x1D7DC;&#x1D7DD;&#x1D7DE;&#x1D7E9;&#x1D7EA;&#x1D7EB;&#x1D7EC;&#x1D7ED;&#x1D7EE;&#x1D7EF;&#x1D7FA;&#x1D7FB;&#x1D7FC;')
+isDecimalNumber('<span class="unicode-nums s1"><img src="images/a123.png" /><img src="images/b456.png" /><img src="images/c789.png" /><img src="images/d0123.png" /><img src="images/e456.png" /></span>')
 // &lt;- true</pre>
 ++++
 
