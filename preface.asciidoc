@@ -1,7 +1,7 @@
 [preface]
 == Preface
 
-Back in 1988, when I was using FrontPage for all my web development needs at school, if someone had told me that I'd end up working on the web for a living, I would've probably chuckled. JavaScript has grown along with us in all the years since, and it's hard to imagine how the web could've thrived without it. Bit by bit, this book will give you a comprehensive picture of the modern JavaScript landscape.
+Back in 1998, when I was using FrontPage for all my web development needs at school, if someone had told me that I'd end up working on the web for a living, I would've probably chuckled. JavaScript has grown along with us in all the years since, and it's hard to imagine how the web could've thrived without it. Bit by bit, this book will give you a comprehensive picture of the modern JavaScript landscape.
 
 === Who Should Read This Book
 
