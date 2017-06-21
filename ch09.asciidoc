@@ -498,7 +498,7 @@ Destructuring is as valuable as the amount of references to host objects it elim
 
 Matches for regular expressions are represented as an array. The matched portion of the input is placed in the first position, while each captured group is placed in subsequent elements in the array. Often, we are interested in specific captures such as the first one.
 
-In the following example, ((("destructuring", "arrays")))((("arrays")))array destructuring helps us omit the whole match and place the `integer` and `fractional` parts of a number into corresponding variables. This way, we avoid resorting to magic numbers pointing at the indices where captured groups will reside at in the match result.
+In the following example, ((("destructuring", "arrays")))((("arrays")))array destructuring helps us omit the whole match and place the `integer` and `fractional` parts of a number into corresponding variables. This way, we avoid resorting to magic numbers pointing at the indices where captured groups will reside in the match result.
 
 [source,javascript]
 ----
@@ -541,7 +541,7 @@ administrators.concat(moderators)
 [...administrators, ...moderators, bob]
 ----
 
-Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in <<extending_objects_with_object_assign>> allows us to merge objects onto a new object. Consider the following snippet where we programmatically create a new object comprised of base `defaults`, user-provided `options`, and some important override property that prevails over previous properties.
+Similarly, the object spread featurefootnote:[Currently in stage 3 of the ECMAScript standard development process.] introduced in <<extending_objects_with_object_assign>> allows us to merge objects onto a new object. Consider the following snippet where we programmatically create a new object comprising base `defaults`, user-provided `options`, and some important override property that prevails over previous properties.
 
 [source,javascript]
 ----
@@ -576,7 +576,7 @@ Being able to visualize object spread as an `Object.assign` helps internalize ho
 }
 ----
 
-Object spread ((("object spread")))comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a `player` object and a function call that casts a healing spell and returns a new, healthier, player object.
+Object spread ((("object spread")))comes in handy when we're dealing with immutable structures, where we're supposed to create new objects instead of editing existing ones. Consider the following bit of code where we have a `player` object and a function call that casts a healing spell and returns a new, healthier, +player+ object.
 
 [source,javascript]
 ----
