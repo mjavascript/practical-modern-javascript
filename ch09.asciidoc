@@ -809,7 +809,7 @@ const pistol = {
 pistol.trigger()
 ----
 
-As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, requires several lines of code, or involve recursion, ((("arrow functions", startref="af9")))((("function expressions", startref="fe9")))then consider an arrow function.
+As a general rule of thumb, think of every function as a function declaration by default. If that function doesn't need a meaningful name, requires several lines of code, or involves recursion, ((("arrow functions", startref="af9")))((("function expressions", startref="fe9")))then consider an arrow function.
 
 === Classes and Proxies
 
@@ -917,7 +917,7 @@ JavaScript classes are less verbose than their prototype-based equivalents. Clas
 
 Statically typed languages typically offer and enforce the use of classes.footnote:[An exception should be made for most functional programming languages.] In contrast, due to the highly dynamic nature of JavaScript, classes aren't mandatory. Almost every scenario that would typically demand classes can be addressed using ((("classes", startref="class9")))plain objects.
 
-Plain objects ((("objects", "plain")))are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON, and more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
+Plain objects ((("objects", "plain")))are simpler than classes. There's no need for special constructor methods, their only initialization is the declaration, they're easy to serialize via JSON, and they're more interoperable. Inheritance is seldom the right abstraction to use, but when it is desirable we might switch to classes or stick with plain objects and `Object.create`.
 
 Proxies ((("proxies", id="p9")))empower many previously unavailable use cases, but we need to tread lightly. Solutions that involve a `Proxy` object may also be implemented using plain objects and functions without resorting to an object that behaves as if by magic.
 
@@ -969,7 +969,7 @@ Promises ((("promises", id="prom9")))were around for a long time, in user librar
 
 Promises are a bit more expensive than callbacks in terms of commitment, because promise chains involve more promises, so they are hard to interleave with plain callbacks. At the same time, you don't want to interleave promises with callback-based code, because that leads to complex applications. For any given portion of code, it's important to pick one paradigm and stick with it. Relying on a single paradigm produces code that doesn't focus as much on the mechanics as it does on task processing.
 
-Committing to promises isn't inherently bad, however; it's merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators, and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
+Committing to promises isn't inherently bad; however, it's merely a cost you need to be aware of. As more and more of the web platform relies on promises as a fundamental building block, they only get better. Promises underlie generators, async functions, async iterators, and async generators. The more we use those constructs, the more synergistic our applications become, and while it could be argued that plain callbacks are already synergistic by nature, they certainly don't compare to the sheer power of async functions and all promise-based solutions that are now native to the JavaScript language.
 
 Once we commit to promises, the variety of tools at our disposal is comparable to using a library that offers solutions to common flow control problems by relying on callbacks. The difference is that, for the most part, promises don't require any libraries because they're native to the language.
 
