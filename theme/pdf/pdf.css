@@ -12,6 +12,12 @@ pre > img {
   width: 12pt;
 }
 
+.emoji {
+   margin-bottom: -6pt;
+  height: 12pt;
+  width: 12pt;
+}
+
 
 /*--- This oneoff overrides the code in https://github.com/oreillymedia/animal_theme/blob/master/pdf/pdf.css---*/
 
