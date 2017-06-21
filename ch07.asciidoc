@@ -177,7 +177,7 @@ Number.isFinite('10')
 // <- false, because '10' is not a number
 ----
 
-Creating a ponyfillpass:[<span data-type="footnote" id="ponyfills">Like polyfills, <a href="https://mjavascript.com/out/ponyfills">ponyfills</a> are user-land implementations of features that aren't available in every JavaScript runtime. While polyfills try to patch the runtime environment so that it behaves as if the feature was indeed available on the runtime, ponyfills implement the missing functionality as standalone modules that don't pollute the runtime environment. This has the benefit of not breaking expectations third-party libraries (that don't know about your polyfill) may have about the environment.</span>] for `Number.isFinite` would involve returning `false` for nonnumeric values, effectively turning off the type-casting feature, and then calling `isFinite` on the input ((("Number.isFinite", startref="nisf7")))value.
+Creating a ponyfill for `Number.isFinite` would involve returning `false` for nonnumeric values, effectively turning off the type-casting feature, and then calling `isFinite` on the input ((("Number.isFinite", startref="nisf7")))value.
 
 [source,javascript]
 ----
