@@ -3,11 +3,11 @@ pre > img,
 span.unicode-nums > img /*STYL-974*/ { 
   margin: 0 0 -0.25em;
   padding: 0;
-  height: 1em;
+  height: .75em;
 }
 
 .emoji { 
   margin: 0 0 -0.25em;
   padding: 0;
-  height: 1em;
+  height: .75em;
 }
