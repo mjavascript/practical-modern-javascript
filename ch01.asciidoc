@@ -294,7 +294,7 @@ image::images/pmjs_0102.png["Validating a piece of source code through ESLint."]
 
 ESLint is able to fix most style problems automatically if we pass in a `--fix` flag. Add the following script to your _package.json_:
 
-[role="pagebreak-before"]
+
 [source,json]
 ----
 {
@@ -306,6 +306,7 @@ ESLint is able to fix most style problems automatically if we pass in a `--fix` 
 
 When we run `lint-fix` we'll only get a pair of errors: `hello` is never used and `false` is a constant condition. Every other error has been fixed in place, resulting in the following bit of source code. The remaining errors weren't fixed because ESLint avoids making assumptions about our code, and prefers not to incur semantic changes. In doing so, `--fix` becomes a useful tool to resolve code style wrinkles without risking a broken program as a result.
 
+[role="pagebreak-before"]
 [source,javascript]
 ----
 var goodbye = 'Goodbye!'
