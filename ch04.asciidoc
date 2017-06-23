@@ -203,6 +203,7 @@ new Promise((resolve, reject) => { throw new Error('oops') })
 
 Errors that occur while executing a fulfillment or rejection reaction behave in the same way: they result in a promise being rejected, the one returned by the `.then` or `.catch` call that was passed the reaction where the error originated. It's easier to explain this with code, such as the following piece.
 
+[role="pagebreak-before"]
 [source,javascript]
 ----
 Promise
@@ -818,6 +819,7 @@ const low = [...range(random, 0, 0.8)]
 
 This sort of abstraction of complexity into another function often helps keep code focused on its intent, while striving to avoid a `for..of` loop when all we wanted was to produce a derivated sequence. It also shows how sequences can be composed and piped into one another. In this case, we first created a multipurpose and infinite `random` sequence, and then piped it through a `range` function that returns a derivated sequence that ends when it meets values that are below or above a desired range. An important aspect of iterators is that despite having been composed, the iterators produced by the `range` function can be lazily iterated as well, effectively meaning you can compose as many iterators you need into mapping, filtering, and exit condition helpers.
 
+[role="pagebreak-before"]
 .Identifying Infinite Sequences
 ****
 Iterators ((("infinite sequences", "identifying")))don't have any knowledge that the sequences they produce are infinite. In a similar situation to the famous halting problem (<<fig0405>>), there is no way of knowing whether the sequence is infinite or not in code.
