@@ -294,6 +294,7 @@ image::images/pmjs_0102.png["Validating a piece of source code through ESLint."]
 
 ESLint is able to fix most style problems automatically if we pass in a `--fix` flag. Add the following script to your _package.json_:
 
+[role="pagebreak-before"]
 [source,json]
 ----
 {
