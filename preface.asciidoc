@@ -71,6 +71,7 @@ For more information, please visit pass:[<a href="http://oreilly.com/safari" cla
 
 Please address comments and questions concerning this book to the publisher:
 
+[role="pagebreak-before"]
 ++++
 <ul class="simplelist">
   <li>O’Reilly Media, Inc.</li>
