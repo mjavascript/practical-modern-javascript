@@ -19,7 +19,17 @@
        need to rely on AH counters to do footnote numbering -->
 <xsl:param name="process.footnote.callouts.only" select="1"/>
 
+<!-- ***************** COOKBOOK PARAMS ***************** -->
+<!-- *************** Overrides param.xsl *************** -->
 
+<!-- Recipe format should be "X.1 Title, no second period" -->
+<xsl:param name="recipe.number.and.title.separator" select="' '"/>
+
+<!-- This book should show sect2s in TOC -->
+<xsl:param name="toc.section.depth" select="2"/>
+
+<!-- ***************** LABEL HANDLING ***************** -->
+<!-- ************* Overrides common.xsl *************** -->
 
   <!-- Logic for processing sect1 headings with labels (including section numbers) -->
   <xsl:template match="h:section[@data-type='chapter' and not(contains(@class, 'orm:non-recipe'))]/h:section[@data-type='sect1' and not(contains(@class, 'orm:non-recipe'))]/h:h1" mode="process-heading">
