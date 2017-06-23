@@ -67,11 +67,12 @@ Members have access to thousands of books, training videos, Learning Paths, inte
 
 For more information, please visit pass:[<a href="http://oreilly.com/safari" class="orm:hideurl"><em>http://oreilly.com/safari</em></a>]. 
 
+[role="pagebreak-before"]
 === How to Contact Us
 
 Please address comments and questions concerning this book to the publisher:
 
-[role="pagebreak-before"]
+
 ++++
 <ul class="simplelist">
   <li>O’Reilly Media, Inc.</li>
