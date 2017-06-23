@@ -178,7 +178,7 @@ var emitter = {
 }
 ----
 
-Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the `function` keyword. This is meant as a terse alternative to traditional method declarations where you need to use the `function` ((("function keyword")))keyword. The following example shows how our `emitter` object looks when using method definitions.
+Starting in ES6, you can declare methods on an object literal using the new method definition syntax. In this case, we can omit the colon and the `function` keyword. This is meant as a terse alternative to traditional method declarations where you need to use the pass:[<span class="keep-together"><code>function</code></span>] ((("function keyword")))keyword. The following example shows how our `emitter` object looks when using method definitions.
 
 [source,javascript]
 ----
