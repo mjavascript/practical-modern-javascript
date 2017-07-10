@@ -694,7 +694,7 @@ var car = {
     name: 'Donald Draper'
   },
   brand: 'Peugeot',
-  make: 2015,
+  make: 2017,
   model: '208',
   preferences: {
     airbags: true,
@@ -754,14 +754,14 @@ function splitDate(date) {
   var rdate = /(\d+).(\d+).(\d+)/
   return rdate.exec(date)
 }
-var [ , year, month, day] = splitDate('2015-11-06')
+var [ , year, month, day] = splitDate('2017-11-06')
 ----
 
 You'll want to be careful when the regular expression doesn't match, as that returns `null`. Perhaps a better approach would be to test for the failure case before destructuring, as shown in the following bit of code.
 
 [source,javascript]
 ----
-var matches = splitDate('2015-11-06')
+var matches = splitDate('2017-11-06')
 if (matches === null) {
   return
 }
@@ -940,16 +940,16 @@ Another limitation of `.apply` is that combining it with the `new` keyword, when
 
 [source,javascript]
 ----
-new (Date.bind.apply(Date, [null, 2015, 11, 31]))
-// <- Thu Dec 31 2015
+new (Date.bind.apply(Date, [null, 2017, 11, 31]))
+// <- Thu Dec 31 2017
 ----
 
 As shown in the next snippet, the spread operator strips away all the complexity and we're only left with the important bits. It's a `new` instance, it uses `...` to spread a dynamic list of arguments over the function call, and it's a `Date`. ((("Date()")))That's it.
 
 [source,javascript]
 ----
-new Date(...[2015, 11, 31])
-// <- Thu Dec 31 2015
+new Date(...[2017, 11, 31])
+// <- Thu Dec 31 2017
 ----
 
 The following table summarizes the use cases we've discussed for the spread operator.
@@ -960,7 +960,7 @@ The following table summarizes the use cases we've discussed for the spread oper
 |Concatenation|`[1, 2].concat(more)`|`[1, 2, ...more]`
 |Push an array onto list|`list.push.apply(list, items)`|`list.push(...items)`
 |Destructuring|`a = list[0], other = list.slice(1)` | `[a, ...other] = list`
-|`new` and `apply`|`new (Date.bind.apply(Date, [null,2015,31,8]))`| `new Date(...[2015,31,8])`
+|`new` and `apply`|`new (Date.bind.apply(Date, [null,2017,11,31]))`| `new Date(...[2017,11,31])`
 |=======
 
 [[template_literals]]
@@ -1001,7 +1001,7 @@ It will be up to your coding style guides to decide how much logic you want to c
 [source,javascript]
 ----
 `The time and date is ${ new Date().toLocaleString() }.`
-// <- 'the time and date is 8/26/2015, 3:15:20 PM'
+// <- 'the time and date is 8/26/2017, 3:15:20 PM'
 ----
 
 You could interpolate mathematical operations.
