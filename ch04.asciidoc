@@ -1905,12 +1905,16 @@ Let's look at a similar example, but this time we'll be using generators. The fo
 ----
 function getRandomArticle(gen) {
   const g = gen()
+  //call next on the generator to force it to yield, and hold on that yield statement, 
+  g.next();
   fetch('/articles/random', {
     headers: new Headers({
       Accept: 'application/json'
     })
   })
   .then(res => res.json())
+  //passing a value to next() here will cause the *prior* yield statement in the generator to resolve to the value we pass in, 
+  //and will resume the generator, and run to the next yield. In this case there is none, so {done: true} will return
   .then(json => g.next(json))
   .catch(err => g.throw(err))
 }
