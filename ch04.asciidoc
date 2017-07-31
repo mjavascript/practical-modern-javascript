@@ -1905,6 +1905,7 @@ Let's look at a similar example, but this time we'll be using generators. The fo
 ----
 function getRandomArticle(gen) {
   const g = gen()
+  g.next() // advance the generator to the first yield expression
   fetch('/articles/random', {
     headers: new Headers({
       Accept: 'application/json'
@@ -2124,7 +2125,7 @@ function spawn(generator) {
         resolve(next.value)
         return
       }
-      // not finished, chain off the yielded promise 
+      // not finished, chain off the yielded promise
       // and run next step
       Promise
         .resolve(next.value)
