@@ -1068,7 +1068,7 @@ Generators ((("generators", id="gen4")))are a new feature in ES6. The way they w
 
 We ((("generators", "fundamentals", id="gen4f")))already examined iterators in the previous section, learning how their `.next()` method is called one at a time to pull values from a sequence. Instead of a `next` method whenever you return a value, generators use the `yield` ((("yield")))keyword to add values into the sequence.
 
-Here is an example generator function. Note the `*` after `function`. That's ((("function*")))not a typo, that's how you mark a generator function as a generator.
+Here is an example generator function. Note the `+*+` after `function`. That's ((("function*")))not a typo, that's how you mark a generator function as a generator.
 
 [source,javascript]
 ----
