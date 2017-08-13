@@ -45,7 +45,7 @@ console.log(union([1, 2], 2))
 ====
 We can omit the ((("CommonJS", "file extension use")))file extension as long as it's _.js_ or _.json_, but this is discouraged.
 
-While the file extension is optional for `require` statements and when using the `node` CLI, we should strongly consider getting into the habit of including it nevertheless. https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-module-system[Browser implementations of ESM] won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource. 
+While the file extension is optional for `require` statements and when using the `node` CLI, we should strongly consider getting into the habit of including it nevertheless. https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-module-system[Browser implementations of ESM] won't have this luxury, since that'd entail extra roundtrips to figure out the correct endpoint for a JavaScript module HTTP resource.
 ====
 
 We could run `_app.js_` in its current state through the CLI for Node.js, `node`, as seen in the next snippet.
@@ -507,7 +507,7 @@ Lastly, there are also namespace ((("import statements", "named exports", startr
 
 ===== Wildcard import statements
 
-We can ((("import statements", "wildcards")))((("wildcard import statements")))import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the `*` must be followed by an alias where all the bindings will be placed. If there was a `default` export, it'll be placed in the namespace binding ((("ES6 modules", "import statements", startref="esm8is")))((("import statements", startref="is8")))as well.
+We can ((("import statements", "wildcards")))((("wildcard import statements")))import the namespace object for a module by using a wildcard. Instead of importing the named exports or the default value, it imports everything at once. Note that the pass:[<code>*</code>] must be followed by an alias where all the bindings will be placed. If there was a `default` export, it'll be placed in the namespace binding ((("ES6 modules", "import statements", startref="esm8is")))((("import statements", startref="is8")))as well.
 
 
 [source,javascript]
