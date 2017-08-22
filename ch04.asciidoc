@@ -1699,8 +1699,8 @@ As a bonus, we'll have `saveProducts` return a promise that's fulfilled after th
 [source,javascript]
 ----
 saveProducts(function* () {
-  const p2 = yield '/products/modern-javascript'
-  const p2 = yield '/products/mastering-modular-javascript'
+  yield '/products/modern-javascript'
+  yield '/products/mastering-modular-javascript'
   return '/wishlists/books'
 }).then(response => {
   // continue after storing the product list
