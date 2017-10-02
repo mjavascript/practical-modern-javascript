@@ -147,7 +147,7 @@ To install Babel, enter the following couple of commands into your favorite term
 [source,shell]
 ----
 npm install babel-cli​@6 --save-dev
-npm install babel-preset-env@6 --save-dev
+npm install babel-preset-env@1 --save-dev
 ----
 
 [NOTE]
