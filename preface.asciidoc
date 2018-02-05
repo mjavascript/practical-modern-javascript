@@ -11,7 +11,7 @@ This book is meant for web developers, enthusiasts, and professionals with a wor
 
 The goal of this book is to provide an approachable way of learning the latest developments in JavaScript: ES6 and later. ES6 was a huge update to the language, and it came out around the same time as a streamlined specification development process. Around this time I wrote quite a few blog posts about the different features in ES6, which became a bit popular. There are quite a few other books on ES6 out there, but they're a little different from what I had in mind for a book on ES6 and beyond. This book tries to explain features in detail without getting caught up in the specification, its implementation details, or unlikely corner cases that would almost certainly need to be researched online if happened upon.
 
-Instead of extreme thoroughness, the book places its utmost focus in the learning process, having sorted its material in such an incremental way that you don't have to scan ahead in the book for the definition of something else. Armed with practical examples, _Practical Modern JavaScript_ goes beyond ES6 to capture the changes to the language since June 2015--when the ES6 specification was finalized--including async functions, object destructuring, dynamic imports, `Promise#finally`, and async generators.
+Instead of extreme thoroughness, the book places its utmost focus in the learning process, having sorted its material in such an incremental way that you don't have to scan ahead in the book for the definition of something else. Armed with practical examples, _Practical Modern JavaScript_ goes beyond ES6 to capture the changes to the language since June 2015--when the ES6 specification was finalized--including async functions, object rest/spread properties, dynamic imports, `Promise#finally`, and async generators.
 
 Lastly, this book has the goal of establishing a baseline we can take for granted in the rest of the Modular JavaScript series. After having learned the latest language features in this first book, we'll be all set to discuss modular design, testing, and deployment, without having to diverge into language features whenever they're used in a code example. This incremental and modular approach is meant to be pervasive across the series, each book, each chapter, and each section.
 
@@ -65,7 +65,7 @@ pass:[<a href="http://oreilly.com/safari" class="orm:hideurl"><em class="hyperli
 
 Members have access to thousands of books, training videos, Learning Paths, interactive tutorials, and curated playlists from over 250 publishers, including O’Reilly Media, Harvard Business Review, Prentice Hall Professional, Addison-Wesley Professional, Microsoft Press, Sams, Que, Peachpit Press, Adobe, Focal Press, Cisco Press, John Wiley & Sons, Syngress, Morgan Kaufmann, IBM Redbooks, Packt, Adobe Press, FT Press, Apress, Manning, New Riders, McGraw-Hill, Jones & Bartlett, and Course Technology, among others.
 
-For more information, please visit pass:[<a href="http://oreilly.com/safari" class="orm:hideurl"><em>http://oreilly.com/safari</em></a>]. 
+For more information, please visit pass:[<a href="http://oreilly.com/safari" class="orm:hideurl"><em>http://oreilly.com/safari</em></a>].
 
 [role="pagebreak-before"]
 === How to Contact Us
