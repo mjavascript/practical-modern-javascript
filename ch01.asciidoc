@@ -85,7 +85,7 @@ Let's talk about how you can use Babel as part of your workflow.
 
 Babel can compile modern JavaScript code that relies on ES6 features into ES5. It produces human-readable code, making it more welcoming when we don't have a firm grasp on all of the new features we're using.
 
-The online https://mjavascript.com/out/babel-repl[Babel REPL (Read-Evaluate-Print Loop)] is an excellent way of jumping right into learning ES6, without any of the hassle of installing Node.js and the `babel` CLI, and manually compiling source code. 
+The online https://mjavascript.com/out/babel-repl[Babel REPL (Read-Evaluate-Print Loop)] is an excellent way of jumping right into learning ES6, without any of the hassle of installing Node.js and the `babel` CLI, and manually compiling source code.
 
 The REPL provides us with a source code input area that gets automatically compiled in real time. We can see the compiled code to the right of our source code.
 
@@ -311,7 +311,7 @@ When we run `lint-fix` we'll only get a pair of errors: `hello` is never used an
 ----
 var goodbye = 'Goodbye!'
 
-function hello() {
+function hello () {
   return goodbye
 }
 
