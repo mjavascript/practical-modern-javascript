@@ -802,7 +802,7 @@ const pistol = {
   caliber: 50,
   trigger() {
     setTimeout(() => {
-      console.log(`Fired caliber ${ self.caliber } pistol`)
+      console.log(`Fired caliber ${ this.caliber } pistol`)
     }, 1000)
   }
 }
