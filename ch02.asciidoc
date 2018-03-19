@@ -401,70 +401,69 @@ This ((("arrow functions", startref="af2")))((("arrow functions", "merits and us
 
 ==== Destructuring Objects
 
-Imagine ((("assignment destructuring", "objects", id="ad2o")))((("destructuring", "objects", id="d2o")))((("objects", "destructuring", id="o2d")))you had a program with some comic book characters, Bruce Wayne being one of them, and you want to refer to properties in the object that describes him. Here's the example object we'll be using for Batman:
+Imagine ((("assignment destructuring", "objects", id="ad2o")))((("destructuring", "objects", id="d2o")))((("objects", "destructuring", id="o2d")))you had a program describing a color palette and you want to refer to properties in the object that describes it. Here's an example object we'll be using for our palette:
 
 [source,javascript]
 ----
-var character = {
-  name: 'Bruce',
-  pseudonym: 'Batman',
-  metadata: {
-    age: 34,
-    gender: 'male'
+var palette = {
+  profile: 'intense-red',
+  name: 'Red',
+  color: {
+    code: `#f00`
   },
-  batarang: ['gas pellet', 'bat-mobile control', 'bat-cuffs']
+  luminosity: 0.8
 }
 ----
 
-If you wanted a `pseudonym` variable referencing `character.pseudonym`, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing `pseudonym` in several places in your codebase and you'd prefer to avoid typing out `character.pseudonym` each time:
+If you wanted a `profile` variable referencing `palette.profile`, you could write the following bit of ES5 code. This is commonplace when, for instance, you'll be referencing `profile` in several places in your codebase and you'd prefer to avoid typing out `palette.profile` each time:
 
 [source,javascript]
 ----
-var pseudonym = character.pseudonym
+var profile = palette.profile
 ----
 
-With destructuring in assignment, the syntax becomes a bit more clear. As you can see in the next example, you don't have to write `pseudonym` twice, while still clearly conveying intent. The following statement is equivalent to the previous one written in ES5 code:
+With destructuring in assignment, the syntax becomes a bit more clear. As you can see in the next example, you don't have to write `profile` twice, while still clearly conveying intent. The following statement is equivalent to the previous one written in ES5 code:
 
 [source,javascript]
 ----
-var { pseudonym } = character
+var { profile } = palette
 ----
 
 Just like you could declare multiple comma-separated variables with a single `var` statement, you can also declare multiple variables within the curly braces of a destructuring expression:
 
 [source,javascript]
 ----
-var { pseudonym, name } = character
+var { profile, name } = palette
 ----
 
 In a similar fashion, you could mix and match destructuring with regular variable declarations in the same `var` statement. While this might look a bit confusing at first, it'll be up to any JavaScript coding style guides you follow to determine whether it's appropriate to declare several variables in a single statement. In any case, it goes to show the flexibility offered by destructuring syntax:
 
 [source,javascript]
 ----
-var { pseudonym } = character, two = 2
+var { profile } = palette, two = 2
 ----
 
-If you want to extract a property named `pseudonym` but would like to declare it as a variable named `alias`, you can use the following destructuring syntax, known as _aliasing_. Note that you can use `alias` or any other valid variable name:
-
-[source,javascript]
-----
-var { pseudonym: alias } = character
-console.log(alias)
-// <- 'Batman'
-----
-
-While aliases don't look any simpler than the ES5 flavor, `alias = character.pseudonym`, ((("aliases", id="al2")))they start making sense when you consider the fact that destructuring supports deep structures, as in the following example:
+If you want to extract a property named `profile` but would like to declare it as a variable named `id`, you can use the following destructuring syntax, known as _aliasing_. Note that you can use `id` or any other valid variable name:
 
 [source,javascript]
 ----
-var { metadata: { gender } } = character
+var { profile: id } = palette
+console.log(id)
+// <- 'intense-red'
+----
+
+While aliases don't look any simpler than the ES5 flavor, `id = palette.profile`, ((("aliases", id="al2")))they start making sense when you consider the fact that destructuring supports deep structures, as in the following example:
+
+[source,javascript]
+----
+var { color: { code } } = palette
 ----
 
 In cases like the previous one, where you have deeply nested properties being destructured, you might be able to convey a property name more clearly if you choose an alias. Consider the next snippet, where a property named `code` wouldn't have been as indicative of its contents as `colorCode` could be:
 
 [source,javascript]
 ----
-var { metadata: { gender: characterGender } } = character
+var { color: { code: colorCode } } = palette
 ----
 
 The scenario we just saw repeats itself frequently, because properties are often named in the context of their host object. While `palette.color.code` is perfectly descriptive, `code` on its own could mean a wide variety of things, and aliases such as `colorCode` can help you bring context back into the variable name while still using destructuring.
@@ -473,9 +472,9 @@ Whenever you access a nonexistent property in ES5 notation, you get a value of `
 
 [source,javascript]
 ----
-console.log(character.boots)
+console.log(palette.luminosity)
 // <- undefined
-console.log(character['boots'])
+console.log(palette['luminosity'])
 // <- undefined
 ----
 
@@ -483,8 +482,8 @@ With destructuring, the same behavior prevails. When declaring a destructured va
 
 [source,javascript]
 ----
-var { boots } = character
-console.log(boots)
+var { luminosity } = palette
+console.log(luminosity)
 // <- undefined
 ----
 
@@ -492,7 +491,7 @@ A destructured declaration accessing a nested property of a parent object that's
 
 [source,javascript]
 ----
-var { boots: { size } } = character
+var { stroke: { width } } = palette
 // <- Exception
 var { missing } = null
 // <- Exception
@@ -511,37 +510,37 @@ As part of destructuring, you can provide default values for those cases where t
 
 [source,javascript]
 ----
-var { boots = { size: 10 } } = character
-console.log(boots)
-// <- { size: 10 }
+var { description = 'This is a color palette' } = palette
+console.log(description)
+// <- 'This is a color palette'
 ----
 
 Default values can also be provided in nested property destructuring.
 
 [source,javascript]
 ----
-var { metadata: { enemy = 'Satan' } } = character
-console.log(enemy)
-// <- 'Satan'
+var { color: { density = 320 } } = palette
+console.log(density)
+// <- 320
 ----
 
 For use in combination with aliases, you should place the alias first, and then the default value, as shown next.
 
 [source,javascript]
 ----
-var { boots: footwear = { size: 10 } } = character
+var { color: paletteColor = { density: 320 } } = palette
 ----
 
-It's possible to use the ((("computed property names")))computed property names syntax in destructuring patterns. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler wouldn't be able to infer a variable name. In the following example we use the `value` alias, and a computed property name to extract the `boots` property from the `character` object.
+It's possible to use the ((("computed property names")))computed property names syntax in destructuring patterns. In this case, however, you're required to provide an alias to be used as the variable name. That's because computed property names allow arbitrary expressions and thus the compiler wouldn't be able to infer a variable name. In the following example we use the `paletteProfile` alias, and a computed property name to extract the `profile` property from the `palette` object.
 
 [source,javascript]
 ----
-var { ['boo' + 'ts']: characterBoots } = character
-console.log(characterBoots)
+var { ['pro' + 'file']: paletteProfile } = palette
+console.log(paletteProfile)
 // <- true
 ----
 
-This flavor of destructuring is probably the least useful, as `characterBoots = character[type]` is usually simpler than `{ [type]: characterBoots } = character`, as it's a more sequential statement. That being said, the feature is useful when you have properties you want to declare in the object literal, as opposed to using subsequent assignment statements.
+This flavor of destructuring is probably the least useful, as `sourceProperty = source[property]` is usually simpler than `{ [property]: sourceProperty } = source`, as it's a more sequential statement. That being said, the feature is useful when you have properties you want to declare in the object literal, as opposed to using subsequent assignment statements.
 
 That's it, as far as objects go, in terms of destructuring. ((("assignment destructuring", "objects", startref="ad2o")))((("destructuring", "objects", startref="d2o")))((("objects", "destructuring", startref="o2d")))((("aliases", startref="al2")))What about arrays?
 
