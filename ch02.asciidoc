@@ -1185,7 +1185,7 @@ var name = 'Maurice'
 var emotion = 'thrilled'
 var text = tag`Hello, ${ name }. I am ${ emotion } to meet you!`
 console.log(text)
-// <- 'Hello Maurice, I am thrilled to meet you!'
+// <- 'Hello, Maurice. I am thrilled to meet you!'
 ----
 
 Multiple use cases apply to tagged templates. One possible use case might be to make user input uppercase, making the string sound satirical. That's what the following piece of code does. We've modified `tag` slightly so that any interpolated strings are uppercased.
@@ -1200,7 +1200,7 @@ function upper(parts, ...values) {
 var name = 'Maurice'
 var emotion = 'thrilled'
 upper`Hello, ${ name }. I am ${ emotion } to meet you!`
-// <- 'Hello MAURICE, I am THRILLED to meet you!'
+// <- 'Hello, MAURICE. I am THRILLED to meet you!'
 ----
 
 A decidedly more useful use case would be to sanitize expressions interpolated into your templates, automatically, using a tagged template. Given a template where all expressions are considered user input, we could use a hypothetical `sanitize` library to remove HTML tags and similar hazards, preventing cross-site scripting (XSS) attacks where users might inject malicious HTML into our websites.
