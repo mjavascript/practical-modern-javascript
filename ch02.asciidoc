@@ -1033,8 +1033,8 @@ A second line\n\
 Then a third line'
 
 var concatenated =
-'The first line\n' `
-'A second line\n' `
+'The first line\n' +
+'A second line\n' +
 'Then a third line'
 
 var joined = [
