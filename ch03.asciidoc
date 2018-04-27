@@ -428,7 +428,7 @@ console.log(JSON.stringify(character))
 // <- '{"name":"Penguin"}'
 ----
 
-That being said, symbols are by no means a safe mechanism to conceal properties. Even though you won't stumble upon symbol properties when using reflection or serialization methods, symbols are revealed by a dedicated method as shown in the next snippet of code. In other words, symbols are not nonenumerable, but hidden in plain sight. Using `Object.getOwnPropertySymbols` we can retrieve all symbols used as property keys on any given object.
+That being said, symbols are by no means a safe mechanism to conceal properties. Even though you won't stumble upon symbol properties when using pre-ES6 reflection, iteration or serialization methods, symbols are revealed by a dedicated method as shown in the next snippet of code. In other words, symbols are not nonenumerable, but hidden in plain sight. Using `Object.getOwnPropertySymbols` we can retrieve all symbols used as property keys on any given object.
 
 [source,javascript]
 ----
