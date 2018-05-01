@@ -337,7 +337,7 @@ class Plum extends createJuicyFruit('plum', 30) {
 }
 ----
 
-Let's move ((("prototypal inheritance", startref="pi3)))onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length later in ((("classes", startref="class3")))((("classes", "extending", startref="class3ext")))the chapter.
+Let's move ((("prototypal inheritance", startref="pi3)))onto `Symbol`. While not an iteration or flow control mechanism, learning about `Symbol` is crucial to shaping an understanding of iteration protocols, which are discussed at length in ((("classes", startref="class3")))((("classes", "extending", startref="class3ext")))the next chapter.
 
 === Symbols
 
@@ -1043,7 +1043,7 @@ function getCommandProperties(ctor) {
   return [...properties]
 }
 getCommandProperties(Dog)
-// <- [{ key: 'name', readLevel: 'game-master', 
+// <- [{ key: 'name', readLevel: 'game-master',
 // writeLevel: 'game-master' }]
 ----
 
