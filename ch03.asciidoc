@@ -755,7 +755,7 @@ console.log(Object.assign({}, defaults, options))
 
 Note, however, that `Object.assign` doesn't cater to every need. While most user-land implementations have the ability to perform deep assignment, `Object.assign` doesn't offer a recursive treatment of objects. Object values are assigned as properties on `target` directly, instead of being recursively assigned key by key.
 
-In the following bit of code you might expect the `f` property to be added to `target.a` while keeping `b.c` and `b.d` intact, but the `b.c` and `b.d` properties are lost when using `Object.assign`.
+In the following bit of code you might expect the `f` property to be added to `target.a` while keeping `a.b` and `a.d` intact, but the `a.b` and `a.d` properties are lost when using `Object.assign`.
 
 [source,javascript]
 ----
