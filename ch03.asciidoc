@@ -877,7 +877,7 @@ Using `Object.setPrototypeOf` to change the prototype of an object is an expensi
 
 [quote, Mozilla Developer Network]
 ____
-Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `obj.__proto__ = …` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new ((("objects", "built-in improvements", startref="ob3bii")))object with the desired ((("objects", "setting prototypes", startref="ob3sp")))((("Object.setPrototypeOf", startref="ospo3")))prototype using `Object.create()`.
+Changing the prototype of an object is, by the nature of how modern JavaScript engines optimize property accesses, a very slow operation, in every browser and JavaScript engine. The effects on performance of altering inheritance are subtle and far-flung, and are not limited to simply the time spent in a `Object.setPrototypeOf(…)` statement, but may extend to any code that has access to any object whose prototype has been altered. If you care about performance you should avoid setting the prototype of an object. Instead, create a new ((("objects", "built-in improvements", startref="ob3bii")))object with the desired ((("objects", "setting prototypes", startref="ob3sp")))((("Object.setPrototypeOf", startref="ospo3")))prototype using `Object.create()`.
 ____
 
 ****
