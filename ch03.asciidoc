@@ -771,7 +771,7 @@ Object.assign({}, { a: ['b', 'c', 'd'] }, { a: ['e', 'f'] })
 // <- { a: ['e', 'f'] }
 ----
 
-At the time of this writing, there's an ECMAScript stage 3 proposalpass:[<span data-type="footnote" id="object-spread">You can find the proposal draft at <a href="https://mjavascript.com/out/proposal-promise-finally">GitHub</a>.</span>] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an ((("objects", "object spread")))object onto another is equivalent to using an `Object.assign` function call.
+At the time of this writing, there's an ECMAScript stage 3 proposalpass:[<span data-type="footnote" id="object-spread">You can find the proposal draft at <a href="https://mjavascript.com/out/object-spread">GitHub</a>.</span>] to implement spread in objects, similar to how you can spread iterable objects onto an array in ES6. Spreading an ((("objects", "object spread")))object onto another is equivalent to using an `Object.assign` function call.
 
 The following piece of code shows a few cases where we're spreading the properties of an object onto another one, and their `Object.assign` counterpart. As you can see, using object spread is more succinct and should be preferred where possible.
 
