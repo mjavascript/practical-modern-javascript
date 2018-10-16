@@ -884,7 +884,7 @@ ____
 
 === Decorators
 
-Decorators are, ((("Decorators", id="dec3")))as most things programming, definitely not a new concept. The pattern is fairly commonplace in modern programming languages: you have _attributes_ in C#, they're called _annotations_ in Java, there are _decorators_ in Python, and the list goes on. There's a JavaScript decorators proposal in the works and you can find the draft online at <a href="https://mjavascript.com/out/decorators">GitHub</a>.</span>] It is currently sitting at stage 2 of the TC39 process.
+Decorators are, ((("Decorators", id="dec3")))as most things programming, definitely not a new concept. The pattern is fairly commonplace in modern programming languages: you have _attributes_ in C#, they're called _annotations_ in Java, there are _decorators_ in Python, and the list goes on. There's a JavaScript decorators proposalpass:[<span data-type="footnote" id="decorators"> in the works and you can find the draft online at <a href="https://mjavascript.com/out/decorators">GitHub</a>.</span>] It is currently sitting at stage 2 of the TC39 process.
 
 ==== A Primer on JavaScript Decorators
 
