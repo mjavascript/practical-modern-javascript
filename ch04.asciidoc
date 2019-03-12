@@ -1169,7 +1169,7 @@ console.log([...salute('you')])
 // <- ['h', 'e', 'l', 'l', 'o', ' ', 'y', 'o', 'u']
 ----
 
-To reiterate, you can `yield*` anything that adheres to the iterable protocol, not merely strings. That includes generator objects, arrays, `arguments`, `NodeList` in the browser, and just about anything, provided it implements `System.iterator`. The following example demonstrates how you could mix `yield` and `yield*` statements to describe a sequence of values using generator functions, an iterable object, and the spread operator. Can you deduce what the `console.log` statement would print?
+To reiterate, you can `yield*` anything that adheres to the iterable protocol, not merely strings. That includes generator objects, arrays, `arguments`, `NodeList` in the browser, and just about anything, provided it implements `Symbol.iterator`. The following example demonstrates how you could mix `yield` and `yield*` statements to describe a sequence of values using generator functions, an iterable object, and the spread operator. Can you deduce what the `console.log` statement would print?
 
 [source,javascript]
 ----
