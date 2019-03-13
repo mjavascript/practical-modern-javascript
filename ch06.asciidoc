@@ -205,7 +205,7 @@ const validations = new Map()
 const validator = {
   set(target, key, value) {
     if (validations.has(key)) {
-      return validations[key](value)
+      validations.get(key)(value)
     }
     return Reflect.set(target, key, value)
   }
