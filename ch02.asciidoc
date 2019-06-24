@@ -286,7 +286,7 @@ function puzzle() {
 puzzle('a', 'b', 'c')(1, 2, 3)
 ----
 
-In this case, the `arguments` object refers to the context of the `puzzle` function, because arrow functions don't create a closure. For this reason, the printed arguments will be `'a', 'b', 'c'`.
+Because arrow functions don't have their own `arguments` keyword, the lookup bubbles up to the outer scope of the `puzzle` function. That means the printed arguments will be `'a', 'b', 'c'`.
 
 I've mentioned there are several flavors of arrow functions, but so far we've only looked at their fully fleshed version. What are the other ways to represent an ((("arrow functions", "lexical scoping", startref="af2ls")))((("lexical scoping", startref="ls2")))arrow function?
 
