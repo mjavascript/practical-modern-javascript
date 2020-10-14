@@ -520,7 +520,7 @@ console.log(counter.default) // <- 2
 
 ==== Dynamic import()
 
-At the ((("dynamic import()", id="di8")))((("ES6 modules", "dynamic import()", id="esm8di")))time of this writing, a proposal for dynamic ++import()++pass:[<span class="footnote">Check out the <a href="https://mjavascript.com/out/dynamic-import">proposal specification draft</a>.</span>] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike `import` statements, which are statically analyzed and linked, `import()` loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
+At the ((("dynamic import()", id="di8")))((("ES6 modules", "dynamic import()", id="esm8di")))time of this writing, a proposal for dynamic ++import()++pass:[<span data-type="footnote">Check out the <a href="https://mjavascript.com/out/dynamic-import">proposal specification draft</a>.</span>] expressions is sitting at stage 3 of the TC39 proposal review process. Unlike `import` statements, which are statically analyzed and linked, `import()` loads modules at runtime, returning a promise for the module namespace object after fetching, parsing, and executing the requested module and all of its dependencies.
 
 The module specifier can be any string, like with `import` statements. Keep in mind `import` statements only allow statically defined plain string literals as module specifiers. In contrast, we're able to use template literals or any valid JavaScript expression to produce the module specifier string for `import()` function calls.
 
